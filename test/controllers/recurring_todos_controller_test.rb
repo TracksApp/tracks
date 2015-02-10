@@ -37,7 +37,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       {
       "daily_every_x_days"=>"1",
       "daily_selector"=>"daily_every_x_day",
-      "description"=>"new recurring pattern",
+      "description"=>"new recurrence pattern",
       "end_date" => "31/08/2010",
       "ends_on" => "ends_on_end_date",
       "monthly_day_of_week" => "1",
@@ -122,7 +122,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     # check new rec todo is not there
-    assert_nil RecurringTodo.where(:description => "new recurring pattern").first
+    assert_nil RecurringTodo.where(:description => "new recurrence pattern").first
 
     put :create,
       "context_name"=>"library",
@@ -131,7 +131,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       {
       "daily_every_x_days"=>"1",
       "daily_selector"=>"daily_every_x_day",
-      "description"=>"new recurring pattern",
+      "description"=>"new recurrence pattern",
       "end_date" => "31/08/2010",
       "ends_on" => "ends_on_end_date",
       "monthly_day_of_week" => "1",
@@ -158,7 +158,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     },
       "tag_list"=>"one, two, three, four", :format => :js
 
-    new_rec_todo = RecurringTodo.where(:description => "new recurring pattern").first
+    new_rec_todo = RecurringTodo.where(:description => "new recurrence pattern").first
 
     assert_not_nil new_rec_todo
 
@@ -245,7 +245,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         {
         "daily_every_x_days"=>"1",
         "daily_selector"=>"daily_every_x_day",
-        "description"=>"new recurring pattern",
+        "description"=>"new recurrence pattern",
         "end_date" => "",
         "ends_on" => "no_end_date",
         "monthly_day_of_week" => "1",
@@ -278,7 +278,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       assert_equal orig_todo_count+1, Todo.count
 
       # find the newly created todo
-      new_todo = Todo.where(:description => "new recurring pattern").first
+      new_todo = Todo.where(:description => "new recurrence pattern").first
       assert !new_todo.nil?
 
       # the date should be 31 march 2013
@@ -299,7 +299,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       {
       "daily_every_x_days"=>"1",
       "daily_selector"=>"daily_every_x_day",
-      "description"=>"new recurring pattern",
+      "description"=>"new recurrence pattern",
       "end_date" => "",
       "ends_on" => "no_end_date",
       "monthly_day_of_week" => "1",
@@ -332,7 +332,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal orig_todo_count+1, Todo.count
 
     # find the newly created recurring todo
-    recurring_todo = RecurringTodo.where(:description => "new recurring pattern").first
+    recurring_todo = RecurringTodo.where(:description => "new recurrence pattern").first
     assert !recurring_todo.nil?
 
     assert_equal "due_date", recurring_todo.target
@@ -351,7 +351,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         {
         "daily_every_x_days"=>"1",
         "daily_selector"=>"daily_every_x_day",
-        "description"=>"new recurring pattern",
+        "description"=>"new recurrence pattern",
         "end_date" => nil,
         "ends_on" => "no_end_date",
         "monthly_day_of_week" => "2",
@@ -378,7 +378,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       },
         "tag_list"=>"one, two, three, four", format: :js
 
-      assert_equal "new recurring pattern", assigns['recurring_todo'].description
+      assert_equal "new recurrence pattern", assigns['recurring_todo'].description
       assert_equal "2013-01-02 00:00:00 +0000", assigns['recurring_todo'].start_from.to_s
       todo = assigns['recurring_todo'].todos.first
       assert_equal "2013-01-02 00:00:00 +0000", todo.show_from.to_s
@@ -393,12 +393,12 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
     assert_not_nil todo
     assert_equal "active", todo.state, "todo should be active"
-    assert_equal "active", rt.state, "repeat pattern should be active"
+    assert_equal "active", rt.state, "recurrence pattern should be active"
 
     get :index # will call find_and_inactivate
 
     rt.reload
-    assert_equal "active", rt.state, "repeat pattern should still be active"
+    assert_equal "active", rt.state, "recurrence pattern should still be active"
 
     # disconnect todo from pattern thus leaving the pattern without
     # any active todos, but in active state
@@ -408,11 +408,11 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
     todo.reload
     rt.reload
-    assert_equal "active", rt.state, "repeat pattern should still be active and not changed"
+    assert_equal "active", rt.state, "recurrence pattern should still be active and not changed"
 
     get :index
     rt.reload
-    assert_equal "completed", rt.state, "repeat pattern should be completed"
+    assert_equal "completed", rt.state, "recurrence pattern should be completed"
   end
 
   def test_update_recurring_todo

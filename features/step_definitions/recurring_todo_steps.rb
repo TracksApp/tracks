@@ -1,4 +1,4 @@
-Given /^I have a repeat pattern called "([^"]*)"$/ do |pattern_name|
+Given /^I have a recurrence pattern called "([^"]*)"$/ do |pattern_name|
   context = @current_user.contexts.first
 
   @recurring_todo = @current_user.recurring_todos.create!(
@@ -21,15 +21,15 @@ Given /^I have a repeat pattern called "([^"]*)"$/ do |pattern_name|
     :recurring_todo_id => @recurring_todo.id)
 end
 
-Given /^I have a completed repeat pattern "([^"]*)"$/ do |pattern_name|
-  step "I have a repeat pattern called \"#{pattern_name}\""
+Given /^I have a completed recurrence pattern "([^"]*)"$/ do |pattern_name|
+  step "I have a recurrence pattern called \"#{pattern_name}\""
   @recurring_todo.toggle_completion!
   expect(@recurring_todo.completed?).to be true
 end
 
-Given /^I have (\d+) completed repeat patterns$/ do |number_of_patterns|
+Given /^I have (\d+) completed recurrence patterns$/ do |number_of_patterns|
   1.upto number_of_patterns.to_i do |i|
-    step "I have a completed repeat pattern \"Repeating Todo #{i}\""
+    step "I have a completed recurrence pattern \"Recurring Todo #{i}\""
   end
 end
 

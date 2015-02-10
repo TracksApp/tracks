@@ -35,7 +35,7 @@ Feature: Existing user logging in
       | contexts page                                           | contexts page                                           | Logout (Test User) |
       | projects page                                           | projects page                                           | Logout (Test User) |
       | notes page                                              | notes page                                              | Logout (Test User) |
-      | repeating todos page                                    | repeating todos page                                    | Logout (Test User) |
+      | recurring todos page                                    | recurring todos page                                    | Logout (Test User) |
       | statistics page                                         | statistics page                                         | Logout (Test User) |
       | manage users page                                       | manage users page                                       | 401 Unauthorized   |
       | integrations page                                       | integrations page                                       | Logout (Test User) |

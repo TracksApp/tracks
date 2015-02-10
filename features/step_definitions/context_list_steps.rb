@@ -4,7 +4,7 @@ When /^I delete the context "([^\"]*)"$/ do |context_name|
   handle_js_confirm do
     click_link "delete_context_#{context.id}"
   end
-  expect(get_confirm_text).to eq("Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (repeating) actions in this context!")
+  expect(get_confirm_text).to eq("Are you sure that you want to delete the context '#{context_name}'? Be aware that this will also delete all (recurring) actions in this context!")
 
   # wait until the context is removed
   expect(page).to_not have_css("a#delete_context_#{context.id}")

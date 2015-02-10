@@ -111,27 +111,27 @@ Then /^I should see "([^"]*)" in the due next month container$/ do |todo_descrip
   end
 end
 
-####### Repeat patterns #######
+####### Recurrence patterns #######
 
-Then /^I should (see|not see) "([^"]*)" in the active recurring todos container$/ do |visibility, repeat_pattern|
-  repeat = @current_user.recurring_todos.where(:description => repeat_pattern).first
+Then /^I should (see|not see) "([^"]*)" in the active recurring todos container$/ do |visibility, recurrence_pattern|
+  recurrence = @current_user.recurring_todos.where(:description => recurrence_pattern).first
 
-  unless repeat.nil?
-    xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+  unless recurrence.nil?
+    xpath = "//div[@id='active_recurring_todos_container']//div[@id='recurring_todo_#{recurrence.id}']"
     check_xpath_visibility(visibility, xpath)
   else
-    step "I should #{visibility} \"#{repeat_pattern}\""
+    step "I should #{visibility} \"#{recurrence_pattern}\""
   end
 end
 
-Then /^I should (see|not see) "([^"]*)" in the completed recurring todos container$/ do |visible, repeat_pattern|
-  repeat = @current_user.todos.where(:description =>  repeat_pattern).first
+Then /^I should (see|not see) "([^"]*)" in the completed recurring todos container$/ do |visible, recurrence_pattern|
+  recurrence = @current_user.todos.where(:description =>  recurrence_pattern).first
 
-  unless repeat.nil?
-    xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{repeat.id}']"
+  unless recurrence.nil?
+    xpath = "//div[@id='completed_recurring_todos_container']//div[@id='recurring_todo_#{recurrence.id}']"
     check_xpath_visibility(visible, xpath)
   else
-    step "I should #{visible} \"#{repeat_pattern}\""
+    step "I should #{visible} \"#{recurrence_pattern}\""
   end
 end
 

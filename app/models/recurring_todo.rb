@@ -72,7 +72,7 @@ class RecurringTodo < ActiveRecord::Base
 
   def pattern
     if valid_period?
-      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RepeatPattern.new(user)")
+      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RecurrencePattern.new(user)")
       @pattern.build_from_recurring_todo(self)
     end
     @pattern

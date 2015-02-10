@@ -1,6 +1,6 @@
 module RecurringTodos
 
-  class YearlyRepeatPattern < AbstractRepeatPattern
+  class YearlyRecurrencePattern < AbstractRecurrencePattern
 
     def initialize(user)
       super user

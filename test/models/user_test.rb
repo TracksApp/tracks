@@ -385,7 +385,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal expect_todos_count, Todo.count, "expected #{nr_of_todos} todos to be gone"
     assert_equal expect_projects_count, Project.count, "expected #{nr_of_projects} projects to be gone"
     assert_equal expect_contexts_count, Context.count, "expected #{nr_of_contexts} contexts to be gone"
-    assert_equal expect_rec_todos_count, RecurringTodo.count, "expected #{nr_of_rec_todos} repeating todos to be gone"
+    assert_equal expect_rec_todos_count, RecurringTodo.count, "expected #{nr_of_rec_todos} recurring todos to be gone"
     assert_equal expect_notes_count, Note.count, "expected #{nr_of_notes} notes to be gone"
     assert_equal expect_deps_count, Dependency.count, "expected #{nr_of_deps} dependencies to be gone"
   end

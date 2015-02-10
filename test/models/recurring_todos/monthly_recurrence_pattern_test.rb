@@ -2,7 +2,7 @@ require 'test_helper'
 
 module RecurringTodos
 
-  class MonthlyRepeatPatternTest < ActiveSupport::TestCase
+  class MonthlyRecurrencePatternTest < ActiveSupport::TestCase
     fixtures :users
 
     def setup
@@ -13,7 +13,7 @@ module RecurringTodos
     def test_attribute_mapping
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
-        'description'            => 'a repeating todo',    # generic
+        'description'            => 'a recurring todo',    # generic
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
@@ -28,7 +28,7 @@ module RecurringTodos
       assert builder.save, "should save: #{builder.errors.full_messages}"
       rt = builder.saved_recurring_todo
 
-      assert builder.pattern.is_a?(MonthlyRepeatPattern), "should be monthly pattern, but is #{builder.pattern.class}"
+      assert builder.pattern.is_a?(MonthlyRecurrencePattern), "should be monthly pattern, but is #{builder.pattern.class}"
       assert builder.pattern.every_x_day?, "should be true for monthly_every_x_day"
       assert 1, rt.recurrence_selector
 
@@ -42,7 +42,7 @@ module RecurringTodos
     def test_every_x_month
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
-        'description'            => 'a repeating todo',    # generic
+        'description'            => 'a recurring todo',    # generic
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
@@ -61,7 +61,7 @@ module RecurringTodos
 
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'monthly',
-        'description'            => 'a repeating todo',    # generic
+        'description'            => 'a recurring todo',    # generic
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,

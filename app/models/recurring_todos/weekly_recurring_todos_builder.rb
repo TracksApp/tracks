@@ -4,7 +4,7 @@ module RecurringTodos
     attr_reader :recurring_todo
 
     def initialize(user, attributes)
-      super(user, attributes, WeeklyRepeatPattern)
+      super(user, attributes, WeeklyRecurrencePattern)
     end
 
     def attributes_to_filter

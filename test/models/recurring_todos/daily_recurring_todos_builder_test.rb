@@ -17,7 +17,7 @@ module RecurringTodos
     def test_filter_non_daily_attributes
       attributes = {
         'recurring_period' => 'daily',
-        'description'      => 'a repeating todo',  # generic
+        'description'      => 'a recurring todo',  # generic
         'daily_selector'   => 'daily_every_x_day', # daily specific
         'bla_bla'          => 'go away'            # irrelevant for daily
       }
@@ -27,7 +27,7 @@ module RecurringTodos
       assert_nil   result.get('bla_bla'),   "bla_bla should be filtered"
       assert_nil   result.get(:bla_bla),    "bla_bla should be filtered"
       assert_equal false, result.get(:only_work_days), "daily attributes should be preserved"
-      assert_equal "a repeating todo",  result.get(:description), "description should be preserved"
+      assert_equal "a recurring todo",  result.get(:description), "description should be preserved"
     end
 
     def test_valid_selector
@@ -54,7 +54,7 @@ module RecurringTodos
     def test_mapping_of_attributes
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'    => 'daily',
-        'description'         => 'a repeating todo',  # generic
+        'description'         => 'a recurring todo',  # generic
         'daily_selector'      => 'daily_every_x_day', # daily specific --> mapped to only_work_days=false
         'daily_every_x_days'  => '5'                  # mapped to every_other1
       })
@@ -66,7 +66,7 @@ module RecurringTodos
 
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'    => 'daily',
-        'description'         => 'a repeating todo',     # generic
+        'description'         => 'a recurring todo',     # generic
         'daily_selector'      => 'daily_every_work_day', # daily specific --> mapped to only_work_days=true
       })
 

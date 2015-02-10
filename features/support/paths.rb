@@ -74,7 +74,7 @@ module NavigationHelpers
       projects_path(options)
     when /the manage users page/
       users_path(options)
-    when /the repeating todos page/
+    when /the recurring todos page/
       recurring_todos_path(options)
     when /the integrations page/
       integrations_path(options)

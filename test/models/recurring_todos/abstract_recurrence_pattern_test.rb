@@ -2,7 +2,7 @@ require 'test_helper'
 
 module RecurringTodos
 
-  class AbstractRepeatPatternTest < ActiveSupport::TestCase
+  class AbstractRecurrencePatternTest < ActiveSupport::TestCase
     fixtures :users
 
     def setup
@@ -14,7 +14,7 @@ module RecurringTodos
       rt = @admin.recurring_todos.first
 
       pattern = rt.pattern
-      assert pattern.is_a?(DailyRepeatPattern), "recurring todo should have daily pattern"
+      assert pattern.is_a?(DailyRecurrencePattern), "recurring todo should have daily pattern"
     end
 
     def test_validation_on_due_date
@@ -156,7 +156,7 @@ module RecurringTodos
       create_pattern(attributes.reverse_merge({
         'recurring_period'     => 'weekly',
         'recurring_target'     => 'due_date',
-        'description'          => 'a repeating todo',  # generic
+        'description'          => 'a recurring todo',  # generic
         'ends_on'              => 'ends_on_end_date',
         'end_date'             => Time.zone.now + 1.week,
         'context_id'           => @admin.contexts.first.id,

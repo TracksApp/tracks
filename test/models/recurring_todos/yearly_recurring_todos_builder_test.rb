@@ -17,7 +17,7 @@ module RecurringTodos
     def test_filter_non_daily_attributes
       attributes = {
         'recurring_period'     => 'yearly',
-        'description'          => 'a repeating todo',   # generic
+        'description'          => 'a recurring todo',   # generic
         'yearly_selector'      => 'yearly_every_x_day', # daily specific
         'yearly_month_of_year' => '1',                  # mapped to evert_other2 because yearly_selector is yearly_every_x_day
         'bla_bla'              => 'go away'             # irrelevant for daily
@@ -28,7 +28,7 @@ module RecurringTodos
       assert_nil   result.get('bla_bla'),                         "bla_bla should be filtered"
       assert_nil   result.get(:bla_bla),                          "bla_bla should be filtered"
       assert_equal '1', result.get(:every_other2),                "yearly attributes should be preserved"
-      assert_equal "a repeating todo",  result.get(:description), "description should be preserved"
+      assert_equal "a recurring todo",  result.get(:description), "description should be preserved"
     end
 
     def test_valid_selector
@@ -55,7 +55,7 @@ module RecurringTodos
     def test_mapping_of_attributes
       attributes = {
         'recurring_period'      => 'yearly',
-        'description'           => 'a repeating todo',   # generic
+        'description'           => 'a recurring todo',   # generic
         'yearly_selector'       => 'yearly_every_x_day', # yearly specific 
         'yearly_every_x_day'    => '5',                  # mapped to every_other1
         'yearly_every_xth_day'  => '7',                  # mapped to every_other3
@@ -73,7 +73,7 @@ module RecurringTodos
 
       attributes = {
         'recurring_period'      => 'yearly',
-        'description'           => 'a repeating todo',     # generic
+        'description'           => 'a recurring todo',     # generic
         'yearly_selector'       => 'yearly_every_xth_day', # daily specific --> mapped to only_work_days=false
         'yearly_month_of_year'  => '1',                    # ignored because yearly_selector is yearly_every_xth_day
         'yearly_month_of_year2' => '2'                     # mapped to evert_other2 because yearly_selector is yearly_every_xth_day
