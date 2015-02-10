@@ -776,7 +776,7 @@ class TodosControllerTest < ActionController::TestCase
     todo = Todo.find(todo.id) #reload does not seem to work here
     assert todo.completed?
 
-    # Then there should not be an active todo beloning to the repeat pattern
+    # Then there should not be an active todo belonging to the repeat pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert next_todo.nil?
 
@@ -814,7 +814,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.reload
     assert todo.completed?
 
-    # Then there should not be an active todo beloning to the repeat pattern
+    # Then there should not be an active todo belonging to the repeat pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo.id, :state => 'active').first
     assert next_todo.nil?
 

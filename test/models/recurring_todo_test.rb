@@ -29,7 +29,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # assume that target due_date works fine, i.e. don't do the same tests over
 
     @every_day.target='show_from_date'
-    # when recurrence is targeted on show_from, due date shoult remain nil
+    # when recurrence is targeted on show_from, due date should remain nil
     assert_equal nil, @every_day.get_due_date(nil)
     assert_equal nil, @every_day.get_due_date(@today-3.days)
 
