@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130227205845) do
+ActiveRecord::Schema.define(version: 20150209233951) do
 
   create_table "contexts", force: true do |t|
     t.string   "name",                                     null: false
@@ -104,17 +104,17 @@ ActiveRecord::Schema.define(version: 20130227205845) do
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
   create_table "recurring_todos", force: true do |t|
-    t.integer  "user_id",                         default: 1
-    t.integer  "context_id",                                      null: false
+    t.integer  "user_id",                          default: 1
+    t.integer  "context_id",                                       null: false
     t.integer  "project_id"
-    t.string   "description",                                     null: false
+    t.string   "description",                                      null: false
     t.text     "notes"
-    t.string   "state",                limit: 20,                 null: false
+    t.string   "state",                 limit: 20,                 null: false
     t.datetime "start_from"
     t.string   "ends_on"
     t.datetime "end_date"
-    t.integer  "number_of_occurences"
-    t.integer  "occurences_count",                default: 0
+    t.integer  "number_of_occurrences"
+    t.integer  "occurrences_count",                default: 0
     t.string   "target"
     t.integer  "show_from_delta"
     t.string   "recurring_period"
@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20130227205845) do
     t.integer  "every_other2"
     t.integer  "every_other3"
     t.string   "every_day"
-    t.boolean  "only_work_days",                  default: false
+    t.boolean  "only_work_days",                   default: false
     t.integer  "every_count"
     t.integer  "weekday"
     t.datetime "completed_at"

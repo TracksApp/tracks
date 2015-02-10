@@ -145,7 +145,7 @@ class RecurringTodosController < ApplicationController
     params.require(:recurring_todo).permit(
       # model attributes
       :context_id, :project_id, :description, :notes, :state, :start_from,
-      :ends_on, :end_date, :number_of_occurences, :occurences_count, :target,
+      :ends_on, :end_date, :number_of_occurrences, :occurrences_count, :target,
       :show_from_delta, :recurring_period, :recurrence_selector, :every_other1,
       :every_other2, :every_other3, :every_day, :only_work_days, :every_count,
       :weekday, :show_always, :context_name, :project_name, :tag_list,

@@ -34,7 +34,7 @@
         <br/>
         <label for="recurring_todo[ends_on]"><%= t('todos.recurrence.ends_on') %>:</label><br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'no_end_date', true)%> <%= t('todos.recurrence.no_end_date') %><br/>
-        <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_number_of_times', false)%> <%= raw t('todos.recurrence.ends_on_number_times', :number => text_field( :recurring_todo, :number_of_occurences, "size" => 3)) %> <br/>
+        <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_number_of_times', false)%> <%= raw t('todos.recurrence.ends_on_number_times', :number => text_field( :recurring_todo, :number_of_occurrences, "size" => 3)) %> <br/>
         <%= radio_button_tag('recurring_todo[ends_on]', 'ends_on_end_date', false)%> <%= raw t('todos.recurrence.ends_on_date', :date => text_field(:recurring_todo, :end_date, "size" => 12, "class" => "Date", "autocomplete" => "off", "value" => "")) %><br/>
     </div></div>
     <div id="recurring_daily" style="display:block">

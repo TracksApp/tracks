@@ -32,8 +32,8 @@ module RecurringTodos
       get :show_from_delta
     end
 
-    def number_of_occurences
-      get :number_of_occurences
+    def number_of_occurrences
+      get :number_of_occurrences
     end
 
     def recurring_target_as_text
@@ -94,7 +94,7 @@ module RecurringTodos
       validate_not_blank(start_from, "The start date needs to be filled in")
       case ends_on
       when 'ends_on_number_of_times'
-        validate_not_blank(number_of_occurences, "The number of recurrences needs to be filled in for 'Ends on'")
+        validate_not_blank(number_of_occurrences, "The number of recurrences needs to be filled in for 'Ends on'")
       when "ends_on_end_date"
         validate_not_blank(end_date, "The end date needs to be filled in for 'Ends on'")
       else
@@ -155,7 +155,7 @@ module RecurringTodos
     end
 
     def continues_recurring?(previous)
-      return @recurring_todo.occurences_count < @recurring_todo.number_of_occurences unless @recurring_todo.number_of_occurences.nil?
+      return @recurring_todo.occurrences_count < @recurring_todo.number_of_occurrences unless @recurring_todo.number_of_occurrences.nil?
       return true if self.end_date.nil? || self.ends_on == 'no_end_date'
 
       case self.target

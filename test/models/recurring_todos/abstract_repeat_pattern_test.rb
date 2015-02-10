@@ -73,7 +73,7 @@ module RecurringTodos
       assert pattern.valid?, "should be valid"
     end
 
-    def test_validation_on_number_of_occurences
+    def test_validation_on_number_of_occurrences
       attributes = {
         'weekly_return_monday'       => 'm',                 # weekly specific
         'weekly_every_x_week'        => 1,
@@ -83,9 +83,9 @@ module RecurringTodos
       }
 
 #      pattern = create_recurring_todo(attributes)
-#      assert !pattern.valid?, "number_of_occurences should be filled"
+#      assert !pattern.valid?, "number_of_occurrences should be filled"
 
-      attributes['number_of_occurences']=5
+      attributes['number_of_occurrences']=5
       pattern = create_recurring_todo(attributes)
       assert pattern.valid?, "should be valid"
     end
@@ -110,12 +110,12 @@ module RecurringTodos
       assert !rt.continues_recurring?(Time.zone.now), "should end because end_date is in the past"
 
       rt.reload # reset
-      rt.number_of_occurences = 2
-      rt.occurences_count = 1
-      assert rt.continues_recurring?(Time.zone.now), "should continue since there still may come occurences"
+      rt.number_of_occurrences = 2
+      rt.occurrences_count = 1
+      assert rt.continues_recurring?(Time.zone.now), "should continue since there still may come occurrences"
 
-      rt.occurences_count = 2
-      assert !rt.continues_recurring?(Time.zone.now), "should end since all occurences are there"
+      rt.occurrences_count = 2
+      assert !rt.continues_recurring?(Time.zone.now), "should end since all occurrences are there"
     end
 
     def test_determine_start

@@ -96,7 +96,7 @@ module ApplicationHelper
     when "no_end_date"
       return time_span_text(rt.start_from, I18n.t("todos.recurrence.pattern.from"))
     when "ends_on_number_of_times"
-      return I18n.t("todos.recurrence.pattern.times", :number => rt.number_of_occurences)
+      return I18n.t("todos.recurrence.pattern.times", :number => rt.number_of_occurrences)
     when "ends_on_end_date"
       starts = time_span_text(rt.start_from, I18n.t("todos.recurrence.pattern.from"))
       ends = time_span_text(rt.end_date, I18n.t("todos.recurrence.pattern.until"))
