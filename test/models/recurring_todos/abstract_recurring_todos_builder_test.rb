@@ -5,7 +5,7 @@ module RecurringTodos
   class AbstractRecurringTodosBuilderTest < ActiveSupport::TestCase
     fixtures :users
 
-    class TestRepeatPattern < AbstractRepeatPattern 
+    class TestRecurringPattern < AbstractRecurrencePattern
       def selector_key
         'test'
       end
@@ -33,7 +33,7 @@ module RecurringTodos
       })
   
       assert_raise(Exception, "should have exception since we are using abstract builder") do 
-        builder = AbstractRecurringTodosBuilder.new(@admin, attributes, DailyRepeatPattern)
+        builder = AbstractRecurringTodosBuilder.new(@admin, attributes, DailyRecurrencePattern)
       end
     end  
 

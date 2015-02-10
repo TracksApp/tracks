@@ -23,19 +23,19 @@ module RecurringTodos
     end
 
     def daily_pattern
-      @daily_pattern ||= create_pattern(DailyRepeatPattern)
+      @daily_pattern ||= create_pattern(DailyRecurrencePattern)
     end
 
     def weekly_pattern
-      @weekly_pattern ||= create_pattern(WeeklyRepeatPattern)
+      @weekly_pattern ||= create_pattern(WeeklyRecurrencePattern)
     end
 
     def monthly_pattern
-      @monthly_pattern ||= create_pattern(MonthlyRepeatPattern)
+      @monthly_pattern ||= create_pattern(MonthlyRecurrencePattern)
     end
 
     def yearly_pattern
-      @yearly_pattern ||= create_pattern(YearlyRepeatPattern)
+      @yearly_pattern ||= create_pattern(YearlyRecurrencePattern)
     end
 
     def method_missing(method, *args)

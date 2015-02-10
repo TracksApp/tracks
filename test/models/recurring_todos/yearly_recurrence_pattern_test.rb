@@ -2,7 +2,7 @@ require 'test_helper'
 
 module RecurringTodos
 
-  class YearlyRepeatPatternTest < ActiveSupport::TestCase
+  class YearlyRecurrencePatternTest < ActiveSupport::TestCase
     fixtures :users
 
     def setup
@@ -13,7 +13,7 @@ module RecurringTodos
     def test_attribute_mapping
       builder = RecurringTodosBuilder.new(@admin, { 
         'recurring_period'       => 'yearly',
-        'description'            => 'a repeating todo',    # generic
+        'description'            => 'a recurring todo',    # generic
         'recurring_target'       => 'show_from_date',
         'ends_on'                => 'ends_on_end_date',
         'end_date'               => Time.zone.now + 1.week,
@@ -30,7 +30,7 @@ module RecurringTodos
       assert builder.save, "should save: #{builder.errors.full_messages}"
       rt = builder.saved_recurring_todo
 
-      assert builder.pattern.is_a?(YearlyRepeatPattern), "should be yearly pattern, but is #{builder.pattern.class}"
+      assert builder.pattern.is_a?(YearlyRecurrencePattern), "should be yearly pattern, but is #{builder.pattern.class}"
 
       assert_equal rt.recurrence_selector, builder.pattern.recurrence_selector
       assert_equal rt.every_other2,        builder.pattern.month_of_year

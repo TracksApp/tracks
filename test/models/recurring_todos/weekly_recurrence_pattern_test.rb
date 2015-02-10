@@ -2,7 +2,7 @@ require 'test_helper'
 
 module RecurringTodos
 
-  class WeeklyRepeatPatternTest < ActiveSupport::TestCase
+  class WeeklyRecurrencePatternTest < ActiveSupport::TestCase
     fixtures :users
 
     def setup

@@ -13,11 +13,11 @@ module RecurringTodos
 
       h = FormHelper.new(rt)
 
-      assert_equal 42,  h.daily_every_x_days,  "should be passed to DailyRepeatPattern"
-      assert_equal 42,  h.weekly_every_x_week, "should be passed to WeeklyRepeatPattern"
-      assert_equal 42,  h.monthly_every_x_day, "should be passed to MonthlyRepeatPattern"
-      assert_equal 42,  h.yearly_every_x_day,  "should be passed to YearlyRepeatPattern"
-      assert            h.on_monday,           "should be passed to WeeklyRepeatPattern"
+      assert_equal 42,  h.daily_every_x_days,  "should be passed to DailyRecurrencePattern"
+      assert_equal 42,  h.weekly_every_x_week, "should be passed to WeeklyRecurrencePattern"
+      assert_equal 42,  h.monthly_every_x_day, "should be passed to MonthlyRecurrencePattern"
+      assert_equal 42,  h.yearly_every_x_day,  "should be passed to YearlyRecurrencePattern"
+      assert            h.on_monday,           "should be passed to WeeklyRecurrencePattern"
     end
   end
 

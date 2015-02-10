@@ -129,7 +129,7 @@ class ContextsController < ApplicationController
   # actions, you'll get a warning dialogue. If you choose to go ahead, any
   # actions in the context will also be deleted.
   def destroy
-    # make sure the deleted recurring patterns are removed from associated todos
+    # make sure the deleted recurrence patterns are removed from associated todos
     @context.recurring_todos.each { |rt| rt.clear_todos_association } unless @context.recurring_todos.nil?
 
     @context.destroy

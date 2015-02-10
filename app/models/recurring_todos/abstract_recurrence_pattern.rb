@@ -1,6 +1,6 @@
 module RecurringTodos
 
-  class AbstractRepeatPattern
+  class AbstractRecurrencePattern
 
     attr_accessor :attributes
 
@@ -41,7 +41,7 @@ module RecurringTodos
     end
 
     def recurrence_pattern
-      raise "Should not call AbstractRepeatPattern.recurrence_pattern directly. Overwrite in subclass"
+      raise "Should not call AbstractRecurrencePattern.recurrence_pattern directly. Overwrite in subclass"
     end
 
     def xth(x)
@@ -151,7 +151,7 @@ module RecurringTodos
     end
 
     def get_next_date(previous)
-      raise "Should not call AbstractRepeatPattern.get_next_date directly. Overwrite in subclass"
+      raise "Should not call AbstractRecurrencePattern.get_next_date directly. Overwrite in subclass"
     end
 
     def continues_recurring?(previous)

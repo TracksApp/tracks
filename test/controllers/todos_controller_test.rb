@@ -676,7 +676,7 @@ class TodosControllerTest < ActionController::TestCase
     count = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').count
     assert_equal 1, count
 
-    # check there is a new todo linked to the recurring pattern
+    # check there is a new todo linked to the recurrence pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert_equal "Call Bill Gates every day", next_todo.description
     # check that the new todo is not the same as todo_1
@@ -706,7 +706,7 @@ class TodosControllerTest < ActionController::TestCase
     count = Todo.where(:recurring_todo_id => recurring_todo_1.id).count
     assert_equal 3, count
 
-    # check there is a new todo linked to the recurring pattern in the tickler
+    # check there is a new todo linked to the recurrence pattern in the tickler
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
     assert !next_todo.nil?
     assert_equal "Call Bill Gates every day", next_todo.description
@@ -758,16 +758,16 @@ class TodosControllerTest < ActionController::TestCase
 
     tomorrow = Time.zone.now + 1.day
 
-    # Given a repeat pattern with recurring date set to tomorrow
+    # Given a recurrence pattern with recurring date set to tomorrow
     recurring_todo_1 = RecurringTodo.find(5)
     recurring_todo_1.every_other1 = tomorrow.day
     recurring_todo_1.every_other2 = tomorrow.month
     recurring_todo_1.save
 
-    # Given a recurring todo (todo) that belongs to the repeat pattern (recurring_todo_1) and is due tomorrow
+    # Given a recurring todo (todo) that belongs to the recurrence pattern (recurring_todo_1) and is due tomorrow
     todo = Todo.where(:recurring_todo_id => 1).first
     assert todo.from_recurring_todo?
-    todo.recurring_todo_id = 5 # rewire todo to the repeat pattern above
+    todo.recurring_todo_id = 5 # rewire todo to the recurrence pattern above
     todo.due = tomorrow
     todo.save!
 
@@ -776,7 +776,7 @@ class TodosControllerTest < ActionController::TestCase
     todo = Todo.find(todo.id) #reload does not seem to work here
     assert todo.completed?
 
-    # Then there should not be an active todo belonging to the repeat pattern
+    # Then there should not be an active todo belonging to the recurrence pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert next_todo.nil?
 
@@ -794,7 +794,7 @@ class TodosControllerTest < ActionController::TestCase
 
     tomorrow = Time.zone.now + 1.day
 
-    # Given a monthly repeat pattern
+    # Given a monthly recurrence pattern
     recurring_todo = RecurringTodo.find(5)
     recurring_todo.target = "due_date"
     recurring_todo.recurring_period = "monthly"
@@ -802,10 +802,10 @@ class TodosControllerTest < ActionController::TestCase
     recurring_todo.every_other2 = 1
     recurring_todo.save
 
-    # Given a recurring todo (todo) that belongs to the repeat pattern (recurring_todo) and is due tomorrow
+    # Given a recurring todo (todo) that belongs to the recurrence pattern (recurring_todo) and is due tomorrow
     todo = Todo.where(:recurring_todo_id => 1).first
     assert todo.from_recurring_todo?
-    todo.recurring_todo_id = 5 # rewire todo to the repeat pattern above
+    todo.recurring_todo_id = 5 # rewire todo to the recurrence pattern above
     todo.due = tomorrow
     todo.save!
 
@@ -814,7 +814,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.reload
     assert todo.completed?
 
-    # Then there should not be an active todo belonging to the repeat pattern
+    # Then there should not be an active todo belonging to the recurrence pattern
     next_todo = Todo.where(:recurring_todo_id => recurring_todo.id, :state => 'active').first
     assert next_todo.nil?
 

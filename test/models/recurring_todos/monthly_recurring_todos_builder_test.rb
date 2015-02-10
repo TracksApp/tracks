@@ -17,7 +17,7 @@ module RecurringTodos
     def test_filter_non_daily_attributes
       attributes = {
         'recurring_period'    => 'monthly',
-        'description'         => 'a repeating todo',    # generic
+        'description'         => 'a recurring todo',    # generic
         'monthly_selector'    => 'monthly_every_x_day', # monthly specific
         'monthly_every_x_day' => 5,                     # should be preserved as :every_other1
         'bla_bla'             => 'go away'              # irrelevant for daily
@@ -54,7 +54,7 @@ module RecurringTodos
     def test_mapping_of_attributes
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'       => 'monthly',
-        'description'            => 'a repeating todo',    # generic
+        'description'            => 'a recurring todo',    # generic
         'monthly_selector'       => 'monthly_every_x_day', # monthly specific 
         'monthly_every_x_day'    => '5',                   # mapped to :every_other1
         'monthly_every_xth_day'  => '7',                   # mapped to :every_other3
@@ -75,7 +75,7 @@ module RecurringTodos
 
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'       => 'monthly',
-        'description'            => 'a repeating todo',      # generic
+        'description'            => 'a recurring todo',      # generic
         'monthly_selector'       => 'monthly_every_xth_day', # monthly specific 
         'monthly_every_x_day'    => '5',                     # mapped to :every_other1
         'monthly_every_x_month'  => '10',                    # not mapped

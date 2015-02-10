@@ -16,7 +16,7 @@ Feature: Show done
     When I go to the done page
     Then I should see "Last Completed Actions"
     And I should see "Last Completed Projects"
-    And I should see "Last Completed Repeating Actions"
+    And I should see "Last Completed Recurring Actions"
 
   Scenario Outline: Page with actions links to show all completed actions
     When I go to the <page>
@@ -95,7 +95,7 @@ Feature: Show done
     And the page should be "2"
 
   Scenario: The recurring todos page shows a link to all completed recurring todos
-    Given I have a completed repeat pattern "finished"
+    Given I have a completed recurrence pattern "finished"
     When I go to the recurring todos page
     Then I should see "finished"
     And I should see "Show all"
@@ -104,7 +104,7 @@ Feature: Show done
     And I should see "finished"
 
   Scenario: I can browse all completed recurring todos by page
-    Given I have 40 completed repeat patterns
+    Given I have 40 completed recurrence patterns
     When I go to the recurring todos page
     And I follow "Show all"
     Then I should see the page selector
@@ -115,7 +115,7 @@ Feature: Show done
 
   @javascript
   Scenario: I can toggle a done recurring todo active from done page
-    Given I have a completed repeat pattern "test pattern"
+    Given I have a completed recurrence pattern "test pattern"
     When I go to the done recurring todos page
     Then I should see "test pattern"
     When I mark the pattern "test pattern" as active
@@ -125,7 +125,7 @@ Feature: Show done
 
   @javascript
   Scenario: I can delete a recurring todo from the done page
-    Given I have a completed repeat pattern "test pattern"
+    Given I have a completed recurrence pattern "test pattern"
     When I go to the done recurring todos page
     Then I should see "test pattern"
     When I delete the pattern "test pattern"

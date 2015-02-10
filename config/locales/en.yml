@@ -254,7 +254,7 @@ en:
   common:
     back: Back
     third: Third
-    recurring_todos: Repeating Actions
+    recurring_todos: Recurring Actions
     actions: Actions
     actions_midsentence:
       zero: actions
@@ -387,7 +387,7 @@ en:
       home: Home
     navigation:
       manage_users_title: Add or delete users
-      recurring_todos: Repeating todos
+      recurring_todos: Recurring todos
       api_docs: REST API Docs
       feeds: Feeds
       starred: Starred
@@ -697,7 +697,7 @@ en:
       due_date: with a due date %{due_date} or earlier
     overdue: Overdue
     add_new_recurring: Add a new recurring action
-    edit_recurring_todo: Edit repeating action
+    edit_recurring_todo: Edit recurring action
     see_all_completed: You can see all completed actions %{link}
     all_completed_here: here
   contexts:
@@ -705,7 +705,7 @@ en:
     all_completed_tasks_title: "TRACKS::All Completed actions in the context '%{context_name}'"
     hide_form: Hide form
     show_form_title: Add a context
-    delete_context_confirmation: "Are you sure that you want to delete the context '%{name}'? Be aware that this will also delete all (repeating) actions in this context!"
+    delete_context_confirmation: "Are you sure that you want to delete the context '%{name}'? Be aware that this will also delete all (recurring) actions in this context!"
     delete_context: Delete context
     edit_context: Edit context
     hide_form_title: Hide new context form

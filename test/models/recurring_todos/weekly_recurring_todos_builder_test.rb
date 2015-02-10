@@ -17,7 +17,7 @@ module RecurringTodos
     def test_filter_non_daily_attributes
       attributes = {
         'recurring_period'     => 'weekly',
-        'description'          => 'a repeating todo',  # generic
+        'description'          => 'a recurring todo',  # generic
         'weekly_return_monday' => 'm',                 # weekly specific
         'bla_bla'              => 'go away'            # irrelevant 
       }
@@ -27,13 +27,13 @@ module RecurringTodos
       assert_nil   result.get('bla_bla'),   "bla_bla should be filtered"
       assert_nil   result.get(:bla_bla),    "bla_bla should be filtered"
       assert_equal ' m     ',           result.get(:every_day), "weekly attributes should be preserved"
-      assert_equal "a repeating todo",  result.get(:description), "description should be preserved"
+      assert_equal "a recurring todo",  result.get(:description), "description should be preserved"
     end
 
     def test_attributes_to_filter
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'     => 'weekly',
-        'description'          => 'a repeating todo',  # generic
+        'description'          => 'a recurring todo',  # generic
         'weekly_return_monday' => 'm',                 # weekly specific
       })
 
@@ -46,7 +46,7 @@ module RecurringTodos
     def test_mapping_of_attributes
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'     => 'weekly',
-        'description'          => 'a repeating todo',  # generic
+        'description'          => 'a recurring todo',  # generic
         'weekly_every_x_week'  => '5',                 # mapped to every_other1
         'weekly_return_monday' => 'm'
       })
@@ -60,7 +60,7 @@ module RecurringTodos
     def test_map_day
       attributes = Tracks::AttributeHandler.new(@admin, {
         'recurring_period'     => 'weekly',
-        'description'          => 'a repeating todo',  # generic
+        'description'          => 'a recurring todo',  # generic
         'weekly_every_x_week'  => '5'                  # mapped to every_other1
       })
 
