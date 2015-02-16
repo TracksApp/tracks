@@ -16,12 +16,6 @@ gem 'uglifier', '>=1.3.0'
 
 gem 'jquery-rails'
 
-# you may comment out the database driver you will not be using.
-# This will prevent a native build of the driver. Building native drivers is not
-# always possible on all hosters
-gem "sqlite3"
-gem "mysql2"
-
 gem "RedCloth"
 gem "sanitize"
 gem "will_paginate"
@@ -41,41 +35,7 @@ gem 'bcrypt', '~> 3.1.7'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 1.2'
 
-group :development do
-  gem "spring"
-  gem "spring-commands-cucumber"
-  gem "yard"
-
-  gem 'tolk', '~> 1.6.0'
-
-  gem "bullet"
-  gem "rack-mini-profiler"
-  gem "rack-dev-mark"
-  gem "activerecord-deprecated_finders"
-end
-
-group :test do
-  gem "factory_girl_rails"
-  gem "capybara"
-  gem "cucumber-rails", :require => false
-  gem "rspec-expectations"
-  gem "database_cleaner"
-  gem "mocha", :require => false
-
-  gem "aruba", ">=0.5.4", :require => false
-
-  # Note that > 2.14 has problems, see:
-  # https://code.google.com/p/selenium/issues/detail?id=3075
-  gem "selenium-webdriver"
-
-  # uncomment to use the webkit option. This depends on Qt being installed
-  # gem "capybara-webkit"
-
-  # uncomment to be able to make screenshots from scenarios
-  #gem "capybara-screenshot"
-  #gem "launchy"
-
-  gem "simplecov"
-  # get test coverage info on codeclimate
-  gem "codeclimate-test-reporter", group: :test, require: nil
+# Load supplemental groups from bundler.d
+Dir["#{File.dirname(__FILE__)}/bundler.d/*.rb"].each do |bundle|
+  self.instance_eval(Bundler.read_file(bundle))
 end
