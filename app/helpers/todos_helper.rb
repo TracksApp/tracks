@@ -154,10 +154,10 @@ module TodosHelper
 
   def remote_edit_button(todo=@todo)
     link_to(
-      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
-      {:controller => 'todos', :action => 'edit', :id => todo.id},
+      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => dom_id(todo, "edit_icon"), :class => 'edit_item'),
+      edit_todo_path(todo),
       :class => "icon edit_item",
-      :id => "icon_edit_todo_#{todo.id}",
+      :id => dom_id(todo, "icon_edit"),
       :title => t('todos.edit_action_with_description', :description => todo.description))
   end
 
