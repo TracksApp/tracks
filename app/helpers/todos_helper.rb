@@ -166,7 +166,7 @@ module TodosHelper
       t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :class => "icon_delete_item",
-      :id => "delete_#{dom_id(todo)}",
+      :id => dom_id(todo, "delete"),
       :x_confirm_message => t('todos.confirm_delete', :description => todo.description),
       :title => t('todos.delete_action'));
   end
