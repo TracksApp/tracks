@@ -154,10 +154,10 @@ module TodosHelper
 
   def remote_edit_button(todo=@todo)
     link_to(
-      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => 'edit_icon_todo_'+todo.id.to_s, :class => 'edit_item'),
-      {:controller => 'todos', :action => 'edit', :id => todo.id},
+      image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => dom_id(todo, "edit_icon"), :class => 'edit_item'),
+      edit_todo_path(todo),
       :class => "icon edit_item",
-      :id => "icon_edit_todo_#{todo.id}",
+      :id => dom_id(todo, "icon_edit"),
       :title => t('todos.edit_action_with_description', :description => todo.description))
   end
 
@@ -166,7 +166,7 @@ module TodosHelper
       t('todos.delete'),
       {:controller => 'todos', :action => 'destroy', :id => todo.id},
       :class => "icon_delete_item",
-      :id => "delete_#{dom_id(todo)}",
+      :id => dom_id(todo, "delete"),
       :x_confirm_message => t('todos.confirm_delete', :description => todo.description),
       :title => t('todos.delete_action'));
   end
@@ -191,7 +191,7 @@ module TodosHelper
   def remote_delete_dependency(todo, predecessor)
     link_to(
       image_tag("blank.png", :title => t('todos.remove_dependency'), :align => "absmiddle", :class => "delete_item"),
-      url_for({:controller => 'todos', :action => 'remove_predecessor', :id => todo.id}),
+      remove_predecessor_todo_path(todo),
       {:class => "delete_dependency_button", :x_predecessors_id => predecessor.id}
     )
   end
@@ -201,7 +201,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => "to_project_#{dom_id(todo)}"})
+    link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => dom_id(todo, "to_project")})
   end
 
   def collapsed_notes_image(todo)
