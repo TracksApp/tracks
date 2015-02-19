@@ -19,4 +19,9 @@ class TodosHelpersTest < ActionView::TestCase
     html = remote_delete_dependency(todo, predecessor)
     assert_equal "<a class=\"delete_dependency_button\" href=\"/todos/18/remove_predecessor\" x_predecessors_id=\"1\"><img align=\"absmiddle\" alt=\"Blank\" class=\"delete_item\" src=\"/images/blank.png\" title=\"Remove dependency (does not delete the action)\" /></a>", html
   end
+
+  test "remote_promote_to_project_menu_item" do
+    html = remote_promote_to_project_menu_item(todos(:call_bill))
+    assert_equal "<a class=\"icon_item_to_project\" href=\"/todos/1/convert_to_project?_source_view=\" id=\"to_project_todo_1\">Make project</a>", html
+  end
 end

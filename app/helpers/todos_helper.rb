@@ -201,7 +201,7 @@ module TodosHelper
       :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
-    return link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => "to_project_#{dom_id(todo)}"})
+    link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => dom_id(todo, "to_project")})
   end
 
   def collapsed_notes_image(todo)
