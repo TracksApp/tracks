@@ -191,7 +191,7 @@ module TodosHelper
   def remote_delete_dependency(todo, predecessor)
     link_to(
       image_tag("blank.png", :title => t('todos.remove_dependency'), :align => "absmiddle", :class => "delete_item"),
-      url_for({:controller => 'todos', :action => 'remove_predecessor', :id => todo.id}),
+      remove_predecessor_todo_path(todo),
       {:class => "delete_dependency_button", :x_predecessors_id => predecessor.id}
     )
   end
