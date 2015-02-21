@@ -16,11 +16,12 @@ gem 'uglifier', '>=1.3.0'
 
 gem 'jquery-rails'
 
-# you may comment out the database driver you will not be using.
+# you may comment out the database driver(s) you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
-# always possible on all hosters
-gem "sqlite3"
-gem "mysql2"
+# always possible on all platforms
+# Alternatively use --without <group> arguments to bundler to not install that group
+gem "sqlite3", group: :sqlite
+gem "mysql2", group: :mysql
 
 gem "RedCloth"
 gem "sanitize"
