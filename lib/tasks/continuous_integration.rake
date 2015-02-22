@@ -9,7 +9,7 @@ task :ci do |t|
   require 'simplecov'
   SimpleCov.start 'rails'
 
-  [:environment, 'test:all', 'cucumber'].each do |t|
+  [:environment, 'db:create', 'test:all', 'cucumber'].each do |t|
     Rake::Task[t].invoke
   end
 end
