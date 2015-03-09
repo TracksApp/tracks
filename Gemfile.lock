@@ -44,9 +44,6 @@ GEM
     bullet (4.14.0)
       activesupport (>= 3.0.0)
       uniform_notifier (>= 1.6.0)
-    cache_digests (0.3.1)
-      actionpack (>= 3.2)
-      thread_safe
     capybara (2.4.4)
       mime-types (>= 1.16)
       nokogiri (>= 1.3.3)
@@ -215,7 +212,6 @@ DEPENDENCIES
   aruba (>= 0.5.4)
   bcrypt (~> 3.1.7)
   bullet
-  cache_digests
   capybara
   codeclimate-test-reporter
   coffee-rails (~> 4.0)
