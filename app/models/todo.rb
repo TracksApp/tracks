@@ -115,20 +115,11 @@ class Todo < ActiveRecord::Base
   validates_presence_of :show_from, :if => :deferred?
   validates_presence_of :context
   validate :check_show_from_in_future
-  validate :check_circular_dependencies
 
   def check_show_from_in_future
     if show_from_changed? # only check on change of show_from
       if show_from.present? && (show_from < user.date)
         errors.add("show_from", I18n.t('models.todo.error_date_must_be_future'))
-      end
-    end
-  end
-
-  def check_circular_dependencies
-    unless @predecessor_array.nil? # Only validate predecessors if they changed
-      @predecessor_array.each do |todo|
-        errors.add("Depends on:", "Adding '#{todo.specification}' would create a circular dependency") if is_successor?(todo)
       end
     end
   end
