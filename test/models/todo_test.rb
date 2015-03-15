@@ -93,10 +93,9 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 1, @not_completed3.successors.count
     
     # 1 -> 3 -> 2 -> 1 == circle
-    @not_completed3.add_predecessor(@not_completed1)
-    assert !@not_completed3.valid?
-    error_msg = "Adding ''Call Bill Gates to find out how much he makes per day' <'agenda'; 'Make more money than Billy Gates'>' would create a circular dependency"
-    assert_equal error_msg, @not_completed3.errors["Depends on:"][0]
+    assert_raises ActiveRecord::RecordInvalid do
+      @not_completed3.add_predecessor(@not_completed1)
+    end
   end
 
   def test_defer_an_existing_todo
