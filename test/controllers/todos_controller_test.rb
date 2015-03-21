@@ -1003,6 +1003,24 @@ class TodosControllerTest < ActionController::TestCase
     assert t4.predecessors.map(&:id).include?(t3.id)
   end
 
+
+  def test_do_not_activate_done_successors
+    login_as(:admin_user)
+    predecessor = Todo.find(1)
+    successor = Todo.find(2)
+    successor.add_predecessor(predecessor)
+
+    successor.complete!
+    xhr :post, :toggle_check, :id => predecessor.id, :_source_view => 'todo'
+
+    predecessor.reload
+    successor.reload
+    assert !predecessor.active?
+    assert !successor.active?
+    assert predecessor.completed?
+    assert successor.completed?
+  end
+
   private
 
   def create_todo(params={})
