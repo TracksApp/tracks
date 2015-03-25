@@ -266,7 +266,7 @@ class TodoTest < ActiveSupport::TestCase
     assert !@not_completed1.starred?
   end
 
-  def test_hidden_todo_remains_hidden_after_getting_unblokked
+  def test_hidden_todo_remains_hidden_after_getting_unblocked
     todo = todos(:call_bill)
     project=todo.project
     project.hide!
