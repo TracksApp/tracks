@@ -65,8 +65,6 @@ group :test do
 
   gem "aruba", ">=0.5.4", :require => false
 
-  # Note that > 2.14 has problems, see:
-  # https://code.google.com/p/selenium/issues/detail?id=3075
   gem "selenium-webdriver"
 
   # uncomment to use the webkit option. This depends on Qt being installed
