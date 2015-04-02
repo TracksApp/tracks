@@ -58,6 +58,16 @@ Feature: Edit a project
     Then the project title should be "cherries"
     And the project field of the new todo form should contain "cherries"
 
+  # Ticket #1789
+  @javascript
+  Scenario: I can change the name of the project and it should still allow me to add new actions
+    Given I have a project "bananas"
+    When I go to the "bananas" project
+    And I edit the project name to "cherries"
+    And I edit the default context to "@pc"
+    And I submit a new action with description "a new next action"
+    Then I should see the todo "a new next action"
+
   @javascript
   Scenario: I can change the default context of the project and it should update the new todo form
     Given I have a project "bananas" with 1 todos
