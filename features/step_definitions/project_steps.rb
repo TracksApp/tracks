@@ -306,7 +306,7 @@ Then /^I should have a project called "([^"]*)"$/ do |project_name|
   expect(project).to_not be_nil
 end
 
-Then /^I should have (\d+) todo in project "([^"]*)"$/ do |todo_count, project_name|
+Then /^I should have (\d+) todos? in project "([^"]*)"$/ do |todo_count, project_name|
   project = @current_user.projects.where(:name => project_name).first
   expect(project).to_not be_nil
   expect(project.todos.count).to eq(todo_count.to_i)
