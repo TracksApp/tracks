@@ -33,4 +33,4 @@ Feature: Add a todo to Tracks on console
 
       """
     When I execute the add-todo script
-    Then I should have 2 todo in project "Project A"
+    Then I should have 2 todos in project "Project A"
