@@ -119,6 +119,11 @@ Then /^the project field of the new todo form should contain "([^"]*)"$/ do |pro
   expect(project_name).to eq(page.find(:xpath, xpath).value)
 end
 
+Then /^the context field of the new todo form should contain "([^"]*)"$/ do |context_name|
+  xpath= "//form[@id='todo-form-new-action']/input[@id='todo_context_name']"
+  expect(page.find(:xpath, xpath).value).to eq(context_name)
+end
+
 Then /^the default context of the new todo form should be "([^"]*)"$/ do |context_name|
   xpath= "//form[@id='todo-form-new-action']/input[@id='todo_context_name']"
   expect(context_name).to eq(page.find(:xpath, xpath).value)
