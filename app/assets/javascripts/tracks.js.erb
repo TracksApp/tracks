@@ -659,7 +659,7 @@ var ContextListPage = {
         $.post(relative_to_root('contexts/'+context_id), {
             'context[name]': value,
             '_method': 'put'
-        }, highlight);
+        }, highlight, 'script');
         return value;
     },
     setup_behavior: function() {
