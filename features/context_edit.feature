@@ -28,6 +28,14 @@ Feature: Edit a context
     And I edit the context name in place to be "OutAndAbout"
     Then the context field of the new todo form should contain "OutAndAbout"
 
+  # Ticket #1789
+  @javascript
+  Scenario: I can change the name of the context and it should still allow me to add new actions
+    When I go to the context page for "@pc"
+    And I edit the context name in place to be "OutAndAbout"
+    And I submit a new action with description "a new next action"
+    Then I should see the todo "a new next action"
+
   @javascript
   Scenario: Editing the context of a todo will remove the todo
     When I go to the the context page for "@pc"
