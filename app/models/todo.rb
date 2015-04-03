@@ -3,7 +3,6 @@ class Todo < ActiveRecord::Base
   MAX_DESCRIPTION_LENGTH = 300
   MAX_NOTES_LENGTH = 60000
 
-  before_save :render_note
   after_save :save_predecessors
 
   # associations
@@ -375,14 +374,6 @@ class Todo < ActiveRecord::Base
     unless params[:tag].nil?
       tag_list = params[:tag].inject([]) { |list, value| list << value[:name] }
       tag_with tag_list.join(", ")
-    end
-  end
-
-  def render_note
-    unless self.notes.nil?
-      self.rendered_notes = Tracks::Utils.render_text(self.notes)
-    else
-      self.rendered_notes = nil
     end
   end
 

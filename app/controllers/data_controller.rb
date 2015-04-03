@@ -31,7 +31,7 @@ class DataController < ApplicationController
       #save file for later
       begin
         uploaded_file = params[:file]
-        @filename = Tracks::Utils.sanitize_filename(uploaded_file.original_filename)
+        @filename = sanitize_filename(uploaded_file.original_filename)
         path_and_file = Rails.root.join('public', 'uploads', 'csv', @filename)
         File.open(path_and_file, "wb") { |f| f.write(uploaded_file.read) }
       rescue Exception => e
@@ -57,7 +57,7 @@ class DataController < ApplicationController
 
   def csv_import
     begin
-      filename = Tracks::Utils.sanitize_filename(params[:file])
+      filename = sanitize_filename(params[:file])
       path_and_file = Rails.root.join('public', 'uploads', 'csv', filename)
       case params[:import_to]
       when 'projects'
@@ -207,6 +207,11 @@ class DataController < ApplicationController
 
   def yaml_import
     raise "YAML loading is disabled"
+  end
+
+  private
+  def sanitize_filename(filename)
+    filename.gsub(/[^0-9A-z.\-]/, '_')
   end
 
 end

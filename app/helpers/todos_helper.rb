@@ -220,7 +220,7 @@ module TodosHelper
     notes = content_tag(:div, {
       :class => "todo_notes",
       :id => dom_id(todo, 'notes'),
-      :style => "display:none"}) { raw todo.rendered_notes }
+      :style => "display:none"}) { raw render_text(todo.notes) }
     return link+notes
   end
 
@@ -429,7 +429,7 @@ module TodosHelper
   end
 
   def feed_content_for_todo(todo)
-    item_notes = todo.notes ? todo.rendered_notes : ''
+    item_notes = todo.notes ? render_text(todo.notes) : ''
     due = todo.due ? content_tag(:div, t('todos.feeds.due', :date => format_date(todo.due))) : ''
     done = todo.completed? ? content_tag(:div, t('todos.feeds.completed', :date => format_date(todo.completed_at))) : ''
     context_link = link_to(context_url(todo.context), todo.context.name)
