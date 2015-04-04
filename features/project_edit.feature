@@ -19,8 +19,8 @@ Feature: Edit a project
   @javascript
   Scenario: I can describe the project using markup
     When I go to the "manage me" project
-    And I edit the project description to "_successfull outcome_: project is *done*"
-    Then I should see the italic text "successfull outcome" in the project description
+    And I edit the project description to "_successful outcome_: project is *done*"
+    Then I should see the italic text "successful outcome" in the project description
     And I should see the bold text "done" in the project description
 
   @javascript

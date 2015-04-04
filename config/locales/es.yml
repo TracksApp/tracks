@@ -761,7 +761,7 @@ es:
       one: Defer one day
       other: Defer %{count} days
     delete: Delete
-    deleted_success: The action was deleted succesfully.
+    deleted_success: The action was deleted successfully.
     delete_action: Delete action
     delete_recurring_action_confirm: Are you sure that you want to delete the recurring
       action '%{description}'?
@@ -897,7 +897,7 @@ es:
     recurring_action_deleted: Action was deleted. Because this action is recurring,
       a new action was added
     recurring_action_saved: Recurring action saved
-    recurring_deleted_success: The recurring action was deleted succesfully.
+    recurring_deleted_success: The recurring action was deleted successfully.
     recurring_pattern_removed: El patrón de repetición se retira de %{count}
     recurring_todos: Recurring todos
     removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
