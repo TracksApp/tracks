@@ -409,7 +409,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
 
-    cache_attributes_from_before_update # TODO: remove in favor of @orininal_item
+    cache_attributes_from_before_update # TODO: remove in favor of @original_item
 
     update_tags
     update_project
