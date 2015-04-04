@@ -542,7 +542,7 @@ en:
     edit: Edit
     pending: Pending
     completed_actions_with: "Completed actions with the tag '%{tag_name}'"
-    deleted_success: The action was deleted succesfully.
+    deleted_success: The action was deleted successfully.
     completed_tasks_title: TRACKS::Completed tasks
     feed_title_in_project: "in project '%{project}'"
     clear_due_date: Clear due date
@@ -552,7 +552,7 @@ en:
     show_on_date: Show on %{date}
     recurrence_period: Recurrence period
     deferred_actions_with: "Deferred actions with the tag '%{tag_name}'"
-    recurring_deleted_success: The recurring action was deleted succesfully.
+    recurring_deleted_success: The recurring action was deleted successfully.
     confirm_delete: "Are you sure that you want to delete the action '%{description}'?"
     deferred_tasks_title: TRACKS::Tickler
     next_actions_title: Tracks - Next Actions
