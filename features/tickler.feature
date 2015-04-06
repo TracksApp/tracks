@@ -42,7 +42,7 @@ Feature: Manage deferred todos
       | project  |
 
   @javascript
-  Scenario Outline: Editing the container of a todo moves it to the new contaier
+  Scenario Outline: Editing the container of a todo moves it to the new container
     Given I have a context called "A"
     And I have a context called "B"
     And I have a project called "pA"
