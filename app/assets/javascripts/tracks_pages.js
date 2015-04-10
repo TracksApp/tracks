@@ -24,15 +24,6 @@ var TracksPages = {
       $(selector).remove();
     });
   },
-  setup_nifty_corners: function() {
-    Nifty("div#recurring_new_container","normal");
-    Nifty("div#context_new_container","normal");
-    Nifty("div#feedlegend","normal");
-    Nifty("div#feedicons-project","normal");
-    Nifty("div#feedicons-context","normal");
-    Nifty("div#todo_new_action_container","normal");
-    Nifty("div#project_new_project_container","normal");
-  },
   page_notify: function(type, message, fade_duration_in_sec) {
     var flash = $('div#message_holder');
     flash.html("<h4 id=\'flash\' class=\'alert "+type+"\'>"+message+"</h4>");
