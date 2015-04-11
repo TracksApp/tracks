@@ -109,7 +109,7 @@ class Project < ActiveRecord::Base
     ## mutually exclusive for stalled and blocked
     # blocked is uncompleted project with deferred or pending todos, but no next actions
     return false if self.completed?
-    return !self.todos.deferred_or_blocked.empty? && self.todos.not_deferred_or_blocked.empty?
+    return !self.todos.deferred_or_blocked.empty? && self.todos.active.empty?
   end
 
   def stalled?

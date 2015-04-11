@@ -198,7 +198,6 @@ class ProjectTest < ActiveSupport::TestCase
 
   def test_project_blocked
     p = users(:admin_user).projects.first
-    todo_in_other_project = users(:admin_user).projects.last.todos.first
 
     assert !p.blocked?, "first project should not be blocked"
 
@@ -208,6 +207,9 @@ class ProjectTest < ActiveSupport::TestCase
     p.activate!
     p.todos.each{|t| t.show_from = 2.weeks.from_now; t.save! }
     assert p.blocked?, "projects with deferred todos should be blocked"
+
+    p.todos.first.complete!
+    assert p.blocked?, "projects with deferred todo should be blocked even if a completed todo exists"
   end
 
   def test_project_stalled
