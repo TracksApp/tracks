@@ -1,5 +1,5 @@
 <%- object_name = unique_object_name_for("update_todo_#{@todo.id}") -%>
 var <%=object_name%> = {
-  <%= render :partial => (@saved ? "update_succesfull" : "update_has_errors"), locals: {object_name: object_name} %>
+  <%= render :partial => (@saved ? "update_successful" : "update_has_errors"), locals: {object_name: object_name} %>
 }
 <%=object_name%>.animate();
