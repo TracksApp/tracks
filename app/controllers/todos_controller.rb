@@ -558,7 +558,7 @@ class TodosController < ApplicationController
 
     includes = params[:format]=='xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
 
-    @not_done_todos = current_user.todos.deferred.includes(includes) + current_user.todos.pending.includes(includes)
+    @not_done_todos = current_user.todos.deferred.includes(includes).reorder('show_from') + current_user.todos.pending.includes(includes)
     @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
     @down_count = @count = @not_done_todos.size
 
