@@ -85,7 +85,7 @@ class TodosController < ApplicationController
       create_multiple
     else
       p = Todos::TodoCreateParamsHelper.new(params, current_user)
-      p.parse_dates() unless mobile?
+      p.parse_dates unless mobile?
       tag_list = p.tag_list
 
       @todo = current_user.todos.build
@@ -1137,7 +1137,7 @@ end
   end
 
   def update_project
-    @project_changed = false;
+    @project_changed = false
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
         project = Project.null_object
