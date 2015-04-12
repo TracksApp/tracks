@@ -257,9 +257,13 @@ class TodosController < ApplicationController
     @todo = current_user.todos.includes(Todo::DEFAULT_INCLUDES).find(params['successor'])
     @original_state = @todo.state
     unless @predecessor.completed?
-      @todo.add_predecessor(@predecessor)
-      @todo.block! unless @todo.pending?
-      @saved = @todo.save
+      begin
+        @todo.add_predecessor(@predecessor)
+        @todo.block! unless @todo.pending?
+        @saved = @todo.save
+      rescue ActiveRecord::RecordInvalid
+        @saved = false
+      end
 
       @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
       @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
