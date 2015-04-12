@@ -15,6 +15,7 @@ class ActiveSupport::TestCase
   def setup
     Time.zone = SITE_CONFIG['time_zone']
     @today = Time.zone.now
+    travel_to @today
     @tomorrow = @today + 1.day
     @in_three_days = @today + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
@@ -26,6 +27,10 @@ class ActiveSupport::TestCase
     @tuesday = Time.zone.local(2008,6,10)
     @wednesday = Time.zone.local(2008,6,11)
     @thursday = Time.zone.local(2008,6,12)
+  end
+
+  def teardown
+    travel_back
   end
 
   # Add more helper methods to be used by all tests here...
