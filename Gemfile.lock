@@ -142,7 +142,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.1.0)
     rspec-support (3.1.2)
-    rubyzip (1.1.6)
+    rubyzip (1.1.7)
     safe_yaml (1.0.4)
     sanitize (3.0.3)
       crass (~> 0.2.0)
@@ -154,7 +154,7 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 2.12)
       sprockets-rails (~> 2.0)
-    selenium-webdriver (2.43.0)
+    selenium-webdriver (2.45.0)
       childprocess (~> 0.5)
       multi_json (~> 1.0)
       rubyzip (~> 1.0)
@@ -235,7 +235,7 @@ DEPENDENCIES
   rspec-expectations
   sanitize
   sass-rails (~> 4.0)
-  selenium-webdriver
+  selenium-webdriver (>= 2.45)
   simplecov
   spring
   spring-commands-cucumber
