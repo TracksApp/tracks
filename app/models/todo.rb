@@ -308,7 +308,7 @@ class Todo < ActiveRecord::Base
 
   # activate todos that should be activated if the current todo is completed
   def activate_pending_todos
-    pending_todos = successors.select {|t| t.uncompleted_predecessors.empty?}
+    pending_todos = successors.select { |t| t.uncompleted_predecessors.empty? and !t.completed? }
     pending_todos.each {|t| t.activate! }
     return pending_todos
   end
