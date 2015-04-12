@@ -301,7 +301,6 @@ var TodoItems = {
         /* Drag & Drop for successor/predecessor */
         var dragged_todo = ui.draggable[0].id.split('_')[2];
         var dropped_todo = this.id.split('_')[2];
-        ui.draggable.remove();
         $('.drop_target').hide(); // IE8 doesn't call stop() in this situation
 
         ajax_options = default_ajax_options_for_scripts('POST', relative_to_root('todos/add_predecessor'), $(this));
@@ -324,7 +323,7 @@ var TodoItems = {
     setup_drag_and_drop: function() {
         $('.item-show').draggable({
             handle: '.grip',
-            revert: 'invalid',
+            revert: true,
             start: TodoItems.drag_todo,
             stop: function() {
                 $('.drop_target').hide();
