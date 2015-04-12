@@ -21,7 +21,7 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 2, @not_completed1.project_id
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
-    assert @not_completed1.completed? == false
+    refute @not_completed1.completed?
     assert_equal 1.week.ago.beginning_of_day.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.beginning_of_day.strftime("%Y-%m-%d %H:%M")
     assert_equal 2.week.from_now.beginning_of_day.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
     assert_nil @not_completed1.completed_at
