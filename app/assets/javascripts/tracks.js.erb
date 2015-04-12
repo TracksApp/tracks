@@ -13,8 +13,9 @@ var TracksForm = {
         }
         toggleLink.parent().toggleClass('hide_form');
     },
-    set_project_name: function (name) {
+    set_project_name_and_default_project_name: function (name) {
         $('input#todo_project_name').val(name);
+        $('#default_project_name_id').val(name);
     },
     set_project_name_for_multi_add: function (name) {
         $('#multi_todo_project_name').val(name);
@@ -28,11 +29,6 @@ var TracksForm = {
     set_context_name_and_default_context_name: function (name) {
         TracksForm.set_context_name(name);
         $('input[name=default_context_name]').val(name);
-    },
-    set_project_name_and_default_project_name: function (name) {
-        TracksForm.set_project_name('');
-        $('#default_project_name_id').val(name);
-        $('#project_name').html(name);
     },
     set_tag_list_and_default_tag_list: function (name) {
         $('input#tag_list').val(name);
@@ -659,7 +655,7 @@ var ContextListPage = {
         $.post(relative_to_root('contexts/'+context_id), {
             'context[name]': value,
             '_method': 'put'
-        }, highlight);
+        }, highlight, 'script');
         return value;
     },
     setup_behavior: function() {

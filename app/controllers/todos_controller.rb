@@ -76,7 +76,7 @@ class TodosController < ApplicationController
   def create
     @source_view = params['_source_view'] || 'todo'
     @default_context = current_user.contexts.where(:name => params['default_context_name']).first
-    @default_project = current_user.projects.where(:name => params['default_project_name']).first if params['default_project_name'].present?
+    @default_project = current_user.projects.where(:name => params['default_project_name']).first
 
     @tag_name = params['_tag_name']
 

@@ -18,6 +18,7 @@ var <%=object_name%> = {
       <% else -%>
         <%=object_name%>.replace_context_form_with_updated_context();
       <% end -%>
+      TracksForm.set_context_name_and_default_context_name("<%= escape_javascript(@context.name)%>");
     },
     remove_and_re_add_context: function() {
       $('#<%=dom_id(@context, 'container')%>').slideUp(500, function() {

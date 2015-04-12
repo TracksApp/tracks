@@ -231,6 +231,7 @@ class ProjectsController < ApplicationController
       elsif boolean_param('update_default_tags')
         template = 'projects/update_default_tags'
       elsif boolean_param('update_project_name')
+        # clicking on a project name in the project view gives a form triggering this
         @projects = current_user.projects
         template = 'projects/update_project_name'
       else
