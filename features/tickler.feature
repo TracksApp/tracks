@@ -98,3 +98,12 @@ Feature: Manage deferred todos
       | grouping |
       | context  |
       | project  |
+
+  Scenario: Opening the tickler page shows the deferred todos in order
+    Given I have a deferred todo "show tomorrow" in the context "Context B" deferred by 1 day
+    And I have a deferred todo "show in a year" in the context "Context B" deferred by 365 days
+    And I have a deferred todo "show in a week" in the context "Context B" deferred by 7 days
+    When I go to the tickler page
+    Then I should see "show tomorrow" before "show in a week"
+    And I should see "show tomorrow" before "show in a year"
+    And I should see "show in a week" before "show in a year"
