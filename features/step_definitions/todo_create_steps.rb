@@ -100,9 +100,13 @@ Given /^I have ([0-9]+) deferred todos$/ do |count|
 end
 
 Given /^I have a deferred todo "([^"]*)" in the context "([^"]*)"$/ do |description, context_name|
+  step "I have a deferred todo \"#{description}\" in the context \"#{context_name}\" deferred by 7 days"
+end
+
+Given /^I have a (?:deferred )todo "([^"]*)" in the context "([^"]*)" deferred by (\d+) day(?:s)?$/ do |description, context_name, deferred_by_days|
   context = @current_user.contexts.where(:name => context_name).first_or_create
   todo = @current_user.todos.create!(:context_id => context.id, :description => description)
-  todo.show_from = UserTime.new(@current_user).time + 1.week
+  todo.show_from = UserTime.new(@current_user).time + deferred_by_days.to_i.day
   todo.save!
 end
 
