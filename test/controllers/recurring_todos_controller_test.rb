@@ -378,7 +378,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       },
         "tag_list"=>"one, two, three, four", format: :js
 
-      assert_equal "new recurring pattern", assigns['recurring_todo'].description
+      assert_equal "new recurrence pattern", assigns['recurring_todo'].description
       assert_equal "2013-01-02", assigns['recurring_todo'].start_from.localtime.to_date.to_s
       todo = assigns['recurring_todo'].todos.first
       assert_equal "2013-01-02", todo.show_from.localtime.to_date.to_s
