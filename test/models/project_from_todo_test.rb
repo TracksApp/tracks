@@ -12,6 +12,13 @@ class ProjectFromTodoTest < ActiveSupport::TestCase
     assert_equal project.default_context, todo.context
   end
 
+  def test_retain_tags_from_todo
+    todo = todos(:upgrade_rails)
+    todo.tag_with "a, b"
+    project = ProjectFromTodo.new(todo).create
+    assert_equal "a, b", project.default_tags
+  end
+
   def test_invalid_project_from_invalid_todo
     todo = todos(:upgrade_rails)
     todo.description = ""

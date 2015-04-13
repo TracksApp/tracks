@@ -21,6 +21,7 @@ class ProjectFromTodo
       p.name = todo.description
       p.description = todo.notes
       p.default_context = todo.context
+      p.default_tags = todo.tag_list
       p.user = todo.user
     end
   end
