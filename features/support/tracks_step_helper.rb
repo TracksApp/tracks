@@ -105,7 +105,7 @@ module TracksStepHelper
     execute_javascript "$('#{submenu_css}').parent().showSuperfishUl()"
 
     expect(page).to have_css(submenu_css, visible: true)
-    submenu = page.find(submenu_css, visible: true)
+    submenu = page.first(submenu_css, visible: true)
 
     within submenu do
       yield
