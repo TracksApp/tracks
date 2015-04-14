@@ -55,7 +55,7 @@ add_to_existing_container: function(next_steps) {
   <% end -%>
 },
 replace_todo: function(next_steps) {
-  $('#<%= dom_id(@todo) %>').html(<%=object_name%>.html_for_todo());
+  $('#<%= dom_id(@todo) %>').replaceWith(<%=object_name%>.html_for_todo());
   next_steps.go();
 },
 hide_container: function(next_steps) {
