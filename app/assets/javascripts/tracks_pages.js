@@ -193,5 +193,21 @@ var TracksPages = {
 
     /* fade flashes and alerts in automatically */
     $(".alert").fadeOut(8000);
+  }, sort_container: function(container) {
+    function comparator(a, b) {
+        var contentA = $(a).attr('data-sort') || '';
+        var contentB = $(b).attr('data-sort') || '';
+        if (contentA > contentB) {
+            return 1;
+        }
+        if (contentB > contentA) {
+            return -1;
+        }
+        return 0;
+    }
+
+    var unsortedActions = container.children();
+    var sortedChildren = unsortedActions.sort(comparator);
+    container.append(sortedChildren);
   }
 };

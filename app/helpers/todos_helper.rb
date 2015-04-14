@@ -357,6 +357,18 @@ module TodosHelper
     text_field_tag name, value, {"size" => 12, "id" => id, "class" => "Date", "autocomplete" => "off"}.update(options.stringify_keys)
   end
 
+  def sort_key(todo)
+    # actions are sorted using {order("todos.due IS NULL, todos.due ASC, todos.created_at ASC")}
+    # the JavaScript frontend sorts using unicode/ascii
+    format = "%Y%m%d%H%M%S%L"
+    if todo.due?
+      sort_by_due = todo.due.strftime format
+    else
+      sort_by_due = "Z" * 17 # length of format string
+    end
+    sort_by_due + todo.created_at.strftime(format)
+  end
+
   # === helpers for default layout
 
   def default_contexts_for_autocomplete
