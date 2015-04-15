@@ -93,7 +93,7 @@ module RecurringTodos
         #  TODO: recheck if future rails versions have this problem too
         start = Time.utc(start.year, start.month, start.day)+n.months
       end
-      Time.zone.local(start.year, start.month, every_x_day).localtime.at_midnight
+      Time.zone.local(start.year, start.month, every_x_day)
     end
 
     def find_relative_day_of_month(start, n)
