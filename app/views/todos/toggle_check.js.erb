@@ -64,7 +64,9 @@ var <%= object_name %> = {
     next_steps.go();
   },
   add_todo_to_container: function(next_steps) {
-    $('#<%= item_container_id(@todo) %>_items').append(<%=object_name%>.html_for_todo());
+    var container = $('#<%= item_container_id(@todo) %>_items');
+    container.append(<%=object_name%>.html_for_todo());
+    TracksPages.sort_container(container);
     <% if should_make_context_visible -%>
       $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
         $("#<%= empty_container_msg_div_id %>").slideUp(100);
