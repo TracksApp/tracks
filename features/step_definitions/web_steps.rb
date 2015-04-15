@@ -113,7 +113,7 @@ end
 Then /^(?:|I )should see "([^"]*)" before "([^"]*)"$/ do |earlier_content, later_content|
   expect(page).to have_content(earlier_content)
   expect(page).to have_content(later_content)
-  page.body.index(earlier_content).should < page.body.index(later_content)
+  expect(page.body.index(earlier_content)).to be < page.body.index(later_content)
 end
 
 Then /^(?:|I )should see \/([^\/]*)\/(?: within "([^"]*)")?$/ do |regexp, selector|
