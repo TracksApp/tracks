@@ -84,7 +84,9 @@ var <%= object_name %> = {
     <%  # show new todo if the completed todo was recurring
       if @todo.from_recurring_todo?
         unless @new_recurring_todo.nil? || (@new_recurring_todo.deferred? && !source_view_is(:deferred)) -%>
-        $('#<%= item_container_id(@new_recurring_todo) %>_items').append(<%=object_name%>.html_for_recurring_todo());
+        var container = $('#<%= item_container_id(@new_recurring_todo) %>_items');
+        conainer.append(<%=object_name%>.html_for_recurring_todo());
+        TracksPages.sort_container(container);
         $('#c<%= @new_recurring_todo.context_id %>').slideDown(500, function() {
           <%=object_name%>.highlight_updated_recurring_todo(next_steps);
         });
