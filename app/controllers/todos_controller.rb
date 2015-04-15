@@ -1051,7 +1051,7 @@ end
       if recurring_todo.todos.active.count == 0
 
         # check for next todo either from the due date or the show_from date
-        date_to_check = todo.due.nil? ? todo.show_from.localtime : todo.due.localtime
+        date_to_check = todo.due.nil? ? todo.show_from : todo.due
 
         # if both due and show_from are nil, check for a next todo from now
         date_to_check = Time.zone.now if date_to_check.nil?

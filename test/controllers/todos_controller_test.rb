@@ -120,7 +120,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal 3, @tagged
   end
-
+  
   def test_find_tagged_with_terms_separated_with_dot
     login_as :admin_user
     create_todo(description: "test dotted tag", tag_list: "first.last, second")
@@ -408,7 +408,7 @@ class TodosControllerTest < ActionController::TestCase
 
   #######
   # defer
-  #######
+  ####### 
 
   def test_update_clearing_show_from_makes_todo_active
     t = Todo.find(1)
@@ -437,7 +437,7 @@ class TodosControllerTest < ActionController::TestCase
     # given a todo in the tickler that should be activated
     travel_to 2.weeks.ago do
       create_todo(
-        description: "tickler",
+        description: "tickler", 
         show_from: 1.week.from_now.
           in_time_zone(users(:admin_user).prefs.time_zone).
           strftime("#{users(:admin_user).prefs.date_format}"))
@@ -740,14 +740,14 @@ class TodosControllerTest < ActionController::TestCase
 
       # locate the new todo in tickler
       new_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'deferred').first
-      refute new_todo.nil?, "the todo should be in the tickler"
+      assert !new_todo.nil?, "the todo should be in the tickler"
 
       assert_equal "Call Bill Gates every day", new_todo.description
       assert_not_equal todo_1.id, new_todo.id, "check that the new todo is not the same as todo_1"
-      refute new_todo.show_from.nil?, "check that the new_todo is in the tickler to show next month"
+      assert !new_todo.show_from.nil?, "check that the new_todo is in the tickler to show next month"
 
       # do not use today here. It somehow gets messed up with the timezone calculation.
-      next_month = (today + 1.month).localtime.at_midnight
+      next_month = (Time.zone.now + 1.month).at_midnight
 
       assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
     end
@@ -1024,13 +1024,13 @@ class TodosControllerTest < ActionController::TestCase
   private
 
   def create_todo(params={})
-    defaults = { source_view: 'todo',
-      context_name: "library", project_name: "Build a working time machine",
+    defaults = { source_view: 'todo', 
+      context_name: "library", project_name: "Build a working time machine", 
       notes: "note", description: "a new todo", due: nil, tag_list: "a,b,c"}
 
     params=params.reverse_merge(defaults)
 
-    put :create, _source_view: params[:_source_view],
+    put :create, _source_view: params[:_source_view], 
       context_name: params[:context_name], project_name: params[:project_name], tag_list: params[:tag_list],
       todo: {notes: params[:notes], description: params[:description], due: params[:due], show_from: params[:show_from]}
   end

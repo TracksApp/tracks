@@ -22,8 +22,8 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal "Call Bill Gates to find out how much he makes per day", @not_completed1.description
     assert_nil @not_completed1.notes
     assert @not_completed1.completed? == false
-    assert_equal 1.week.ago.beginning_of_day.to_date.to_s, @not_completed1.created_at.localtime.beginning_of_day.to_date.to_s
-    assert_equal 2.week.from_now.beginning_of_day.to_date.to_s, @not_completed1.due.localtime.to_date.to_s
+    assert_equal 1.week.ago.beginning_of_day.strftime("%Y-%m-%d %H:%M"), @not_completed1.created_at.beginning_of_day.strftime("%Y-%m-%d %H:%M")
+    assert_equal 2.week.from_now.beginning_of_day.strftime("%Y-%m-%d"), @not_completed1.due.strftime("%Y-%m-%d")
     assert_nil @not_completed1.completed_at
     assert_equal 1, @not_completed1.user_id
   end
@@ -72,26 +72,26 @@ class TodoTest < ActiveSupport::TestCase
   def test_validate_show_from_must_be_a_date_in_the_future
     t = @not_completed2
     t.show_from = 1.week.ago
-
+    
     assert !t.save, "todo should not be saved without validation errors"
     assert_equal 1, t.errors.count
     assert_equal "must be a date in the future", t.errors[:show_from][0]
   end
-
+  
   def test_validate_circular_dependencies
     @completed.activate!
     @not_completed3=@completed
-
+    
     # 2 -> 1
     @not_completed1.add_predecessor(@not_completed2)
     assert @not_completed1.save!
     assert_equal 1, @not_completed2.successors.count
-
+    
     # 3 -> 2 -> 1
     @not_completed2.add_predecessor(@not_completed3)
     assert @not_completed2.save!
     assert_equal 1, @not_completed3.successors.count
-
+    
     # 1 -> 3 -> 2 -> 1 == circle
     assert_raises ActiveRecord::RecordInvalid do
       @not_completed3.add_predecessor(@not_completed1)
@@ -131,7 +131,7 @@ class TodoTest < ActiveSupport::TestCase
     t.toggle_completion!
     assert_equal :active, t.aasm.current_state
   end
-
+  
   def test_toggle_completion_with_show_from_in_future
     t = @not_completed1
     t.show_from= 1.week.from_now
@@ -140,12 +140,12 @@ class TodoTest < ActiveSupport::TestCase
     t.toggle_completion!
     assert_equal :completed, t.aasm.current_state
   end
-
+  
   def test_toggle_completion_with_show_from_in_past
     t = @not_completed1
     t.update_attribute(:show_from, 1.week.ago)
     assert_equal :active, t.aasm.current_state
-
+    
     assert t.toggle_completion!, "shoud be able to mark active todo complete even if show_from is set in the past"
     assert_equal :completed, t.aasm.current_state
   end
@@ -219,7 +219,7 @@ class TodoTest < ActiveSupport::TestCase
     # And I update the state of the todo from its project
     new_todo.update_state_from_project
     # Then the todo should be hidden
-    assert new_todo.hidden?
+    assert new_todo.hidden?    
   end
 
   def test_initial_state_defaults_to_active
@@ -280,7 +280,7 @@ class TodoTest < ActiveSupport::TestCase
     assert todo.pending?, "todo with predecessor should be blocked"
 
     # cannot activate if part of hidden project
-    assert_raise(AASM::InvalidTransition) { todo.activate! }
+    assert_raise(AASM::InvalidTransition) { todo.activate! } 
 
     todo.remove_predecessor(todo2)
     assert todo.reload.hidden?, "todo should be put back in hidden state"
@@ -337,7 +337,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed1.add_predecessor(@not_completed2)
     @not_completed1.save_predecessors
     # blocking is not done automagically
-    @not_completed1.block!
+    @not_completed1.block! 
 
     assert @not_completed1.uncompleted_predecessors?
     assert @not_completed1.pending?, "a todo with predecessors should be pending"
@@ -358,7 +358,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed1.add_predecessor_list("#{@not_completed2.id}, #{@not_completed3.id}")
     @not_completed1.save_predecessors
     # blocking is not done automagically
-    @not_completed1.block!
+    @not_completed1.block! 
 
     # Then @completed1 should have predecessors and should be blocked
     assert @not_completed1.uncompleted_predecessors?
@@ -526,18 +526,18 @@ class TodoTest < ActiveSupport::TestCase
     assert !older_created_todos.include?(todo_now)
     assert !recent_created_todos.include?(todo_old)
   end
-
+  
   def test_notes_are_rendered_on_save
     user = @completed.user
     todo = user.todos.create(:description => "test", :context => @completed.context)
-
+    
     assert_nil todo.notes
     assert_nil todo.rendered_notes
-
+    
     todo.notes = "*test*"
     todo.save!
     todo.reload
-
+    
     assert_equal "*test*", todo.notes
     assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
   end
