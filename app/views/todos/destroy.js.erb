@@ -54,7 +54,9 @@ function show_new_todo_if_todo_was_recurring() {
   <% if @todo.from_recurring_todo? -%>
     <%  unless @new_recurring_todo.nil? || @new_recurring_todo.deferred? -%>
       TodoItemsContainer.ensureVisibleWithEffectAppear("<%=item_container_id(@new_recurring_todo)%>");
-      $('#<%=item_container_id(@new_recurring_todo)%>_items').append(html_for_new_recurring_todo());
+      var container = $('#<%=item_container_id(@new_recurring_todo)%>_items');
+      container.append(html_for_new_recurring_todo());
+      TracksPages.sort_container(container);
       $('#<%= dom_id(@new_recurring_todo, 'line')%>').effect('highlight', {}, 2000 );
       TracksPages.page_inform("<%=t('todos.recurring_action_deleted')%>");
     <% else -%>
