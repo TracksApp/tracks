@@ -33,7 +33,7 @@ function update_successor() {
       $('#c<%= @successor.context_id %>').fadeIn(500, function() {});
       $('#no_todos_in_view').slideUp(100);
     <% end -%>
-    $('#<%=item_container_id(@successor)%>').append(html_for_new_successor());
+    $('#<%=item_container_id(@successor)%>_items').append(html_for_new_successor());
     $('#<%= dom_id(@successor, 'line')%>').effect('highlight', {}, 2000 ); <%
   elsif @successor.deferred? -%>
     $('#<%= dom_id(@successor)%>').html(html_for_new_successor()); <%
