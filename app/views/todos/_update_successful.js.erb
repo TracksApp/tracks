@@ -56,6 +56,7 @@ add_to_existing_container: function(next_steps) {
 },
 replace_todo: function(next_steps) {
   $('#<%= dom_id(@todo) %>').replaceWith(<%=object_name%>.html_for_todo());
+  TracksPages.sort_container($('#<%= item_container_id(@todo) %>_items'));
   next_steps.go();
 },
 hide_container: function(next_steps) {
