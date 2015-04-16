@@ -10,7 +10,7 @@
 <% end -%>
 
 function replace_updated_predecessor() {
-  $('#<%= dom_id(@predecessor) %>').html( html_for_predecessor() );
+  $('#<%= dom_id(@predecessor) %>').replaceWith( html_for_predecessor() );
 }
 
 function regenerate_predecessor_family() {
