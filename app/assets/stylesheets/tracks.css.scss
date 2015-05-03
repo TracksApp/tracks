@@ -315,8 +315,6 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     margin: 0px 0px 15px 0px;
     background: #fff;
     border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
 }
 
 .completed {
@@ -332,6 +330,7 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     margin-bottom: 0px;
     color: #666;
     position:static;
+    border-radius: 4px 4px 0 0;
 }
 
 .container_toggle img {
@@ -761,10 +760,7 @@ The colour of the background gets progressively yellower with age */
     font-size: 12pt;
     margin: 10px 10px 0px 0px;
     height:26px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
     border-radius: 2px;
-
 }
 
 ul {
@@ -917,6 +913,7 @@ form {
     padding: 5px 10px;
     background-color: #000;
     color: #eee;
+    border-radius: 5px;
 }
 
 #recurring_new_container img {
@@ -1016,6 +1013,7 @@ input, select, textarea {
     margin: 0px 0px 0px 60px;
     padding: 0px 0px 0px 5px;
     width: 70%;
+    border-radius: 5px;
 }
 
 .feed {
@@ -1150,6 +1148,7 @@ ul#prefs {list-style-type: disc; margin-left: 15px;}
     color: #666;
     padding: 5px 20px;
     text-align: left;
+    border-radius: 5px;
 
     h3, dl, dt, dd {
         display: inline;

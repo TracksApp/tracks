@@ -27,7 +27,6 @@
 //= require jquery.jeditable.mini
 //= require jquery.simulate.drag-sortable
 //= require jquery.truncator
-//= require niftycube
 //= require superfish
 //= require supersubs
 //= require swf_fu
