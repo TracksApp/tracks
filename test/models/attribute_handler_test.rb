@@ -55,8 +55,8 @@ class AttributeHandlerTest < ActiveSupport::TestCase
     h[:project_name] = "A project"
     assert h.project_specified_by_name?, "project is specified by name"
 
-    h[:project_name] = "None"
-    assert !h.project_specified_by_name?, "None is special token to specify nil-project"
+    h[:project_name] = ""
+    assert !h.project_specified_by_name?, "Blank string is special token to specify nil-project"
   end
 
   def test_context_specified_by_name

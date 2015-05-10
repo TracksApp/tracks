@@ -1135,7 +1135,7 @@ end
   def update_project
     @project_changed = false;
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
-      if params['project_name'] == 'None'
+      if params['project_name'].blank?
         project = Project.null_object
       else
         project = current_user.projects.where(:name => params['project_name'].strip).first

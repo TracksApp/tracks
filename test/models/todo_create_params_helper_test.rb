@@ -102,8 +102,8 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
     assert_equal false, params_helper.project_specified_by_name?
   end
 
-  def test_project_specified_by_name_is_false_when_project_name_is_none
-    params = ActionController::Parameters.new({ 'project_name' => 'None', 'todo' => {} })
+  def test_project_specified_by_name_is_false_when_project_name_is_blank_string
+    params = ActionController::Parameters.new({ 'project_name' => '', 'todo' => {} })
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
     assert_equal false, params_helper.project_specified_by_name?
   end
