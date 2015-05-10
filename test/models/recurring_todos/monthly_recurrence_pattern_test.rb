@@ -104,10 +104,10 @@ module RecurringTodos
       assert_equal "every last friday of every month", rt.recurrence_pattern
 
       rt.recurrence_selector = 0
-      assert_equal "every 5 months on day 1", rt.recurrence_pattern
-
-      rt.every_other3 = 1
       assert_equal "every month on day 1", rt.recurrence_pattern
+
+      rt.every_other2 = 4
+      assert_equal "every 4 months on day 1", rt.recurrence_pattern
     end
 
     def test_monthly_pattern
