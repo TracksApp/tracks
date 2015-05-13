@@ -936,6 +936,7 @@ de:
       haben, konnte keine Aufgabe gefunden werden. Dieser Wert wird nicht mit der
       neuen Aufgabe gespeichert. Trotzdem fortfahren?
     was_due_on_date: war am %{date} fällig
+    completed_recurring_actions_title: 'TRACKS::Erledigte wiederkehrende Aufgaben'
   users:
     account_signup: Accounteinrichtung
     auth_change_submit: Authentifizierungsart ändern

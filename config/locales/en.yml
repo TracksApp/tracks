@@ -700,6 +700,7 @@ en:
     edit_recurring_todo: Edit recurring action
     see_all_completed: You can see all completed actions %{link}
     all_completed_here: here
+    completed_recurring_actions_title: 'TRACKS::Completed recurring actions'
   contexts:
     delete_context_title: Delete context
     all_completed_tasks_title: "TRACKS::All Completed actions in the context '%{context_name}'"
