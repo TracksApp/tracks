@@ -150,8 +150,8 @@ de:
     wiki: Wiki
   contexts:
     add_context: Kontext hinzufügen
-    all_completed_tasks_title: 'TRACKS:: Alle erledigten Aufgaben im Kontext ''%{context_name}'''
-    completed_tasks_title: 'TRACKS:: Erledigte Aufgaben im Kontext ''%{context_name}'''
+    all_completed_tasks_title: 'TRACKS::Alle erledigten Aufgaben im Kontext ''%{context_name}'''
+    completed_tasks_title: 'TRACKS::Erledigte Aufgaben im Kontext ''%{context_name}'''
     context_deleted: Gelöschter Kontext '%{name}'
     context_hide: Auf Startseite ausblenden?
     context_name: Kontextname
@@ -482,9 +482,9 @@ de:
     add_note: Notiz hinzufügen
     add_note_submit: Notiz hinzufügen
     add_project: Projekt hinzufügen
-    all_completed_tasks_title: 'TRACKS:: Alle erledigten Aufgaben im Projekt ''%{project_name}'''
+    all_completed_tasks_title: 'TRACKS::Alle erledigten Aufgaben im Projekt ''%{project_name}'''
     completed_projects: Erledigte Projekte
-    completed_tasks_title: 'TRACKS:: Liste erledigter Aufgaben in Project ''%{project_name}'''
+    completed_tasks_title: 'TRACKS::Liste erledigter Aufgaben in Project ''%{project_name}'''
     default_context: Der Standard-Kontext dieses Projektes ist %{context}
     default_context_removed: Standard-Kontext entfernt
     default_context_set: Standard-Kontext des Projekts auf %{default_context} gesetzt
@@ -498,7 +498,7 @@ de:
     hide_form: Fomular verstecken
     hide_form_title: Formular verstecken
     is_active: ist aktiv
-    list_completed_projects: 'TRACKS:: Liste erledigter Projekte'
+    list_completed_projects: 'TRACKS::Liste erledigter Projekte'
     list_projects: TRACKS::Projektliste
     list_reviews: TRACKS::Rückblick
     notes: Notizen
@@ -727,7 +727,7 @@ de:
     add_new_recurring: Neue wiederkehrende Aufgabe
     all_completed: Alle erledigten Aufgaben
     all_completed_here: hier
-    all_completed_tagged_page_title: 'TRACKS:: Alle erledigten Aufgaben mit Tag %{tag_name}'
+    all_completed_tagged_page_title: 'TRACKS::Alle erledigten Aufgaben mit Tag %{tag_name}'
     append_in_this_project: in diesem Projekt
     archived_tasks_title: TRACKS::Archivierte erledigte Aufgaben
     blocked_by: Blockiert durch %{predecessors}
@@ -755,7 +755,7 @@ de:
     completed_rest_of_month: Erledigt diesen Monat
     completed_rest_of_previous_month: Erledigt im Vormonat
     completed_rest_of_week: Erledigt diese Woche
-    completed_tagged_page_title: 'TRACKS:: Erledigte Aufgaben mit Tag %{tag_name}'
+    completed_tagged_page_title: 'TRACKS::Erledigte Aufgaben mit Tag %{tag_name}'
     completed_tasks_title: TRACKS::Erledigte Aufgaben
     completed_today: Heute erledigt
     confirm_delete: Sind Sie sicher, dass Sie die Aufgabe '%{description}' löschen
