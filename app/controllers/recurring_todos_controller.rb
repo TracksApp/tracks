@@ -36,6 +36,9 @@ class RecurringTodosController < ApplicationController
 
     @range_low = (page.to_i-1) * items_per_page + 1
     @range_high = @range_low + @completed_recurring_todos.size - 1
+
+    @range_low = 0 if @total == 0
+    @range_high = @total if @range_high > @total
   end
 
   def edit

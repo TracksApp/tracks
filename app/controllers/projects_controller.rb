@@ -89,6 +89,9 @@ class ProjectsController < ApplicationController
     @range_low = (page.to_i-1) * items_per_page + 1
     @range_high = @range_low + @projects.size - 1
 
+    @range_low = 0 if @total == 0
+    @range_high = @total if @range_high > @total
+
     init_not_done_counts(['project'])
   end
 
