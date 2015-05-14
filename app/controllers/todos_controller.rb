@@ -639,9 +639,6 @@ class TodosController < ApplicationController
 
     # Set defaults for new_action
     @initial_tags = @tag_name
-    unless @not_done_todos.empty?
-      @context = current_user.contexts.find(@not_done_todos.first.context_id)
-    end
 
     # Set count badge to number of items with this tag
     @not_done_todos.empty? ? @count = 0 : @count = @not_done_todos.size
