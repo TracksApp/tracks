@@ -10,11 +10,11 @@ form_for(note, :html => {
   <div id="error_status"><%= get_list_of_error_messages_for(note) %></div>
 
   <%= f.hidden_field( "project_id" ) %>
-  <%= f.text_area( "body", "cols" => 70, "rows" => 15, "tabindex" => 1 ) %>
+  <%= f.text_area( "body", "cols" => 70, "rows" => 15) %>
 
   <div class="submit_box">
     <div class="widgets">
-      <button type="submit" class="positive" id="<%= dom_id(note, 'submit') %>" tabindex="15">
+      <button type="submit" class="positive" id="<%= dom_id(note, 'submit') %>">
         <%=image_tag("accept.png", :alt => "") %>
         <%= submit_text %>
       </button>

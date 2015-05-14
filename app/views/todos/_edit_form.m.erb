@@ -4,34 +4,34 @@
 <%= get_list_of_error_messages_for(@todo) if @todo %>
 </span>
 <h2><label for="todo_description"><%= t('common.description') %></label></h2>
-<%= text_field( "todo", "description", "tabindex" => 1, "maxlength" => 100, "size" => 50) %>
+<%= text_field( "todo", "description", "maxlength" => 100, "size" => 50) %>
 <h2><label for="tag_list"><%= t('todos.tags') %></label></h2>
-<%= text_field_tag "tag_list", @tag_list_text, :size => 50, :tabindex => 2 %>
+<%= text_field_tag "tag_list", @tag_list_text, :size => 50 %>
 <h2><label for="todo_context_id"><%= t('common.context') %></label></h2>
 <%= unless @mobile_from_context
-  collection_select( "todo", "context_id", @contexts, "id", "name", {}, {"tabindex" => 3} )
+  collection_select( "todo", "context_id", @contexts, "id", "name", {} )
 else
   select_tag("todo[context_id]", options_from_collection_for_select(
     @contexts, "id", "name", @mobile_from_context.id),
-    {"id" => :todo_context_id, :tabindex => 3} )
+    {"id" => :todo_context_id} )
 end %>
 <h2><label for="todo_project_id"><%= t('common.project')  %></label></h2>
 <%= unless @mobile_from_project
   collection_select( "todo", "project_id", @projects, "id", "name",
-                          {:include_blank => t('todos.no_project')}, {"tabindex" => 4} )
+                          {:include_blank => t('todos.no_project')} )
 else
   # manually add blank option since :include_blank does not work
   # with options_from_collection_for_select
   empty_option = content_tag(:option, "", :value => "")
   select_tag("todo[project_id]", empty_option+options_from_collection_for_select(
     @projects, "id", "name", @mobile_from_project.id),
-    {"id" => :todo_project_id, :tabindex => 4} )
+    {"id" => :todo_project_id} )
 end %>
 <h2><label for="todo_notes"><%= t('common.notes') %></label></h2>
-<%= text_area( "todo", "notes", "cols" => 40, "rows" => 3, "tabindex" => 5) %>
+<%= text_area( "todo", "notes", "cols" => 40, "rows" => 3) %>
 <h2><label for="todo_due"><%= t('todos.due') %></label></h2>
 <%= date_select("todo", "due", {:order => [:day, :month, :year],
-                    :start_year => Date.current.year, :include_blank => '--'}, :tabindex => 6) %>
+                    :start_year => Date.current.year, :include_blank => '--'}) %>
 <h2><label for="todo_show_from"><%= t('todos.show_from') %></label></h2>
 <%= date_select("todo", "show_from", {:order => [:day, :month, :year],
-                    :start_year => Date.current.year, :include_blank => true}, :tabindex => 7) %>
+                    :start_year => Date.current.year, :include_blank => true}) %>
