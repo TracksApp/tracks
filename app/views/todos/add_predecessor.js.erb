@@ -32,7 +32,7 @@ function regenerate_predecessor_family() {
   until parents.empty?
     parent = parents.pop
     parents += parent.predecessors -%>
-    $('#<%= dom_id(parent) %>').html("<%= js_render(parent, { :parent_container_type => parent_container_type }) %>");
+    $('#<%= dom_id(parent) %>').replaceWith("<%= js_render(parent, { :parent_container_type => parent_container_type }) %>");
 <%end-%>
 }
 
