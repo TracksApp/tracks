@@ -14,6 +14,8 @@ class Project < ActiveRecord::Base
   scope :with_name_or_description, lambda { |body| where("name LIKE ? OR description LIKE ?", body, body) }
   scope :with_namepart, lambda { |body| where("name LIKE ?", body + '%') }
 
+  before_create :set_last_reviewed_now
+
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
   validates_uniqueness_of :name, :scope => "user_id"
@@ -45,6 +47,10 @@ class Project < ActiveRecord::Base
 
   def self.null_object
     NullProject.new
+  end
+
+  def set_last_reviewed_now
+    self.last_reviewed = Time.now
   end
 
   def hide_todos

@@ -12,6 +12,12 @@ class ProjectFromTodoTest < ActiveSupport::TestCase
     assert_equal project.default_context, todo.context
   end
 
+  def test_project_is_marked_as_reviewed
+    todo = todos(:upgrade_rails)
+    project = ProjectFromTodo.new(todo).create
+    refute project.needs_review?(users(:admin_user))
+  end
+
   def test_retain_tags_from_todo
     todo = todos(:upgrade_rails)
     todo.tag_with "a, b"
