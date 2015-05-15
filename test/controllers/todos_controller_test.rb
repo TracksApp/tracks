@@ -319,10 +319,10 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 1, t.project_id
   end
 
-  def test_update_todo_project_to_none
+  def test_update_todo_delete_project
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"None", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
     t = Todo.find(1)
     assert_nil t.project_id
   end
@@ -384,7 +384,7 @@ class TodosControllerTest < ActionController::TestCase
     assert todo.project_hidden?, "todo should be project_hidden"
 
     # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"None", "todo"=>{}
+    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"", "todo"=>{}
 
     assert assigns['project_changed'], "the project of the todo should be changed"
     todo = Todo.find(todo.id) # reload does not seem to work anymore

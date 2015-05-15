@@ -89,7 +89,6 @@ module Tracks
     def project_specified_by_name?
       return false if get(:project_id).present?
       return false if project_name.blank?
-      return false if project_name == 'None'
       true
     end
 
