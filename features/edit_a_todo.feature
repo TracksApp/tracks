@@ -326,7 +326,7 @@ Feature: Edit a next action from every page
     Given I have a deferred todo "moving" in context "@pc" with tags "tag"
     When I go to the tickler page
     And I edit the context of "moving" to "@new"
-    And I should see the container for context "@new"
+    Then I should see the container for context "@new"
 
   @javascript
   Scenario: Making an error when editing a todo will show error message
