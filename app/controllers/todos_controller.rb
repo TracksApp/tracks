@@ -425,6 +425,8 @@ class TodosController < ApplicationController
 
     @saved = @todo.save
 
+    provide_project_or_context_for_view
+
     # this is set after save and cleared after reload, so save it here
     @removed_predecessors = @todo.removed_predecessors
 
@@ -454,6 +456,15 @@ class TodosController < ApplicationController
           render :action => "edit", :format => :m
         end
       end
+    end
+  end
+
+  def provide_project_or_context_for_view
+    # see application_helper:source_view_key, used in shown partials
+    if source_view_is :project
+      @project = @todo.project
+    elsif source_view_is :context
+      @context = @todo.context
     end
   end
 
