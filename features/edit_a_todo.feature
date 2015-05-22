@@ -329,6 +329,13 @@ Feature: Edit a next action from every page
     Then I should see the container for context "@new"
 
   @javascript
+  Scenario: Editing the context of a todo in the project view to a new context will show new context
+    Given I have a todo "something" in the context "@pc" in the project "project"
+    When I go to the "project" project page
+    And I edit the context of "something" to "@new"
+    Then I should see the container for context "@new"
+
+  @javascript
   Scenario: Making an error when editing a todo will show error message
     Given I have a todo "test"
     When I go to the home page
