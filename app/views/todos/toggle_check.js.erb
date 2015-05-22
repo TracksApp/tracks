@@ -34,7 +34,7 @@ var <%= object_name %> = {
     redirect_to(path);
   },
   remove_todo: function(next_steps) {
-    <% if (@remaining_in_context == 0) && update_needs_to_hide_container
+    <% if update_needs_to_hide_container
       # remove context with deleted todo
     -%>
       $('#<%= item_container_id(@original_item)%>').slideUp(400, function() {

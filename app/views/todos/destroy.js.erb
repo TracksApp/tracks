@@ -28,7 +28,7 @@ function show_empty_messages() {
 }
 
 function remove_todo_from_page() {
-  <% if (@remaining_in_context == 0) && update_needs_to_hide_container
+  <% if update_needs_to_hide_container
        # remove context with deleted todo
   -%>
        $('#<%=item_container_id(@todo)%>').fadeOut(400, function() {
