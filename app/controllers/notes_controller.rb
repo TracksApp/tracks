@@ -56,6 +56,7 @@ class NotesController < ApplicationController
   def destroy
     @note = current_user.notes.find(params['id'])
     @note.destroy
+    set_source_view
 
     respond_to do |format|
       format.html
