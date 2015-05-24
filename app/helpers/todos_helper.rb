@@ -113,7 +113,7 @@ module TodosHelper
     settings.reverse_merge!({
         :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
       })
-    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"add_note_link"){settings[:link_in_header]}
+    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"link_in_container_header"){settings[:link_in_header]}
     header += content_tag(:h2) do
       toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
