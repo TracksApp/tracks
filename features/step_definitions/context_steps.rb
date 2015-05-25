@@ -54,6 +54,7 @@ When /^I edit the context name in place to be "([^\"]*)"$/ do |new_context_name|
   page.find("span#context_name").click
   fill_in "value", :with => new_context_name
   click_button "Ok"
+  wait_for_ajax
 end
 
 Then /^I should see the context name is "([^\"]*)"$/ do |context_name|
