@@ -85,7 +85,7 @@ class TodosController < ApplicationController
       create_multiple
     else
       p = Todos::TodoCreateParamsHelper.new(params, current_user)
-      p.parse_dates() unless mobile?
+      p.parse_dates unless mobile?
       tag_list = p.tag_list
 
       @todo = current_user.todos.build
@@ -423,7 +423,16 @@ class TodosController < ApplicationController
     update_dependencies
     update_attributes_of_todo
 
-    @saved = @todo.save
+    begin
+      @saved = @todo.save!
+    rescue ActiveRecord::RecordInvalid => exception
+      record = exception.record
+      if record.is_a?(Dependency)
+        record.errors.each { |key,value| @todo.errors[key] << value }
+      end
+      @saved = false
+    end
+
 
     # this is set after save and cleared after reload, so save it here
     @removed_predecessors = @todo.removed_predecessors
@@ -1137,7 +1146,7 @@ end
   end
 
   def update_project
-    @project_changed = false;
+    @project_changed = false
     if params['todo']['project_id'].blank? && !params['project_name'].nil?
       if params['project_name'] == 'None'
         project = Project.null_object
