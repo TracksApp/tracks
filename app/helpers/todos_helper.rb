@@ -513,7 +513,7 @@ module TodosHelper
   def update_needs_to_remove_todo_from_container
     source_view do |page|
       page.context  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @todo_should_be_hidden }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
+      page.project  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
       page.deferred { return todo_moved_out_of_container || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
       page.stats    { return @todo.completed? }
@@ -547,7 +547,7 @@ module TodosHelper
   def append_updated_todo
     source_view do |page|
       page.context  { return @todo_deferred_state_changed || @todo_pending_state_changed }
-      page.project  { return @todo_deferred_state_changed || @todo_pending_state_changed }
+      page.project  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed }
       page.deferred { return todo_moved_out_of_container && (@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed && @todo.due }
       page.stats    { return false }
