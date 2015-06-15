@@ -28,7 +28,6 @@ var <%=object_name%> = {
       <% end -%>
       ProjectListPage.update_all_states_count(<%=@active_projects_count%>, <%=@hidden_projects_count%>, <%=@completed_projects_count%>);
       ProjectListPage.show_or_hide_all_state_containers(<%= @show_active_projects %>, <%= @show_hidden_projects %>, <%= @show_completed_projects %>);
-      TracksForm.set_project_name_and_default_project_name("<%= escape_javascript(@project.name)%>");
       $('div.project-edit-current').removeClass('project-edit-current');
     },
     update_project_page: function() {
