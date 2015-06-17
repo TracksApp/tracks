@@ -26,7 +26,7 @@ Tracks has a few software requirements that must be satisfied before installatio
 
 There are two methods of downloading Tracks:
 
-1. (Recommended for most people) Download the [zipped package](https://github.com/TracksApp/tracks/archive/v2.2.2.zip) for the latest stable release (2.2.2) and unzip in your preferred location (e.g. `~/Sites` for Mac OS X users).
+1. (Recommended for most people) Download an archive of [the latest stable release](https://github.com/TracksApp/tracks/releases/latest) and extract it to your preferred location (e.g. `~/Sites` for Mac OS X users).
 2. If you want to live on the edge, you can get the latest development version from GitHub using git (bear in mind that this may be less stable than the released versions):
 
 <!-- -->
