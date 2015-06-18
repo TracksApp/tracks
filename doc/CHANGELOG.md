@@ -1,4 +1,4 @@
-## Version 2.3
+## Version 2.3.0
 
 ### New and changed features
 * Numerous bug fixes
