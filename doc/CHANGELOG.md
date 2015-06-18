@@ -5,7 +5,7 @@
 * Thin replaces WEBrick as the included web server
 * Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
 
-## Version 2.3
+## Version 2.3.0
 
 ### New and changed features
 * Numerous bug fixes
