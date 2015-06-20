@@ -65,7 +65,7 @@ group :test do
   gem "cucumber-rails", :require => false
   gem "rspec-expectations"
   gem "database_cleaner"
-  gem "mocha", :require => false
+  gem 'mocha'
 
   gem "aruba", ">=0.5.4", :require => false
 
