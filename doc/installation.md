@@ -41,7 +41,7 @@ There are two methods of downloading Tracks:
 
 You need to create a database and database-user to use with Tracks. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:
 
-    mysql -uroot -p
+    mysql -u root -p
     mysql> CREATE DATABASE tracks;
     mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost \
     IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
