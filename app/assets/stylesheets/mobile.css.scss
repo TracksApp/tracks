@@ -239,6 +239,10 @@ input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project
     padding: 8px 8px;
 }
 
+select {
+  font-size: 1.1em;
+}
+
 .next-prev-project {
     overflow:auto;
     padding:0;
