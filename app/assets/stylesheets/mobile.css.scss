@@ -235,8 +235,9 @@ table.c {
 }
 
 input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project_id, select#todo_context_id {
-    width: 95%;
+    width: 100%;
     padding: 8px 8px;
+    box-sizing: border-box;
 }
 
 select {
