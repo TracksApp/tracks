@@ -1,8 +1,11 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<% 
 
-def today 
-  Time.now.utc.to_s(:db) 
+# Please note that dates in yml are not converted to utc timezone like
+# rails does automatically in models or controllers! Convert to utc manually!
+<%
+
+def today
+  Time.zone.now.utc.to_s(:db)
 end
 
 %>

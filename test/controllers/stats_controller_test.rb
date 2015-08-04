@@ -45,11 +45,14 @@ class StatsControllerTest < ActionController::TestCase
   def test_totals
     login_as(:admin_user)
     get :index
+
     assert_response :success
     totals = assigns['stats'].totals
     assert_equal 4, totals.tags
     assert_equal 2, totals.unique_tags
-    assert_equal 2.week.ago.utc.at_midnight, totals.first_action_at.utc.at_midnight
+
+    Time.zone = users(:admin_user).prefs.time_zone # calculations are done in users timezone
+    assert_equal 2.weeks.ago.at_midnight, totals.first_action_at.at_midnight
   end
 
   def test_downdrill
@@ -128,15 +131,15 @@ class StatsControllerTest < ActionController::TestCase
         # And they should be averaged over three months
         assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][1], "fourth month should be excluded"
         assert_equal 2/3.0, assigns['actions_done_avg_last12months_array'][2], "fourth month should be included"
-        
+
         assert_equal (3)/3.0, assigns['actions_created_avg_last12months_array'][1], "one every month"
         assert_equal (4)/3.0, assigns['actions_created_avg_last12months_array'][2], "two in fourth month"
-        
+
         # And the current month should be interpolated
         fraction = Time.zone.now.day.to_f / Time.zone.now.end_of_month.day.to_f
         assert_equal (2*(1/fraction)+2)/3.0, assigns['interpolated_actions_created_this_month'], "two this month and one in the last two months"
         assert_equal (2)/3.0, assigns['interpolated_actions_done_this_month'], "none this month and one two the last two months"
-        
+
         # And totals should be calculated
         assert_equal 2, assigns['max'], "max of created or completed todos in one month"
     end
@@ -168,7 +171,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -176,7 +179,7 @@ class StatsControllerTest < ActionController::TestCase
     assert_response :success
 
     # only tests relevant differences with actions_done_last_12months_data
-    
+
     assert_equal 31, assigns['actions_done_last30days_array'].size, "30 complete days plus 1 for the current day"
     assert_equal 2, assigns['max'], "two actions created on one day is max"
   end
@@ -185,31 +188,31 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
     get :actions_done_lastyears_data
     assert_response :success
-    
+
     # only tests difference with actions_done_last_12months_data
-    
+
     # And the last two months are corrected
     assert_equal 2/3.0, assigns['actions_done_avg_last_months_array'][23]
     assert_equal 2/3.0, assigns['actions_done_avg_last_months_array'][24]
   end
-  
+
   def test_actions_completion_time_data
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
-    
+
     # When I get the chart data
     get :actions_completion_time_data
     assert_response :success
-    
+
     # do not test stuff already implicitly tested in other tests
     assert_equal 104,   assigns['max_weeks'], "two years is 104 weeks (for completed_at)"
     assert_equal   3,   assigns['max_actions'], "3 completed within one week"
@@ -222,13 +225,13 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
-    
+
     # When I get the chart data
     get :actions_running_time_data
     assert_response :success
-    
+
     # do not test stuff already implicitly tested in other tests
     assert_equal  17,   assigns['max_weeks'], "there are actions in the first 17 weeks of this year"
     assert_equal   2,   assigns['max_actions'], "2 actions running long together"
@@ -241,13 +244,13 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
-    
+
     # When I get the chart data
     get :actions_open_per_week_data
     assert_response :success
-    
+
     # do not test stuff already implicitly tested in other tests
     assert_equal  17,   assigns['max_weeks'], "there are actions in the first 17 weeks of this year"
     assert_equal   4,   assigns['max_actions'], "4 actions running together"
@@ -258,12 +261,12 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
     # Given todo1 is deferred (i.e. not visible)
     @todo_today1.show_from = Time.zone.now + 1.week
     @todo_today1.save
-    
+
     # When I get the chart data
     get :actions_visible_running_time_data
     assert_response :success
@@ -281,7 +284,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -311,7 +314,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -335,12 +338,12 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal 14, assigns['data'].values[9], "pie slices limited to max 10; last pie contains sum of rest (in percentage)"
     assert_equal "(others)",  assigns['data'].labels[9], "pie slices limited to max 10; last slice contains label for others"
   end
-  
+
   def test_actions_day_of_week_all_data
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -358,7 +361,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -376,7 +379,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -389,12 +392,12 @@ class StatsControllerTest < ActionController::TestCase
     assert_not_nil assigns['actions_creation_hour_array']
     assert_not_nil assigns['actions_completion_hour_array']
   end
-  
+
   def test_show_selected_actions_from_chart_avrt
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -409,7 +412,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -424,7 +427,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -439,7 +442,7 @@ class StatsControllerTest < ActionController::TestCase
     login_as(:admin_user)
     @current_user = User.find(users(:admin_user).id)
     @current_user.todos.delete_all
-    
+
     given_todos_for_stats
 
     # When I get the chart data
@@ -451,7 +454,7 @@ class StatsControllerTest < ActionController::TestCase
   end
 
   private
-  
+
   def given_todos_for_stats
     # Given two todos created today
     @todo_today1 = @current_user.todos.create!(:description => "created today1", :context => contexts(:office))
@@ -491,7 +494,7 @@ class StatsControllerTest < ActionController::TestCase
   def difference_in_days(date1, date2)
     return ((date1.at_midnight-date2.at_midnight)/(60*60*24)).to_i
   end
-  
+
   # assumes date1 > date2
   def difference_in_weeks(date1, date2)
     return difference_in_days(date1, date2) / 7

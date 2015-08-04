@@ -98,7 +98,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal :completed, @timemachine.aasm.current_state
     assert @timemachine.completed?
     assert_not_nil @timemachine.completed_at, "completed_at not expected to be nil"
-    assert_in_delta Time.now, @timemachine.completed_at, 1
+    assert_in_delta Time.zone.now, @timemachine.completed_at, 1
   end
 
   def test_delete_project_deletes_todos_within_it
@@ -254,5 +254,4 @@ class ProjectTest < ActiveSupport::TestCase
     p.reload
     assert_equal 4, p.running_time
   end
-
 end

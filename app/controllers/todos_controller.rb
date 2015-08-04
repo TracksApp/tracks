@@ -1071,10 +1071,10 @@ end
       if recurring_todo.todos.active.count == 0
 
         # check for next todo either from the due date or the show_from date
-        date_to_check = todo.due.nil? ? todo.show_from : todo.due
+        date_to_check = todo.due || todo.show_from
 
         # if both due and show_from are nil, check for a next todo from now
-        date_to_check = Time.zone.now if date_to_check.nil?
+        date_to_check ||= Time.zone.now
 
         if recurring_todo.active? && recurring_todo.continues_recurring?(date_to_check)
 
@@ -1087,7 +1087,7 @@ end
           # for tomorrow.
           date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
 
-          new_recurring_todo = TodoFromRecurringTodo.new(current_user, recurring_todo).create(date.at_midnight)
+          new_recurring_todo = TodoFromRecurringTodo.new(current_user, recurring_todo).create(date)
         end
       end
     end

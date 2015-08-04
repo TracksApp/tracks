@@ -3,7 +3,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 
 # set config for tests. Overwrite those read from config/site.yml. Use inject to avoid warning about changing CONSTANT
-{ "authentication_schemes" => ["database"], "prefered_auth" => "database", "email_dispatch" => nil}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
+{
+  "authentication_schemes" => ["database"],
+  "prefered_auth" => "database",
+  "email_dispatch" => nil,
+  "time_zone" => "Amsterdam"  # force UTC+1 so Travis triggers time zone failures
+}.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -47,11 +52,11 @@ class ActiveSupport::TestCase
     end
     return string
   end
-  
+
   def assert_equal_dmy(date1, date2)
     assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
   end
-    
+
   def xml_document
     @xml_document ||= HTML::Document.new(@response.body, false, true)
   end
@@ -63,43 +68,43 @@ class ActiveSupport::TestCase
 end
 
 class ActionController::TestCase
-  
+
   def login_as(user)
     @request.session['user_id'] = user ? users(user).id : nil
   end
-  
+
   def assert_ajax_create_increments_count(name)
     assert_count_after_ajax_create(name, get_class_count + 1)
   end
-  
+
   def assert_ajax_create_does_not_increment_count(name)
     assert_count_after_ajax_create(name, get_class_count)
   end
-  
+
   def assert_count_after_ajax_create(name, expected_count)
     ajax_create(name)
     assert_equal(expected_count, get_class_count)
   end
-  
+
   def ajax_create(name)
     xhr :post, :create, get_model_class.downcase => {:name => name}
   end
-  
+
   def assert_xml_select(*args, &block)
     @html_document = xml_document
     assert_select(*args, &block)
   end
-  
+
   private
-  
+
   def get_model_class
     @controller.class.to_s.tableize.split("_")[0].camelcase.singularize  #don't ask... converts ContextsController to Context
   end
-  
+
   def get_class_count
     eval("#{get_model_class}.count")
   end
-  
+
 end
 
 class ActionDispatch::IntegrationTest
@@ -137,7 +142,7 @@ class ActionDispatch::IntegrationTest
   def assert_401_unauthorized_admin
     assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
   end
-  
+
   def assert_responses_with_error(error_msg)
     assert_response 409
     assert_xml_select 'errors' do
