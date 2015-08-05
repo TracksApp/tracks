@@ -52,6 +52,10 @@ GEM
       xpath (~> 2.0)
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.7)
+      climate_control (>= 0.0.3, < 1.0)
     codeclimate-test-reporter (0.4.1)
       simplecov (>= 0.7.1, < 1.0.0)
     coffee-rails (4.1.0)
@@ -101,6 +105,7 @@ GEM
       mime-types (>= 1.16, < 3)
     metaclass (0.0.4)
     mime-types (2.6.1)
+    mimemagic (0.3.0)
     mini_portile (0.6.1)
     minitest (5.7.0)
     mocha (1.1.0)
@@ -112,6 +117,12 @@ GEM
       mini_portile (~> 0.6.0)
     nokogumbo (1.1.12)
       nokogiri
+    paperclip (4.3.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      cocaine (~> 0.5.5)
+      mime-types
+      mimemagic (= 0.3.0)
     rack (1.5.5)
     rack-dev-mark (0.7.3)
       rack (>= 1.1)
@@ -228,6 +239,7 @@ DEPENDENCIES
   jquery-rails
   mocha
   mysql2
+  paperclip
   rack-dev-mark
   rack-mini-profiler
   rails (~> 4.1.11)
