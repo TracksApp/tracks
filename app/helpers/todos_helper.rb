@@ -204,6 +204,14 @@ module TodosHelper
     link_to(t('todos.convert_to_project'), url, {:class => "icon_item_to_project", :id => dom_id(todo, "to_project")})
   end
 
+  def attachment_image(todo)
+    link_to(
+      image_tag('blank.png', width: 16, height: 16, border:0),
+      todo.attachments.first.file.url,
+      {:class => 'todo_attachment', title: 'Get attachments of this todo'}
+    )
+  end
+
   def collapsed_notes_image(todo)
     link = link_to(
       image_tag( 'blank.png', :width=>'16', :height=>'16', :border=>'0' ),

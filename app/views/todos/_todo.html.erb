@@ -41,6 +41,7 @@ cache [todo, current_user.date.strftime("%Y%m%d"), @source_view, current_user.pr
         <%= project_and_context_links( todo, parent_container_type, :suppress_context => suppress_context, :suppress_project => suppress_project ) %>
         <%= collapsed_notes_image(todo) if todo.notes.present? %>
         <%= collapsed_successors_image(todo) if todo.has_pending_successors %>
+        <%= attachment_image(todo) if todo.attachments.present? %>
       </div>
     </div>
     <div id="<%= dom_id(todo, 'edit') %>" class="edit-form" style="display:none">
