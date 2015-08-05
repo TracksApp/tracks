@@ -542,4 +542,28 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
   end
 
+  def test_attachments_are_removed_after_delete
+    # Given a user and a todo withou any attachments
+    todo = @not_completed1
+    assert_equal 0, todo.attachments.count, "we start without attachments"
+    assert_equal 0, todo.user.attachments.count, "the user has no attachments"
+
+    # When I add a file as attachment to a todo of this user
+    attachment = todo.attachments.build
+    attachment.file = File.open(File.join(Rails.root, 'test', 'fixtures', 'email_with_multipart.txt'))
+    attachment.save!
+    new_path = attachment.file.path
+
+    # then the attachment should be there
+    assert File.exists?(new_path), "attachment should be on file system"
+    assert_equal 1, todo.attachments.reload.count, "should have one attachment"
+
+    # When I destroy the todo
+    todo.destroy!
+
+    # Then the attachement and file should nogt be there anymore
+    assert_equal 0, todo.user.attachments.reload.count
+    assert !File.exists?(new_path), "attachment should not be on file system"
+  end
+
 end

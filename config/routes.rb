@@ -105,7 +105,7 @@ Rails.application.routes.draw do
   # This means the controller action needs to parse the extension and set format/content type
   # Needed for /todos/tag/first.last.m to work
   get 'todos/tag/:name' => 'todos#tag', :as => :tag, :format => false, :name => /.*/
-  
+  get 'attachments/:id/:filename' => "todos#attachment"
   get 'tags.autocomplete' => "todos#tags", :format => 'autocomplete'
   get 'todos/done/tag/:name' => "todos#done_tag", :as => :done_tag
   get 'todos/all_done/tag/:name' => "todos#all_done_tag", :as => :all_done_tag

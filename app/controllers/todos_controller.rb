@@ -701,7 +701,6 @@ class TodosController < ApplicationController
     @tag = Tag.where(:name => @tag_name).first_or_create
   end
 
-
   def tags
     # TODO: limit to current_user
     tags_beginning = Tag.where('name like ?', params[:term]+'%')
@@ -813,6 +812,21 @@ class TodosController < ApplicationController
         render :action => "show_notes"
       }
     end
+  end
+
+  def attachment
+    id = params[:id]
+    filename = params[:filename]
+    attachment = current_user.attachments.find(id)
+
+    if attachment
+      send_file(attachment.file.path,
+        disposition: 'attachment',
+        type: 'message/rfc822')
+    else
+      head :not_found
+    end
+
   end
 
   private

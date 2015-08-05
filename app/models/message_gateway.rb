@@ -1,3 +1,5 @@
+require 'tempfile'
+
 class MessageGateway < ActionMailer::Base
 
   def receive(email)
@@ -10,12 +12,40 @@ class MessageGateway < ActionMailer::Base
 
     todo_builder = TodoFromRichMessage.new(user, context.id, todo_params[:description], todo_params[:notes])
     todo = todo_builder.construct
-    todo.save!
-    Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+    saved = todo.save!
+
+    if saved
+      Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+      saved = attach_email_to_todo(todo, email)
+
+      if saved
+        Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+      end
+    end
+
     todo
   end
 
   private
+
+  def attach_email_to_todo(todo, email)
+    attachment = todo.attachments.build
+
+    # create temp file
+    tmp = Tempfile.new(['attachment', '.eml'], universal_newline: true)
+    tmp.write email.raw_source
+
+    # add temp file to attachment. paperclip will copy the file to the right location
+    Rails.logger.info "Saved received email to #{tmp.path}"
+    attachment.file = tmp
+    tmp.close
+    saved = attachment.save!
+
+    # delete temp file
+    tmp.unlink
+  end
 
   def get_todo_params(email)
     params = {}
@@ -111,5 +141,4 @@ class MessageGateway < ActionMailer::Base
       end
     end
   end
-
 end
