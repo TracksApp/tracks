@@ -10,12 +10,40 @@ class MessageGateway < ActionMailer::Base
 
     todo_builder = TodoFromRichMessage.new(user, context.id, todo_params[:description], todo_params[:notes])
     todo = todo_builder.construct
-    todo.save!
-    Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+    if todo.save!
+      Rails.logger.info "Saved email as todo for user #{user.login} in context #{context.name}"
+
+      if attach_email_to_todo(todo, email)
+        Rails.logger.info "Saved email as attachment to todo for user #{user.login} in context #{context.name}"
+      end
+    end
     todo
   end
 
   private
+
+  def attach_email_to_todo(todo, email)
+    attachment = todo.attachments.build
+
+    # create temp file
+    tmp = Tempfile.new(['attachment', '.eml'], {universal_newline: true})
+    tmp.write email.raw_source.gsub(/\r/, "")
+
+    # add temp file to attachment. paperclip will copy the file to the right location
+    Rails.logger.info "Saved received email to #{tmp.path}"
+    attachment.file = tmp
+    tmp.close
+    saved = attachment.save!
+
+    # enable write permissions on group, since MessageGateway could be run under different
+    # user than Tracks (i.e. apache versus mail)
+    dir = File.open(File.dirname(attachment.file.path))
+    dir.chmod(0770)
+
+    # delete temp file
+    tmp.unlink
+  end
 
   def get_todo_params(email)
     params = {}
@@ -111,5 +139,4 @@ class MessageGateway < ActionMailer::Base
       end
     end
   end
-
 end
