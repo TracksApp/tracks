@@ -1,5 +1,7 @@
 language: ruby
 
+sudo: false
+
 rvm:
  - 1.9.3
  - 2.0.0
@@ -24,8 +26,4 @@ notifications:
   irc:
     channels: "chat.freenode.net#tracks"
     skip_join: true
-
-addons:
-  code_climate:
-    repo_token:
-      secure: Ev0v5x9abxM+vlCdY7J/AHMP/Eq9FlhFtNlKSMnD3n2I1xWT0oB5kgidS3L+U0/janXxf4aNe28rDcj5AUePSoNBiSg6wzZ95D3Dz7AxqL9i61IQ/hllpA1kzQrTUsXtS5qAqa3H90Ev5hTQQahExjGvLB+1t8Ea2JBLR+8nUvU=
+    
