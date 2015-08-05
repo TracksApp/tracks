@@ -96,6 +96,7 @@ class User < ActiveRecord::Base
 
   has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
   has_one :preference, dependent: :destroy
+  has_many :attachments, through: :todos
 
   validates_presence_of :login
   validates_presence_of :password, if: :password_required?
