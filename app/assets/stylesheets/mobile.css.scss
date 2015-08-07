@@ -235,7 +235,13 @@ table.c {
 }
 
 input#todo_description, input#tag_list, textarea#todo_notes, select#todo_project_id, select#todo_context_id {
-    width: 95%;
+    width: 100%;
+    padding: 8px 8px;
+    box-sizing: border-box;
+}
+
+select {
+  font-size: 1.1em;
 }
 
 .next-prev-project {
@@ -289,3 +295,13 @@ div.note_wrapper p {
     text-align: right;
 }
 
+.btn {
+    padding: 8px;
+    border-radius: 5px;
+    background-image: none;
+    display: inline-block;
+    white-space: none;
+    border: 1px solid transparent;
+    background-color: #999999;
+    color: #ffffff;
+}
