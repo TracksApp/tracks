@@ -123,13 +123,13 @@ end
 Then /^the project "([^"]*)" should have (\d+) actions listed$/ do |project_name, count|
   project = @current_user.projects.where(:name => project_name).first
   expect(project).to_not be_nil
-  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
+  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']"
   expect(page.find(:xpath, xpath).text).to eq("#{project.name} (#{count} actions)")
 end
 
 Then /^the project "([^"]*)" should have (\d+) deferred actions listed$/ do |project_name, deferred|
   project = @current_user.projects.where(:name => project_name).first
   expect(project).to_not be_nil
-  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']//span[@class='needsreview']"
+  xpath = "//div[@id='list-active-projects-container']//div[@id='project_#{project.id}']"
   expect(page.find(:xpath, xpath).text).to eq("#{project.name} (#{deferred} deferred actions)")
 end
