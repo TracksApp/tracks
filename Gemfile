@@ -10,17 +10,18 @@ gem 'coffee-rails', '~> 4.0.1'
 gem 'actionpack-xml_parser', '~> 1.0.1'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer'
+gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '~> 2.5.3'
 
 gem 'jquery-rails', '~> 3.1.2'
 
-# you may comment out the database driver you will not be using.
+# you may comment out the database driver(s) you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
-# always possible on all hosters
-gem "sqlite3", "~> 1.3.9"
-gem "mysql2", "~> 0.3.16"
+# always possible on all platforms
+# Alternatively use --without <group> arguments to bundler to not install that group
+gem "sqlite3", "~> 1.3.9", group: :sqlite
+gem "mysql2", "~> 0.3.16", group: :mysql
 
 gem "RedCloth", "~> 4.2.9"
 gem "sanitize", "~> 3.0.2"

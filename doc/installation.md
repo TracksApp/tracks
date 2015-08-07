@@ -50,9 +50,21 @@ You need to create a database and database-user to use with Tracks. For this, yo
 
 Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundler tool makes it easy to install all the gems that Tracks needs, and ensures that they are all the correct versions.
 
-1. Edit the file `Gemfile` in the Tracks root directory. You may comment out any database drivers you will not be using. You may also comment out `therubyracer` if you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed.
-2. Run the command `bundle install --without development test` in the directory that you unzipped your Tracks download to.
-3. Wait for Bundler to finish installing the necessary gems that Tracks needs. This can take some time depending on the speed of your internet connection and the speed of the system you’re installing Tracks on.
+1. In the directory that you unzipped your Tracks download to, install all the appropriate gems by running:
+  * If you are using SQLite:
+
+        ```
+        bundle install --without development test mysql
+        ```
+
+  * If you are using MySQL:
+
+        ```
+        bundle install --without development test sqlite
+        ```
+
+  * If you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed, you may also append `therubyracer` as an additional "without" parameter.
+2. Wait for Bundler to finish installing the necessary gems that Tracks needs. This can take some time depending on the speed of your internet connection and the speed of the system you’re installing Tracks on.
 
 ## Configure variables
 
