@@ -32,6 +32,7 @@ gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
 gem 'thin'
+gem 'paperclip'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'

@@ -815,6 +815,20 @@ class TodosController < ApplicationController
     end
   end
 
+  def attachment
+    id = params[:id]
+    filename = params[:filename]
+    attachment = current_user.attachments.find(id)
+
+    if attachment
+      send_file(attachment.file.path,
+        disposition: 'attachment',
+        type: 'message/rfc822')
+    else
+      head :not_found
+    end
+  end
+
   private
 
   def set_group_view_by

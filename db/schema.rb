@@ -11,11 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150209233951) do
+ActiveRecord::Schema.define(version: 20150805144100) do
+
+  create_table "attachments", force: true do |t|
+    t.integer  "todo_id"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
+    t.integer  "file_file_size"
+    t.datetime "file_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "attachments", ["todo_id"], name: "index_attachments_on_todo_id", using: :btree
 
   create_table "contexts", force: true do |t|
     t.string   "name",                                     null: false
-    t.integer  "position"
+    t.integer  "position",              default: 0
     t.integer  "user_id",               default: 1
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -85,11 +97,11 @@ ActiveRecord::Schema.define(version: 20150209233951) do
   add_index "preferences", ["user_id"], name: "index_preferences_on_user_id", using: :btree
 
   create_table "projects", force: true do |t|
-    t.string   "name",                                      null: false
-    t.integer  "position"
-    t.integer  "user_id",                       default: 1
-    t.text     "description"
-    t.string   "state",              limit: 20,             null: false
+    t.string   "name",                                            null: false
+    t.integer  "position",                            default: 0
+    t.integer  "user_id",                             default: 1
+    t.text     "description",        limit: 16777215
+    t.string   "state",              limit: 20,                   null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "default_context_id"
@@ -104,17 +116,17 @@ ActiveRecord::Schema.define(version: 20150209233951) do
   add_index "projects", ["user_id"], name: "index_projects_on_user_id", using: :btree
 
   create_table "recurring_todos", force: true do |t|
-    t.integer  "user_id",                          default: 1
-    t.integer  "context_id",                                       null: false
+    t.integer  "user_id",                                default: 1
+    t.integer  "context_id",                                             null: false
     t.integer  "project_id"
-    t.string   "description",                                      null: false
-    t.text     "notes"
-    t.string   "state",                 limit: 20,                 null: false
+    t.string   "description",                                            null: false
+    t.text     "notes",                 limit: 16777215
+    t.string   "state",                 limit: 20,                       null: false
     t.datetime "start_from"
     t.string   "ends_on"
     t.datetime "end_date"
     t.integer  "number_of_occurrences"
-    t.integer  "occurrences_count",                default: 0
+    t.integer  "occurrences_count",                      default: 0
     t.string   "target"
     t.integer  "show_from_delta"
     t.string   "recurring_period"
@@ -123,7 +135,7 @@ ActiveRecord::Schema.define(version: 20150209233951) do
     t.integer  "every_other2"
     t.integer  "every_other3"
     t.string   "every_day"
-    t.boolean  "only_work_days",                   default: false
+    t.boolean  "only_work_days",                         default: false
     t.integer  "every_count"
     t.integer  "weekday"
     t.datetime "completed_at"
@@ -141,7 +153,7 @@ ActiveRecord::Schema.define(version: 20150209233951) do
     t.datetime "updated_at"
   end
 
-  add_index "sessions", ["session_id"], name: "index_sessions_on_session_id", using: :btree
+  add_index "sessions", ["session_id"], name: "sessions_session_id_index", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer "taggable_id"
@@ -162,19 +174,19 @@ ActiveRecord::Schema.define(version: 20150209233951) do
   add_index "tags", ["name"], name: "index_tags_on_name", using: :btree
 
   create_table "todos", force: true do |t|
-    t.integer  "context_id",                               null: false
+    t.integer  "context_id",                                     null: false
     t.integer  "project_id"
-    t.string   "description",                              null: false
-    t.text     "notes"
+    t.string   "description",                                    null: false
+    t.text     "notes",             limit: 16777215
     t.datetime "created_at"
     t.datetime "due"
     t.datetime "completed_at"
-    t.integer  "user_id",                      default: 1
+    t.integer  "user_id",                            default: 1
     t.datetime "show_from"
-    t.string   "state",             limit: 20,             null: false
+    t.string   "state",             limit: 20,                   null: false
     t.integer  "recurring_todo_id"
     t.datetime "updated_at"
-    t.text     "rendered_notes"
+    t.text     "rendered_notes",    limit: 16777215
   end
 
   add_index "todos", ["context_id"], name: "index_todos_on_context_id", using: :btree
@@ -212,7 +224,7 @@ ActiveRecord::Schema.define(version: 20150209233951) do
 
   create_table "users", force: true do |t|
     t.string   "login",                     limit: 80,                      null: false
-    t.string   "crypted_password",          limit: 60,                      null: false
+    t.string   "crypted_password",          limit: 60
     t.string   "token"
     t.boolean  "is_admin",                             default: false,      null: false
     t.string   "first_name"
