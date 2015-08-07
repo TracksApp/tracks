@@ -27,7 +27,7 @@ class TodoFromRecurringTodo
   end
 
   def end_date
-    todo.due ? todo.due : todo.show_from
+    todo.due || todo.show_from
   end
 
   def attributes

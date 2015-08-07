@@ -82,18 +82,9 @@ module RecurringTodos
     def find_specific_day_of_month(previous, start, n)
       if (previous && start.mday >= every_x_day) || (previous.nil? && start.mday > every_x_day)
         # there is no next day n in this month, search in next month
-        #
-        #  start += n.months
-        #
-        # The above seems to not work. Fiddle with timezone. Looks like we hit a
-        # bug in rails here where 2008-12-01 +0100 plus 1.month becomes
-        # 2008-12-31 +0100. For now, just calculate in UTC and convert back to
-        # local timezone.
-        #
-        #  TODO: recheck if future rails versions have this problem too
-        start = Time.utc(start.year, start.month, start.day)+n.months
+        start += n.months
       end
-      Time.zone.local(start.year, start.month, every_x_day)
+      start.in_time_zone.change(day: every_x_day)
     end
 
     def find_relative_day_of_month(start, n)
@@ -101,13 +92,7 @@ module RecurringTodos
       if the_next.nil? || the_next <= start
         # the nth day is already passed in this month, go to next month and try
         # again
-
-        # fiddle with timezone. Looks like we hit a bug in rails here where
-        # 2008-12-01 +0100 plus 1.month becomes 2008-12-31 +0100. For now, just
-        # calculate in UTC and convert back to local timezone.
-        #  TODO: recheck if future rails versions have this problem too
-        the_next = Time.utc(the_next.year, the_next.month, the_next.day)+n.months
-        the_next = Time.zone.local(the_next.year, the_next.month, the_next.day)
+        the_next += n.months
 
         # TODO: if there is still no match, start will be set to nil. if we ever
         # support 5th day of the month, we need to handle this case
@@ -136,7 +121,5 @@ module RecurringTodos
         day:      day_of_week_as_text(day_of_week),
         n_months: n_months)
     end
-
   end
-
 end

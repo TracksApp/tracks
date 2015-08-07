@@ -75,7 +75,7 @@ class UserTest < ActiveSupport::TestCase
       assert_equal "is too long (maximum is 80 characters)", u.errors[:login][0]
     end
   end
-  
+
   def test_validate_correct_length_login
     assert_difference 'User.count' do
       create_user :login => generate_random_string(6)
@@ -206,14 +206,14 @@ class UserTest < ActiveSupport::TestCase
 
   def test_find_and_activate_deferred_todos_that_are_ready
     assert_equal 1, @admin_user.deferred_todos.count
-    @admin_user.deferred_todos[0].show_from = Time.now.utc - 5.seconds
+    @admin_user.deferred_todos[0].show_from = Time.zone.now - 5.seconds
     @admin_user.deferred_todos[0].save(:validate => false)
     @admin_user.deferred_todos.reload
     @admin_user.deferred_todos.find_and_activate_ready
     @admin_user.deferred_todos.reload
     assert_equal 0, @admin_user.deferred_todos.count
   end
-  
+
   def test_sort_active_projects_alphabetically
     u = users(:admin_user)
     u.projects.alphabetize(:state => "active")
@@ -221,7 +221,7 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 2, projects(:gardenclean).position
     assert_equal 3, projects(:moremoney).position
   end
-  
+
   def test_sort_active_projects_alphabetically_case_insensitive
     u = users(:admin_user)
     projects(:timemachine).name = projects(:timemachine).name.downcase
@@ -264,22 +264,22 @@ class UserTest < ActiveSupport::TestCase
     users(:other_user).update_attributes(:password => 'new password', :password_confirmation => 'new password')
     assert_equal users(:other_user), User.authenticate('jane', 'new password')
   end
-  
+
   def test_should_not_rehash_password
     users(:other_user).update_attributes(:login => 'jane2')
     assert_equal users(:other_user), User.authenticate('jane2', 'sesame')
   end
-  
+
   def test_should_authenticate_user
     assert_equal users(:other_user), User.authenticate('jane', 'sesame')
   end
-  
+
   def test_should_set_remember_token
     users(:other_user).remember_me
     assert_not_nil users(:other_user).remember_token
     assert_not_nil users(:other_user).remember_token_expires_at
   end
-  
+
   def test_should_unset_remember_token
     users(:other_user).remember_me
     assert_not_nil users(:other_user).remember_token
@@ -319,7 +319,7 @@ class UserTest < ActiveSupport::TestCase
 
     u.projects.actionize
 
-    assert_equal "3,2,1", u.projects.reload.map(&:id).join(",")    
+    assert_equal "3,2,1", u.projects.reload.map(&:id).join(",")
   end
 
   def test_remember_token
@@ -389,12 +389,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal expect_notes_count, Note.count, "expected #{nr_of_notes} notes to be gone"
     assert_equal expect_deps_count, Dependency.count, "expected #{nr_of_deps} dependencies to be gone"
   end
-    
+
   protected
 
   def create_user(options = {})
     options[:password_confirmation] = options[:password] unless options.has_key?(:password_confirmation) || !options.has_key?(:password)
     User.create({ :login => 'quire', :password => 'quire', :password_confirmation => 'quire' }.merge(options))
   end
-        
+
 end

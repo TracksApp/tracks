@@ -1,17 +1,27 @@
+# please note that dates in yml are not converted to utc timezone like
+# rails does automatically in models or controllers! Convert to utc manually!
+
+<%
+def today
+  Time.zone.now.utc.beginning_of_day.to_s(:db)
+end
+%>
+
 foo:
   id: 1
   name: foo
-  created_at: <%= Time.now.utc.to_s(:db) %>
-  updated_at: <%= Time.now.utc.to_s(:db) %>
+  created_at: <%= today %>
+  updated_at: <%= today %>
 
 bar:
   id: 2
   name: bar
-  created_at: <%= Time.now.utc.to_s(:db) %>
-  updated_at: <%= Time.now.utc.to_s(:db) %>
-  
+  created_at: <%= today %>
+  updated_at: <%= today %>
+
 baz:
   id: 3
   name: baz
-  created_at: <%= Time.now.utc.to_s(:db) %>
-  updated_at: <%= Time.now.utc.to_s(:db) %>
+  created_at: <%= today %>
+  updated_at: <%= today %>
+  

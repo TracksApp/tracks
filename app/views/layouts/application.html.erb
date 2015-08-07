@@ -40,7 +40,7 @@
           <% if @count -%>
             <span id="badge_count" class="badge"><%= @count %></span>
           <% end -%>
-          <%= l(Date.today, :format => current_user.prefs.title_date_format) %>
+          <%= l(Time.zone.today, :format => current_user.prefs.title_date_format) %>
         </h1>
       </div>
       <div id="minilinks">

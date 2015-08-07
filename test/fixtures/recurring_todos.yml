@@ -1,26 +1,29 @@
+# Please note that dates in yml are not converted to utc timezone like
+# rails does automatically in models or controllers! Convert to utc manually!
+
 <%
 def today
-    Time.zone.now.beginning_of_day.to_s(:db)
+    Time.zone.now.utc.beginning_of_day.to_s(:db)
 end
 
 def next_week
-    1.week.from_now.beginning_of_day.to_s(:db)
+    1.week.from_now.utc.beginning_of_day.to_s(:db)
 end
 
 def last_week
-    1.week.ago.beginning_of_day.to_s(:db)
+    1.week.ago.utc.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_ago
-    2.weeks.ago.beginning_of_day.to_s(:db)
+    2.weeks.ago.utc.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_hence
-    2.weeks.from_now.beginning_of_day.to_s(:db)
+    2.weeks.from_now.utc.beginning_of_day.to_s(:db)
 end
 
 def way_back
-  Time.zone.local(2008,1,1).to_s(:db)
+  Time.zone.local(2008,1,1).utc.to_s(:db)
 end
 
 %>

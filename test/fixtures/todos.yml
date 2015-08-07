@@ -1,26 +1,27 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-<% 
 
-Time.zone = SITE_CONFIG['time_zone']
+# Please note that dates in yml are not converted to utc timezone like
+# rails does automatically in models or controllers! Convert to utc manually!
 
-def today 
-  Time.zone.now.beginning_of_day.to_s(:db)
+<%
+def today
+  Time.zone.now.utc.beginning_of_day.to_s(:db)
 end
 
-def next_week 
-  1.week.from_now.beginning_of_day.to_s(:db)
-end 
+def next_week
+  1.week.from_now.utc.beginning_of_day.to_s(:db)
+end
 
-def last_week 
-  1.week.ago.beginning_of_day.to_s(:db)
+def last_week
+  1.week.ago.utc.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_ago
-  2.weeks.ago.beginning_of_day.to_s(:db)
+  2.weeks.ago.utc.beginning_of_day.to_s(:db)
 end
 
 def two_weeks_hence
-  2.weeks.from_now.beginning_of_day.to_s(:db)
+  2.weeks.from_now.utc.beginning_of_day.to_s(:db)
 end
 
 %>
@@ -192,7 +193,7 @@ call_stock_broker:
   due: ~
   completed_at: ~
   user_id: 1
-  
+
 select_delorean_model:
   id: 15
   context_id: 6
@@ -254,4 +255,3 @@ email_broker:
   description: Ask about better stocks
   notes: ~
   state: pending
-  

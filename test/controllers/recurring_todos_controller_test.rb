@@ -184,7 +184,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
     # mark as active
     xhr :post, :toggle_check, :id=>1, :_source_view=>""
-    
+
     recurring_todo_1 = RecurringTodo.find(1) # reload seems to not work
     assert recurring_todo_1.active?, "recurring todo should be active but is #{recurring_todo_1.aasm.current_state}"
 
@@ -203,7 +203,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
     # change due date in four days from now and show from 10 days before, i.e. 6
     # days ago
-    target_date = Time.now.utc + 4.days
+    target_date = Time.zone.now + 4.days
     @yearly.every_other1 = target_date.day
     @yearly.every_other2 = target_date.month
     @yearly.show_from_delta = 10
@@ -260,7 +260,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "recurring_show_days_before"=>"0",
         "recurring_target"=>"due_date",
         "recurring_show_always" => "1",
-        "start_from"=>"1/10/2012",  
+        "start_from"=>"1/10/2012",
         "weekly_every_x_week"=>"1",
         "weekly_return_monday"=>"w",
         "yearly_day_of_week"=>"0",
@@ -419,9 +419,9 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     rt = recurring_todos(:call_bill_gates_every_day)
 
-    put :update, 
-      "recurring_todo" => { 
-        "description"        => "changed", 
+    put :update,
+      "recurring_todo" => {
+        "description"        => "changed",
         "daily_selector"     => "daily_every_x_day",
         "daily_every_x_days" => "2",
         "ends_on"            => "no_end_date",
@@ -433,7 +433,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "recurring_todo_edit_start_from" => "2/1/2013",
       "end_date"                       => nil,
       "ends_on"                        => "no_end_date",
-      "id"                             => "#{rt.id}", 
+      "id"                             => "#{rt.id}",
       "context_name"                   => "library",
       format: :js
 

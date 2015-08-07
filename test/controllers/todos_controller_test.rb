@@ -120,7 +120,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal 3, @tagged
   end
-  
+
   def test_find_tagged_with_terms_separated_with_dot
     login_as :admin_user
     create_todo(description: "test dotted tag", tag_list: "first.last, second")
@@ -408,7 +408,7 @@ class TodosControllerTest < ActionController::TestCase
 
   #######
   # defer
-  ####### 
+  #######
 
   def test_update_clearing_show_from_makes_todo_active
     t = Todo.find(1)
@@ -437,7 +437,7 @@ class TodosControllerTest < ActionController::TestCase
     # given a todo in the tickler that should be activated
     travel_to 2.weeks.ago do
       create_todo(
-        description: "tickler", 
+        description: "tickler",
         show_from: 1.week.from_now.
           in_time_zone(users(:admin_user).prefs.time_zone).
           strftime("#{users(:admin_user).prefs.date_format}"))
@@ -715,17 +715,25 @@ class TodosControllerTest < ActionController::TestCase
   end
 
   def test_toggle_check_on_rec_todo_show_from_today
+    # warning: the Time.zone set in site.yml will be overwritten by
+    # :admin_user.prefs.time_zone in ApplicationController. This messes with
+    # the calculation. So set time_zone to admin_user's time_zone setting
+    Time.zone = users(:admin_user).prefs.time_zone
+
     travel_to Time.zone.local(2014, 1, 15) do
+      today = Time.zone.now.at_midnight
+
       login_as(:admin_user)
 
       # link todo_1 and recurring_todo_1
       recurring_todo_1 = RecurringTodo.find(1)
       todo_1 = Todo.where(:recurring_todo_id => 1).first
-      today = Time.zone.now.at_midnight
       todo_1.due = today
       assert todo_1.save
 
-      # change recurrence pattern to monthly and set show_from to today
+      # change recurrence pattern to monthly on a specific
+      # day (recurrence_selector=0) and set show_from
+      # (every_other2=1) to today
       recurring_todo_1.target = 'show_from_date'
       recurring_todo_1.recurring_period = 'monthly'
       recurring_todo_1.recurrence_selector = 0
@@ -746,15 +754,13 @@ class TodosControllerTest < ActionController::TestCase
       assert_not_equal todo_1.id, new_todo.id, "check that the new todo is not the same as todo_1"
       assert !new_todo.show_from.nil?, "check that the new_todo is in the tickler to show next month"
 
-      # do not use today here. It somehow gets messed up with the timezone calculation.
-      next_month = (Time.zone.now + 1.month).at_midnight
-
-      assert_equal next_month.utc.to_date.to_s(:db), new_todo.show_from.utc.to_date.to_s(:db)
+      assert_equal today + 1.month, new_todo.show_from
     end
   end
 
   def test_check_for_next_todo
     login_as :admin_user
+    Time.zone = users(:admin_user).prefs.time_zone
 
     tomorrow = Time.zone.now + 1.day
 
@@ -791,6 +797,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_check_for_next_todo_monthly
     login_as :admin_user
+    Time.zone = users(:admin_user).prefs.time_zone
 
     tomorrow = Time.zone.now + 1.day
 
@@ -1024,13 +1031,13 @@ class TodosControllerTest < ActionController::TestCase
   private
 
   def create_todo(params={})
-    defaults = { source_view: 'todo', 
-      context_name: "library", project_name: "Build a working time machine", 
+    defaults = { source_view: 'todo',
+      context_name: "library", project_name: "Build a working time machine",
       notes: "note", description: "a new todo", due: nil, tag_list: "a,b,c"}
 
     params=params.reverse_merge(defaults)
 
-    put :create, _source_view: params[:_source_view], 
+    put :create, _source_view: params[:_source_view],
       context_name: params[:context_name], project_name: params[:project_name], tag_list: params[:tag_list],
       todo: {notes: params[:notes], description: params[:description], due: params[:due], show_from: params[:show_from]}
   end

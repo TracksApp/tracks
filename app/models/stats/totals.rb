@@ -19,7 +19,7 @@ module Stats
     end
 
     def first_action_at
-      first_action.created_at if first_action
+      first_action.try(:created_at)
     end
 
     def projects

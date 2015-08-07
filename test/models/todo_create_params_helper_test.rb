@@ -16,14 +16,14 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
   end
 
   def test_show_from_accessor
-    expected_date = Time.now
+    expected_date = Time.zone.now
     params =  ActionController::Parameters.new({ 'todo' => { 'show_from' => expected_date}})
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
     assert_equal(expected_date, params_helper.show_from)
   end
 
   def test_due_accessor
-    expected_date = Time.now
+    expected_date = Time.zone.now
     params =  ActionController::Parameters.new({ 'todo' => { 'due' => expected_date}})
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
     assert_equal(expected_date, params_helper.due)
@@ -119,5 +119,4 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
     assert_equal false, params_helper.context_specified_by_name?
   end
-
 end

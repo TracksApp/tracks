@@ -16,7 +16,7 @@
 </head><body>
 <% if current_user && !current_user.prefs.nil? -%>
 <div id="topbar"><h1><% if @down_count -%><span class="count" id="badge_count"><%= @down_count %></span><% end -%> <%=
-        l(Date.today, :format => current_user.prefs.title_date_format) -%></h1>
+        l(Time.zone.today, :format => current_user.prefs.title_date_format) -%></h1>
 <ul class="nav">
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.new_action'), new_todo_path(new_todo_params))) -%></li>
   <li class="link"><%=     (link_to(t('layouts.mobile_navigation.home'), todos_path(:format => 'm'))) -%></li>
