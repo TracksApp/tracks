@@ -358,7 +358,6 @@ nl:
       submit: Bewaar %{model}
       update: Bijwerken %{model}
   integrations:
-    gmail_description: Gadget om Tracks toe te voegen aan Gmail als een gadget
     opensearch_description: Zoek in Tracks
   layouts:
     mobile_navigation:

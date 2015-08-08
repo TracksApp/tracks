@@ -310,7 +310,6 @@ es:
   footer:
     send_feedback: Envía comentarios sobre el %{version}
   integrations:
-    gmail_description: Gadget para añadir pistas a Gmail como un gadget
     opensearch_description: Buscar en las Tracks
   layouts:
     mobile_navigation:

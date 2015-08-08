@@ -797,7 +797,6 @@ en:
     save_status_message: "Note %{id} was saved"    
   integrations:
     opensearch_description: Search in Tracks
-    gmail_description: Gadget to add Tracks to Gmail as a gadget
   preferences:
     open_id_url: Your OpenID URL is
     staleness_starts_after: Staleness starts after %{days} days

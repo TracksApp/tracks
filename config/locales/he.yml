@@ -257,7 +257,6 @@ he:
   footer:
     send_feedback: "שליחת משוב על גירסא %{version}"
   integrations:
-    gmail_description: "חֲפִיץ להוספת מסלולים ל-Gmail"
     opensearch_description: "חיפוש במסלולים"
   layouts:
     mobile_navigation:

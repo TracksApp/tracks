@@ -10,7 +10,6 @@
 <ul>
   <li><a href="#email-cron-section">Anstehende Aufgaben automatisch sich via E-Mail zusenden lassen</a></li>
   <li><a href="#message_gateway">Tracks mit einem Mail-Server integrieren, um Aufgaben via E-Mail zu erstellen</a></li>
-  <li><a href="#google_gadget">Tracks zu Ihrer Google Gmail Seite hinzuf&uuml;gen</a></li>
 </ul><br/>
 <p>Sie haben weitere Beispiele?
   <a href="http://www.getontracks.org/forums/viewforum/10/" title="Tracks | Tips and Tricks">Berichten Sie uns
@@ -50,18 +49,3 @@
   <p>You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to <tt>single_user</tt> and pass the login of the user:
     <pre>TRACKS_MAIL_RECEIVER=<%=current_user.login%> /PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>
 </p>
-
-<a name="google_gadget"> </a>
-<h2>Add Tracks as a Google Gmail gadget</h2>
-<p>
-  You can now manage your projects/actions inside Gmail using Tracks Gmail Gadget.
-  Add Tracks Gmail gadget to the sidebar of Gmail and track your next actions
-  or add new action without explicitly open new browser tab for Tracks. Steps to set it up:
-</p>
-<ul>
-  <li>Sign in to Gmail and click Settings in the top right of your Gmail page. In Gmail setting page, click Labs tab</li>
-  <li>Enable the "Add any gadget by URL" feature. You will find it at bottom of the list. Select Enable radio button and click Save Changes button.</li>
-  <li>Now you can see Gadgets tab added to Gmail Settings. Go to the Gadgets tab</li>
-  <li>Paste following link to the Add a gadget by its URL: and then click Add button:<br/>
-    <pre><%= integrations_url + "/google_gadget.xml" %></pre></li>
-</ul>

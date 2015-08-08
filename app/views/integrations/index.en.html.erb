@@ -12,7 +12,6 @@
   <li><a href="#message_gateway">Integrate Tracks with an email server to be able to send an action through email to Tracks</a></li>
   <li><a href="#mailgun">Send emails to Tracks with Mailgun</a>
   <li><a href="#todo_rich_message_format">Rich Todo Message email format</a>
-  <li><a href="#google_gadget">Add Tracks as a Google Gmail gadget</a></li>
 </ul><br/>
 <p>Do you have one of your own to add?
   <a href="http://www.getontracks.org/forums/viewforum/10/" title="Tracks | Tips and Tricks">Tell us about
@@ -118,18 +117,3 @@ Mailgun handling, as the data is processed the same way</p>
   </tr>
 </table>
 <p>All symbols are optional, and text up to the first symbol (or end of string) is used as the description of the todo</p>
-
-<a name="google_gadget"> </a>
-<h2>Add Tracks as a Google Gmail gadget</h2>
-<p>
-  You can now manage your projects/actions inside Gmail using Tracks Gmail Gadget.
-  Add Tracks Gmail gadget to the sidebar of Gmail and track your next actions
-  or add new action without explicitly open new browser tab for Tracks. Steps to set it up:
-</p>
-<ul>
-  <li>Sign in to Gmail and click Settings in the top right of your Gmail page. In Gmail setting page, click Labs tab</li>
-  <li>Enable the "Add any gadget by URL" feature. You will find it at bottom of the list. Select Enable radio button and click Save Changes button.</li>
-  <li>Now you can see Gadgets tab added to Gmail Settings. Go to the Gadgets tab</li>
-  <li>Paste following link to the Add a gadget by its URL: and then click Add button:<br/>
-    <pre><%= integrations_url + "/google_gadget" %></pre></li>
-</ul>

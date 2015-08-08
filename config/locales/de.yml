@@ -313,7 +313,6 @@ de:
   footer:
     send_feedback: Senden Sie Feedback zu %{version}
   integrations:
-    gmail_description: Gadget, um Tracks als Gadget zu Googlemail hinzuzufügen
     opensearch_description: In Tracks suchen
   layouts:
     mobile_navigation:

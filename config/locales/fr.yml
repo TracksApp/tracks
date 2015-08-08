@@ -340,7 +340,6 @@ fr:
       submit: Sauvegarder %{model}
       update: Mettre à jour %{model}
   integrations:
-    gmail_description: Gadget pour ajouter Tracks à Gmail
     opensearch_description: Rechercher dans Tracks
   layouts:
     mobile_navigation:
