@@ -305,17 +305,16 @@ module TodosHelper
   end
 
   def project_and_context_links(todo, parent_container_type, opts = {})
-    str = ''
+    links = ''
     if todo.completed?
-      links = []
-      links << todo.context.name unless opts[:suppress_context]
-      links << todo.project.name unless opts[:suppress_project] || todo.project.nil?
-      str = "(#{links.join(", ")})" unless links.empty?
+      links << item_link_to_context( todo ) unless opts[:suppress_context]
+      links << item_link_to_project( todo ) unless opts[:suppress_project] || todo.project.nil?
     else
-      str << item_link_to_context( todo ) if include_context_link(todo, parent_container_type)
-      str << item_link_to_project( todo ) if include_project_link(todo, parent_container_type)
+      links << item_link_to_context( todo ) if include_context_link(todo, parent_container_type)
+      links << item_link_to_project( todo ) if include_project_link(todo, parent_container_type)
     end
-    return str.html_safe
+
+    links.html_safe
   end
 
   def include_context_link(todo, parent_container_type)
