@@ -4,12 +4,13 @@
   check for obsolete passwords.
 * Thin replaces WEBrick as the included web server
 * Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
+* The MessageGateway will save the received email as an attachement to the todo
 
 ## Version 2.3.0
 
 ### New and changed features
 * Numerous bug fixes
-* You can select to group todos on the home page by context or by 
+* You can select to group todos on the home page by context or by
   project (using the view menu). This also works for tag page, the
   project page, the tickler and the context page
 * You can now change the state of a context to closed
@@ -41,37 +42,37 @@
 
 ## Version 2.2
 
-The main change to this release of Tracks is the migration to Rails 3.2. We had 
-to remove some features because the code and dependencies were not compatible with 
-Rails 3.2. This may impact your scripts or mobile apps that integrate with 
+The main change to this release of Tracks is the migration to Rails 3.2. We had
+to remove some features because the code and dependencies were not compatible with
+Rails 3.2. This may impact your scripts or mobile apps that integrate with
 Tracks using SOAP XML API.
 
 Tracks now  includes support for Ruby 1.8.7 and Ruby 1.9. For development, you
-need to use Ruby 1.9, version 1.8.7 is not supported by some dependencies for 
-testing. The next version of Tracks will only support Ruby 1.9. Support for 
+need to use Ruby 1.9, version 1.8.7 is not supported by some dependencies for
+testing. The next version of Tracks will only support Ruby 1.9. Support for
 older versions of Ruby will be droppped.
 
 New and changed features
 * Updates to all locales
 * Improvements to mobile view
 * Drag and drop should work on mobile devices
-* The email adres for administrator is now a global setting in site.yml, not an 
-  attribute in the User model. This means you need to set the admin_email in 
+* The email adres for administrator is now a global setting in site.yml, not an
+  attribute in the User model. This means you need to set the admin_email in
   site.yml when you upgrade. (The email address is shown on the signup page)
 
 Removed features
-* The outdated code for login in using OpenID has been removed. Also the login 
-  code for CAS and LDAP has been removed because of compatibility issues with 
+* The outdated code for login in using OpenID has been removed. Also the login
+  code for CAS and LDAP has been removed because of compatibility issues with
   Rails 3.2. We plan to migrate to Devise and OmniAuth to get these features back.
-* Removed the SOAP XML interface. Please use REST. 
+* Removed the SOAP XML interface. Please use REST.
 
 New and changed features (technical)
 * Improvements to the XML and REST API
-* Improvements to the MessageGateway to pass email to Tracks. Since the SOAP 
+* Improvements to the MessageGateway to pass email to Tracks. Since the SOAP
   interface is removed, this is a good way to import an email as a todo.
 
 Under the hood
-* Upgrade to Rails 3.2. This means Tracks makes use of the new asset pipeline 
+* Upgrade to Rails 3.2. This means Tracks makes use of the new asset pipeline
   of Rails.
 * Uses Cache Digest. This speeds up page rendering a lot
 * Migrated to Tolk for managing translations
