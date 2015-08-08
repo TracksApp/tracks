@@ -28,7 +28,6 @@ Rails.application.routes.draw do
   get 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
   post 'integrations/cloudmailin' => 'integrations#cloudmailin'
   get 'integrations/search_plugin' => "integrations#search_plugin", :as => 'search_plugin'
-  get 'integrations/google_gadget.xml' => 'integrations#google_gadget', :as => 'google_gadget'
 
   get 'preferences' => "preferences#index"
   get 'preferences/render_date_format' => "preferences#render_date_format"

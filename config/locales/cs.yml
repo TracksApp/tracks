@@ -308,7 +308,6 @@ cs:
   footer:
     send_feedback: Poslat zpětnou vazbu na %{version}
   integrations:
-    gmail_description: Gadget pro Tracks do Gmailu
     opensearch_description: Prohledat Tracks
   layouts:
     mobile_navigation:

@@ -376,7 +376,6 @@ ru:
       submit: "Сохранить %{model}"
       update: "Обновить %{model}"
   integrations:
-    gmail_description: "Гаджет для добавления Tracks в Gmail как гаджета боковой панели"
     opensearch_description: "Искать в Tracks"
   layouts:
     mobile_navigation:

@@ -10,7 +10,6 @@
 <ul>
   <li><a href="#email-cron-section">Email jezelf automatisch de acties met een aflopende deadline</a></li>
   <li><a href="#message_gateway">Integreer Tracks met een email server om een actie via email naar Tracks te sturen</a></li>
-  <li><a href="#google_gadget">Voeg tracks toe als een Google Gmail gadget</a></li>
 </ul><br/>
 <p>Heb je een tip om hier toe te voegen?
   <a href="http://www.getontracks.org/forums/viewforum/10/" title="Tracks | Tips and Tricks">Vertel ons er over in onze
@@ -51,19 +50,3 @@
   <p>Je kan ook alle email naar een specifieke Tracks gebruiker sturen. Stel mail_dispatch in site.yml in op <tt>single_user</tt> en geeft de login van de gebruiker door:
     <pre>TRACKS_MAIL_RECEIVER=<%=current_user.login%> /PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>
 </p>
-
-<a name="google_gadget"> </a>
-<h2>Voeg tracks toe als een Google Gmail gadget</h2>
-<p>
-  Je kan nu ook jouw projects/actions beheren in Gmail met de Tracks Gmail Gadget.
-  Voeg Tracks Gmail gadget toe aan de sidebar van Gmail en volg jouw acties
-  of voeg een nieuwe actie toe zonder apart een nieuw browser tab/scherm te openen
-  voor Tracks. Om dit in te stellen:
-</p>
-<ul>
-  <li>Log bij Gmail in en kies Settings in de rechter-bovenkant van jouw Gmail pagina. In de Gmail setting pagina, kies de Labs tab</li>
-  <li>Zet de "Add any gadget by URL" feature aan. Deze kan je onderop de lijst vinden. Kies voor Enable and kies Save Changes.</li>
-  <li>Nu zie je dat de Gadgets tab is toegevoegd aan de Gmail Settings. Ga nu naar de Gadgets tab</li>
-  <li>Knip en plak de volgende link in de Add a gadget by its URL: en klik dan op de Add button:<br/>
-    <pre><%= integrations_url + "/google_gadget" %></pre></li>
-</ul>
