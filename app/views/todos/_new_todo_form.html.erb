@@ -12,31 +12,31 @@
 
     <label for="todo_description" style="float:left"><%= Todo.human_attribute_name('description') %></label>
     <a href="#" id="new_todo_starred_link" class="undecorated_link" ><%= image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star", :style=> "float: right")%></a>
-    <%= t.text_field("description", "size" => 30, "tabindex" => next_tab_index, "maxlength" => 100, "autocomplete" => "off", :autofocus => 1) %>
+    <%= t.text_field("description", "size" => 30, "maxlength" => 100, "autocomplete" => "off", :autofocus => 1) %>
 
     <label for="todo_notes"><%= Todo.human_attribute_name('notes') %></label>
-    <%= t.text_area("notes", "cols" => 29, "rows" => 6, "tabindex" => next_tab_index) %>
+    <%= t.text_area("notes", "cols" => 29, "rows" => 6) %>
 
     <label for="todo_project_name"><%= Todo.human_attribute_name('project') %></label>
-    <input id="todo_project_name" name="project_name" autocomplete="off" tabindex="<%= next_tab_index%>" size="30" type="text" value="<%= h(@initial_project_name) %>" />
+    <input id="todo_project_name" name="project_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_project_name) %>" />
     <div class="page_name_auto_complete" id="project_list" style="display:none"></div>
 
     <label for="todo_context_name"><%= Todo.human_attribute_name('context') %></label>
-    <input id="todo_context_name" name="context_name" autocomplete="off" tabindex="<%= next_tab_index%>" size="30" type="text" value="<%= h(@initial_context_name) %>" />
+    <input id="todo_context_name" name="context_name" autocomplete="off" size="30" type="text" value="<%= h(@initial_context_name) %>" />
 
     <label for="tag_list"><%= Todo.human_attribute_name('tags') + ' (' + t('shared.separate_tags_with_commas') + ')' %></label>
     <%= hidden_field_tag "initial_tag_list", @initial_tags%>
-    <%= text_field_tag "tag_list", @initial_tags, :size => 30, :tabindex => next_tab_index %>
+    <%= text_field_tag "tag_list", @initial_tags, :size => 30 %>
     <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
 
     <div class="due_input">
       <label for="todo_due"><%= Todo.human_attribute_name('due') %></label>
-      <%= t.text_field("due", "size" => 12, "class" => "Date", "tabindex" => next_tab_index, "autocomplete" => "off") %>
+      <%= t.text_field("due", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
     </div>
 
     <div class="show_from_input">
       <label for="todo_show_from"><%= Todo.human_attribute_name('show_from') %></label>
-      <%= t.text_field("show_from", "size" => 12, "class" => "Date", "tabindex" => next_tab_index, "autocomplete" => "off") %>
+      <%= t.text_field("show_from", "size" => 12, "class" => "Date", "autocomplete" => "off") %>
     </div>
 
     <div class="depends_on">
@@ -46,7 +46,7 @@
         </ul>
       </div>
       <label id="label_for_predecessor_input" for="predecessor_input" style="display:none"><%= t('todos.add_another_dependency')%></label>
-      <%= text_field_tag "predecessor_input", nil, :size => 30, :tabindex => next_tab_index %>
+      <%= text_field_tag "predecessor_input", nil, :size => 30 %>
       <%= hidden_field_tag "predecessor_list", ""%>
     </div>
 
@@ -55,7 +55,7 @@
 
     <div class="submit_box">
       <div class="widgets">
-        <button type="submit" class="positive" id="todo_new_action_submit" tabindex="<%= next_tab_index%>">
+        <button type="submit" class="positive" id="todo_new_action_submit">
           <%=  image_tag("accept.png", :alt => "") + t('shared.add_action') %>
         </button>
       </div>
