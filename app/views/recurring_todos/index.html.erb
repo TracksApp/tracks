@@ -10,7 +10,7 @@
   </div>
 
   <div class="container" id="completed_recurring_todos_container">
-    <div class=add_note_link><%= link_to t('common.show_all'), done_recurring_todos_path%></div>
+    <div class="link_in_container_header"><%= link_to t('common.show_all'), done_recurring_todos_path%></div>
     <h2><%= t('common.last') %> <%= t('todos.completed_recurring') %></h2>
     <div id="completed_recurring_todos_container">
       <div id="completed-empty-nd" style="<%= @no_completed_recurring_todos ? 'display:block' : 'display:none'%>">

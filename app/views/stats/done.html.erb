@@ -1,6 +1,6 @@
 <div id="display_box">
   <div class="container">
-    <div class=add_note_link><%= link_to t('common.show_all'), done_todos_path%></div>
+    <div class="link_in_container_header"><%= link_to t('common.show_all'), done_todos_path%></div>
     <h2>
       <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.actions') %>
     </h2>
@@ -12,7 +12,7 @@
   </div>
 
   <div class="container">
-    <div class=add_note_link><%= link_to t('common.show_all'), done_projects_path%></div>
+    <div class="link_in_container_header"><%= link_to t('common.show_all'), done_projects_path%></div>
     <h2>
       <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.projects') %>
     </h2>
@@ -29,7 +29,7 @@
   </div>
 
   <div class="container">
-    <div class=add_note_link><%= link_to t('common.show_all'), done_recurring_todos_path%></div>
+    <div class="link_in_container_header"><%= link_to t('common.show_all'), done_recurring_todos_path%></div>
     <h2>
       <%= t('common.last') %> <%= t('states.completed_plural' )%> <%= t('common.recurring_todos') %>
     </h2>
