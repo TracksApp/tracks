@@ -417,18 +417,6 @@ module TodosHelper
     return html
   end
 
-  def reset_tab_index
-    $tracks_tab_index = 0
-  end
-
-  def next_tab_index
-    # make sure it exists if reset was not called. Set to 20 to avoid clashes with existing form in sidebar
-    $tracks_tab_index ||= 20
-
-    $tracks_tab_index = $tracks_tab_index + 1
-    return $tracks_tab_index
-  end
-
   def feed_content_for_todo(todo)
     item_notes = todo.notes ? todo.rendered_notes : ''
     due = todo.due ? content_tag(:div, t('todos.feeds.due', :date => format_date(todo.due))) : ''

@@ -89,7 +89,12 @@ class ProjectTest < ActiveSupport::TestCase
 
   def test_review_completedprojects
     @timemachine.complete!
-    assert !@timemachine.needs_review?(users(:admin_user))
+    refute @timemachine.needs_review?(users(:admin_user))
+  end
+
+  def test_new_project_is_reviewed
+    project = users(:admin_user).projects.create!(:name => "test1")
+    refute project.needs_review?(users(:admin_user))
   end
 
   def test_complete_project

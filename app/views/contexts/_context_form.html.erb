@@ -10,17 +10,17 @@
   <div id="edit_error_status"><%= get_list_of_error_messages_for(context) %></div>
 
   <label for="context_name"><%= t 'contexts.context_name' %></label><br/>
-  <%= text_field('context', 'name', :class => 'context-name', :tabindex => next_tab_index) %><br/>
+  <%= text_field('context', 'name', :class => 'context-name') %><br/>
 
   <label for="context_hide"><%= t 'contexts.context_state' %> </label><br/>
   <% ['active', 'hidden', 'closed'].each do | state | %>
-    <%= radio_button(:context, 'state', state, {:tabindex => next_tab_index}) %> <%= state.titlecase %>
+    <%= radio_button(:context, 'state', state) %> <%= state.titlecase %>
   <% end %>
   </br></br>
 
   <div class="submit_box">
     <div class="widgets">
-      <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>" tabindex="<%=next_tab_index%>">
+      <button type="submit" class="positive" id="<%= dom_id(context, 'submit') %>">
         <%=image_tag("accept.png", :alt => "") %>
         <%= t 'common.update' %>
       </button>
