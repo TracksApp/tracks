@@ -103,8 +103,8 @@ module RecurringTodos
 
     def recurrence_pattern_for_specific_day
       on_day = " #{I18n.t('todos.recurrence.pattern.on_day_n', :n => every_x_day)}"
-      if every_xth_day(0) > 1
-        I18n.t("todos.recurrence.pattern.every_n_months", :n => every_xth_day) + on_day
+      if every_x_month > 1
+        I18n.t("todos.recurrence.pattern.every_n_months", :n => every_x_month) + on_day
       else
         I18n.t("todos.recurrence.pattern.every_month") + on_day
       end

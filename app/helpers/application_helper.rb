@@ -107,13 +107,15 @@ module ApplicationHelper
   end
 
   def recurrence_pattern_as_text(recurring_todo)
-    rt = recurring_todo.recurring_target_as_text
-    rp = recurring_todo.recurrence_pattern
-    rp = " " + rp unless rp.nil?
-    rts = recurrence_time_span(recurring_todo)
-    # only add space if recurrence_time_span has content
-    rts = " " + rts unless rts == ""
-    return rt+rp+rts
+    recurring_target = recurring_todo.recurring_target_as_text
+
+    recurrence_pattern = recurring_todo.recurrence_pattern
+    recurrence_pattern = ' ' + recurrence_pattern unless recurrence_pattern.nil?
+
+    recurrence_time_span = recurrence_time_span(recurring_todo)
+    recurrence_time_span = ' ' + recurrence_time_span unless recurrence_time_span.empty?
+
+    recurring_target + recurrence_pattern + recurrence_time_span
   end
 
   def date_format_for_date_picker()
