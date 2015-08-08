@@ -64,7 +64,9 @@ var <%= object_name %> = {
     next_steps.go();
   },
   add_todo_to_container: function(next_steps) {
-    $('#<%= item_container_id(@todo) %>_items').append(<%=object_name%>.html_for_todo());
+    var container = $('#<%= item_container_id(@todo) %>_items');
+    container.append(<%=object_name%>.html_for_todo());
+    TracksPages.sort_container(container);
     <% if should_make_context_visible -%>
       $('#<%= item_container_id(@todo) %>').slideDown(500, function() {
         $("#<%= empty_container_msg_div_id %>").slideUp(100);
@@ -82,7 +84,9 @@ var <%= object_name %> = {
     <%  # show new todo if the completed todo was recurring
       if @todo.from_recurring_todo?
         unless @new_recurring_todo.nil? || (@new_recurring_todo.deferred? && !source_view_is(:deferred)) -%>
-        $('#<%= item_container_id(@new_recurring_todo) %>_items').append(<%=object_name%>.html_for_recurring_todo());
+        var container = $('#<%= item_container_id(@new_recurring_todo) %>_items');
+        conainer.append(<%=object_name%>.html_for_recurring_todo());
+        TracksPages.sort_container(container);
         $('#c<%= @new_recurring_todo.context_id %>').slideDown(500, function() {
           <%=object_name%>.highlight_updated_recurring_todo(next_steps);
         });
@@ -123,11 +127,15 @@ var <%= object_name %> = {
           if source_view_is_one_of(:project,:tag) -%>
             $('#<%= dom_id(t) %>').slideUp(400, function() {
               $('#<%= dom_id(t) %>').remove();
-              $('#<%= item_container_id(t) %>_items').append("<%= html  %>");
+              var container = $('#<%= item_container_id(t) %>_items');
+              container.append("<%= html  %>");
+              TracksPages.sort_container(container);
               <%= "$('#deferred_pending_container-empty-d').show();".html_safe if @remaining_deferred_or_pending_count==0 -%>
             });
    <%     else -%>
-            $('#<%= item_container_id(t) %>_items').append("<%= html%>");
+            var container = $('#<%= item_container_id(t) %>_items');
+            container.append("<%= html%>");
+            TracksPages.sort_container(container);
    <%     end -%>
           TodoItems.highlight_todo('#<%= dom_id(t)%>');
    <%   end -%>

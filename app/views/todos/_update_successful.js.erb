@@ -29,7 +29,9 @@ remove_todo: function(next_steps) {
   });
 },
 add_to_existing_container: function(next_steps) {
-  $('#<%= item_container_id(@todo) %>_items').append(<%=object_name%>.html_for_todo());
+  var container = $('#<%= item_container_id(@todo) %>_items');
+  container.append(<%=object_name%>.html_for_todo());
+  TracksPages.sort_container(container);
   <% if source_view_is_one_of(:calendar) -%>
     next_steps.go();
     <% if (@target_context_count==1) || ( (@todo.deferred? || @todo.pending?) && @remaining_deferred_or_pending_count == 1) -%>
@@ -55,7 +57,8 @@ add_to_existing_container: function(next_steps) {
   <% end -%>
 },
 replace_todo: function(next_steps) {
-  $('#<%= dom_id(@todo) %>').html(<%=object_name%>.html_for_todo());
+  $('#<%= dom_id(@todo) %>').replaceWith(<%=object_name%>.html_for_todo());
+  TracksPages.sort_container($('#<%= item_container_id(@todo) %>_items'));
   next_steps.go();
 },
 hide_container: function(next_steps) {

@@ -10,7 +10,7 @@
 <% end -%>
 
 function replace_updated_predecessor() {
-  $('#<%= dom_id(@predecessor) %>').html( html_for_predecessor() );
+  $('#<%= dom_id(@predecessor) %>').replaceWith( html_for_predecessor() );
 }
 
 function regenerate_predecessor_family() {
@@ -33,7 +33,9 @@ function update_successor() {
       $('#c<%= @successor.context_id %>').fadeIn(500, function() {});
       $('#no_todos_in_view').slideUp(100);
     <% end -%>
-    $('#<%=item_container_id(@successor)%>').append(html_for_new_successor());
+    var container = $('#<%=item_container_id(@successor)%>_items');
+    container.append(html_for_new_successor());
+    TracksPages.sort_container(container);
     $('#<%= dom_id(@successor, 'line')%>').effect('highlight', {}, 2000 ); <%
   elsif @successor.deferred? -%>
     $('#<%= dom_id(@successor)%>').html(html_for_new_successor()); <%
