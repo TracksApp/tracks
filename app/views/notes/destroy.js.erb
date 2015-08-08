@@ -1,6 +1,13 @@
-remove_deleted_note(<%=@note.id%>);
-TracksPages.set_page_badge(<%=@down_count%>);
 TracksPages.page_inform("<%=  t('notes.deleted_note', :id => @note.id)%>");
+<%
+if @source_view == 'note' %>
+    redirect_to("<%= project_path(@note.project) -%>")
+<% else %>
+    remove_deleted_note(<%=@note.id%>);
+    TracksPages.set_page_badge(<%=@down_count%>);
+<%
+end
+%>
 
 function remove_deleted_note(id) {
   TracksPages.slide_up_and_remove('div#note-'+id+'-wrapper');
