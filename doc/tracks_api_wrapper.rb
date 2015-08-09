@@ -37,7 +37,7 @@ require 'activeresource'
 module Tracks
   
   class Base < ActiveResource::Base
-    self.site = ENV["SITE"] || "http://username:password@0.0.0.0:3000/"
+    self.site = ENV["SITE"] || "http://username:password@localhost:3000/"
   end
   
   class Todo < Base

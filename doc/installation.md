@@ -94,11 +94,11 @@ While still in the Terminal inside the Tracks root directory, issue the followin
 
     bundle exec rails server -e production
 
-If all goes well, you should see some text informing you that the server is running: `=> Rails application starting in production on http://0.0.0.0:3000`. If you are already running other services on port 3000, you need to select a different port when running the server, using the `-p` option.
+If all goes well, you should see some text informing you that the server is running: `=> Rails application starting in production on http://localhost:3000`. If you are already running other services on port 3000, you need to select a different port when running the server, using the `-p` option.
 
 ## Visit Tracks in a browser
 
-Visit `http://0.0.0.0:3000/signup` in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users. If you need to access Tracks from a mobile/cellular phone browser, visit `http://yourdomain.com/mobile/`. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
+Visit `http://localhost:3000/signup` in a browser (or whatever URL and port was reported when you started the server in the step above) and chose a user name and password for admin user. Once logged in as admin, you can add other (ordinary level) users. If you need to access Tracks from a mobile/cellular phone browser, visit `http://yourdomain.com/mobile/`. This mobile version is a special, lightweight version of Tracks, designed to use on a mobile browser.
 
 ## Customise Tracks
 

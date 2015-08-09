@@ -5,7 +5,7 @@ namespace :ci do
 
     puts 'Running "lite" test suite'
 
-    [:environment, 'db:create', 'test:all'].each do |t|
+    [:environment, 'db:create', :test].each do |t|
       Rake::Task[t].invoke
     end
   end
