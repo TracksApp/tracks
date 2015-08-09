@@ -1,6 +1,8 @@
 require 'test_helper'
+require 'support/html_entity_helper'
 
 class ProjectsControllerTest < ActionController::TestCase
+  include HTMLEntityHelper
 
   def setup
   end
@@ -83,7 +85,7 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 'application/rss+xml', @response.content_type
     #puts @response.body
 
-    assert_xml_select 'rss[version="2.0"]' do
+    assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
         assert_select '>title', 'Tracks Projects'
         assert_select '>description', "Lists all the projects for #{users(:admin_user).display_name}"
@@ -94,7 +96,7 @@ class ProjectsControllerTest < ActionController::TestCase
         assert_select 'title', /.+/
         assert_select 'description' do
           assert_select_encoded do
-            assert_select 'p', /^\d+&nbsp;actions\. Project is (active|hidden|completed)\.$/
+            assert_select 'p', /^\d+#{nbsp}actions\. Project is (active|hidden|completed)\.$/
           end
         end
         %w(guid link).each do |node|
@@ -127,16 +129,15 @@ class ProjectsControllerTest < ActionController::TestCase
     login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
-    # puts @response.body
-
-    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+    assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
+    assert_select 'feed' do
       assert_select '>title', 'Tracks Projects'
       assert_select '>subtitle', "Lists all the projects for #{users(:admin_user).display_name}"
       assert_select 'entry', 3 do
         assert_select 'title', /.+/
         assert_select 'content[type="html"]' do
           assert_select_encoded do
-            assert_select 'p', /\d+&nbsp;actions. Project is (active|hidden|completed)./
+            assert_select 'p', /\d+#{nbsp}actions. Project is (active|hidden|completed)./
           end
         end
         assert_select 'published', /(#{Regexp.escape(projects(:timemachine).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
@@ -239,7 +240,7 @@ class ProjectsControllerTest < ActionController::TestCase
     get :index, { :format => "xml" }
     assert_equal 'application/xml', @response.content_type
 
-    assert_xml_select 'projects' do
+    assert_select 'projects' do
       assert_select 'project', 3 do
         assert_select 'name', /.+/
         assert_select 'state', 'active'

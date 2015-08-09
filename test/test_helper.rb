@@ -56,15 +56,6 @@ class ActiveSupport::TestCase
   def assert_equal_dmy(date1, date2)
     assert_equal date1.strftime("%d-%m-%y"), date2.strftime("%d-%m-%y")
   end
-
-  def xml_document
-    @xml_document ||= HTML::Document.new(@response.body, false, true)
-  end
-
-  def assert_xml_select(*args, &block)
-    @html_document = xml_document
-    assert_select(*args, &block)
-  end
 end
 
 class ActionController::TestCase
@@ -88,11 +79,6 @@ class ActionController::TestCase
 
   def ajax_create(name)
     xhr :post, :create, get_model_class.downcase => {:name => name}
-  end
-
-  def assert_xml_select(*args, &block)
-    @html_document = xml_document
-    assert_select(*args, &block)
   end
 
   private
@@ -145,7 +131,7 @@ class ActionDispatch::IntegrationTest
 
   def assert_responses_with_error(error_msg)
     assert_response 409
-    assert_xml_select 'errors' do
+    assert_select 'errors' do
       assert_select 'error', 1, error_msg
     end
   end

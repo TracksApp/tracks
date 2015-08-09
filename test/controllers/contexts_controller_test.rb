@@ -1,6 +1,9 @@
 require 'test_helper'
+require 'support/html_entity_helper'
 
 class ContextsControllerTest < ActionController::TestCase
+  include HTMLEntityHelper
+
   fixtures :users, :preferences, :contexts
 
   def test_contexts_list
@@ -96,7 +99,7 @@ class ContextsControllerTest < ActionController::TestCase
     login_as :admin_user
     get :show, { :id => "0", :format => 'xml' }
     assert_response 404
-    assert_xml_select 'error', 'Context not found'
+    assert_select 'error', 'Context not found'
   end
   
   # RSS
@@ -107,7 +110,7 @@ class ContextsControllerTest < ActionController::TestCase
     assert_equal 'application/rss+xml', @response.content_type
     #puts @response.body
   
-    assert_xml_select 'rss[version="2.0"]' do
+    assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
         assert_select '>title', 'Tracks Contexts'
         assert_select '>description', "Lists all the contexts for #{users(:admin_user).display_name}"
@@ -118,7 +121,7 @@ class ContextsControllerTest < ActionController::TestCase
         assert_select 'title', /.+/
         assert_select 'description' do
           assert_select_encoded do
-            assert_select 'p', /\d+&nbsp;actions. Context is (Active|Hidden)./
+            assert_select 'p', /\d+#{nbsp}actions. Context is (Active|Hidden)./
           end
         end
         %w(guid link).each do |node|
@@ -153,16 +156,15 @@ class ContextsControllerTest < ActionController::TestCase
     login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
-    #puts @response.body
-    
-    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+    assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
+    assert_select 'feed' do
       assert_select '>title', 'Tracks Contexts'
       assert_select '>subtitle', "Lists all the contexts for #{users(:admin_user).display_name}"
       assert_select 'entry', 10 do
         assert_select 'title', /.+/
         assert_select 'content[type="html"]' do
           assert_select_encoded do
-            assert_select 'p', /\d+&nbsp;actions. Context is (Active|Hidden)./
+            assert_select 'p', /\d+#{nbsp}actions. Context is (Active|Hidden)./
           end
         end
         assert_select 'published', /(#{Regexp.escape(contexts(:agenda).created_at.xmlschema)}|#{Regexp.escape(contexts(:library).created_at.xmlschema)})/
