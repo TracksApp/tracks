@@ -22,7 +22,7 @@
 
   <div class="project_input">
     <label for="<%= dom_id(@todo, 'project_name') %>"><%= t('common.project') %></label>
-    <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" size="30" type="text" value="<%= @todo.project.nil? ? 'None' : h(@todo.project.name) %>" />
+    <input id="<%= dom_id(@todo, 'project_name') %>" name="project_name" autocomplete="off" size="30" type="text" value="<%= @todo.project.nil? ? '' : h(@todo.project.name) %>" />
   </div>
 
   <div class="context_input">
