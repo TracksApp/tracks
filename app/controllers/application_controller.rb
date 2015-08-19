@@ -19,13 +19,7 @@ class ApplicationController < ActionController::Base
   append_before_filter :set_group_view_by
   prepend_before_filter :login_required
   prepend_before_filter :enable_mobile_content_negotiation
-  after_filter :set_charset
-
-  # By default, sets the charset to UTF-8 if it isn't already set
-  def set_charset
-    headers["Content-Type"] ||= "text/html; charset=UTF-8"
-  end
-
+  
   def set_locale
     locale = params[:locale] # specifying a locale in the request takes precedence
     locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
