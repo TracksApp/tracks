@@ -1,7 +1,7 @@
 module Todos
   class TodoCreateParamsHelper
 
-    attr_reader :new_project_created, :new_context_created
+    attr_reader :new_project_created, :new_context_created, :attributes
 
     def initialize(params, user)
       set_params(params)
@@ -44,10 +44,6 @@ module Todos
       if @params[:new_todo_starred]
         @attributes["starred"] = (@params[:new_todo_starred]||"").include? "true"
       end
-    end
-
-    def attributes
-      @attributes
     end
 
     def show_from
