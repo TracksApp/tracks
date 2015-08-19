@@ -188,8 +188,8 @@ module RecurringTodos
     # Example: get 3rd (x) wednesday  (weekday) of december (month) 2014 (year)
     # 5th means last, so it will return the 4th if there is no 5th
     def get_xth_day_of_month(x, weekday, month, year)
-      raise "Weekday should be between 0 and 6 with 0=sunday. You supplied #{weekday}" unless (0..6).include?(weekday)
-      raise "x should be 1-4 for first-fourth or 5 for last. You supplied #{x}" unless (0..5).include?(x)
+      raise "Weekday should be between 0 and 6 with 0=sunday. You supplied #{weekday}" unless (0..6).cover?(weekday)
+      raise "x should be 1-4 for first-fourth or 5 for last. You supplied #{x}" unless (0..5).cover?(x)
 
       if x == 5
         return find_last_day_x_of_month(weekday, month, year)
