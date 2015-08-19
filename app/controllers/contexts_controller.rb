@@ -130,7 +130,7 @@ class ContextsController < ApplicationController
   # actions in the context will also be deleted.
   def destroy
     # make sure the deleted recurrence patterns are removed from associated todos
-    @context.recurring_todos.each { |rt| rt.clear_todos_association } unless @context.recurring_todos.nil?
+    @context.recurring_todos.each(&:clear_todos_association) unless @context.recurring_todos.nil?
 
     @context.destroy
     respond_to do |format|
