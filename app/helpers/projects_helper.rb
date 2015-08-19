@@ -25,7 +25,8 @@ module ProjectsHelper
   end
 
   def project_next_prev_mobile
-    prev_project,next_project= "", ""
+    prev_project = ""
+    next_project = ""
     prev_project = content_tag(:li, link_to_project_mobile(@previous_project, "5", @previous_project.shortened_name), :class=>"prev") if @previous_project
     next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", @next_project.shortened_name), :class=>"next") if @next_project
     return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class=>"next-prev-project")

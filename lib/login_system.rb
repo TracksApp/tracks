@@ -9,7 +9,7 @@ module LoginSystem
   def prefs
     current_user.prefs unless current_user.nil?
   end
-  
+
   # Logout the {#current_user} and redirect to login page
   #
   # @param [String] message notification to display
@@ -25,9 +25,9 @@ module LoginSystem
       redirect_to_login
     end
   end
-    
+
   protected
-  
+
   # overwrite this if you want to restrict access to only a few actions
   # or if you want to check if the user has the correct rights
   # example:
@@ -39,7 +39,7 @@ module LoginSystem
   def authorize?(user)
      true
   end
-  
+
   # overwrite this method if you only want to protect certain actions of the controller
   # example:
   #
@@ -54,7 +54,7 @@ module LoginSystem
   def protect?(action)
     true
   end
-  
+
   # When called with before_filter :login_from_cookie will check for an :auth_token
   # cookie and log the user back in if appropriate
   def login_from_cookie
@@ -69,7 +69,7 @@ module LoginSystem
       flash[:notice] = t('login.successful')
     end
   end
-  
+
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics'].include?(params[:format])
       if user = User.where(:token => params[:token]).first
@@ -79,7 +79,7 @@ module LoginSystem
     end
     login_required
   end
-   
+
   # login_required filter. add
   #
   #   before_filter :login_required
@@ -90,19 +90,19 @@ module LoginSystem
   #   def authorize?(user)
   #
   def login_required
-    
+
     if not protect?(action_name)
       return true
     end
-    
+
     login_from_cookie
 
     if session['user_id'] and authorize?(get_current_user)
       return true
     end
-    
-    http_user, http_pass = get_basic_auth_data
-    if user = User.authenticate(http_user, http_pass)
+
+    auth = get_basic_auth_data
+    if user = User.authenticate(auth[:user], auth[:pass])
       session['user_id'] = user.id
       set_current_user(user)
       return true
@@ -111,22 +111,22 @@ module LoginSystem
     # store current location so that we can
     # come back after the user logged in
     store_location unless params[:format] == 'js'
-    
+
     # call overwriteable reaction to unauthorized access
     access_denied
     return false
   end
-  
+
   def login_optional
 
     login_from_cookie
-    
+
     if session['user_id'] and authorize?(get_current_user)
       return true
     end
-    
-    http_user, http_pass = get_basic_auth_data
-    if user = User.authenticate(http_user, http_pass)
+
+    auth = get_basic_auth_data
+    if user = User.authenticate(auth[:user], auth[:pass])
       session['user_id'] = user.id
       set_current_user(user)
       return true
@@ -134,22 +134,22 @@ module LoginSystem
 
     return true
   end
-  
+
   def logged_in?
     current_user != nil
   end
-  
+
   def get_current_user
     if @user.nil? && session['user_id']
       @user = User.find(session['user_id'])
     end
     @user
   end
-  
+
   def set_current_user(user)
     @user = user
   end
-  
+
   # overwrite if you want to have special behavior in case the user is not authorized
   # to access the current operation.
   # the default action is to redirect to the login screen
@@ -179,28 +179,34 @@ module LoginSystem
       session['return-to'] = nil
     end
   end
-  
+
   # HTTP Basic auth code adapted from Coda Hale's simple_http_auth plugin. Thanks, Coda!
   def get_basic_auth_data
-    
+
     auth_locations = ['REDIRECT_REDIRECT_X_HTTP_AUTHORIZATION',
                       'REDIRECT_X_HTTP_AUTHORIZATION',
                       'X-HTTP_AUTHORIZATION', 'HTTP_AUTHORIZATION']
-    
+
     authdata = nil
-    for location in auth_locations
+    auth_locations.each do |location|
       if request.env.has_key?(location)
         authdata = request.env[location].to_s.split
       end
     end
     if authdata and authdata[0] == 'Basic'
-      user, pass = Base64.decode64(authdata[1]).split(':')[0..1]
+      data = Base64.decode64(authdata[1]).split(':')[0..1]
+      return {
+        user: data[0],
+        pass: data[1]
+      }
     else
-      user, pass = ['', '']
+      return {
+        user: ''.freeze,
+        pass: ''.freeze
+      }
     end
-    return user, pass
   end
-  
+
   def basic_auth_denied
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
       render :text => t('login.unsuccessful'), :status => 401

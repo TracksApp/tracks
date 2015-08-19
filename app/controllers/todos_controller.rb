@@ -40,18 +40,21 @@ class TodosController < ApplicationController
         cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         determine_down_count
 
-        render :action => 'index'
+        render :action => 'index'.freeze
       end
       format.text  do
         # somehow passing Mime::TEXT using content_type to render does not work
-        headers['Content-Type']=Mime::TEXT.to_s
+        headers['Content-Type'.freeze]=Mime::TEXT.to_s
         render :content_type => Mime::TEXT
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
         render :xml => @xml_todos.to_xml( *todo_xml_params )
       end
-      format.any(:rss, :atom) { @feed_title, @feed_description = 'Tracks Actions', "Actions for #{current_user.display_name}" }
+      format.any(:rss, :atom) do
+        @feed_title = 'Tracks Actions'.freeze
+        @feed_description = "Actions for #{current_user.display_name}"
+      end
       format.ics
     end
   end
@@ -156,7 +159,10 @@ class TodosController < ApplicationController
     p = Todos::TodoCreateParamsHelper.new(params, current_user)
     tag_list = p.tag_list
 
-    @not_done_todos, @build_todos, @todos, errors = [], [], [], []
+    @not_done_todos = []
+    @build_todos = []
+    @todos = []
+    errors = []
     @predecessor = nil
     validates = true
 
@@ -887,13 +893,15 @@ class TodosController < ApplicationController
     elsif params[:format].nil?
       # if no format is given, default to html
       # note that if url has ?format=m, we should not overwrite it here
-      request.format, params[:format] = :html, :html
+      request.format = :html
+      params[:format] = :html
     end
   end
 
   def set_format_for_tag_view(format)
     # tag name ends with .m, set format to :m en remove .m from name
-    request.format, params[:format] = format, format
+    request.format = format
+    params[:format] = format
     params[:name] = params[:name].chomp(".#{format.to_s}")
 end
 
