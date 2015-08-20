@@ -188,7 +188,7 @@ class Todo < ActiveRecord::Base
 
   def touch_predecessors
     self.touch
-    predecessors.each { |p| p.touch_predecessors }
+    predecessors.each(&:touch_predecessors)
   end
 
   def removed_predecessors

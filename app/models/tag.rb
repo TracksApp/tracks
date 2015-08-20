@@ -3,8 +3,8 @@ class Tag < ActiveRecord::Base
   has_many :taggings
   has_many :taggable, :through => :taggings
 
-  DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
-  JOIN_DELIMITER = ", "
+  DELIMITER = ",".freeze # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
+  JOIN_DELIMITER = ", ".freeze
 
   # If database speed becomes an issue, you could remove these validations and
   # rescue the ActiveRecord database constraint errors instead.
@@ -17,11 +17,11 @@ class Tag < ActiveRecord::Base
   # allow tags to be renamed later, you might want to use the
   # <tt>before_save</tt> callback instead.
   def before_create
-    self.name = name.downcase.strip.squeeze(" ")
+    self.name = name.downcase.strip.squeeze(' '.freeze)
   end
 
   def label
-    @label ||= name.gsub(' ', '-')
+    @label ||= name.tr(' '.freeze, '-'.freeze)
   end
 
   def to_s

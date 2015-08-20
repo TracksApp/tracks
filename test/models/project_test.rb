@@ -227,7 +227,7 @@ class ProjectTest < ActiveSupport::TestCase
     assert !p.stalled?, "completed projects are not stalled"
 
     p.activate!
-    p.todos.each{|t| t.complete!}
+    p.todos.each(&:complete!)
     assert p.todos.reload.active.empty?, "project should not have active todos"
     assert p.todos.reload.deferred_or_blocked.empty?, "there should not be deferred or blocked todos"
     assert p.reload.stalled?, "project should be stalled"

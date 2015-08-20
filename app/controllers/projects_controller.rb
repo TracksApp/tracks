@@ -267,7 +267,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project.recurring_todos.each {|rt| rt.remove_from_project!}
+    @project.recurring_todos.each(&:remove_from_project!)
     @project.destroy
 
     respond_to do |format|

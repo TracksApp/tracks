@@ -13,21 +13,21 @@ class ContextTest < ActiveSupport::TestCase
     # only check that acts_as_list is present in the model
     assert @agenda.respond_to?(:move_to_bottom)
   end
-  
+
   def test_validate_presence_of_name
      @agenda.name = ""
      assert !@agenda.save
      assert_equal 1, @agenda.errors.count
      assert_equal "context must have a name", @agenda.errors[:name][0]
   end
-     
+
   def test_validate_name_is_less_than_256
      @agenda.name = generate_random_string(256)
      assert !@agenda.save
      assert_equal 1, @agenda.errors.count
      assert_equal "context name must be less than 256 characters", @agenda.errors[:name][0]
    end
-     
+
   def test_validate_name_is_unique
      newcontext = Context.new
      newcontext.name = contexts(:agenda).name
@@ -36,7 +36,7 @@ class ContextTest < ActiveSupport::TestCase
      assert_equal 1, newcontext.errors.count
      assert_equal "already exists", newcontext.errors[:name][0]
   end
-    
+
   def test_delete_context_deletes_todos_within_it
     assert_equal 7, @agenda.todos.count
     agenda_todo_ids = @agenda.todos.collect{|t| t.id }
@@ -45,11 +45,11 @@ class ContextTest < ActiveSupport::TestCase
       assert !Todo.exists?(todo_id)
     end
   end
-        
+
   def test_to_param_returns_id
     assert_equal '1', @agenda.to_param
   end
-    
+
   def test_title_reader_returns_name
     assert_equal @agenda.name, @agenda.title
   end
@@ -79,14 +79,14 @@ class ContextTest < ActiveSupport::TestCase
       @agenda.close!
     end
 
-    @agenda.todos.active.each {|t| t.complete! }
+    @agenda.todos.active.each(&:complete!)
     @agenda.close!
     assert @agenda.closed?
   end
 
   def test_activating_closed_context
     # given a context @agenda that is closed
-    @agenda.todos.active.each {|t| t.complete! }
+    @agenda.todos.active.each(&:complete!)
     @agenda.close!
     assert @agenda.closed?
 

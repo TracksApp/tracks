@@ -448,7 +448,7 @@ class StatsController < ApplicationController
   end
 
   def three_month_avg(set, i)
-    (set.fetch(i,0) + set.fetch(i+1,0) + set.fetch(i+2,0)) / 3.0
+    (set.fetch(i){ 0 } + set.fetch(i+1){ 0 } + set.fetch(i+2){ 0 }) / 3.0
   end
 
   def set_three_month_avg(set,upper_bound)
