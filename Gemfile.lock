@@ -223,7 +223,7 @@ DEPENDENCIES
   acts_as_list
   aruba (>= 0.5.4)
   bcrypt (~> 3.1.7)
-  bootstrap-sass
+  bootstrap-sass (= 3.3.3)
   bullet
   capybara
   codeclimate-test-reporter
