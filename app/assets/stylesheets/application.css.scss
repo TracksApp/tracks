@@ -14,3 +14,8 @@
  *= require_tree ../../../vendor/assets/stylesheets
  *= require tracks
  */
+
+.bootstrap {
+  @import "bootstrap-sprockets";
+  @import "bootstrap";
+}
