@@ -162,3 +162,8 @@ Then /^I should (see|not see) the empty tickler message$/ do |see|
   elem = find("div#no_todos_in_view")
   expect(elem).send(see=="see" ? :to : :to_not, be_visible)
 end
+
+Then /^I should see the todo "([^"]*)" with project name "([^"]*)"$/ do |todo_description, project_name|
+  todo = @current_user.todos.where(:description => todo_description).first
+  expect(todo.project.name).to eq(project_name)
+end
