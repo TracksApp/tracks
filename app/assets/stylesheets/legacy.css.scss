@@ -159,7 +159,7 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
 /* Structural divs */
 
 #content {
-    margin-top: 90px;
+    margin-top: 70px;
 }
 
 #display_box {
@@ -239,78 +239,6 @@ a.show_successors:hover, a.link_to_successors:hover {background-image: image-url
     z-index:502;
 }
 
-/* Navigation links at the top */
-
-#navcontainer {
-    position: fixed;
-    top: 48px;
-    left: 0px;
-    a { color: #eee; }
-    a:hover { color: #ccc; }
-}
-
-#navlist {
-    margin: 0;
-    padding: 0 0 20px 5px;
-
-    ul, li {
-        margin: 0;
-        padding: 0;
-        display: inline;
-        list-style-type: none;
-    }
-
-    a:link, a:visited {
-        float: left;
-        line-height: 14px;
-        font-weight: bold;
-        margin: 0 10px 4px 10px;
-        text-decoration: none;
-        color: #eee;
-    }
-
-    a:link#current, a:visited#current, a:hover {
-        border-bottom: 4px solid #CCC;
-        padding-bottom: 2px;
-        background: transparent;
-        color: #CCC;
-    }
-
-    a:hover { color: #CCC; }
-}
-
-#topbar {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    height: 68px;
-    margin-bottom: 20px;
-    clear: both;
-    background-color: #000;
-    color: #eee;
-    width: 100%;
-    z-index:501;
-}
-
-#date {
-    float: left;
-    width: 45%;
-    padding-left: 15px;
-    margin-top: 15px;
-    margin-bottom: 5px;
-    white-space: nowrap; /* added 2006-05-17 for safari display, timfm */
-
-    h1 { font-size: 152%; }
-}
-
-#minilinks {
-    text-align: right;
-    position: fixed;
-    right: 15px;
-    top: 10px;
-    font-size: 0.9em;
-}
-
 .container {
     padding: 0px 5px 0px 5px;
     border: 1px solid #999;
@@ -362,7 +290,7 @@ div#input_box {
     width: 265px;
     margin: 0;
     padding: 0px 0px 0px 0px;
-    top: 90px;
+    top: 70px;
     right: 40px;
 }
 
@@ -650,7 +578,7 @@ span.tag a:hover {
 
 div#message_holder {
     position: absolute;
-    z-index: 502;
+    z-index: 1502;
     left: 60%;
     top: 30px;
     right: 0px;
@@ -752,17 +680,6 @@ The colour of the background gets progressively yellower with age */
 
 .stale_l3 {
     background: #ff0;
-}
-
-/* Shows the number of undone next action */
-.badge {
-    color: #fff;
-    background: #f00;
-    padding: 3px 5px;
-    font-size: 12pt;
-    margin: 10px 10px 0px 0px;
-    height:26px;
-    border-radius: 2px;
 }
 
 ul {

@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap-sprockets
 
 // Stuff in app/assets
 //= require tracks
