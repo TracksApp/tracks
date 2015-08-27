@@ -124,18 +124,6 @@ var TracksPages = {
     });
   },
   setup_behavior: function () {
-    /* main menu */
-    $('ul.sf-menu').superfish({
-        delay: 250,
-        animation:   {
-            opacity:'show',
-            height:'show'
-        },
-        autoArrows: false,
-        dropShadows: false,
-        speed: 'fast'
-    });
-
     /* context menu */
     $('ul.sf-item-menu').superfish({
         delay: 100,

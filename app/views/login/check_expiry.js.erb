@@ -3,7 +3,7 @@
   message = I18n.t('login.session_time_out', :link => theLink)
   theHtml = escape_javascript(content_tag(:div, message.html_safe, :"class" => "warning"))
   -%>
-  $('div#navcontainer').hide();
+  $('nav.navbar').hide();
   $('div#content').html('<%=theHtml%>');
   refresh_page(); // refresh the page. if it fails, the message above remains
 <%  end -%>

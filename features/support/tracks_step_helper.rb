@@ -11,7 +11,7 @@ module TracksStepHelper
       page.evaluate_script('$(":animated").length').zero?
     end
   end
-  
+
   def wait_for_ajax
     wait_until do
       page.evaluate_script('jQuery.active').zero?
@@ -69,7 +69,7 @@ module TracksStepHelper
   def project_list_find_index(project_name)
     return container_list_find_index(:project, find_project(project_name))
   end
-    
+
   def format_date(date)
     # copy-and-past from ApplicationController::format_date
     return date ? date.in_time_zone(@current_user.prefs.time_zone).strftime("#{@current_user.prefs.date_format}") : ''
@@ -81,15 +81,13 @@ module TracksStepHelper
   end
 
   def open_view_menu
-    view_menu = "ul.sf-menu li#menu_view"
-
-    # click menu 
-    view_menu_link = "#{view_menu} a#menu_view_link"
+    # click menu
+    view_menu_link = "#menu_view_link"
     expect(page).to have_css(view_menu_link, :visible => true)
     page.find(view_menu_link).click
 
     # wait for menu to be visible
-    view_menu_item = "#{view_menu} li#menu_view_toggle_contexts"
+    view_menu_item = "#menu_view_toggle_contexts"
     expect(page).to have_css(view_menu_item)
 
     within view_menu do
@@ -100,7 +98,7 @@ module TracksStepHelper
   def open_submenu_for(todo)
     wait_for_animations_to_end
 
-    submenu_css = "div#line_todo_#{todo.id} ul#ultodo_#{todo.id}"
+    submenu_css = "#ultodo_#{todo.id}"
 
     execute_javascript "$('#{submenu_css}').parent().showSuperfishUl()"
 
@@ -111,7 +109,7 @@ module TracksStepHelper
       yield
     end
   end
-  
+
   def handle_js_confirm(accept=true)
     execute_javascript "window.original_confirm_function = window.confirm"
     execute_javascript "window.confirmMsg = null"
@@ -120,7 +118,7 @@ module TracksStepHelper
   ensure
     execute_javascript "window.confirm = window.original_confirm_function"
   end
-  
+
   def get_confirm_text
     page.evaluate_script "window.confirmMsg"
   end
@@ -128,5 +126,5 @@ module TracksStepHelper
   def execute_javascript(js)
     page.execute_script(js)
   end
-  
+
 end
