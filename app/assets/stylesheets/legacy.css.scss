@@ -63,12 +63,9 @@ abbr,acronym {
     border:0;
 }
 
-body {
-    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+& {
     font-size: 80%;
     padding: 0px 10px;
-    margin: 0px;
-    background: #eee;
 }
 
 p {
@@ -498,7 +495,7 @@ a.footer_link {
 
 /* preferences */
 
-body.preferences {
+&.preferences {
     div#display_box {
         margin-right:510px;
     }

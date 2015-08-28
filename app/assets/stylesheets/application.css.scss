@@ -11,11 +11,37 @@
  * file per style scope.
  *
  *= require_self
- *= require_tree ../../../vendor/assets/stylesheets
- *= require tracks
  */
+
+@import "../../../vendor/assets/stylesheets/jquery-ui-1.10.0.custom.min";
+
+.legacy-ui {
+  @import "../../../vendor/assets/stylesheets/superfish-navbar";
+  @import "../../../vendor/assets/stylesheets/superfish-vertical";
+  @import "../../../vendor/assets/stylesheets/superfish";
+  @import "legacy";
+}
 
 .bootstrap {
   @import "bootstrap-sprockets";
   @import "bootstrap";
+
+  // resets normally applied to body
+  // TODO: remove when dropping the .bootstrap namespace
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+}
+
+// Hybrid Bootstrap/legacy styles applied to body
+// See bootstrap/_normalize and bootstrap/_scaffolding
+// TODO: clean these up after the migration to Bootstrap is complete
+body {
+  @import "bootstrap/_variables";
+  $font-family-base: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+  $body-bg: #eee;
+
+  margin: 0;
+  font-family: $font-family-base;
+  color: $text-color;
+  background-color: $body-bg;
 }
