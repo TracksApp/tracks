@@ -23,6 +23,7 @@ config/database.yml
 config/deploy.rb
 config/site.yml
 db/data.yml
+spec/examples.txt
 nbproject
 rerun.txt
 tags
