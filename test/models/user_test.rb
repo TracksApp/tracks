@@ -44,8 +44,8 @@ class UserTest < ActiveSupport::TestCase
 
   def test_validate_long_password
     assert_no_difference 'User.count' do
-      u = create_user :password => generate_random_string(41)
-      assert_equal "is too long (maximum is 40 characters)", u.errors[:password][0]
+      u = create_user :password => generate_random_string(73)
+      assert_equal "is too long (maximum is 72 characters)", u.errors[:password][0]
     end
   end
 
