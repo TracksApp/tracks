@@ -1,4 +1,5 @@
 ## Version 2.4
+* PostgreSQL and SQLite are fully tested
 * Removed support for deprecated password-hashing algorithm. This
   eliminates config.salt. Note the addition of a pre-upgrade step to
   check for obsolete passwords.

@@ -13,6 +13,7 @@ rvm:
 env:
   - DATABASE_URL=mysql2://localhost/tracks_test
   - DATABASE_URL=sqlite3:db/test.sqlite3
+  - DATABASE_URL=postgresql://localhost/tracks_test
 
 bundler_args: --without development --jobs=3 --retry=3
 

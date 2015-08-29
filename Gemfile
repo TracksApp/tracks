@@ -22,6 +22,7 @@ gem 'jquery-rails'
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
 gem "mysql2", group: :mysql
+gem 'pg', group: :postgresql
 
 gem "RedCloth"
 gem "sanitize", ">=3.0.0"
@@ -64,7 +65,7 @@ group :test do
   gem "cucumber-rails", :require => false
   gem "rspec-expectations"
   gem "database_cleaner"
-  gem "mocha", :require => false
+  gem 'mocha'
 
   gem "aruba", ">=0.5.4", :require => false
 
