@@ -15,7 +15,7 @@ That said. To upgrade:
 7. Precompile your static assets (css, javascript, etc.) by running `bundle exec rake assets:precompile RAILS_ENV=production`.
 8. Run `bundle exec rails server -e production` inside your Tracks 2.4devel directory to start up Tracks. Or use `-e development` if you intend to try your changes and get more log info.
 
-Please note that if you intend to deploy Tracks using its included web server, you’ll need to change `config.serve_static_assets` to `true` in `config/environments/production.rb` in order for the images, stylesheets, and javascript files to be served correctly.
+Please note that if you intend to deploy Tracks using its included web server, you’ll need to copy over the `serve_static_assets` option into your `config/site.yml` and set it as it was in `config/production.rb` in order for the images, stylesheets, and javascript files to be served correctly.
 
 ## Upgrading from older versions of Tracks
 

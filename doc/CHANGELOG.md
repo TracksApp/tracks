@@ -5,6 +5,7 @@
 * Thin replaces WEBrick as the included web server
 * Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
 * The MessageGateway will save the received email as an attachement to the todo
+* Add a configuration option for serving static assets from Rails
 
 ## Version 2.3.0
 
