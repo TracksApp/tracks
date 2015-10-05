@@ -263,6 +263,7 @@ Feature: Edit a next action from every page
   Scenario: I can defer a todo
     When I go to the home page
     And I submit a new action with description "start later" in the context "@pc"
+    When I go to the home page
     And I defer "start later" for 1 day
     Then I should not see "start later"
     When I go to the tickler page
@@ -272,6 +273,7 @@ Feature: Edit a next action from every page
   Scenario: I can make a project from a todo
     When I go to the home page
     And I submit a new action with description "buy mediacenter" in the context "@pc"
+    When I go to the home page
     And I make a project of "buy mediacenter"
     #sidebar does not update
     Then I should be on the "buy mediacenter" project
