@@ -3,7 +3,7 @@ xml.rss :version => "2.0" do
   xml.channel do
     xml.title @feed_title
     xml.description @feed_description
-    xml.link contexts_url
+    xml.link projects_url
     xml.language 'en-us'
     xml.ttl 40
 
