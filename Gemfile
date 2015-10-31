@@ -50,6 +50,7 @@ gem "font-awesome-sass", "~> 4.5.0"
 group :development do
   gem "spring"
   gem "spring-commands-cucumber"
+  gem 'spring-commands-rspec'
   gem "yard"
 
   gem 'tolk', '~> 1.9.3'
