@@ -195,15 +195,12 @@ module LoginSystem
     end
     if authdata and authdata[0] == 'Basic'
       data = Base64.decode64(authdata[1]).split(':')[0..1]
-      return {
+      {
         user: data[0],
         pass: data[1]
       }
     else
-      return {
-        user: ''.freeze,
-        pass: ''.freeze
-      }
+      {}
     end
   end
 
