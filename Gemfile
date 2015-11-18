@@ -21,7 +21,7 @@ gem 'jquery-rails'
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
-gem "mysql2", group: :mysql
+gem "mysql2", "~> 0.3.17", group: :mysql
 
 gem "RedCloth"
 gem "sanitize", ">=3.0.0"
