@@ -25,6 +25,8 @@
 .bootstrap {
   @import "bootstrap-sprockets";
   @import "bootstrap";
+  @import "tracks-logo";
+  @import "login";
 
   // resets normally applied to body
   // TODO: remove when dropping the .bootstrap namespace
