@@ -81,6 +81,7 @@ module TracksStepHelper
   end
 
   def open_view_menu
+    view_menu = '#menu_view_link + ul.dropdown-menu'
     # click menu
     view_menu_link = "#menu_view_link"
     expect(page).to have_css(view_menu_link, :visible => true)
