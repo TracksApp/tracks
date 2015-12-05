@@ -16,13 +16,13 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @in_three_days = @today + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
 
-    @friday = Time.zone.local(2008,6,6)
-    @saturday = Time.zone.local(2008,6,7)
-    @sunday = Time.zone.local(2008,6,8)  # june 8, 2008 was a sunday
-    @monday = Time.zone.local(2008,6,9)
-    @tuesday = Time.zone.local(2008,6,10)
-    @wednesday = Time.zone.local(2008,6,11)
-    @thursday = Time.zone.local(2008,6,12)
+    @friday = Time.zone.local(2008,6,6,1,2,3)
+    @saturday = Time.zone.local(2008,6,7,1,2,3)
+    @sunday = Time.zone.local(2008,6,8,1,2,3)  # june 8, 2008 was a sunday
+    @monday = Time.zone.local(2008,6,9,1,2,3)
+    @tuesday = Time.zone.local(2008,6,10,1,2,3)
+    @wednesday = Time.zone.local(2008,6,11,1,2,3)
+    @thursday = Time.zone.local(2008,6,12,1,2,3)
   end
 
   def test_show_from_date
@@ -35,7 +35,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
     # check show from get the next day
     assert_equal_dmy @today, @every_day.get_show_from_date(@today-1.days)
-    assert_equal @today+1.day, @every_day.get_show_from_date(@today)
+    assert_equal (@today+1.day).at_midnight, @every_day.get_show_from_date(@today)
 
     @every_day.target='due_date'
     # when target on due_date, show_from is relative to due date unless show_always is true
@@ -56,6 +56,15 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
     # TODO: show_from has no use case for daily pattern. Need to test on
     # weekly/monthly/yearly
+  end
+
+  def test_show_from_at_midnight
+    test_cases = [@every_day, @every_workday, @weekly_every_day, @every_week, @monthly_every_last_friday, @yearly]
+    test_cases.each do |test_case|
+      test_case.target='show_from_date'
+      show_from_date = test_case.get_show_from_date(@today)
+      assert_equal show_from_date.at_midnight, show_from_date
+    end
   end
 
   def test_next_todo_without_previous_todo
