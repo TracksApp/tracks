@@ -409,4 +409,16 @@ class Todo < ActiveRecord::Base
     count
   end
 
+  def destroy
+    # activate successors if they only depend on this action
+    self.pending_successors.each do |successor|
+      successor.uncompleted_predecessors.delete(self)
+      if successor.uncompleted_predecessors.empty?
+        successor.activate!
+      end
+    end
+
+    super
+  end
+
 end

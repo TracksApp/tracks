@@ -565,4 +565,15 @@ class TodoTest < ActiveSupport::TestCase
     assert_equal 0, todo.user.attachments.reload.count
     assert !File.exists?(new_path), "attachment should not be on file system"
   end
+
+  def test_destroying_action_activates_successors
+    @not_completed1.add_predecessor(@not_completed2)
+    @not_completed1.block!
+
+    @not_completed2.destroy
+
+    @not_completed1.reload
+    assert @not_completed1.active?
+  end
+
 end
