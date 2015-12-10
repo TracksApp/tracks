@@ -141,7 +141,7 @@ module RecurringTodos
         get_due_date(previous) - show_from_delta.days
       when 'show_from_date'
         # Leave due date empty
-        get_next_date(previous)
+        get_next_date(previous).at_midnight
       end
     end
 
