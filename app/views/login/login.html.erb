@@ -1,28 +1,38 @@
-<div title="<%= t('login.account_login') %>" id="loginform" class="form">
-
-  <%= render_flash %>
-
-  <h3><%= t('login.please_login') %>:</h3>
-  <div id="database_auth_form" style="display:block">
-      <%= form_tag :action=> 'login' do %>
-        <table>
-          <tr>
-            <td><label for="user_login"><%= User.human_attribute_name('login') %>:</label></td>
-            <td><input type="text" name="user_login" id="user_login" value="" class="login_text" /></td>
-          </tr>
-          <tr>
-            <td><label for="user_password"><%= User.human_attribute_name('password') %>:</label></td>
-            <td><input type="password" name="user_password" id="user_password" class="login_text" /></td>
-          </tr>
-         <tr>
-            <td><label for="user_noexpiry"><%= t('login.user_no_expiry') %>:</label></td>
-            <td><input type="checkbox" name="user_noexpiry" id="user_noexpiry" checked  /></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td><input type="submit" name="login" value="<%= t('login.sign_in') %>" class="primary" /></td>
-          </tr>
-        </table>
-      <% end %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="login-flash">
+      <%= bootstrap_flash :close_button => false %>
+    </div>
+  </div>
+  <div class="login-wrapper">
+    <div class="login-box">
+      <div class="icon-box">
+        <div class="tracks-icon"><div class="tracks-icon-text">10</div>
+      </div>
+      <div title="<%= t('login.account_login') %>" id="loginform" class="login-form">
+        <h3><%= t('login.please_login') %>:</h3>
+        <%= form_tag login_path do %>
+          <div class="label-element-combo">
+            <%= label_tag "user_login", User.human_attribute_name('login') %>
+            <%= text_field_tag "user_login", nil, class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
+            <%= label_tag "user_password", User.human_attribute_name("password") %>
+            <%= password_field_tag "user_password", nil, class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
+            <div class="checkbox">
+              <label for="user_expiry">
+                <input name="user_expiry" type="checkbox" checked><%= t("login.user_no_expiry") %></input>
+              </label>
+            </div>
+          </div>
+          <%= submit_tag t("login.sign_in"), class: "btn btn-default" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <%= render :partial => "shared/footer" %>
   </div>
 </div>

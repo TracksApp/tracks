@@ -7,7 +7,7 @@ end
 When /^I submit the login form as user "([^\"]*)" with password "([^\"]*)"$/ do |username, password|
   fill_in 'Login', :with => username
   fill_in 'Password', :with => password
-  uncheck "Stay logged in:"
+  uncheck "Stay logged in"
   click_button "Sign in"
 end
 
