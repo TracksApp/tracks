@@ -10,3 +10,23 @@
     border-radius: 2px;
   }
 }
+
+.footer {
+  @include make-xs-column(12);
+  @include make-sm-column(10);
+  @include make-sm-column-offset(1);
+  font-size: 85%;
+  text-align: center;
+  color: #999;
+  margin: 20px 0 5px;
+}
+
+.footer-line {
+  display: block;
+}
+
+@media screen and (min-width: 1170px) {
+  .footer-line {
+    display: inline;
+  }
+}
