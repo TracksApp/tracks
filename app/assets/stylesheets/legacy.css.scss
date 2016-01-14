@@ -402,15 +402,6 @@ input.item-checkbox {
     border-top: 1px solid #999;
 }
 
-#footer {
-    clear: both;
-    font-size: 85%;
-    text-align: center;
-    color: #999;
-    margin: 20px 310px 5px 20px;
-    padding: 0px;
-}
-
 a.footer_link {
     color: #cc3334;
     font-style: normal;
@@ -435,10 +426,6 @@ a.footer_link {
 
     select#prefs_time_zone, select#prefs_sms_context_id {
         width: 250px;
-    }
-
-    div#footer {
-        margin-right:410px;
     }
 
     /* override jquery css to match tracks defaults better */
