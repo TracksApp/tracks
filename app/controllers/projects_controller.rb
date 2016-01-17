@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
   def review
     @source_view = params['_source_view'] || 'review'
     @page_title = t('projects.list_reviews')
-    @projects = current_user.projects.load
+    projects = current_user.projects.load
     @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
     @stalled_projects = current_user.projects.select  {|p| p.stalled?}
     @blocked_projects = current_user.projects.select  {|p| p.blocked?}
