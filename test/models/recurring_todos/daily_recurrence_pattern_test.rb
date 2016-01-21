@@ -54,12 +54,12 @@ module RecurringTodos
 
       # when the last todo was completed today, the next todo is due tomorrow
       due_date = @every_day.get_due_date(@today)
-      assert_equal @tomorrow, due_date
+      assert_equal @tomorrow.at_midnight, due_date
 
       # do something every 14 days
       @every_day.every_other1=14
       due_date = @every_day.get_due_date(@today)
-      assert_equal @today+14.days, due_date
+      assert_equal (@today+14.days).at_midnight, due_date
     end
 
     def test_only_work_days_skips_weekend
