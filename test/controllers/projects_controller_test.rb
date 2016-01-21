@@ -25,6 +25,16 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_equal 2, assigns['deferred_todos'].size
   end
 
+  def test_sorted_current_in_review
+    p = projects(:timemachine)
+    login_as :admin_user
+    get :review
+    current_projects = assigns['current_projects']
+    assert_equal 2, current_projects.length
+    assert_equal projects(:gardenclean), current_projects[0]
+    assert_equal projects(:moremoney), current_projects[1]
+  end
+
   def test_show_exposes_next_project_in_same_state
     login_as :admin_user
     get :show, :id => projects(:timemachine).to_param

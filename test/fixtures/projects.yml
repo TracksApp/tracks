@@ -6,6 +6,12 @@
 def today
   Time.zone.now.utc.beginning_of_day.to_s(:db)
 end
+def yesterday
+  1.day.ago.utc.beginning_of_day.to_s(:db)
+end
+def last_week
+  1.week.ago.utc.beginning_of_day.to_s(:db)
+end
 %>
 
 timemachine:
@@ -28,6 +34,7 @@ moremoney:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+  last_reviewed: <%= yesterday %>
 
 gardenclean:
   id: 3
@@ -38,6 +45,7 @@ gardenclean:
   user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
+  last_reviewed: <%= last_week %>
 
 attendrailsconf:
   id: 4

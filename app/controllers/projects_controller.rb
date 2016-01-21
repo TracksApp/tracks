@@ -57,12 +57,11 @@ class ProjectsController < ApplicationController
   def review
     @source_view = params['_source_view'] || 'review'
     @page_title = t('projects.list_reviews')
-    @projects = current_user.projects.load
-    @contexts = current_user.contexts.load
-    @projects_to_review = current_user.projects.select  {|p| p.needs_review?(current_user)}
-    @stalled_projects = current_user.projects.select  {|p| p.stalled?}
-    @blocked_projects = current_user.projects.select  {|p| p.blocked?}
-    @current_projects = current_user.projects.uncompleted.select  {|p| not(p.needs_review?(current_user))}
+    projects = current_user.projects
+    @projects_to_review = projects.select  {|p| p.needs_review?(current_user)}
+    @stalled_projects = projects.select  {|p| p.stalled?}
+    @blocked_projects = projects.select  {|p| p.blocked?}
+    @current_projects = projects.uncompleted.select { |p| not (p.needs_review?(current_user)) }.sort_by { |p| p.last_reviewed || Time.zone.at(0) }
 
     init_not_done_counts(['project'])
     init_project_hidden_todo_counts(['project'])
