@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     @count = searcher.number_of_finds
 
     init_not_done_counts
-    init_project_hidden_todo_counts
+    init_hidden_todo_counts
   end
 
   def index

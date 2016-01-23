@@ -381,7 +381,7 @@ class TodosControllerTest < ActionController::TestCase
     assert p.reload().hidden?
     todo = p.todos.first
 
-    assert todo.project_hidden?, "todo should be project_hidden"
+    assert todo.hidden?, 'todo should be hidden'
 
     # clear project from todo: the todo should be unhidden
     xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"", "todo"=>{}

@@ -75,7 +75,9 @@ class ApplicationController < ActionController::Base
     if todos_parent.nil?
       count = 0
     elsif (todos_parent.is_a?(Project) && todos_parent.hidden?)
-      count = @project_project_hidden_todo_counts[todos_parent.id]
+      count = @project_hidden_todo_counts[todos_parent.id]
+    elsif (todos_parent.is_a?(Context) && todos_parent.hidden?)
+      count = @context_hidden_todo_counts[todos_parent.id]
     else
       count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
     end
@@ -200,7 +202,10 @@ class ApplicationController < ActionController::Base
 
     init_not_done_counts
     if prefs.show_hidden_projects_in_sidebar
-      init_project_hidden_todo_counts(['project'])
+      init_hidden_todo_counts(['project'])
+    end
+    if prefs.show_hidden_contexts_in_sidebar
+      init_hidden_todo_counts(['context'])
     end
   end
 
@@ -211,9 +216,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def init_project_hidden_todo_counts(parents = ['project','context'])
+  def init_hidden_todo_counts(parents = ['project', 'context'])
     parents.each do |parent|
-      eval("@#{parent}_project_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')")
+      eval("@#{parent}_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')")
     end
   end
 

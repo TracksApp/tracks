@@ -52,13 +52,13 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_ajax_create_increments_count 'My New Project'
   end
 
-  def test_todo_state_is_project_hidden_after_hiding_project
+  def test_todo_is_hidden_after_hiding_project
     p = projects(:timemachine)
     todos = p.todos.active
     login_as(:admin_user)
     xhr :post, :update, :id => 1, "project"=>{"name"=>p.name, "description"=>p.description, "state"=>"hidden"}
     todos.each do |t|
-      assert_equal :project_hidden, t.reload().aasm.current_state
+      assert t.reload().hidden?
     end
     assert p.reload().hidden?
   end

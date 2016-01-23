@@ -12,7 +12,10 @@ class ContextsController < ApplicationController
     @active_contexts = current_user.contexts.active
     @hidden_contexts = current_user.contexts.hidden
     @closed_contexts = current_user.contexts.closed
-    init_not_done_counts(['context']) unless request.format == :autocomplete
+    unless request.format == :autocomplete
+      init_not_done_counts(['context'])
+      init_hidden_todo_counts(['context'])
+    end
 
     respond_to do |format|
       format.html &render_contexts_html
@@ -37,7 +40,7 @@ class ContextsController < ApplicationController
     unless @context.nil?
       @max_completed = current_user.prefs.show_number_completed
       @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
-      @not_done_todos = @context.todos.active.reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(Todo::DEFAULT_INCLUDES)
+      @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder('todos.due IS NULL, todos.due ASC, todos.created_at ASC').includes(Todo::DEFAULT_INCLUDES)
       @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
@@ -77,6 +80,7 @@ class ContextsController < ApplicationController
       format.js do
         @down_count = current_user.contexts.size
         init_not_done_counts
+        init_hidden_todo_counts(['context'])
       end
       format.xml do
         if @context.new_record?

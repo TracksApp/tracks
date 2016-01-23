@@ -13,7 +13,17 @@ class ContextsControllerTest < ActionController::TestCase
     get :show, { :id => "1" }
     assert_equal 'TRACKS::Context: agenda', assigns['page_title']
   end
-  
+
+  def test_shows_todos_when_hidden
+    c = contexts(:agenda)
+    todos = c.todos.active
+    assert_equal 6, todos.size
+    c.hide!
+    login_as :admin_user
+    get :show, { :id => '1'}
+    assert_equal 6, assigns['not_done_todos'].size
+  end
+
   def test_show_renders_show_template
     login_as :admin_user
     get :show, { :id => "1" }

@@ -26,21 +26,25 @@ class Todo < ActiveRecord::Base
   has_many :attachments, dependent: :destroy
 
   # scopes for states of this todo
-  scope :active, -> { where state: 'active' }
-  scope :active_or_hidden, -> { where "todos.state = ? OR todos.state = ?", 'active', 'project_hidden' }
-  scope :not_completed, -> { where 'NOT (todos.state = ?)', 'completed' }
-  scope :completed, -> { where "todos.state = ?", 'completed' }
-  scope :deferred, -> { where "todos.state = ?", 'deferred' }
+  scope :active, -> { active_or_hidden.not_hidden }
+  scope :active_or_hidden, -> { where state: 'active' }
+  scope :context_hidden, -> { joins('INNER JOIN contexts c ON c.id = todos.context_id').where('c.state = ?', 'hidden') }
+  scope :project_hidden, -> { joins('LEFT OUTER JOIN projects p ON p.id = todos.project_id').where('p.state = ?', 'hidden') }
+  scope :completed, -> { where 'todos.state = ?', 'completed' }
+  scope :deferred, -> { where 'todos.state = ?', 'deferred' }
   scope :blocked, -> {where 'todos.state = ?', 'pending' }
   scope :pending, -> {where 'todos.state = ?', 'pending' }
-  scope :deferred_or_blocked, -> { where "(todos.state = ?) OR (todos.state = ?)", "deferred", "pending" }
-  scope :not_deferred_or_blocked, -> { where "(NOT todos.state=?) AND (NOT todos.state = ?)", "deferred", "pending" }
+  scope :deferred_or_blocked, -> { where '(todos.state = ?) OR (todos.state = ?)', 'deferred', 'pending' }
   scope :hidden, -> {
-    joins("INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id").
-    where("todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?))", 'project_hidden', 'hidden', 'active', 'deferred', 'pending') }
-  scope :not_hidden, -> {
-    joins("INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id").
-    where('NOT(todos.state = ? OR (c_hidden.state = ? AND (todos.state = ? OR todos.state = ? OR todos.state = ?)))','project_hidden', 'hidden', 'active', 'deferred', 'pending') }
+    joins('INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id').
+    joins('LEFT OUTER JOIN projects p_hidden ON p_hidden.id = todos.project_id').
+    where('(c_hidden.state = ? OR p_hidden.state = ?)', 'hidden', 'hidden').
+    where('NOT todos.state = ?', 'completed') }
+  scope :not_hidden, -> { not_context_hidden.not_project_hidden }
+  scope :not_deferred_or_blocked, -> { where '(NOT todos.state=?) AND (NOT todos.state = ?)', 'deferred', 'pending' }
+  scope :not_project_hidden, -> { joins('LEFT OUTER JOIN projects p ON p.id = todos.project_id').where('p.id IS NULL OR NOT(p.state = ?)', 'hidden') }
+  scope :not_context_hidden, -> { joins('INNER JOIN contexts c ON c.id = todos.context_id').where('NOT(c.state = ?)', 'hidden') }
+  scope :not_completed, -> { where 'NOT (todos.state = ?)', 'completed' }
 
   # other scopes
   scope :are_due,           -> { where 'NOT (todos.due IS NULL)' }
@@ -71,7 +75,6 @@ class Todo < ActiveRecord::Base
   aasm :column => :state do
 
     state :active
-    state :project_hidden
     state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil}
     state :deferred,  :before_exit => Proc.new { |t| t[:show_from] = nil }
     state :pending
@@ -81,29 +84,19 @@ class Todo < ActiveRecord::Base
     end
 
     event :complete do
-      transitions :to => :completed, :from => [:active, :project_hidden, :deferred, :pending]
+      transitions :to => :completed, :from => [:active, :deferred, :pending]
     end
 
     event :activate do
-      transitions :to => :active, :from => [:project_hidden, :deferred]
+      transitions :to => :active, :from => [:deferred]
       transitions :to => :active, :from => [:completed], :guard => :no_uncompleted_predecessors?
       transitions :to => :active, :from => [:pending], :guard => :no_uncompleted_predecessors_or_deferral?
       transitions :to => :pending, :from => [:completed], :guard => :uncompleted_predecessors?
       transitions :to => :deferred, :from => [:pending], :guard => :no_uncompleted_predecessors?
     end
 
-    event :hide do
-      transitions :to => :project_hidden, :from => [:active, :deferred, :pending]
-    end
-
-    event :unhide do
-      transitions :to => :deferred, :from => [:project_hidden], :guard => Proc.new{|t| t.show_from.present? }
-      transitions :to => :pending, :from => [:project_hidden], :guard => :uncompleted_predecessors?
-      transitions :to => :active, :from => [:project_hidden]
-    end
-
     event :block do
-      transitions :to => :pending, :from => [:active, :deferred, :project_hidden]
+      transitions :to => :pending, :from => [:active, :deferred]
     end
   end
 
@@ -141,10 +134,6 @@ class Todo < ActiveRecord::Base
 
   def uncompleted_predecessors?
     return !uncompleted_predecessors.empty?
-  end
-
-  def should_be_blocked?
-    return !( uncompleted_predecessors.empty? || state == 'project_hidden' )
   end
 
   def guard_for_transition_from_deferred_to_pending
@@ -199,7 +188,7 @@ class Todo < ActiveRecord::Base
     self.predecessors.delete(predecessor)
     if self.predecessors.empty?
       self.reload  # reload predecessors
-      self.not_part_of_hidden_container? ? self.activate! : self.hide!
+      self.activate!
     else
       save!
     end
@@ -226,20 +215,7 @@ class Todo < ActiveRecord::Base
   end
 
   def hidden?
-    return self.project_hidden? || ( self.context.hidden? && (self.active? || self.deferred?))
-  end
-
-  def update_state_from_project
-    if self.project_hidden? && (!self.project.hidden?)
-      if self.uncompleted_predecessors.empty?
-        self.activate!
-      else
-        self.block!
-      end
-    elsif self.active? && self.project.hidden?
-      self.hide!
-    end
-    self.save!
+    self.project.hidden? || self.context.hidden?
   end
 
   def toggle_completion!
