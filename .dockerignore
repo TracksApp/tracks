@@ -1,0 +1,12 @@
+.bundle
+.git
+config/database.yml
+config/site.yml
+coverage
+db/*.sqlite3
+doc
+features
+log
+public/assets
+test
+tmp
