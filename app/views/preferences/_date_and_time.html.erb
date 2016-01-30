@@ -3,20 +3,34 @@
 <div class='prefs_example'>This will result in: <span id='prefs.date_format'><%= l(Time.zone.today, :format => current_user.prefs.date_format) %></span></div>
 <br/>
 Or pick one of the following:<br/>
-<% %w{default short long longer}.each do |format| %>
-<%= radio_button_tag("date_picker1", t("date.formats.#{format}")) %> <%= l(Time.zone.today, :format => format.to_sym) %> <br/>
-<% end %>
-<br/>
-
-<%= pref_with_text_field('prefs', 'title_date_format') %>
+<div class="form-group btn-group" role="group" data-toggle="buttons">
+  <% %i{default short long longer}.each do |format| %>
+    <label class="btn btn-default">
+      <%= radio_button_tag("date_picker1", t("date.formats.#{format}")) %>
+      <%= l(Time.zone.today, format: format) %>
+    </label>
+  <% end %>
+</div>
+<div class="form-group">
+  <%= pref_with_text_field('prefs', 'title_date_format') %>
+</div>
 <div class='prefs_example'>This will result in: <span id='prefs.title_date_format'><%= l(Time.zone.today, :format => current_user.prefs.title_date_format) %></span></div>
 <br/>
 Or pick one of the following:<br/>
-<% %w{default short long longer}.each do |format| %>
-<%= radio_button_tag("date_picker2", t("date.formats.#{format}")) %> <%= l(Time.zone.today, :format => format.to_sym) %> <br/>
-<% end %>
+<div class="form-group btn-group" role="group" data-toggle="buttons">
+  <% %i{default short long longer}.each do |format| %>
+    <label class="btn btn-default">
+      <%= radio_button_tag("date_picker2", t("date.formats.#{format}")) %>
+      <%= l(Time.zone.today, format: format) %>
+    </label>
+  <% end %>
+</div>
 <br/>
 
-<%= pref('prefs', 'time_zone') { time_zone_select('prefs','time_zone') } %>
+<div class="form-group">
+  <%= pref('prefs', 'time_zone') { time_zone_select('prefs','time_zone', [], {}, class: "form-control") } %>
+</div>
 
-<%= pref_with_select_field('prefs', "week_starts", (0..6).to_a.map {|num| [t('date.day_names')[num], num] }) %>
+<div class="form-group">
+  <%= pref_with_select_field('prefs', "week_starts", (0..6).to_a.map {|num| [t('date.day_names')[num], num] }) %>
+</div>
