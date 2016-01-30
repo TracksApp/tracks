@@ -169,14 +169,6 @@ module ApplicationHelper
     return js.html_safe
   end
 
-  def javascript_tag_for_i18n_datepicker
-    locale = I18n.locale
-    # do not include en as locale since this the available by default
-    if locale && locale != :en
-      javascript_include_tag("i18n/jquery.ui.datepicker-#{locale}.js")
-    end
-  end
-
   def done_path(controller_name, type)
     case controller_name
     when "contexts"
