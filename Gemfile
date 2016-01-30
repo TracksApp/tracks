@@ -68,7 +68,7 @@ group :test do
 
   gem "aruba", ">=0.5.4", :require => false
 
-  gem "selenium-webdriver", '>=2.45'
+  gem "selenium-webdriver", '>= 2.50'
 
   # uncomment to use the webkit option. This depends on Qt being installed
   # gem "capybara-webkit"
