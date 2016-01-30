@@ -14,13 +14,26 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 
+//= require jquery-ui/autocomplete
+//= require jquery-ui/datepicker
+//= require jquery-ui/datepicker-cs
+//= require jquery-ui/datepicker-de
+//= require jquery-ui/datepicker-es
+//= require jquery-ui/datepicker-fr
+//= require jquery-ui/datepicker-he
+//= require jquery-ui/datepicker-nl
+//= require jquery-ui/datepicker-ru
+//= require jquery-ui/dialog
+//= require jquery-ui/droppable
+//= require jquery-ui/effect-highlight
+//= require jquery-ui/sortable
+
 // Stuff in app/assets
 //= require tracks
 //= require tracks_pages
 //= require disable_fx_in_test
 
 // Stuff in vendor/assets
-//= require jquery-ui-1.10.0.custom.min
 //= require jquery.ui.touch-punch.min
 //= require jquery.blockUI
 //= require jquery.cookie

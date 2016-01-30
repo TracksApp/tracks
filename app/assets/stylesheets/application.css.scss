@@ -13,7 +13,10 @@
  *= require_self
  */
 
-@import "../../../vendor/assets/stylesheets/jquery-ui-1.10.0.custom.min";
+@import "jquery-ui/autocomplete";
+@import "jquery-ui/datepicker";
+@import "jquery-ui/dialog";
+@import "jquery-ui/sortable";
 
 .legacy-ui {
   @import "../../../vendor/assets/stylesheets/superfish-navbar";

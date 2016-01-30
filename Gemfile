@@ -15,6 +15,7 @@ gem 'therubyracer', group: :therubyracer
 gem 'uglifier', '>=1.3.0'
 
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # you may comment out the database driver(s) you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
