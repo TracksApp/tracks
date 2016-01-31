@@ -842,11 +842,22 @@ class TodosControllerTest < ActionController::TestCase
     # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
     login_as(:admin_user)
     todo = users(:admin_user).todos.first
-    url = "http://example.com/foo?bar=/baz"
+    url = 'http://example.com/foo?bar=/baz'
     todo.notes = "foo #{url} bar"
     todo.save!
     get :index
-    assert_select("a[href=#{url}]")
+    assert_select "a[href=#{url}]"
+  end
+
+  def test_link_opened_in_new_window
+    # issue #1747
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    url = 'http://example.com/'
+    todo.notes = "foo #{url} bar"
+    todo.save!
+    get :index
+    assert_select "a[target='_blank']"
   end
 
   def test_format_note_normal

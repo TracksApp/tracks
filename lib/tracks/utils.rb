@@ -25,14 +25,17 @@ module Tracks
     def self.render_text(text)
       rendered = auto_link_message(text)
       rendered = textile(rendered)
-      rendered = helpers.auto_link(rendered, :link => :urls)
+      rendered = helpers.auto_link(rendered, :link => :urls, :html => {:target => '_blank'})
 
-      # add onenote and message protocols
-      config = Sanitize::Config.merge(Sanitize::Config::RELAXED,
-        :protocols => { 'a' => {'href' => Sanitize::Config::RELAXED[:protocols]['a']['href'] + ['onenote', 'message']}}
-        )
+      relaxed_config = Sanitize::Config::RELAXED
+      config = relaxed_config
 
-      rendered = Sanitize.clean(rendered, config)
+      # add onenote and message protocols, allow a target
+      a_href_config = relaxed_config[:protocols]['a']['href'] + %w(onenote message)
+      a_attributes = relaxed_config[:attributes]['a'] + ['target']
+      config = Sanitize::Config.merge(config, :protocols => {'a' => {'href' => a_href_config}}, :attributes => {'a' => a_attributes})
+
+      rendered = Sanitize.fragment(rendered, config)
       return rendered.html_safe
     end
 
