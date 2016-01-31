@@ -57,6 +57,7 @@ group :development do
   gem "rack-mini-profiler"
   gem "rack-dev-mark"
   gem "activerecord-deprecated_finders"
+  gem "rubocop", require: false
 end
 
 group :test do

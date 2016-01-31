@@ -1,0 +1,15 @@
+Rails:
+  Enabled: true
+
+AllCops:
+  Exclude:
+    - bin/*
+
+Metrics/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
