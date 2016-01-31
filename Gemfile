@@ -59,6 +59,10 @@ group :development do
   gem "activerecord-deprecated_finders"
 end
 
+group :development, :test do
+  gem 'pry'
+end
+
 group :test do
   gem "factory_girl_rails"
   gem "capybara"
