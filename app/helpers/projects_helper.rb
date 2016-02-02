@@ -34,7 +34,7 @@ module ProjectsHelper
 
   def project_summary(project)
     project_description = ''
-    project_description += Tracks::Utils.render_text( project.description ) if project.description.present?
+    project_description += render_text( project.description ) if project.description.present?
     project_description += content_tag(:p,
       "#{count_undone_todos_phrase(p)}. #{t('projects.project_state', :state => project.state)}".html_safe
       )

@@ -532,14 +532,12 @@ class TodoTest < ActiveSupport::TestCase
     todo = user.todos.create(:description => "test", :context => @completed.context)
 
     assert_nil todo.notes
-    assert_nil todo.rendered_notes
 
     todo.notes = "*test*"
     todo.save!
     todo.reload
 
     assert_equal "*test*", todo.notes
-    assert_equal "<p><strong>test</strong></p>", todo.rendered_notes
   end
 
   def test_attachments_are_removed_after_delete
