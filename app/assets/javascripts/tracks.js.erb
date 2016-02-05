@@ -201,6 +201,7 @@ var TodoItems = {
         params.data += "&term="+term;
         params.dataType = "json";
         params.async = false;
+        params.cache = false; // fix for Google Chrome around 48.0.2564.82, see issue #1983
         params.success = function(result){
             allContexts = result;
         };
