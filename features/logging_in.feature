@@ -31,24 +31,24 @@ Feature: Existing user logging in
 
     Examples:
       | page                                                    | next page                                               | logout             |
-      | home page                                               | home page                                               | Logout (Test User) |
-      | contexts page                                           | contexts page                                           | Logout (Test User) |
-      | projects page                                           | projects page                                           | Logout (Test User) |
-      | notes page                                              | notes page                                              | Logout (Test User) |
-      | recurring todos page                                    | recurring todos page                                    | Logout (Test User) |
-      | statistics page                                         | statistics page                                         | Logout (Test User) |
-      | manage users page                                       | manage users page                                       | 401 Unauthorized   |
-      | integrations page                                       | integrations page                                       | Logout (Test User) |
-      | starred page                                            | starred page                                            | Logout (Test User) |
-      | tickler page                                            | tickler page                                            | Logout (Test User) |
-      | calendar page                                           | calendar page                                           | Logout (Test User) |
-      | feeds page                                              | feeds page                                              | Logout (Test User) |
-      | preference page                                         | preference page                                         | Logout (Test User) |
-      | export page                                             | export page                                             | Logout (Test User) |
-      | rest api docs page                                      | rest api docs page                                      | Logout (Test User) |
-      | search page                                             | search page                                             | Logout (Test User) |
-      | "top secret" project for user "testuser"                | "top secret" project for user "testuser"                | Logout (Test User) |
-      | context page for "@secret location" for user "testuser" | context page for "@secret location" for user "testuser" | Logout (Test User) |
+      | home page                                               | home page                                               | Logout           |
+      | contexts page                                           | contexts page                                           | Logout           |
+      | projects page                                           | projects page                                           | Logout           |
+      | notes page                                              | notes page                                              | Logout           |
+      | recurring todos page                                    | recurring todos page                                    | Logout           |
+      | statistics page                                         | statistics page                                         | Logout           |
+      | manage users page                                       | manage users page                                       | 401 Unauthorized |
+      | integrations page                                       | integrations page                                       | Logout           |
+      | starred page                                            | starred page                                            | Logout           |
+      | tickler page                                            | tickler page                                            | Logout           |
+      | calendar page                                           | calendar page                                           | Logout           |
+      | feeds page                                              | feeds page                                              | Logout           |
+      | preference page                                         | preference page                                         | Logout           |
+      | export page                                             | export page                                             | Logout           |
+      | rest api docs page                                      | rest api docs page                                      | Logout           |
+      | search page                                             | search page                                             | Logout           |
+      | "top secret" project for user "testuser"                | "top secret" project for user "testuser"                | Logout           |
+      | context page for "@secret location" for user "testuser" | context page for "@secret location" for user "testuser" | Logout           |
 
   @javascript
   Scenario: When session expires, you should be logged out

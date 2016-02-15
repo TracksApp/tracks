@@ -428,6 +428,7 @@ en:
       show_empty_containers_project: "Show empty projects"
       show_empty_containers_context: "Show empty contexts"
       show_empty_containers_title: "Show or hide the empty projects or contexts"
+      options: Options
   footer:
     send_feedback: Send feedback on %{version}
   sidebar:
