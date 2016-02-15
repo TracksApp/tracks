@@ -16,19 +16,19 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li><%= navigation_link(t('layouts.navigation.home'), root_path, {:accesskey => "t", :title => t('layouts.navigation.home_title')} ) %></li>
-        <li><%= navigation_link(t('layouts.navigation.starred'), tag_path("starred"), :title => t('layouts.navigation.starred_title')) %></li>
-        <li><%= navigation_link(t('common.projects'), projects_path, {:accesskey=>"p", :title=>t('layouts.navigation.projects_title')} ) %></li>
-        <li><%= navigation_link(t('layouts.navigation.tickler'), tickler_path, {:accesskey =>"k", :title => t('layouts.navigation.tickler_title')} ) %></li>
+        <li><%= link_to t('layouts.navigation.home'), root_path, accesskey: 't', title: t('layouts.navigation.home_title') %></li>
+        <li><%= link_to t('layouts.navigation.starred'), tag_path('starred'), title: t('layouts.navigation.starred_title') %></li>
+        <li><%= link_to t('common.projects'), projects_path, accesskey: 'p', title: t('layouts.navigation.projects_title') %></li>
+        <li><%= link_to t('layouts.navigation.tickler'), tickler_path, accesskey: 'k', title: t('layouts.navigation.tickler_title') %></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
             <%= t('layouts.navigation.organize') %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><%= navigation_link( t('common.contexts'), contexts_path, {:accesskey=>"c", :title=>t('layouts.navigation.contexts_title')} ) %></li>
-            <li><%= navigation_link( t('common.notes'), notes_path, {:accesskey => "o", :title => t('layouts.navigation.notes_title')} ) %></li>
-            <li><%= navigation_link( t('common.review'), review_path, {:accesskey => "r", :title => t('layouts.navigation.review_title')} ) %></li>
-            <li><%= navigation_link( t('layouts.navigation.recurring_todos'), {:controller => "recurring_todos", :action => "index"}, :title => t('layouts.navigation.recurring_todos_title')) %></li>
+            <li><%= link_to t('common.contexts'), contexts_path, accesskey: 'c', title: t('layouts.navigation.contexts_title') %></li>
+            <li><%= link_to t('common.notes'), notes_path, accesskey: 'o', title: t('layouts.navigation.notes_title') %></li>
+            <li><%= link_to t('common.review'), review_path, accesskey: 'r', title: t('layouts.navigation.review_title') %></li>
+            <li><%= link_to t('layouts.navigation.recurring_todos'), controller: 'recurring_todos', action: 'index', title: t('layouts.navigation.recurring_todos_title') %></li>
           </ul>
         </li>
         <li class="dropdown">
@@ -36,10 +36,10 @@
             <%= t('layouts.navigation.view') %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><%= navigation_link( t('layouts.navigation.calendar'), calendar_path, :title => t('layouts.navigation.calendar_title')) %></li>
-            <li><%= navigation_link( t('layouts.navigation.completed_tasks'), done_overview_path, {:accesskey=>"d", :title=>t('layouts.navigation.completed_tasks_title')} ) %></li>
-            <li><%= navigation_link( t('layouts.navigation.feeds'), feeds_path, :title => t('layouts.navigation.feeds_title')) %></li>
-            <li><%= navigation_link( t('layouts.navigation.stats'), stats_path, :title => t('layouts.navigation.stats_title')) %></li>
+            <li><%= link_to t('layouts.navigation.calendar'), calendar_path, title: t('layouts.navigation.calendar_title') %></li>
+            <li><%= link_to t('layouts.navigation.completed_tasks'), done_overview_path, accesskey: 'd', title: t('layouts.navigation.completed_tasks_title') %></li>
+            <li><%= link_to t('layouts.navigation.feeds'), feeds_path, title: t('layouts.navigation.feeds_title') %></li>
+            <li><%= link_to t('layouts.navigation.stats'), stats_path, title: t('layouts.navigation.stats_title') %></li>
             <li class="divider"></li>
             <li id="menu_view_toggle_contexts"><%= link_to(t('layouts.toggle_contexts'), "#", {:title => t('layouts.toggle_contexts_title'), :id => "toggle-contexts-nav"}) %></li>
             <li><%= link_to(t('layouts.toggle_notes'), "#", {:accesskey => "S", :title => t('layouts.toggle_notes_title'), :id => "toggle-notes-nav"}) %></li>
@@ -51,11 +51,11 @@
             <%= t('layouts.navigation.admin') %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <li><%= navigation_link( t('layouts.navigation.preferences'), preferences_path, {:accesskey => "u", :title => t('layouts.navigation.preferences_title')} ) %></li>
-            <li><%= navigation_link( t('layouts.navigation.export'), data_path, {:accesskey => "e", :title => t('layouts.navigation.export_title')} ) %></li>
-            <li><%= navigation_link( t('layouts.navigation.import'), import_data_path, {:accesskey => "i", :title => t('layouts.navigation.import_title')} ) %></li>
+            <li><%= link_to t('layouts.navigation.preferences'), preferences_path, accesskey: 'u', title: t('layouts.navigation.preferences_title') %></li>
+            <li><%= link_to t('layouts.navigation.export'), data_path, accesskey: 'e', title: t('layouts.navigation.export_title') %></li>
+            <li><%= link_to t('layouts.navigation.import'), import_data_path, accesskey: 'i', title: t('layouts.navigation.import_title') %></li>
             <% if current_user.is_admin? -%>
-            <li><%= navigation_link(t('layouts.navigation.manage_users'), users_path, {:accesskey => "a", :title => t('layouts.navigation.manage_users_title')} ) %></li>
+            <li><%= link_to t('layouts.navigation.manage_users'), users_path, accesskey: 'a', title: t('layouts.navigation.manage_users_title') %></li>
             <% end -%>
           </ul>
         </li>
