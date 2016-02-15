@@ -11,7 +11,7 @@
         <% if @count -%>
         <span id="badge_count" class="badge"><%= @count %></span>
         <% end -%>
-        <%= l(Time.zone.today, :format => current_user.prefs.title_date_format) %>
+        <%= content_tag :span, l(Time.zone.today, format: current_user.prefs.title_date_format), class: 'visible-lg-inline' %>
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
