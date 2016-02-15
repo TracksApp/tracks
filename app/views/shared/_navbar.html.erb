@@ -68,7 +68,12 @@
             <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
           </ul>
         </li>
-        <li><%= navigation_link(image_tag("system-search.png", :size => "16X16", :border => 0), search_path, :title => t('layouts.navigation.search')) %></li>
+        <li>
+          <%= link_to search_path, title: t('layouts.navigation.search') do %>
+            <%= icon('search', class: 'hidden-xs') %>
+            <%= content_tag :span, t('layouts.navigation.search'), class: 'visible-xs-inline' %>
+          <% end %>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
