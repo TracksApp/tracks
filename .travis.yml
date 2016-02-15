@@ -21,7 +21,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - "cp config/site.yml.tmpl config/site.yml"
 
-script: "bin/rake ci"
+script: "if [[ $DATABASE_URL == mysql* ]]; then bundle exec rake ci:full; else bundle exec rake ci:lite; fi"
 
 notifications:
   email: false
