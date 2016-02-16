@@ -109,4 +109,9 @@ module TracksFormHelper
     execute_javascript("$('#todo_project_name').val('');")
   end
 
+  def close_datepicker
+    within '.ui-datepicker' do
+      click_button 'Done'
+    end
+  end
 end

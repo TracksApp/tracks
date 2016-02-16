@@ -75,9 +75,7 @@ end
 Then /^I should see an active todo "([^"]*)"$/ do |todo_description|
   todo = @current_user.todos.where(:description => todo_description).first
   expect(todo).to_not be_nil
-
-  xpath = "//div[@id='line_todo_#{todo.id}']/img[@class='grip']"
-  expect(page).to have_xpath(xpath, :visible=>true)
+  expect(page).to have_css("div#line_todo_#{todo.id} img.grip", :visible=>true)
 end
 
 Then /^the number of actions should be (\d+)$/ do |count|
