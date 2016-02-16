@@ -4,7 +4,7 @@
 <br/>
 Or pick one of the following:<br/>
 <div class="form-group btn-group" role="group" data-toggle="buttons">
-  <% %i{default short long longer}.each do |format| %>
+  <% [:default, :short, :long, :longer].each do |format| %>
     <label class="btn btn-default">
       <%= radio_button_tag("date_picker1", t("date.formats.#{format}")) %>
       <%= l(Time.zone.today, format: format) %>
@@ -18,7 +18,7 @@ Or pick one of the following:<br/>
 <br/>
 Or pick one of the following:<br/>
 <div class="form-group btn-group" role="group" data-toggle="buttons">
-  <% %i{default short long longer}.each do |format| %>
+  <% [:default, :short, :long, :longer].each do |format| %>
     <label class="btn btn-default">
       <%= radio_button_tag("date_picker2", t("date.formats.#{format}")) %>
       <%= l(Time.zone.today, format: format) %>
