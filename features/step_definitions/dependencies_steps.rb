@@ -10,8 +10,8 @@ end
 When /^I drag "(.*)" to "(.*)"$/ do |dragged, target|
   drag_id = Todo.where(:description => dragged).first.id
   drop_id = Todo.where(:description => target).first.id
-  drag_elem = page.find(:xpath, "//div[@id='line_todo_#{drag_id}']//img[@class='grip']")
-  drop_elem = page.find(:xpath, "//div[@id='line_todo_#{drop_id}']")
+  drag_elem = page.find("div#line_todo_#{drag_id} img.grip")
+  drop_elem = page.find("div#line_todo_#{drop_id}")
 
   drag_elem.drag_to(drop_elem)
 end
