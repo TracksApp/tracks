@@ -19,11 +19,11 @@ module TracksStepHelper
   end
 
   def wait_for_auto_complete
-    expect(page).to have_css("a.ui-state-focus", :visible => true)
+    expect(page).to have_css("ul.ui-autocomplete li.ui-state-focus", :visible => true)
   end
 
   def click_first_line_of_auto_complete
-    page.find(:css, "ul li a.ui-state-focus").click
+    page.find(:css, "ul.ui-autocomplete li.ui-state-focus").click
   end
 
   def check_xpath_visibility(visible, xpath)

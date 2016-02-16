@@ -116,6 +116,7 @@ When /^I edit the due date of "([^"]*)" to "([^"]*)"$/ do |action_description, d
 
   open_edit_form_for(todo)
   fill_in "due_todo_#{todo.id}", :with => date
+  close_datepicker
   submit_edit_todo_form(todo)
 end
 

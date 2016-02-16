@@ -42,11 +42,8 @@ When /^I edit the dependency of "([^"]*)" to add "([^"]*)" as predecessor$/ do |
   # in webkit, the autocompleter is not fired after fill_in
   page.execute_script %Q{$("#{form_css}").find('input[id$="predecessor_input"]').autocomplete('search')} if Capybara.javascript_driver == :webkit
   
-  # wait for auto complete
-  expect(page).to have_css("a.ui-state-focus")
-
   # click first line
-  page.find(:css, "ul li a.ui-state-focus").click
+  page.find('ul.ui-autocomplete li.ui-state-focus').click
 
   # wait for the new dependency to be added to the list
   expect(page).to have_css("li#pred_#{predecessor.id}")
