@@ -111,7 +111,6 @@ var TracksPages = {
     TodoItems.setup_autocomplete_for_predecessor();
   },
   setup_datepicker: function() {
-    $.datepicker.setDefaults($.datepicker.regional[i18n_locale]);
     $('input.Date').datepicker({
         'dateFormat': dateFormat,
         'firstDay': weekStart,
