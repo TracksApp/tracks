@@ -16,13 +16,6 @@
 
 //= require jquery-ui/autocomplete
 //= require jquery-ui/datepicker
-//= require jquery-ui/datepicker-cs
-//= require jquery-ui/datepicker-de
-//= require jquery-ui/datepicker-es
-//= require jquery-ui/datepicker-fr
-//= require jquery-ui/datepicker-he
-//= require jquery-ui/datepicker-nl
-//= require jquery-ui/datepicker-ru
 //= require jquery-ui/dialog
 //= require jquery-ui/droppable
 //= require jquery-ui/effect-highlight
