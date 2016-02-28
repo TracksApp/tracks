@@ -33,7 +33,5 @@ module Tracksapp
 
     # configure Tracks to handle deployment in a subdir
     config.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
-
-    config.middleware.insert_after ActionDispatch::ParamsParser, ActionDispatch::XmlParamsParser
   end
 end

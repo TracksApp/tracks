@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.6'
+gem "rails", "~> 5.0.3"
 gem 'sass-rails', '~> 5.0'
-gem 'coffee-rails', '~> 4.1.0'
+gem "coffee-rails", "~> 4.2"
 
 #gem 'json'
 
 # todo: remove xml api
-gem 'actionpack-xml_parser', '>=1.0.1'
+gem "actionpack-xml_parser", "~> 2.0"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', group: :therubyracer
@@ -32,7 +32,7 @@ gem "aasm"
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
-gem 'thin'
+gem "puma", "~> 3.0"
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
@@ -47,12 +47,15 @@ gem 'bcrypt', '~> 3.1.7'
 gem "bootstrap-sass", "3.3.3"
 gem "font-awesome-sass", "~> 4.5.0"
 
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
 group :development do
   gem "spring"
   gem "spring-commands-cucumber"
   gem "yard"
 
-  gem 'tolk', '~> 1.9.3'
+  gem "tolk", "~> 2.0"
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -60,14 +63,12 @@ group :development do
 end
 
 group :development, :test do
-  gem 'pry'
+  gem "byebug"
   gem "rubocop", "~> 0.41.2", require: false
 end
 
 group :test do
-  # Pull in the fix for rails-dom-testing issue #42
-  # TODO: Remove with Rails 5 and rails-dom-testing 2.x
-  gem 'rails-dom-testing', github: 'rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
+  gem "rails-dom-testing"
 
   gem "factory_girl_rails"
   gem "capybara"
