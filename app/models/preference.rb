@@ -1,4 +1,4 @@
-class Preference < ActiveRecord::Base
+class Preference < ApplicationRecord
   belongs_to :user
   belongs_to :sms_context, :class_name => 'Context'
 
