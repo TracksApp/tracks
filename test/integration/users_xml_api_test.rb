@@ -67,7 +67,7 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
   end
   
   def test_get_users_as_xml
-    get '/users.xml', {}, basic_auth_headers()
+    get '/users.xml', headers: basic_auth_headers()
     assert_response :success
     assert_select 'users' do
       assert_select 'user', count: 4
@@ -76,7 +76,7 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_get_user_as_xml
-    get "/users/#{users(:other_user).id}.xml", {}, basic_auth_headers()
+    get "/users/#{users(:other_user).id}.xml", headers: basic_auth_headers()
     assert_response :success
     assert_select 'user'
     assert_select 'password', false

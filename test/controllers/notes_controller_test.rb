@@ -13,7 +13,7 @@ class NotesControllerTest < ActionController::TestCase
     project = users(:admin_user).projects.first
     count = users(:admin_user).notes.count
 
-  	post :create, note: {body: "test note", project_id: project.id}, format: :js
+  	post :create, params: {note: {body: "test note", project_id: project.id}, format: :js}
 
   	assert_response 200
   	assert assigns['saved'], "@saved should be true"
@@ -26,7 +26,7 @@ class NotesControllerTest < ActionController::TestCase
   	note = users(:admin_user).notes.first
 
   	assert_not_equal "test", note.body
-  	post :update, id: note.id, note: {body: "test"}, format: :js
+  	post :update, params: {id: note.id, note: {body: "test"}, format: :js}
   	assert_equal "test", note.reload.body
   end
 
@@ -36,7 +36,7 @@ class NotesControllerTest < ActionController::TestCase
   	note = users(:admin_user).notes.first
     count = users(:admin_user).notes.count
 
-    post :destroy, id: note.id, format: :js
+    post :destroy, params: {id: note.id, format: :js}
 
     old_note = users(:admin_user).notes.where(id: note.id).first
     assert_nil old_note

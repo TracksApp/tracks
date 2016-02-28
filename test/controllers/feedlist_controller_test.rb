@@ -16,13 +16,13 @@ class FeedlistControllerTest < ActionController::TestCase
   
   def test_get_feeds_for_context_using_xhr
     login_as(:admin_user)
-    xhr :get, :get_feeds_for_context, :context_id => contexts(:errand).id
+    get :get_feeds_for_context, xhr: true, params: {:context_id => contexts(:errand).id}
     assert_response 200
   end
   
   def test_get_feeds_for_project_using_xhr
     login_as(:admin_user)
-    xhr :get, :get_feeds_for_project, :project_id => projects(:timemachine).id
+    get :get_feeds_for_project, xhr: true, params: {:project_id => projects(:timemachine).id}
     assert_response 200
   end
     

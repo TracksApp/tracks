@@ -14,10 +14,10 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_get_tickler_needs_authentication
-    get '/tickler.xml', {}, {}
+    get '/tickler.xml'
     assert_response 401
 
-    get "/tickler.xml", {}, {'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
+    get "/tickler.xml", headers: {'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("wrong:wrong"),'ACCEPT' => 'application/xml'}
     assert_response 401
   end
 

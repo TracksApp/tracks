@@ -1,6 +1,6 @@
 class CalendarController < ApplicationController
-  skip_before_filter :login_required, :only => [:show]
-  prepend_before_filter :login_or_feed_token_required, :only => [:show]
+  skip_before_action :login_required, :only => [:show]
+  prepend_before_action :login_or_feed_token_required, :only => [:show]
 
   def show
     @source_view = 'calendar'
@@ -17,7 +17,7 @@ class CalendarController < ApplicationController
         cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       }
       format.ics   {
-        render :action => 'show', :layout => false, :content_type => Mime::ICS
+        render :action => 'show', :layout => false, :content_type => Mime[:ics]
       }
       format.xml {
         render :xml => @due_all.to_xml( *todo_xml_params )

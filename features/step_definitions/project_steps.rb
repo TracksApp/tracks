@@ -280,7 +280,7 @@ Then /^I should see the italic text "([^\"]*)" in the project description$/ do |
 end
 
 Then /^the project title should be "(.*)"$/ do |title|
-  expect(page).to have_css("h2#project_name_container span#project_name", text: title, exact: true)
+  expect(page).to have_css("h2#project_name_container span#project_name", text: title)
 end
 
 Then /^I should see the project name is "([^"]*)"$/ do |project_name|

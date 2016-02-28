@@ -13,7 +13,7 @@ class ContextsControllerTest < ActionController::TestCase
   
   def test_show_sets_title
     login_as :admin_user
-    get :show, { :id => "1" }
+    get :show, params: { :id => "1" }
     assert_equal 'TRACKS::Context: agenda', assigns['page_title']
   end
 
@@ -23,19 +23,19 @@ class ContextsControllerTest < ActionController::TestCase
     assert_equal 6, todos.size
     c.hide!
     login_as :admin_user
-    get :show, { :id => '1'}
+    get :show, params: { :id => '1'}
     assert_equal 6, assigns['not_done_todos'].size
   end
 
   def test_show_renders_show_template
     login_as :admin_user
-    get :show, { :id => "1" }
+    get :show, params: { :id => "1" }
     assert_template "contexts/show"
   end
   
   def test_get_edit_form_using_xhr
     login_as(:admin_user)
-    xhr :get, :edit, :id => contexts(:errand).id
+    get :edit, xhr: true, params: {:id => contexts(:errand).id}
     assert_response 200
   end
 
@@ -47,7 +47,7 @@ class ContextsControllerTest < ActionController::TestCase
   def test_update_handles_invalid_state_change
     login_as :admin_user
     context = users(:admin_user).contexts.first
-    xhr :put, :update, :id => context.id, :context => {:name => "@name", :state => 'closed'}
+    put :update, xhr: true, params: {:id => context.id, :context => {:name => "@name", :state => 'closed'}}
 
     assert_response 200
     assert /The context cannot be closed if you have uncompleted actions/.match(@response.body)
@@ -57,26 +57,26 @@ class ContextsControllerTest < ActionController::TestCase
   
   def test_text_feed_content
     login_as :admin_user
-    get :index, { :format => "txt" }
+    get :index, params: { :format => "txt" }
     assert_equal 'text/plain', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "txt" }
+    get :index, params: { :format => "txt" }
     assert_response 401
   end
   
   def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "txt", :token => 'foo'  }
+    get :index, params: { :format => "txt", :token => 'foo'  }
     assert_response 401
   end
   
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "txt", :token => users(:admin_user).token }
+    get :index, params: { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
 
@@ -84,20 +84,20 @@ class ContextsControllerTest < ActionController::TestCase
   
   def test_show_xml_renders_context_to_xml
     login_as :admin_user
-    get :show, { :id => "1", :format => 'xml' }
+    get :show, params: { :id => "1", :format => 'xml' }
     assert_equal contexts(:agenda).to_xml( :except => :user_id ), @response.body
   end
   
   def test_show_with_nil_context_returns_404
     login_as :admin_user
-    get :show, { :id => "0" }
+    get :show, params: { :id => "0" }
     assert_equal 'Context not found', @response.body
     assert_response 404
   end
   
   def test_show_xml_with_nil_context_returns_404
     login_as :admin_user
-    get :show, { :id => "0", :format => 'xml' }
+    get :show, params: { :id => "0", :format => 'xml' }
     assert_response 404
     assert_select 'error', 'Context not found'
   end
@@ -106,7 +106,7 @@ class ContextsControllerTest < ActionController::TestCase
 
   def test_rss_feed_content
     login_as :admin_user
-    get :index, { :format => "rss" }
+    get :index, params: { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
     #puts @response.body
   
@@ -134,19 +134,19 @@ class ContextsControllerTest < ActionController::TestCase
   
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "rss" }
+    get :index, params: { :format => "rss" }
     assert_response 401
   end
   
   def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "rss", :token => 'foo'  }
+    get :index, params: { :format => "rss", :token => 'foo'  }
     assert_response 401
   end
   
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "rss", :token => users(:admin_user).token }
+    get :index, params: { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
 
@@ -154,7 +154,7 @@ class ContextsControllerTest < ActionController::TestCase
   
   def test_atom_feed_content
     login_as :admin_user
-    get :index, { :format => "atom" }
+    get :index, params: { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
     assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
     assert_select 'feed' do
@@ -174,19 +174,19 @@ class ContextsControllerTest < ActionController::TestCase
  
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "atom" }
+    get :index, params: { :format => "atom" }
     assert_response 401
   end
   
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "atom", :token => 'foo'  }
+    get :index, params: { :format => "atom", :token => 'foo'  }
     assert_response 401
   end
   
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "atom", :token => users(:admin_user).token }
+    get :index, params: { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
 

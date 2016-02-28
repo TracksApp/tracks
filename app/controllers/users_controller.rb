@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
-  skip_before_filter :login_required, :only => [ :new, :create ]
-  prepend_before_filter :login_optional, :only => [ :new, :create ]
+  before_action :admin_login_required, :only => [ :index, :show, :destroy ]
+  skip_before_action :login_required, :only => [ :new, :create ]
+  prepend_before_action :login_optional, :only => [ :new, :create ]
 
   # GET /users GET /users.xml
   def index
@@ -99,7 +99,7 @@ class UsersController < ApplicationController
       end
       format.xml do
         unless current_user && current_user.is_admin
-          render :text => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+          render :body => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
           return
         end
         unless check_create_user_params
@@ -110,7 +110,7 @@ class UsersController < ApplicationController
         user.password_confirmation = user_params[:password]
         saved = user.save
         unless user.new_record?
-          render :text => t('users.user_created'), :status => 200
+          render :body => t('users.user_created'), :status => 200
         else
           render_failure user.errors.to_xml, 409
         end

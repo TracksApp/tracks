@@ -4,9 +4,11 @@ class RecurringTodosTest < ActionDispatch::IntegrationTest
 
   def logs_in_as(user,plain_pass)
     @user = user
-    post "/login", :user_login => @user.login,
+    post "/login", params: {
+      :user_login => @user.login,
       :user_password => plain_pass,
       :user_noexpiry => 'n'
+    }
     assert_response :redirect
     follow_redirect!
     assert_response :success
@@ -22,7 +24,7 @@ class RecurringTodosTest < ActionDispatch::IntegrationTest
 
     # when I toggle the todo complete
     todo = Todo.where(:recurring_todo_id => 1).first
-    put "/todos/#{todo.id}/toggle_check", :_source_view => 'todo'
+    put "/todos/#{todo.id}/toggle_check", params: {:_source_view => 'todo'}
     todo.reload
     assert todo.completed?
 
@@ -32,7 +34,8 @@ class RecurringTodosTest < ActionDispatch::IntegrationTest
     assert_not_equal todo2.id, todo.id # and the todos should be different
 
     # when I delete the recurring todo
-    delete_via_redirect "/recurring_todos/#{rt.id}", :_source_view => 'todo'
+    delete "/recurring_todos/#{rt.id}", params: {:_source_view => 'todo'}
+    follow_redirect!
 
     todo.reload
     todo2.reload

@@ -11,7 +11,7 @@ class LoginControllerTest < ActionController::TestCase
   #============================================
     
   def test_invalid_login
-    post :login, {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
+    post :login, params: {:user_login => 'cracker', :user_password => 'secret', :user_noexpiry => 'on'}
     assert_response :success
     assert(!session[:user_id])
     assert_template "login"
@@ -19,7 +19,7 @@ class LoginControllerTest < ActionController::TestCase
   
   def test_login_with_valid_admin_user
     @request.session['return-to'] = "/bogus/location"
-    post :login, {:user_login => 'admin', :user_password => 'abracadabra', :user_noexpiry => 'on'}
+    post :login, params: {:user_login => 'admin', :user_password => 'abracadabra', :user_noexpiry => 'on'}
     user = User.find(session['user_id'])
     assert_not_nil user
     assert_equal user.id, session['user_id']
@@ -30,7 +30,7 @@ class LoginControllerTest < ActionController::TestCase
   end
   
   def test_login_with_valid_standard_user
-    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    post :login, params: {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
     user = User.find(session['user_id'])
     assert_not_nil user
     assert_equal user.id, session['user_id']
@@ -56,26 +56,26 @@ class LoginControllerTest < ActionController::TestCase
   # Test login with a bad password for existing user
   #
   def test_login_bad_password
-    post :login, {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
+    post :login, params: {:user_login => 'jane', :user_password => 'wrong', :user_noexpiry => 'on'}
     assert(!session[:user])
     assert_equal "Login unsuccessful.", flash[:warning]
     assert_response :success
   end
   
   def test_login_bad_login
-    post :login, {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
+    post :login, params: {:user_login => 'blah', :user_password => 'sesame', :user_noexpiry => 'on'}
     assert(!session[:user])
     assert_equal "Login unsuccessful.", flash[:warning]
     assert_response :success
   end
   
   def test_should_remember_me
-    post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "on"
+    post :login, params: {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "on"}
     assert_not_nil @response.cookies["auth_token"]
   end
   
   def test_should_not_remember_me
-    post :login, :user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "off"
+    post :login, params: {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => "off"}
     assert_nil @response.cookies["auth_token"]
   end
   
@@ -113,7 +113,7 @@ class LoginControllerTest < ActionController::TestCase
   end
   
   def test_current_user_correct
-    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    post :login, params: {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
     assert_equal users(:other_user), @controller.current_user
   end
   
@@ -124,7 +124,7 @@ class LoginControllerTest < ActionController::TestCase
   end
   
   def test_prefs_correct
-    post :login, {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
+    post :login, params: {:user_login => 'jane', :user_password => 'sesame', :user_noexpiry => 'off'}
     assert_equal users(:other_user).prefs, @controller.prefs
   end
   

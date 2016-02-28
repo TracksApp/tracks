@@ -18,13 +18,13 @@ class CalendarControllerTest < ActionController::TestCase
 
   def test_show_ics
     login_as(:admin_user)
-    get :show, :format => 'ics'
+    get :show, params: {:format => 'ics'}
     assert_equal 8, assigns['due_all'].count
   end
 
   def test_show_xml
     login_as(:admin_user)
-    get :show, :format => 'xml'
+    get :show, params: {:format => 'xml'}
     assert_equal 8, assigns['due_all'].count
   end
 end

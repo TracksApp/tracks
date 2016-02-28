@@ -2,8 +2,8 @@ class RecurringTodosController < ApplicationController
 
   helper :todos, :recurring_todos
 
-  append_before_filter :init, :only => [:index, :new, :edit, :create]
-  append_before_filter :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
+  append_before_action :init, :only => [:index, :new, :edit, :create]
+  append_before_action :get_recurring_todo_from_param, :only => [:destroy, :toggle_check, :toggle_star, :edit, :update]
 
   def index
     @page_title = t('todos.recurring_actions_title')

@@ -66,22 +66,22 @@ class StatsControllerTest < ActionController::TestCase
     # assert_template nil
 
     # get week 0-1 for actions visible running
-    get :show_selected_actions_from_chart, :id => 'avrt', :index => 0
+    get :show_selected_actions_from_chart, params: {:id => 'avrt', :index => 0}
     assert_response :success
     assert_template "stats/show_selection_from_chart"
 
     # get week 0 and further for actions visible running
-    get :show_selected_actions_from_chart, :id => 'avrt_end', :index => 0
+    get :show_selected_actions_from_chart, params: {:id => 'avrt_end', :index => 0}
     assert_response :success
     assert_template "stats/show_selection_from_chart"
 
     # get week 0-1 for actions running
-    get :show_selected_actions_from_chart, :id => 'art', :index => 0
+    get :show_selected_actions_from_chart, params: {:id => 'art', :index => 0}
     assert_response :success
     assert_template "stats/show_selection_from_chart"
 
     # get week 0 and further for actions running
-    get :show_selected_actions_from_chart, :id => 'art_end', :index => 0
+    get :show_selected_actions_from_chart, params: {:id => 'art_end', :index => 0}
     assert_response :success
     assert_template "stats/show_selection_from_chart"
   end
@@ -401,7 +401,7 @@ class StatsControllerTest < ActionController::TestCase
     given_todos_for_stats
 
     # When I get the chart data
-    get :show_selected_actions_from_chart, {:id => "avrt", :index => 1}
+    get :show_selected_actions_from_chart, params: {:id => "avrt", :index => 1}
     assert_response :success
 
     assert_equal false, assigns['further']  # not at end
@@ -416,7 +416,7 @@ class StatsControllerTest < ActionController::TestCase
     given_todos_for_stats
 
     # When I get the chart data
-    get :show_selected_actions_from_chart, {:id => "avrt_end", :index => 1}
+    get :show_selected_actions_from_chart, params: {:id => "avrt_end", :index => 1}
     assert_response :success
 
     assert assigns['further']  # at end
@@ -431,7 +431,7 @@ class StatsControllerTest < ActionController::TestCase
     given_todos_for_stats
 
     # When I get the chart data
-    get :show_selected_actions_from_chart, {:id => "art", :index => 1}
+    get :show_selected_actions_from_chart, params: {:id => "art", :index => 1}
     assert_response :success
 
     assert_equal false, assigns['further']  # not at end
@@ -446,7 +446,7 @@ class StatsControllerTest < ActionController::TestCase
     given_todos_for_stats
 
     # When I get the chart data
-    get :show_selected_actions_from_chart, {:id => "art_end", :index => 1}
+    get :show_selected_actions_from_chart, params: {:id => "art_end", :index => 1}
     assert_response :success
 
     assert assigns['further']  # at end

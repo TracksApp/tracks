@@ -13,7 +13,7 @@ class SearchControllerTest < ActionController::TestCase
   
   def test_search_for_todo_with_tag
     login_as :admin_user
-    post :results, :search => "gates"
+    post :results, params: {:search => "gates"}
     assert_response 200
     assert_equal 3, assigns['count'], "should have found 3 todos"
   end

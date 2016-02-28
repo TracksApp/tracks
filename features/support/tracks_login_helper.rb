@@ -1,5 +1,5 @@
 class SessionBackdoorController < ::ApplicationController
-  skip_before_filter :login_required
+  skip_before_action :login_required
 
   def create
     session['user_id'] = params[:user_id]
@@ -18,8 +18,8 @@ class SessionBackdoorController < ::ApplicationController
     session['expiry_time'] = Time.now
 
     respond_to do |format|
-      format.html { render :text => "Session expired for test purposes"}
-      format.js   { render :text => "" }
+      format.html { render :body => "Session expired for test purposes"}
+      format.js   { render :body => "" }
     end
   end
 end

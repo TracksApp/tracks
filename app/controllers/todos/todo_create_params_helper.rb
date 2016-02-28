@@ -110,7 +110,7 @@ module Todos
     end
 
     def add_errors(model)
-      @errors.each {|e| model.errors[ e[:attribute] ] = e[:message] }
+      @errors.each {|e| model.errors.add(e[:attribute], e[:message]) }
     end
 
     private

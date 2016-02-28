@@ -32,9 +32,9 @@ class TodosControllerTest < ActionController::TestCase
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
+    assert_nil assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_nil assigns['context_not_done_counts'][contexts(:lab).id]
   end
 
   def test_not_done_counts_after_hiding_project
@@ -63,9 +63,9 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_deferred_count_for_project_source_view
     login_as(:admin_user)
-    xhr :post, :toggle_check, :id => 5, :_source_view => 'project'
+    post :toggle_check, xhr: true, params: {:id => 5, :_source_view => 'project'}
     assert_equal 1, assigns['remaining_deferred_or_pending_count']
-    xhr :post, :toggle_check, :id => 15, :_source_view => 'project'
+    post :toggle_check, xhr: true, params: {:id => 15, :_source_view => 'project'}
     assert_equal 0, assigns['remaining_deferred_or_pending_count']
   end
 
@@ -86,9 +86,10 @@ class TodosControllerTest < ActionController::TestCase
     # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
     login_as(:admin_user)
     assert_difference 'Todo.count' do
-      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
         "tag_list"=>"1234,5667,9876"
+      }
       # default has_many_polymorphs will fail on these high numbers as tags with those id's do not exist
     end
     t = assigns['todo']
@@ -100,9 +101,10 @@ class TodosControllerTest < ActionController::TestCase
     # by default has_many_polymorph searches for tags with given id if the tag is a number. we do not want that
     login_as(:admin_user)
     assert_difference 'Todo.count' do
-      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+      put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
         "notes"=>"", "description"=>"test tags", "due"=>"30/11/2006"},
         "tag_list"=>"a,,b"
+      }
       # default has_many_polymorphs will fail on the empty tag
     end
     t = assigns['todo']
@@ -115,7 +117,7 @@ class TodosControllerTest < ActionController::TestCase
     @user = User.find(@request.session['user_id'])
     tag = Tag.where(:name => 'foo').first.taggings
     @tagged = tag.count
-    get :tag, :name => 'foo'
+    get :tag, params: {:name => 'foo'}
     assert_response :success
     assert_equal 3, @tagged
   end
@@ -126,17 +128,17 @@ class TodosControllerTest < ActionController::TestCase
     t = assigns['todo']
     assert_equal "first.last, second", t.tag_list
 
-    get :tag, name: 'first.last.m'
+    get :tag, params: {name: 'first.last.m'}
     assert_equal "text/html", request.format, "controller should set right content type"
     assert_equal "text/html", @response.content_type
     assert_equal "first.last", assigns['tag_name'], ".m should be chomped"
 
-    get :tag, name: 'first.last.txt'
+    get :tag, params: {name: 'first.last.txt'}
     assert_equal "text/plain", request.format, "controller should set right content type"
     assert_equal "text/plain", @response.content_type
     assert_equal "first.last", assigns['tag_name'], ".txt should be chomped"
 
-    get :tag, name: 'first.last'
+    get :tag, params: {name: 'first.last'}
     assert_equal "text/html", request.format, "controller should set right content type"
     assert_equal "text/html", @response.content_type
     assert_equal "first.last", assigns['tag_name'], ":name should be correct"
@@ -144,7 +146,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_get_boolean_expression_from_parameters_of_tag_view_single_tag
     login_as(:admin_user)
-    get :tag, :name => "single"
+    get :tag, params: {:name => "single"}
     assert_equal true, assigns['single_tag'], "should recognize it is a single tag name"
     assert_equal "single", assigns['tag_expr'][0][0], "should store the single tag"
     assert_equal "single", assigns['tag_name'], "should store the single tag name"
@@ -152,21 +154,21 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags
     login_as(:admin_user)
-    get :tag, :name => "multiple", :and => "tags", :and1 => "present", :and2 => "here"
+    get :tag, params: {:name => "multiple", :and => "tags", :and1 => "present", :and2 => "here"}
     assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
     assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
   end
 
   def test_get_boolean_expression_from_parameters_of_tag_view_multiple_tags_without_digitless_and
     login_as(:admin_user)
-    get :tag, :name => "multiple", :and1 => "tags", :and2 => "present", :and3 => "here"
+    get :tag, params: {:name => "multiple", :and1 => "tags", :and2 => "present", :and3 => "here"}
     assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
     assert_equal 4, assigns['tag_expr'].size, "should have 4 AND expressions"
   end
 
   def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs
     login_as(:admin_user)
-    get :tag, :name => "multiple,tags,present"
+    get :tag, params: {:name => "multiple,tags,present"}
     assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
     assert_equal 1, assigns['tag_expr'].size, "should have 1 expressions"
     assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
@@ -174,7 +176,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_get_boolean_expression_from_parameters_of_tag_view_multiple_ORs_and_ANDS
     login_as(:admin_user)
-    get :tag, :name => "multiple,tags,present", :and => "here,is,two", :and1=>"and,three"
+    get :tag, params: {:name => "multiple,tags,present", :and => "here,is,two", :and1=>"and,three"}
     assert_equal false, assigns['single_tag'], "should recognize it has multiple tags"
     assert_equal 3, assigns['tag_expr'].size, "should have 3 expressions"
     assert_equal 3, assigns['tag_expr'][0].size, "should have 3 ORs in 1st expression"
@@ -185,18 +187,18 @@ class TodosControllerTest < ActionController::TestCase
   def test_set_right_title_tag_page
     login_as(:admin_user)
 
-    get :tag, :name => "foo"
+    get :tag, params: {:name => "foo"}
     assert_equal "foo", assigns['tag_title']
-    get :tag, :name => "foo,bar", :and => "baz"
+    get :tag, params: {:name => "foo,bar", :and => "baz"}
     assert_equal "foo,bar AND baz", assigns['tag_title']
   end
 
   def test_set_default_tag
     login_as(:admin_user)
 
-    get :tag, :name => "foo"
+    get :tag, params: {:name => "foo"}
     assert_equal "foo", assigns['initial_tags']
-    get :tag, :name => "foo,bar", :and => "baz"
+    get :tag, params: {:name => "foo,bar", :and => "baz"}
     assert_equal "foo", assigns['initial_tags']
   end
 
@@ -207,14 +209,24 @@ class TodosControllerTest < ActionController::TestCase
   def test_create_todo
     assert_difference 'Todo.count' do
       login_as(:admin_user)
-      put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+      put :create, params: {
+        :_source_view => 'todo',
+        "context_name" => "library",
+        "project_name" => "Build a working time machine",
+        "todo" => {
+          "notes" => "",
+          "description" => "Call Warren Buffet to find out how much he makes per day",
+          "due" => "30/11/2006"
+        },
+        "tag_list" => "foo bar"
+      }
     end
   end
 
   def test_create_todo_via_xml
     login_as(:admin_user)
     assert_difference 'Todo.count' do
-      put :create, :format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+      put :create, params: {:format => "xml", "request" => { "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }}
       assert_response 201
     end
   end
@@ -222,7 +234,16 @@ class TodosControllerTest < ActionController::TestCase
   def test_create_todo_via_xhr
     login_as(:admin_user)
     assert_difference 'Todo.count' do
-      xhr :put, :create, "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+      put :create, xhr: true, params: {
+        "context_name" => "library",
+        "project_name" => "Build a working time machine",
+        "todo" => {
+          "notes" => "",
+          "description" => "Call Warren Buffet to find out how much he makes per day",
+          "due" => "30/11/2006"
+        },
+        "tag_list" => "foo bar"
+      }
       assert_response 200
     end
   end
@@ -230,9 +251,10 @@ class TodosControllerTest < ActionController::TestCase
   def test_fail_to_create_todo_via_xml
     login_as(:admin_user)
     # try to create with no context, which is not valid
-    put :create, :format => "xml", "request" => {
+    put :create, params: {:format => "xml", "request" => {
       "project_name"=>"Build a working time machine",
       "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
+    }
     assert_response 409
     assert_select "errors" do
       assert_select "error", "Context can't be blank"
@@ -242,7 +264,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_create_deferred_todo
     original_todo_count = Todo.count
     login_as(:admin_user)
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2026", 'show_from' => '30/10/2026'}, "tag_list"=>"foo bar"
+    put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2026", 'show_from' => '30/10/2026'}, "tag_list"=>"foo bar"}
     assert_equal original_todo_count + 1, Todo.count
   end
 
@@ -250,8 +272,9 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+    put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
       :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'"}
+    }
 
     assert_equal start_count+3, Todo.count, "two todos should have been added"
   end
@@ -262,8 +285,9 @@ class TodosControllerTest < ActionController::TestCase
     long_string = "a" * 500
 
     start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+    put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
       :multiple_todos=>"a\nb\nmuch \"ado\" about \'nothing\'\n#{long_string}"}
+    }
 
     assert_equal start_count, Todo.count, "no todos should have been added"
   end
@@ -272,10 +296,12 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     start_count = Todo.count
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+    put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
       :multiple_todos=>"a\nb"}, :todos_sequential => 'true'
-    put :create, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
+    }
+    put :create, params: {:_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{
       :multiple_todos=>"c\nd"}, :todos_sequential => 'false'
+    }
 
     assert_equal start_count+4, Todo.count, "four todos should have been added"
 
@@ -295,7 +321,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_destroy_todo
     login_as(:admin_user)
-    xhr :post, :destroy, :id => 1, :_source_view => 'todo'
+    post :destroy, xhr: true, params: {:id => 1, :_source_view => 'todo'}
     todo = Todo.where(:id=>1).first
     assert_nil todo
   end
@@ -306,14 +332,26 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_get_edit_form_using_xhr
     login_as(:admin_user)
-    xhr :get, :edit, :id => todos(:call_bill).id
+    get :edit, xhr: true, params: {:id => todos(:call_bill).id}
     assert_response 200
   end
 
   def test_update_todo_project
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "context_name" => "library",
+      "project_name" => "Build a working time machine",
+      "todo" => {
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => "foo bar"
+    }
     t = Todo.find(1)
     assert_equal 1, t.project_id
   end
@@ -321,7 +359,19 @@ class TodosControllerTest < ActionController::TestCase
   def test_update_todo_delete_project
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar"
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "context_name" => "library",
+      "project_name" => "",
+      "todo" => {
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => "foo bar"
+    }
     t = Todo.find(1)
     assert_nil t.project_id
   end
@@ -330,14 +380,39 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index
     assert_equal 11, assigns['count']
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "context_name"=>"library", "project_name"=>"Make more money than Billy Gates", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006", "show_from"=>"30/11/2030"}, "tag_list"=>"foo bar"
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "context_name" => "library",
+      "project_name" => "Make more money than Billy Gates",
+      "todo" => {
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006",
+        "show_from" => "30/11/2030"
+      },
+      "tag_list" => "foo bar"
+    }
     assert_equal 10, assigns['down_count']
   end
 
   def test_update_todo
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "todo" => {
+        "context_id" => "1",
+        "project_id" => "2",
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => "foo, bar"
+    }
     t = Todo.find(1)
     assert_equal "Call Warren Buffet to find out how much he makes per day", t.description
     assert_equal "bar, foo", t.tag_list
@@ -349,7 +424,18 @@ class TodosControllerTest < ActionController::TestCase
   def test_update_todos_with_blank_project_name
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', :project_name => '', "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo, bar"
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      :project_name => '',
+      "todo" => {
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => "foo, bar"
+    }
     t.reload
     assert t.project.nil?
   end
@@ -357,7 +443,19 @@ class TodosControllerTest < ActionController::TestCase
   def test_update_todo_tags_to_none
     t = Todo.find(1)
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>""
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "todo" => {
+        "context_id" => "1",
+        "project_id"=>"2",
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => ""
+    }
     t = Todo.find(1)
     assert_equal true, t.tag_list.empty?
   end
@@ -366,7 +464,19 @@ class TodosControllerTest < ActionController::TestCase
     t = Todo.find(1)
     login_as(:admin_user)
     taglist = "  one  ,  two,three    ,four, 8.1.2, version1.5"
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"context_id"=>"1", "project_id"=>"2", "id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>taglist
+    post :update, xhr: true, params: {
+      :id => 1,
+      :_source_view => 'todo',
+      "todo" => {
+        "context_id" => "1",
+        "project_id" => "2",
+        "id" => "1",
+        "notes" => "",
+        "description" => "Call Warren Buffet to find out how much he makes per day",
+        "due" => "30/11/2006"
+      },
+      "tag_list" => taglist
+    }
     t = Todo.find(1)
     assert_equal "8.1.2, four, one, three, two, version1.5", t.tag_list
   end
@@ -383,7 +493,7 @@ class TodosControllerTest < ActionController::TestCase
     assert todo.hidden?, 'todo should be hidden'
 
     # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"", "todo"=>{}
+    post :update, xhr: true, params: {:id => todo.id, :_source_view => 'todo', "project_name"=>"", "todo"=>{}}
 
     assert assigns['project_changed'], "the project of the todo should be changed"
     todo = Todo.find(todo.id) # reload does not seem to work anymore
@@ -399,7 +509,7 @@ class TodosControllerTest < ActionController::TestCase
 
     assert_not_equal todo.context.id, context.id
 
-    xhr :post, :change_context, :id => todo.id, :todo=>{:context_id => context.id}, :_source_view=>"todo"
+    post :change_context, xhr: true, params: {:id => todo.id, :todo=>{:context_id => context.id}, :_source_view=>"todo"}
     assert assigns['context_changed'], "context should have changed"
     assert_equal todo.id, assigns['todo'].id, 'correct todo should have been found'
     assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
@@ -414,7 +524,7 @@ class TodosControllerTest < ActionController::TestCase
     t.show_from = "01/01/2030"
     assert t.deferred?
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>""}, "tag_list"=>""
+    post :update, xhr: true, params: {:id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>""}, "tag_list"=>""}
     t = Todo.find(1)
     assert t.active?
     assert_nil t.show_from
@@ -424,7 +534,7 @@ class TodosControllerTest < ActionController::TestCase
     t = Todo.find(1)
     assert t.active?
     login_as(:admin_user)
-    xhr :post, :update, :id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>"01/01/2030"}, "tag_list"=>""
+    post :update, xhr: true, params: {:id => 1, :_source_view => 'todo', "todo"=>{"show_from"=>"01/01/2030"}, "tag_list"=>""}
     t = Todo.find(1)
     assert t.deferred?
     assert_not_nil t.show_from
@@ -462,7 +572,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_rss_feed_not_completed
     login_as(:admin_user)
-    get :index, { :format => "rss" }
+    get :index, params: { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
     # puts @response.body
 
@@ -485,7 +595,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_atom_feed_not_completed
     login_as :admin_user
-    get :index, { :format => "atom" }
+    get :index, params: { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
     assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
     assert_select 'feed' do
@@ -501,7 +611,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_text_feed_not_completed
     login_as(:admin_user)
-    get :index, { :format => "txt" }
+    get :index, params: { :format => "txt" }
     assert_equal 'text/plain', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_text_feed 11
@@ -509,7 +619,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_ical_feed_not_completed
     login_as :admin_user
-    get :index, { :format => "ics" }
+    get :index, params: { :format => "ics" }
     assert_equal 'text/calendar', @response.content_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_ical_feed 11
@@ -517,219 +627,219 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_rss_feed_completed_in_last_week
     login_as(:admin_user)
-    get :index, { :format => "rss", :done => '7' }
+    get :index, params: { :format => "rss", :done => '7' }
 
     assert_number_of_items_in_rss_feed 3
   end
 
   def test_atom_feed_completed_in_last_week
     login_as(:admin_user)
-    get :index, { :format => "atom", :done => '7' }
+    get :index, params: { :format => "atom", :done => '7' }
 
     assert_number_of_items_in_atom_feed 3
   end
 
   def test_text_feed_completed_in_last_week
     login_as(:admin_user)
-    get :index, { :format => "text", :done => '7' }
+    get :index, params: { :format => "text", :done => '7' }
 
     assert_number_of_items_in_text_feed 3
   end
 
   def test_ical_feed_completed_in_last_week
     login_as(:admin_user)
-    get :index, { :format => "ics", :done => '7' }
+    get :index, params: { :format => "ics", :done => '7' }
 
     assert_number_of_items_in_ical_feed 3
   end
 
   def test_rss_feed_with_limit
     login_as(:admin_user)
-    get :index, { :format => "rss", :limit => '5' }
+    get :index, params: { :format => "rss", :limit => '5' }
 
     assert_number_of_items_in_rss_feed 5
   end
 
   def test_atom_feed_with_limit
     login_as(:admin_user)
-    get :index, { :format => "atom", :limit => '5' }
+    get :index, params: { :format => "atom", :limit => '5' }
 
     assert_number_of_items_in_atom_feed 5
   end
 
   def test_text_feed_with_limit
     login_as(:admin_user)
-    get :index, { :format => "text", :limit => '5' }
+    get :index, params: { :format => "text", :limit => '5' }
 
     assert_number_of_items_in_text_feed 5
   end
 
   def test_ical_feed_with_limit
     login_as(:admin_user)
-    get :index, { :format => "ics", :limit => '5' }
+    get :index, params: { :format => "ics", :limit => '5' }
 
     assert_number_of_items_in_ical_feed 5
   end
 
   def test_rss_feed_filter_by_context
     login_as(:admin_user)
-    get :index, { :format => "rss", :context_id => 2 }
+    get :index, params: { :format => "rss", :context_id => 2 }
 
     assert_number_of_items_in_rss_feed 3
   end
 
   def test_atom_feed_filter_by_context
     login_as(:admin_user)
-    get :index, { :format => "atom", :context_id => 2 }
+    get :index, params: { :format => "atom", :context_id => 2 }
 
     assert_number_of_items_in_atom_feed 3
   end
 
   def test_text_feed_filter_by_context
     login_as(:admin_user)
-    get :index, { :format => "text", :context_id => 2 }
+    get :index, params: { :format => "text", :context_id => 2 }
 
     assert_number_of_items_in_text_feed 3
   end
 
   def test_ical_feed_filter_by_context
     login_as(:admin_user)
-    get :index, { :format => "ics", :context_id => 2 }
+    get :index, params: { :format => "ics", :context_id => 2 }
 
     assert_number_of_items_in_ical_feed 3
   end
 
   def test_rss_feed_filter_by_project
     login_as(:admin_user)
-    get :index, { :format => "rss", :project_id => 2 }
+    get :index, params: { :format => "rss", :project_id => 2 }
 
     assert_number_of_items_in_rss_feed 4
   end
 
   def test_atom_feed_filter_by_project
     login_as(:admin_user)
-    get :index, { :format => "atom", :project_id => 2 }
+    get :index, params: { :format => "atom", :project_id => 2 }
 
     assert_number_of_items_in_atom_feed 4
   end
 
   def test_text_feed_filter_by_project
     login_as(:admin_user)
-    get :index, { :format => "text", :project_id => 2 }
+    get :index, params: { :format => "text", :project_id => 2 }
 
     assert_number_of_items_in_text_feed 4
   end
 
   def test_ical_feed_filter_by_project
     login_as(:admin_user)
-    get :index, { :format => "ics", :project_id => 2 }
+    get :index, params: { :format => "ics", :project_id => 2 }
 
     assert_number_of_items_in_ical_feed 4
   end
 
   def test_rss_feed_filter_by_project_and_context
     login_as(:admin_user)
-    get :index, { :format => "rss", :project_id => 2, :context_id => 2 }
+    get :index, params: { :format => "rss", :project_id => 2, :context_id => 2 }
 
     assert_number_of_items_in_rss_feed 1
   end
 
   def test_atom_feed_filter_by_project_and_context
     login_as(:admin_user)
-    get :index, { :format => "atom", :project_id => 2, :context_id => 2 }
+    get :index, params: { :format => "atom", :project_id => 2, :context_id => 2 }
 
     assert_number_of_items_in_atom_feed 1
   end
 
   def test_text_feed_filter_by_project_and_context
     login_as(:admin_user)
-    get :index, { :format => "text", :project_id => 2, :context_id => 2 }
+    get :index, params: { :format => "text", :project_id => 2, :context_id => 2 }
 
     assert_number_of_items_in_text_feed 1
   end
 
   def test_ical_feed_filter_by_project_and_context
     login_as(:admin_user)
-    get :index, { :format => "ics", :project_id => 2, :context_id => 2 }
+    get :index, params: { :format => "ics", :project_id => 2, :context_id => 2 }
 
     assert_number_of_items_in_ical_feed 1
   end
 
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "rss" }
+    get :index, params: { :format => "rss" }
     assert_response 401
   end
 
   def test_atom_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "atom" }
+    get :index, params: { :format => "atom" }
     assert_response 401
   end
 
   def test_text_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :index, { :format => "txt" }
+    get :index, params: { :format => "txt" }
     assert_response 401
   end
 
   def test_rss_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "rss", :token => 'foo'  }
+    get :index, params: { :format => "rss", :token => 'foo'  }
     assert_response 401
   end
 
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "atom", :token => 'foo'  }
+    get :index, params: { :format => "atom", :token => 'foo'  }
     assert_response 401
   end
 
   def test_text_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
-    get :index, { :format => "txt", :token => 'foo'  }
+    get :index, params: { :format => "txt", :token => 'foo'  }
     assert_response 401
   end
 
   def test_rss_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "rss", :token => users(:admin_user).token }
+    get :index, params: { :format => "rss", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_atom_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "atom", :token => users(:admin_user).token }
+    get :index, params: { :format => "atom", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "txt", :token => users(:admin_user).token }
+    get :index, params: { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_ical_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
-    get :index, { :format => "ics", :token => users(:admin_user).token }
+    get :index, params: { :format => "ics", :token => users(:admin_user).token }
     assert_response :ok
   end
 
   def test_tag_rss_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :tag, {:name => "foo", :format => "rss" }
+    get :tag, params: {:name => "foo", :format => "rss" }
     assert_response 401
   end
 
   def test_tag_atom_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :tag, {:name => "foo", :format => "atom" }
+    get :tag, params: {:name => "foo", :format => "atom" }
     assert_response 401
   end
 
   def test_tag_text_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
-    get :tag, {:name => "foo", :format => "txt" }
+    get :tag, params: {:name => "foo", :format => "txt" }
     assert_response 401
   end
 
@@ -739,18 +849,18 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_mobile_index_uses_text_html_content_type
     login_as(:admin_user)
-    get :index, { :format => "m" }
+    get :index, params: { :format => "m" }
     assert_equal 'text/html', @response.content_type
   end
 
   def test_mobile_index_assigns_down_count
     login_as(:admin_user)
-    get :index, { :format => "m" }
+    get :index, params: { :format => "m" }
     assert_equal 11, assigns['down_count']
   end
 
   def test_mobile_redirect_to_login
-    get :index, { :format => "m" }
+    get :index, params: { :format => "m" }
     assert_redirected_to login_url(:format => "m")
   end
 
@@ -760,7 +870,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_mobile_create_action_creates_a_new_todo
     login_as(:admin_user)
-    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+    post :create, params: {"format"=>"m", "todo"=>{"context_id"=>"2",
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
@@ -777,7 +887,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_mobile_create_action_redirects_to_mobile_home_page_when_successful
     login_as(:admin_user)
-    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+    post :create, params: {"format"=>"m", "todo"=>{"context_id"=>"2",
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
@@ -788,7 +898,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_mobile_create_action_renders_new_template_when_save_fails
     login_as(:admin_user)
-    post :create, {"format"=>"m", "todo"=>{"context_id"=>"2",
+    post :create, params: {"format"=>"m", "todo"=>{"context_id"=>"2",
         "due(1i)"=>"2007", "due(2i)"=>"1", "due(3i)"=>"2",
         "show_from(1i)"=>"", "show_from(2i)"=>"", "show_from(3i)"=>"",
         "project_id"=>"1",
@@ -808,7 +918,7 @@ class TodosControllerTest < ActionController::TestCase
     todo_1 = Todo.where(:recurring_todo_id => 1).first
 
     # mark todo_1 as complete by toggle_check
-    xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
+    post :toggle_check, xhr: true, params: { :id => todo_1.id, :_source_view => 'todo' }
     todo_1.reload
     assert todo_1.completed?
 
@@ -837,7 +947,7 @@ class TodosControllerTest < ActionController::TestCase
     assert recurring_todo_1.save
 
     # mark next_todo as complete by toggle_check
-    xhr :post, :toggle_check, :id => next_todo.id, :_source_view => 'todo'
+    post :toggle_check, xhr: true, params: {:id => next_todo.id, :_source_view => 'todo'}
     next_todo.reload
     assert next_todo.completed?
 
@@ -882,7 +992,7 @@ class TodosControllerTest < ActionController::TestCase
       assert recurring_todo_1.save
 
       # mark todo_1 as complete by toggle_check
-      xhr :post, :toggle_check, :id => todo_1.id, :_source_view => 'todo'
+      post :toggle_check, xhr: true, params: {:id => todo_1.id, :_source_view => 'todo'}
       todo_1.reload
       assert todo_1.completed?
 
@@ -918,7 +1028,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.save!
 
     # When I mark the todo complete
-    xhr :post, :toggle_check, :id => todo.id, :_source_view => 'todo'
+    post :toggle_check, xhr: true, params: {:id => todo.id, :_source_view => 'todo'}
     todo = Todo.find(todo.id) #reload does not seem to work here
     assert todo.completed?
 
@@ -957,7 +1067,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.save!
 
     # When I mark the todo complete
-    xhr :post, :toggle_check, :id => todo.id, :_source_view => 'todo'
+    post :toggle_check, xhr: true, params: {:id => todo.id, :_source_view => 'todo'}
     todo.reload
     assert todo.completed?
 
@@ -1004,7 +1114,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 0, successor.predecessors.size
 
     # add predecessor
-    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>predecessor.id, :successor=>successor.id, :format => "js"}
 
     assert_equal 1, successor.predecessors.count
     assert_equal predecessor.id, successor.predecessors.reload.first.id
@@ -1018,14 +1128,14 @@ class TodosControllerTest < ActionController::TestCase
     other_todo = todos(:phone_grandfather)
 
     # predecessor -> successor
-    put :add_predecessor, :predecessor=>predecessor.id, :successor=>successor.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>predecessor.id, :successor=>successor.id, :format => "js"}
 
     # other_todo -> predecessor -> successor
-    put :add_predecessor, :predecessor=>other_todo.id, :successor=>predecessor.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>other_todo.id, :successor=>predecessor.id, :format => "js"}
 
-    assert_equal 1, successor.predecessors(true).count
-    assert_equal 0, other_todo.predecessors(true).count
-    assert_equal 1, predecessor.predecessors(true).count
+    assert_equal 1, successor.predecessors.reload.count
+    assert_equal 0, other_todo.predecessors.reload.count
+    assert_equal 1, predecessor.predecessors.reload.count
     assert_equal predecessor.id, successor.predecessors.first.id
     assert_equal other_todo.id, predecessor.predecessors.first.id
   end
@@ -1040,12 +1150,12 @@ class TodosControllerTest < ActionController::TestCase
     t4 = todos(:construct_dilation_device)
 
     # t1 -> t2
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t1.id, :successor=>t2.id, :format => "js"}
     # t3 -> t4
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t3.id, :successor=>t4.id, :format => "js"}
 
     # t2 -> t4
-    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t2.id, :successor=>t4.id, :format => "js"}
 
     # should be: t1 -> t2 -> t4 and t3 -> t4
     assert t4.predecessors.map(&:id).include?(t2.id)
@@ -1063,12 +1173,12 @@ class TodosControllerTest < ActionController::TestCase
     t4 = todos(:construct_dilation_device)
 
     # t1 -> t2
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t1.id, :successor=>t2.id, :format => "js"}
     # t3 -> t4
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t3.id, :successor=>t4.id, :format => "js"}
 
     # t3 -> t2
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t2.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t3.id, :successor=>t2.id, :format => "js"}
 
     # should be: t1 -> t2 and t3 -> t4 & t2
     assert t3.successors.map(&:id).include?(t4.id)
@@ -1088,12 +1198,12 @@ class TodosControllerTest < ActionController::TestCase
 
     # create same dependency tree as previous test
     # should be: t1 -> t2 -> t4 and t3 -> t4
-    put :add_predecessor, :predecessor=>t1.id, :successor=>t2.id, :format => "js"
-    put :add_predecessor, :predecessor=>t3.id, :successor=>t4.id, :format => "js"
-    put :add_predecessor, :predecessor=>t2.id, :successor=>t4.id, :format => "js"
+    put :add_predecessor, params: {:predecessor=>t1.id, :successor=>t2.id, :format => "js"}
+    put :add_predecessor, params: {:predecessor=>t3.id, :successor=>t4.id, :format => "js"}
+    put :add_predecessor, params: {:predecessor=>t2.id, :successor=>t4.id, :format => "js"}
 
     # removing t4 as successor of t2 should leave t4 blocked with t3 as predecessor
-    put :remove_predecessor, :predecessor=>t2.id, :id=>t4.id, :format => "js"
+    put :remove_predecessor, params: {:predecessor=>t2.id, :id=>t4.id, :format => "js"}
 
     t4.reload
     assert t4.pending?, "t4 should remain pending"
@@ -1108,7 +1218,7 @@ class TodosControllerTest < ActionController::TestCase
     successor.add_predecessor(predecessor)
 
     successor.complete!
-    xhr :post, :toggle_check, :id => predecessor.id, :_source_view => 'todo'
+    post :toggle_check, xhr: true, params: {:id => predecessor.id, :_source_view => 'todo'}
 
     predecessor.reload
     successor.reload
@@ -1127,9 +1237,10 @@ class TodosControllerTest < ActionController::TestCase
 
     params=params.reverse_merge(defaults)
 
-    put :create, _source_view: params[:_source_view],
+    put :create, params: {_source_view: params[:_source_view],
       context_name: params[:context_name], project_name: params[:project_name], tag_list: params[:tag_list],
       todo: {notes: params[:notes], description: params[:description], due: params[:due], show_from: params[:show_from]}
+    }
   end
 
 end

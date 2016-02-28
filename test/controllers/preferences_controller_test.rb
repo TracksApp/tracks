@@ -14,7 +14,7 @@ class PreferencesControllerTest < ActionController::TestCase
     assert_response :success
     assert_equal I18n.l(Date.current, :format => "%Y-%m-%d"), @response.body
 
-    get(:render_date_format, {:date_format => "%A %Y"})
+    get :render_date_format, params: {:date_format => "%A %Y"}
     assert_response :success
     assert_equal I18n.l(Date.current, :format => "%A %Y"), @response.body
   end
@@ -35,7 +35,7 @@ class PreferencesControllerTest < ActionController::TestCase
 
   test "should update preferences" do
     login_as :admin_user
-    post :update, {
+    post :update, params: {
       :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe'},
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
@@ -51,7 +51,7 @@ class PreferencesControllerTest < ActionController::TestCase
 
     old_password_hash = users(:admin_user).password
 
-    post :update, {
+    post :update, params: {
       :id => users(:admin_user).id,
       :user => { :first_name => 'Jane', :last_name => 'Doe', :password => "", :password_confirmation => ""},
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
