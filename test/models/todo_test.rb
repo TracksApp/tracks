@@ -216,8 +216,6 @@ class TodoTest < ActiveSupport::TestCase
     new_todo = @not_completed1.user.todos.build(description: "test", context: @not_completed1.context, project: project)
     new_todo.save!
     assert new_todo.active?
-    # And I update the state of the todo from its project
-    new_todo.update_state_from_project
     # Then the todo should be hidden
     assert new_todo.hidden?
   end

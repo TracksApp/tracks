@@ -27,7 +27,7 @@ class Project < ActiveRecord::Base
   aasm :column => :state do
 
     state :active, :initial => true
-    state :hidden, :enter => :hide_todos, :exit => :unhide_todos
+    state :hidden
     state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
 
     event :activate do
@@ -51,24 +51,6 @@ class Project < ActiveRecord::Base
 
   def set_last_reviewed_now
     self.last_reviewed = Time.now
-  end
-
-  def hide_todos
-    todos.each do |t|
-      unless t.completed? || t.deferred?
-        t.hide!
-        t.save
-      end
-    end
-  end
-
-  def unhide_todos
-    todos.each do |t|
-      if t.project_hidden?
-        t.unhide!
-        t.save
-      end
-    end
   end
 
   def set_completed_at_date

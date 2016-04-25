@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
     else
       @contexts = current_user.contexts
       init_not_done_counts(['project'])
-      init_project_hidden_todo_counts(['project'])
+      init_hidden_todo_counts(['project'])
       if params[:only_active_with_no_next_actions]
         @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
       else
@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
     @current_projects = projects.uncompleted.select { |p| not (p.needs_review?(current_user)) }.sort_by { |p| p.last_reviewed || Time.zone.at(0) }
 
     init_not_done_counts(['project'])
-    init_project_hidden_todo_counts(['project'])
+    init_hidden_todo_counts(['project'])
     current_user.projects.cache_note_counts
 
     @page_title = t('projects.list_reviews')
@@ -220,7 +220,7 @@ class ProjectsController < ApplicationController
         @contexts = current_user.contexts
         update_state_counts
         init_data_for_sidebar
-        init_project_hidden_todo_counts(['project'])
+        init_hidden_todo_counts(['project'])
 
         template = 'projects/update'
 
@@ -292,7 +292,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.alphabetize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
-    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
+    init_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def actionize
@@ -300,7 +300,7 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.actionize(:state => @state) if @state
     @contexts = current_user.contexts
     init_not_done_counts(['project'])
-    init_project_hidden_todo_counts(['project']) if @state == 'hidden'
+    init_hidden_todo_counts(['project']) if @state == 'hidden'
   end
 
   def done_todos
