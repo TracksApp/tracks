@@ -244,6 +244,25 @@ class TodoTest < ActiveSupport::TestCase
     assert todo.reload.hidden?, "todo should be put back in hidden state"
   end
 
+  def test_dependent_todo_in_hidden_project_remains_hidden
+    todo = todos(:call_bill)
+    project=todo.project
+    project.hide!
+
+    assert todo.reload.hidden?, "todo in hidden project should be hidden"
+
+    todo2 = todos(:call_dino_ext)
+    todo.add_predecessor(todo2)
+    todo.block!
+
+    assert todo.pending?, "todo with predecessor should be blocked"
+
+    todo2.toggle_completion!
+    todo.activate!
+
+    assert todo.reload.hidden?, "todo should be put back in hidden state"
+  end
+
   def test_todo_specification_handles_null_project
     # @not_completed1 has a project
     todo_desc = @not_completed1.description
