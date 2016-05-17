@@ -52,3 +52,12 @@ body {
   color: $text-color;
   background-color: $body-bg;
 }
+
+@font-face{
+  font-family:'Glyphicons Halflings';
+  src: image-url("bootstrap/glyphicons-halflings-regular.eot");
+  src: image-url("bootstrap/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),
+  image-url("bootstrap/glyphicons-halflings-regular.woff") format("woff"),
+  image-url("bootstrap/glyphicons-halflings-regular.ttf") format("truetype"),
+  image-url("bootstrap/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg")
+}
