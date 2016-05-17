@@ -1,3 +1,12 @@
+GIT
+  remote: git://github.com/rails/activerecord-session_store.git
+  revision: 1cc0daf77d542045da4f6a43cba9ce04c27453dd
+  specs:
+    activerecord-session_store (0.1.1)
+      actionpack (>= 4.0.0, < 5)
+      activerecord (>= 4.0.0, < 5)
+      railties (>= 4.0.0, < 5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -240,6 +249,7 @@ DEPENDENCIES
   aasm
   actionpack-xml_parser (>= 1.0.1)
   activerecord-deprecated_finders
+  activerecord-session_store!
   acts_as_list
   aruba (>= 0.5.4)
   bcrypt (~> 3.1.7)

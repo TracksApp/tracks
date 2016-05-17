@@ -38,6 +38,8 @@ gem 'paperclip'
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem 'activerecord-session_store', github: 'rails/activerecord-session_store'
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
 
