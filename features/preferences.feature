@@ -36,6 +36,6 @@ Feature: Manage preferences
 
   Scenario: I can edit preferences
     When I go to the preferences page
-    Then I should see "Logout (testuser)"
+    Then I should see "testuser Preferences"
     When I edit my last name to "Tester"
-    Then I should see "Logout (Tester)"
+    Then I should see "Tester Preferences"
