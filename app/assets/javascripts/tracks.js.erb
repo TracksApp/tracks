@@ -812,6 +812,7 @@ var RecurringTodosPage = {
         autoOpen: false,
         height: 690,
         width: 750,
+        position: { my: 'top', at: 'bottom+10', of: 'nav', collision: 'none' },
         modal: true,
         buttons: {
           create: {
@@ -845,6 +846,7 @@ var RecurringTodosPage = {
         autoOpen: false,
         height: 690,
         width: 750,
+        position: { my: 'top', at: 'bottom+10', of: 'nav', collision: 'none' },
         modal: true,
         buttons: {
           "Update": {
@@ -864,7 +866,8 @@ var RecurringTodosPage = {
           RecurringTodosPage.hide_all_recurring();
           RecurringTodosPage.reset_radio();
           $('#recurring_daily').show();
-        }
+        },
+        appendTo: "#content"
       });
 
       /* change recurring period radio input on edit form */
