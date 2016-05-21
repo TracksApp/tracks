@@ -15,7 +15,7 @@
       var defaultTags = <%= default_tags_for_autocomplete.html_safe rescue '{}' %>;
       var dateFormat = '<%= date_format_for_date_picker %>';
       var weekStart = '<%= current_user.prefs.week_starts %>';
-      function relative_to_root(path) { return '/' + path; };
+      function relative_to_root(path) { return '<%= root_url %>'+path; };
       <% if current_user.prefs.refresh != 0 -%>
         setup_auto_refresh(<%= current_user.prefs["refresh"].to_i*60000 %>);
       <% end -%>
