@@ -65,6 +65,10 @@ group :development, :test do
 end
 
 group :test do
+  # Pull in the fix for rails-dom-testing issue #42
+  # TODO: Remove with Rails 5 and rails-dom-testing 2.x
+  gem 'rails-dom-testing', github: 'rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
+
   gem "factory_girl_rails"
   gem "capybara"
   gem "cucumber-rails", :require => false

@@ -1,3 +1,13 @@
+GIT
+  remote: git://github.com/rails/rails-dom-testing.git
+  revision: a64f30514ee65f172c43f42cfd4500b5e11a561a
+  ref: a64f30514ee65f172c43f42cfd4500b5e11a561a
+  specs:
+    rails-dom-testing (1.0.7)
+      activesupport (>= 4.2.0.beta, < 5.0)
+      nokogiri (~> 1.6.0)
+      rails-deprecated_sanitizer (>= 1.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -172,10 +182,6 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.7)
-      activesupport (>= 4.2.0.beta, < 5.0)
-      nokogiri (~> 1.6.0)
-      rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
     rails_autolink (1.1.6)
@@ -284,6 +290,7 @@ DEPENDENCIES
   rack-dev-mark
   rack-mini-profiler
   rails (~> 4.2.6)
+  rails-dom-testing!
   rails_autolink
   rspec-expectations
   sanitize (>= 3.0.0)
