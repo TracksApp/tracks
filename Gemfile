@@ -75,6 +75,7 @@ group :test do
   gem "rspec-expectations"
   gem "database_cleaner"
   gem "mocha", :require => false
+  gem "minitest-stub-const"
 
   gem "aruba", ">=0.5.4", :require => false
 
