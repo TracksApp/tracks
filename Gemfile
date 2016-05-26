@@ -57,7 +57,6 @@ group :development do
   gem "bullet"
   gem "rack-mini-profiler"
   gem "rack-dev-mark"
-  gem "activerecord-deprecated_finders"
 end
 
 group :development, :test do
