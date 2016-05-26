@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>4.1.11'
+gem 'rails', '~> 4.1.14'
 gem 'sass-rails', '~>4.0'
 gem 'coffee-rails', '~>4.0'
 
@@ -24,7 +24,7 @@ gem 'jquery-ui-rails'
 gem "sqlite3", group: :sqlite
 gem "mysql2", "~> 0.3.17", group: :mysql
 
-gem "RedCloth"
+gem "RedCloth", ">= 4.3.0"
 gem "sanitize", ">=3.0.0"
 gem "will_paginate"
 gem "acts_as_list"
@@ -87,3 +87,4 @@ group :test do
   # get test coverage info on codeclimate
   gem "codeclimate-test-reporter", group: :test, require: nil
 end
+gem "nokogiri", ">= 1.6.7.2"
