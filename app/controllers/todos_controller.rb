@@ -1316,7 +1316,6 @@ end
   end
 
   def get_not_done_todos
-      # TODO: refactor text feed for done todos to todos/done.text, not /todos.text?done=true
     if params[:done]
       not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
     else
