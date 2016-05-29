@@ -1,9 +1,9 @@
 atom_feed do |feed|
   feed.title(@feed_title)
   feed.subtitle(@feed_description)
-  feed.updated(@todos.last.updated_at)
+  feed.updated(@not_done_todos.last.updated_at)
 
-  @todos.each do |todo|
+  @not_done_todos.each do |todo|
     feed.entry(todo) do |entry|
       entry.title(h(todo.description))
       entry.link(todo.project ? project_url(todo.project) : context_url(todo.context))
