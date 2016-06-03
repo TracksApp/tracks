@@ -11,7 +11,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @every_month = @monthly_every_last_friday
     @yearly = recurring_todos(:birthday_reinier)
 
-    @today = Time.now.utc
+    @today = Time.zone.now
     @tomorrow = @today + 1.day
     @in_three_days = @today + 3.days
     @in_four_days = @in_three_days + 1.day    # need a day after start_from
