@@ -894,12 +894,6 @@ var RecurringTodosPage = {
     }
 };
 
-var SearchPage = {
-    setup_behavior: function() {
-        $('#search-form #search').focus();
-    }
-};
-
 /**************************************/
 /* generic Tracks functions           */
 /**************************************/
@@ -1145,7 +1139,7 @@ $(document).ready(function() {
     /* enable page specific behavior */
     $([ 'PreferencesPage', 'NotesPage', 'ProjectListPage', 'ContextListPage',
         'FeedsPage', 'RecurringTodosPage', 'TodoItems', 'TracksPages',
-        'TracksForm', 'SearchPage', 'UsersPage' ]).each(function() {
+        'TracksForm', 'UsersPage' ]).each(function() {
         eval(this+'.setup_behavior();');
     });
 

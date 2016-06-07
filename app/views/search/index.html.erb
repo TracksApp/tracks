@@ -1,6 +1,15 @@
-<div id="display_box_search">
-  <%= form_tag(search_results_path, :id => 'search-form') do %>
-    <%= text_field_tag(:search, params[:search]) %>
-    <%= submit_tag t('common.search') %>
-  <% end %>
+<div class="bootstrap">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+      <%= form_tag(search_results_path) do %>
+        <div class="form-group">
+          <%= label_tag 'Search', nil, class: 'sr-only' %>
+          <%= text_field_tag(:search, params[:search], class: 'form-control', autofocus: true) %>
+        </div>
+        <%= submit_tag t('common.search'), class: 'btn btn-primary pull-right' %>
+      <% end %>
+    </div>
+  </div>
+</div>
 </div>
