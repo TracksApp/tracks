@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~>4.1.11'
-gem 'sass-rails', '~>4.0'
-gem 'coffee-rails', '~>4.0'
+gem 'rails', '~> 4.2.6'
+gem 'sass-rails', '~> 5.0'
+gem 'coffee-rails', '~> 4.1.0'
 
 #gem 'json'
 
@@ -52,7 +52,7 @@ group :development do
   gem "spring-commands-cucumber"
   gem "yard"
 
-  gem 'tolk', '~> 1.6.0'
+  gem 'tolk', '~> 1.9.3'
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -65,12 +65,17 @@ group :development, :test do
 end
 
 group :test do
+  # Pull in the fix for rails-dom-testing issue #42
+  # TODO: Remove with Rails 5 and rails-dom-testing 2.x
+  gem 'rails-dom-testing', github: 'rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
+
   gem "factory_girl_rails"
   gem "capybara"
   gem "cucumber-rails", :require => false
   gem "rspec-expectations"
   gem "database_cleaner"
   gem "mocha", :require => false
+  gem "minitest-stub-const"
 
   gem "aruba", ">=0.5.4", :require => false
 

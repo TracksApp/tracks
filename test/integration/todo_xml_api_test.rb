@@ -24,12 +24,14 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
   def test_get_tickler_returns_all_deferred_and_pending_todos
     number = @user.todos.deferred.count + @user.todos.pending.count
     authenticated_get_xml "/tickler.xml", @user.login, @password, {}
-    assert_tag :tag => "todos", :children => { :count => number }
+    assert_select 'todos' do
+      assert_select 'todo', count: number
+    end
   end
 
   def test_get_tickler_omits_user_id
     authenticated_get_xml "/tickler.xml", @user.login, @password, {}
-    assert_no_tag :tag => "user_id"
+    assert_select 'user_id', false
   end
 
   def test_get_index_with_only_active_todos
@@ -245,7 +247,7 @@ class TodoXmlApiTest < ActionDispatch::IntegrationTest
   <project_id type='integer'>-11</project_id>
 </todo>"
     assert_response 409
-    assert_xml_select 'errors' do
+    assert_select 'errors' do
       assert_select 'error', 2
     end
   end

@@ -1,7 +1,6 @@
 require 'test_helper'
 
 class TodosControllerTest < ActionController::TestCase
-
   def test_get_index_when_not_logged_in
     get :index
     assert_redirected_to login_url
@@ -235,8 +234,8 @@ class TodosControllerTest < ActionController::TestCase
       "project_name"=>"Build a working time machine",
       "todo"=>{"notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"30/11/2006"}, "tag_list"=>"foo bar" }
     assert_response 409
-    assert_xml_select "errors" do
-      assert_xml_select "error", "Context can't be blank"
+    assert_select "errors" do
+      assert_select "error", "Context can't be blank"
     end
   end
 
@@ -467,7 +466,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal 'application/rss+xml', @response.content_type
     # puts @response.body
 
-    assert_xml_select 'rss[version="2.0"]' do
+    assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
         assert_select '>title', 'Tracks Actions'
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
@@ -488,7 +487,7 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index, { :format => "rss", :limit => '5' }
 
-    assert_xml_select 'rss[version="2.0"]' do
+    assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
         assert_select '>title', 'Tracks Actions'
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
@@ -522,15 +521,14 @@ class TodosControllerTest < ActionController::TestCase
     login_as :admin_user
     get :index, { :format => "atom" }
     assert_equal 'application/atom+xml', @response.content_type
-    # #puts @response.body
-
-    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
-      assert_xml_select '>title', 'Tracks Actions'
-      assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
-      assert_xml_select 'entry', 17 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'content[type="html"]', /.*/
-        assert_xml_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
+    assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
+    assert_select 'feed' do
+      assert_select '>title', 'Tracks Actions'
+      assert_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
+      assert_select 'entry', 17 do
+        assert_select 'title', /.+/
+        assert_select 'content[type="html"]', /.*/
+        assert_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
       end
     end
   end
@@ -846,7 +844,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.notes = "foo #{url} bar"
     todo.save!
     get :index
-    assert_select "a[href=#{url}]"
+    assert_select "a[href='#{url}']"
   end
 
   def test_link_opened_in_new_window
@@ -886,7 +884,7 @@ class TodosControllerTest < ActionController::TestCase
     todo.save!
     get :index
     assert_select("div#notes_todo_#{todo.id}", 'A link to http://github.com/.')
-    assert_select("div#notes_todo_#{todo.id} a[href=http://github.com/]", 'http://github.com/')
+    assert_select("div#notes_todo_#{todo.id} a[href='http://github.com/']", 'http://github.com/')
   end
 
   def test_format_note_link_message
@@ -895,9 +893,9 @@ class TodosControllerTest < ActionController::TestCase
     todo.raw_notes = "A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link"
     todo.save!
     get :index
-    assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt; link')
-    assert_select("div#notes_todo_#{todo.id} a", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
-    assert_select("div#notes_todo_#{todo.id} a[href=message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;]", 'message://&lt;ABCDEF-GHADB-123455-FOO-BAR@example.com&gt;')
+    assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link')
+    assert_select("div#notes_todo_#{todo.id} a", 'message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>')
+    assert_select("div#notes_todo_#{todo.id} a[href='message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>']", "message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>")
   end
 
   def test_format_note_link_onenote
@@ -908,7 +906,7 @@ class TodosControllerTest < ActionController::TestCase
     get :index
     assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
     assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a[href=onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&amp;section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&amp;page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&amp;end]", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id} a[href='onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&end']", 'link me to onenote')
   end
 
   ##############

@@ -69,16 +69,17 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
   def test_get_users_as_xml
     get '/users.xml', {}, basic_auth_headers()
     assert_response :success
-    assert_tag :tag => "users",
-               :children => { :count => 4, :only => { :tag => "user" } }
-    assert_no_tag :tag => "password"
+    assert_select 'users' do
+      assert_select 'user', count: 4
+    end
+    assert_select 'password', false
   end
 
   def test_get_user_as_xml
     get "/users/#{users(:other_user).id}.xml", {}, basic_auth_headers()
     assert_response :success
-    assert_tag :tag => "user"
-    assert_no_tag :tag => "password"
+    assert_select 'user'
+    assert_select 'password', false
   end
     
   private
