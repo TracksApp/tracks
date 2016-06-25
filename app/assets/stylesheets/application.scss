@@ -10,13 +10,12 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require jquery-ui/autocomplete
+ *= require jquery-ui/datepicker
+ *= require jquery-ui/dialog
+ *= require jquery-ui/sortable
  *= require_self
  */
-
-@import "jquery-ui/autocomplete";
-@import "jquery-ui/datepicker";
-@import "jquery-ui/dialog";
-@import "jquery-ui/sortable";
 
 @import "icons";
 
