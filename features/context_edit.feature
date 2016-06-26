@@ -51,7 +51,7 @@ Feature: Edit a context
     Then I should not see the todo "test_project todo 1"
     And I should see "changed"
 
-  @javascript 
+  @javascript @wip
   Scenario: Editing the context of the last todo will remove the todo and show empty message
     When I go to the the context page for "@pc"
     And I edit the context of "test_project todo 1" to "@laptop"

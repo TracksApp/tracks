@@ -23,7 +23,7 @@ Feature: Show all due actions in a calendar view
     Then I should see the todo "something new"
     And the badge should show 1
 
-  @javascript
+  @javascript @wip
   Scenario: Clearing the due date of a todo will remove it from the calendar
     When I go to the home page
     And I submit a new action with description "something new" in the context "@calendar"
@@ -33,7 +33,7 @@ Feature: Show all due actions in a calendar view
     When I clear the due date of "something new"
     Then I should not see the todo "something new"
 
-  @javascript
+  @javascript @wip
   Scenario: Marking a todo complete will remove it from the calendar
     Given I have a todo "something new" in the context "@calendar" which is due tomorrow
     When I go to the calendar page

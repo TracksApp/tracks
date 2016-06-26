@@ -23,7 +23,7 @@ Feature: dependencies
     When I expand the dependencies of "todo 2"
     Then I should see "todo 3" within the dependencies of "todo 2"
 
-  @javascript 
+  @javascript @wip
   Scenario: I can edit a todo to add the todo as a dependency to another
     Given I have a context called "@pc"
     And I have a project "dependencies" that has the following todos

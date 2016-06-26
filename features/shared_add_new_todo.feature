@@ -252,7 +252,7 @@ Feature: Add new next action from every page
       | context  |
       | project  |
 
-  @javascript
+  @javascript @wip
   Scenario Outline: Adding a dependency to a todo updates the successor
     Given I have a <list_type> "test" with 1 todos
     When I go to the "test" <list_type>
