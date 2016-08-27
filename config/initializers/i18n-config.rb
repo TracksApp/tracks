@@ -27,6 +27,7 @@ module I18n::Backend::Pluralization
                 n==1 ? :one : :other # default :en
             end
     end
+    key = :other if key == :few && !entry.has_key?(key) #fallback to :other if :few is missing
     raise InvalidPluralizationData.new(entry, n) unless entry.has_key?(key)
     entry[key]
   end
