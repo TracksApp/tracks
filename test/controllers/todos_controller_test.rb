@@ -461,7 +461,7 @@ class TodosControllerTest < ActionController::TestCase
   # feeds
   #######
 
-  def test_rss_feed
+  def test_rss_feed_not_completed
     login_as(:admin_user)
     get :index, { :format => "rss" }
     assert_equal 'application/rss+xml', @response.content_type
@@ -473,36 +473,205 @@ class TodosControllerTest < ActionController::TestCase
         assert_select '>description', "Actions for #{users(:admin_user).display_name}"
         assert_select 'language', 'en-us'
         assert_select 'ttl', '40'
-        assert_select 'item', 17 do
+        assert_select 'item', 11 do
           assert_select 'title', /.+/
           assert_select 'description', /.*/
           assert_select 'link', %r{http://test.host/contexts/.+}
           assert_select 'guid', %r{http://test.host/todos/.+}
-          assert_select 'pubDate', todos(:book).updated_at.to_s(:rfc822)
+          assert_select 'pubDate', todos(:call_bill_gates_every_day).created_at.to_s(:rfc822)
         end
       end
     end
+  end
+
+  def test_atom_feed_not_completed
+    login_as :admin_user
+    get :index, { :format => "atom" }
+    assert_equal 'application/atom+xml', @response.content_type
+    # #puts @response.body
+
+    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+      assert_xml_select '>title', 'Tracks Actions'
+      assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
+      assert_xml_select 'entry', 11 do
+        assert_xml_select 'title', /.+/
+        assert_xml_select 'content[type="html"]', /.*/
+        assert_xml_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
+      end
+    end
+  end
+
+  def test_text_feed_not_completed
+    login_as(:admin_user)
+    get :index, { :format => "txt" }
+    assert_equal 'text/plain', @response.content_type
+    assert !(/&nbsp;/.match(@response.body))
+    assert_number_of_items_in_text_feed 11
+  end
+
+  def test_ical_feed_not_completed
+    login_as :admin_user
+    get :index, { :format => "ics" }
+    assert_equal 'text/calendar', @response.content_type
+    assert !(/&nbsp;/.match(@response.body))
+    assert_number_of_items_in_ical_feed 11
+  end
+
+  def test_rss_feed_completed_in_last_week
+    login_as(:admin_user)
+    get :index, { :format => "rss", :done => '7' }
+
+    assert_number_of_items_in_rss_feed 3
+  end
+
+  def test_atom_feed_completed_in_last_week
+    login_as(:admin_user)
+    get :index, { :format => "atom", :done => '7' }
+
+    assert_number_of_items_in_atom_feed 3
+  end
+
+  def test_text_feed_completed_in_last_week
+    login_as(:admin_user)
+    get :index, { :format => "text", :done => '7' }
+
+    assert_number_of_items_in_text_feed 3
+  end
+
+  def test_ical_feed_completed_in_last_week
+    login_as(:admin_user)
+    get :index, { :format => "ics", :done => '7' }
+
+    assert_number_of_items_in_ical_feed 3
   end
 
   def test_rss_feed_with_limit
     login_as(:admin_user)
     get :index, { :format => "rss", :limit => '5' }
 
-    assert_xml_select 'rss[version="2.0"]' do
-      assert_select 'channel' do
-        assert_select '>title', 'Tracks Actions'
-        assert_select '>description', "Actions for #{users(:admin_user).display_name}"
-        assert_select 'item', 5 do
-          assert_select 'title', /.+/
-          assert_select 'description', /.*/
-        end
-      end
-    end
+    assert_number_of_items_in_rss_feed 5
+  end
+
+  def test_atom_feed_with_limit
+    login_as(:admin_user)
+    get :index, { :format => "atom", :limit => '5' }
+
+    assert_number_of_items_in_atom_feed 5
+  end
+
+  def test_text_feed_with_limit
+    login_as(:admin_user)
+    get :index, { :format => "text", :limit => '5' }
+
+    assert_number_of_items_in_text_feed 5
+  end
+
+  def test_ical_feed_with_limit
+    login_as(:admin_user)
+    get :index, { :format => "ics", :limit => '5' }
+
+    assert_number_of_items_in_ical_feed 5
+  end
+
+  def test_rss_feed_filter_by_context
+    login_as(:admin_user)
+    get :index, { :format => "rss", :context_id => 2 }
+
+    assert_number_of_items_in_rss_feed 3
+  end
+
+  def test_atom_feed_filter_by_context
+    login_as(:admin_user)
+    get :index, { :format => "atom", :context_id => 2 }
+
+    assert_number_of_items_in_atom_feed 3
+  end
+
+  def test_text_feed_filter_by_context
+    login_as(:admin_user)
+    get :index, { :format => "text", :context_id => 2 }
+
+    assert_number_of_items_in_text_feed 3
+  end
+
+  def test_ical_feed_filter_by_context
+    login_as(:admin_user)
+    get :index, { :format => "ics", :context_id => 2 }
+
+    assert_number_of_items_in_ical_feed 3
+  end
+
+  def test_rss_feed_filter_by_project
+    login_as(:admin_user)
+    get :index, { :format => "rss", :project_id => 2 }
+
+    assert_number_of_items_in_rss_feed 4
+  end
+
+  def test_atom_feed_filter_by_project
+    login_as(:admin_user)
+    get :index, { :format => "atom", :project_id => 2 }
+
+    assert_number_of_items_in_atom_feed 4
+  end
+
+  def test_text_feed_filter_by_project
+    login_as(:admin_user)
+    get :index, { :format => "text", :project_id => 2 }
+
+    assert_number_of_items_in_text_feed 4
+  end
+
+  def test_ical_feed_filter_by_project
+    login_as(:admin_user)
+    get :index, { :format => "ics", :project_id => 2 }
+
+    assert_number_of_items_in_ical_feed 4
+  end
+
+  def test_rss_feed_filter_by_project_and_context
+    login_as(:admin_user)
+    get :index, { :format => "rss", :project_id => 2, :context_id => 2 }
+
+    assert_number_of_items_in_rss_feed 1
+  end
+
+  def test_atom_feed_filter_by_project_and_context
+    login_as(:admin_user)
+    get :index, { :format => "atom", :project_id => 2, :context_id => 2 }
+
+    assert_number_of_items_in_atom_feed 1
+  end
+
+  def test_text_feed_filter_by_project_and_context
+    login_as(:admin_user)
+    get :index, { :format => "text", :project_id => 2, :context_id => 2 }
+
+    assert_number_of_items_in_text_feed 1
+  end
+
+  def test_ical_feed_filter_by_project_and_context
+    login_as(:admin_user)
+    get :index, { :format => "ics", :project_id => 2, :context_id => 2 }
+
+    assert_number_of_items_in_ical_feed 1
   end
 
   def test_rss_feed_not_accessible_to_anonymous_user_without_token
     login_as nil
     get :index, { :format => "rss" }
+    assert_response 401
+  end
+
+  def test_atom_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :index, { :format => "atom" }
+    assert_response 401
+  end
+
+  def test_text_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :index, { :format => "txt" }
     assert_response 401
   end
 
@@ -512,58 +681,9 @@ class TodosControllerTest < ActionController::TestCase
     assert_response 401
   end
 
-  def test_rss_feed_accessible_to_anonymous_user_with_valid_token
-    login_as nil
-    get :index, { :format => "rss", :token => users(:admin_user).token }
-    assert_response :ok
-  end
-
-  def test_atom_feed_content
-    login_as :admin_user
-    get :index, { :format => "atom" }
-    assert_equal 'application/atom+xml', @response.content_type
-    # #puts @response.body
-
-    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
-      assert_xml_select '>title', 'Tracks Actions'
-      assert_xml_select '>subtitle', "Actions for #{users(:admin_user).display_name}"
-      assert_xml_select 'entry', 17 do
-        assert_xml_select 'title', /.+/
-        assert_xml_select 'content[type="html"]', /.*/
-        assert_xml_select 'published', /(#{Regexp.escape(todos(:book).updated_at.xmlschema)}|#{Regexp.escape(projects(:moremoney).updated_at.xmlschema)})/
-      end
-    end
-  end
-
-  def test_atom_feed_not_accessible_to_anonymous_user_without_token
-    login_as nil
-    get :index, { :format => "atom" }
-    assert_response 401
-  end
-
   def test_atom_feed_not_accessible_to_anonymous_user_with_invalid_token
     login_as nil
     get :index, { :format => "atom", :token => 'foo'  }
-    assert_response 401
-  end
-
-  def test_atom_feed_accessible_to_anonymous_user_with_valid_token
-    login_as nil
-    get :index, { :format => "atom", :token => users(:admin_user).token }
-    assert_response :ok
-  end
-
-  def test_text_feed_content
-    login_as(:admin_user)
-    get :index, { :format => "txt" }
-    assert_equal 'text/plain', @response.content_type
-    assert !(/&nbsp;/.match(@response.body))
-    # #puts @response.body
-  end
-
-  def test_text_feed_not_accessible_to_anonymous_user_without_token
-    login_as nil
-    get :index, { :format => "txt" }
     assert_response 401
   end
 
@@ -573,18 +693,40 @@ class TodosControllerTest < ActionController::TestCase
     assert_response 401
   end
 
+  def test_rss_feed_accessible_to_anonymous_user_with_valid_token
+    login_as nil
+    get :index, { :format => "rss", :token => users(:admin_user).token }
+    assert_response :ok
+  end
+
+  def test_atom_feed_accessible_to_anonymous_user_with_valid_token
+    login_as nil
+    get :index, { :format => "atom", :token => users(:admin_user).token }
+    assert_response :ok
+  end
+
   def test_text_feed_accessible_to_anonymous_user_with_valid_token
     login_as nil
     get :index, { :format => "txt", :token => users(:admin_user).token }
     assert_response :ok
   end
 
-  def test_ical_feed_content
-    login_as :admin_user
-    get :index, { :format => "ics" }
-    assert_equal 'text/calendar', @response.content_type
-    assert !(/&nbsp;/.match(@response.body))
-    # #puts @response.body
+  def test_ical_feed_accessible_to_anonymous_user_with_valid_token
+    login_as nil
+    get :index, { :format => "ics", :token => users(:admin_user).token }
+    assert_response :ok
+  end
+
+  def test_tag_rss_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :tag, {:name => "foo", :format => "rss" }
+    assert_response 401
+  end
+
+  def test_tag_atom_feed_not_accessible_to_anonymous_user_without_token
+    login_as nil
+    get :tag, {:name => "foo", :format => "atom" }
+    assert_response 401
   end
 
   def test_tag_text_feed_not_accessible_to_anonymous_user_without_token

@@ -89,7 +89,29 @@ class ActionController::TestCase
     @html_document = xml_document
     assert_select(*args, &block)
   end
-  
+
+  def assert_number_of_items_in_rss_feed(expected)
+    assert_xml_select 'rss[version="2.0"]' do
+      assert_select 'channel' do
+        assert_select 'item', expected
+      end
+    end
+  end
+
+  def assert_number_of_items_in_atom_feed(expected)
+    assert_xml_select 'feed[xmlns="http://www.w3.org/2005/Atom"]' do
+      assert_xml_select 'entry', expected
+    end
+  end
+
+  def assert_number_of_items_in_text_feed(expected)
+    assert_equal expected, @response.body.scan(/^  \- /).size
+  end
+
+  def assert_number_of_items_in_ical_feed(expected)
+    assert_equal expected, @response.body.scan(/^BEGIN:VTODO/).size
+  end
+
   private
   
   def get_model_class
