@@ -7,7 +7,7 @@ xml.rss :version => "2.0" do
     xml.language 'en-us'
     xml.ttl 40
 
-    @todos.each do |todo|
+    @not_done_todos.each do |todo|
       xml.item do
         xml.title h(todo.description)
         xml.description feed_content_for_todo(todo)

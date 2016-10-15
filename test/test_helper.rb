@@ -81,6 +81,29 @@ class ActionController::TestCase
     xhr :post, :create, get_model_class.downcase => {:name => name}
   end
 
+  def assert_number_of_items_in_rss_feed(expected)
+    assert_select 'rss[version="2.0"]' do
+      assert_select 'channel' do
+        assert_select 'item', expected
+      end
+    end
+  end
+
+  def assert_number_of_items_in_atom_feed(expected)
+    assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
+    assert_select 'feed' do
+      assert_select 'entry', expected
+    end
+  end
+
+  def assert_number_of_items_in_text_feed(expected)
+    assert_equal expected, @response.body.scan(/^  \- /).size
+  end
+
+  def assert_number_of_items_in_ical_feed(expected)
+    assert_equal expected, @response.body.scan(/^BEGIN:VTODO/).size
+  end
+
   private
 
   def get_model_class
