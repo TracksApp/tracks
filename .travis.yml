@@ -2,10 +2,8 @@ language: ruby
 sudo: false
 cache: bundler
 rvm:
- - 1.9.3
- - 2.0.0
- - 2.1
- - 2.2
+ - 2.2.5
+ - 2.3.1
 addons:
   firefox: 45.8.0esr
 env:
