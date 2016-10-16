@@ -8,6 +8,7 @@ gem "coffee-rails", "~> 4.2"
 
 # todo: remove xml api
 gem "actionpack-xml_parser", "~> 2.0"
+gem "activemodel-serializers-xml", "~> 1.0.1"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', group: :therubyracer

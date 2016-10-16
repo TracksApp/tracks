@@ -56,13 +56,13 @@ class User < ApplicationRecord
               end
               def alphabetize(scope_conditions = {})
                 projects = where(scope_conditions)
-                projects.to_a.sort!{ |x,y| x.name.downcase <=> y.name.downcase }
+                projects = projects.sort_by { |p| p.name.downcase }
                 self.update_positions(projects.map{ |p| p.id })
                 return projects
               end
               def actionize(scope_conditions = {})
                 todos_in_project = where(scope_conditions).includes(:todos)
-                todos_in_project.to_a.sort_by!{ |x| [-x.todos.active.count, -x.id] }
+                todos_in_project = todos_in_project.sort_by { |x| [-x.todos.active.count, -x.id] }
                 todos_in_project.reject{ |p| p.todos.active.count > 0 }
                 sorted_project_ids = todos_in_project.map {|p| p.id}
 
