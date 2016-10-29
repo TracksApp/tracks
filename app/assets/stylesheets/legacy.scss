@@ -1157,11 +1157,11 @@ http://particletree.com/features/rediscovering-the-button-element/ */
 .widgets a, .widgets button {
     display:block;
     float: left;
-    margin:0px 7px 0 0;
+    margin:5px 10px 0 0;
     background-color:#f5f5f5;
-    border:1px solid #dedede;
-    border-top:1px solid #eee;
-    border-left:1px solid #eee;
+    border:1px solid #999;
+    border-top:1px solid #ccc;
+    border-left:1px solid #ccc;
 
     font-family:"Lucida Grande", Verdana, Geneva, Arial, sans-serif;
     font-size:80%;
@@ -1170,17 +1170,17 @@ http://particletree.com/features/rediscovering-the-button-element/ */
     font-weight:bold;
     color:#565656;
     cursor:pointer;
-    padding:3px 5px 7px 5px; /* Links */
+    padding:2px 5px 3px 5px; /* Links */
 }
 
 .widgets button{
     width:auto;
     overflow:visible;
-    padding:3px 5px 5px 5px; /* IE6 */
+    padding:2px 5px 3px 5px; /* IE6 */
 }
 
 .widgets button[type]{
-    padding:3px 5px 4px 5px; /* Firefox */
+    padding:2px 5px 3px 5px; /* Firefox */
     line-height:15px; /* Safari */
 }
 .widgets button img, .widgets a img{
@@ -1195,7 +1195,7 @@ http://particletree.com/features/rediscovering-the-button-element/ */
 
 .widgets a:hover{
     background-color:#dff4ff;
-    border:1px solid #c2e1ef;
+    border:1px solid #b7e1f3;
     color:#336699;
 }
 .widgets a:active{

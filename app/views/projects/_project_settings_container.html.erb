@@ -1,6 +1,12 @@
 <div class="container project">
   <h2 id="project_name_container">
     <%= show_project_name(project) %>
+      <div class="widgets" id="<%= dom_id(project, 'widgets') %>">
+        <a href="<%=set_reviewed_project_path(project)+"?_source_view=#{@source_view}"%>" id="<%= dom_id(project, 'reviewed') %>" class="reviewed">
+          <%=image_tag("reviewed.png", :alt => "") %>
+          Reviewed
+        </a>
+      </div>
   </h2>
     <%= show_project_settings(project) %>
 </div>
