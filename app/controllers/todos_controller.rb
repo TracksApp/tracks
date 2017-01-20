@@ -397,7 +397,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params[:id])
     @original_item_context_id = @todo.context_id
     @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
-    @context = current_user.contexts.find(params[:todo][:context_id])
+    @context = current_user.contexts.find(params[:todo][:context_id].sub! 'c', '')
     @todo.context = @context
     @saved = @todo.save
 
