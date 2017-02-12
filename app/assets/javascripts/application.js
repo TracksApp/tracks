@@ -36,4 +36,3 @@
 //= require jquery.truncator
 //= require superfish
 //= require supersubs
-//= require swf_fu
