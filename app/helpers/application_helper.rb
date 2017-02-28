@@ -96,7 +96,7 @@ module ApplicationHelper
     when "ends_on_end_date"
       starts = time_span_text(rt.start_from, I18n.t("todos.recurrence.pattern.from"))
       ends = time_span_text(rt.end_date, I18n.t("todos.recurrence.pattern.until"))
-      return starts+ends
+      return starts + " " + ends
     else
       raise Exception.new, "unknown recurrence time span selection (#{rt.ends_on})"
     end
