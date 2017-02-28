@@ -10,7 +10,7 @@ module RenderingHelper
       right = $'
       # detect already linked URLs and URLs in the middle of a tag
       if left =~ /<[^>]+$/ && right =~ /^[^>]*>/
-        # do not change string; URL is alreay linked
+        # do not change string; URL is already linked
         href
       else
         content_tag(:a, h(href), :href => h(href))
