@@ -10,7 +10,7 @@ module RenderingHelper
       right = $'
       # detect already linked URLs and URLs in the middle of a tag
       if left =~ /<[^>]+$/ && right =~ /^[^>]*>/
-        # do not change string; URL is alreay linked
+        # do not change string; URL is already linked
         href
       else
         content_tag(:a, h(href), :href => h(href))
@@ -20,8 +20,8 @@ module RenderingHelper
 
   def render_text(text)
     rendered = auto_link_message(text)
-    rendered = textile(rendered)
     rendered = auto_link(rendered, link: :urls, html: {target: '_blank'})
+    rendered = textile(rendered)
 
     relaxed_config = Sanitize::Config::RELAXED
     config = relaxed_config

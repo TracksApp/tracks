@@ -989,6 +989,17 @@ class TodosControllerTest < ActionController::TestCase
     assert_select "a[href='#{url}']"
   end
 
+  def test_url_with_double_hyphen_is_parsed_correctly
+    # issue #2056
+    login_as(:admin_user)
+    todo = users(:admin_user).todos.first
+    url = 'http://example.com/foo--bar'
+    todo.notes = "foo #{url} bar"
+    todo.save!
+    get :index
+    assert_select "a[href='#{url}']"
+  end
+
   def test_link_opened_in_new_window
     # issue #1747
     login_as(:admin_user)
@@ -1038,17 +1049,6 @@ class TodosControllerTest < ActionController::TestCase
     assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link')
     assert_select("div#notes_todo_#{todo.id} a", 'message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>')
     assert_select("div#notes_todo_#{todo.id} a[href='message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>']", "message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>")
-  end
-
-  def test_format_note_link_onenote
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.notes = ' "link me to onenote":onenote:///E:\OneNote\dir\notes.one#PAGE&section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&end'
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a[href='onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&end']", 'link me to onenote')
   end
 
   ##############
