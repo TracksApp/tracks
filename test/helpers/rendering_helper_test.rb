@@ -3,33 +3,57 @@ require "test_helper"
 class RenderingHelperTest < ActionView::TestCase
   include RenderingHelper
 
-  test "auto_link_message" do
-    html = "This is a sample with a message - message://<123456789>. There we go."
-    rendered_html = auto_link_message(html)
-    assert(
-      rendered_html.include?(%|<a href="message://&lt;123456789&gt;">message://&lt;123456789&gt;</a>|),
-      "Message was not correctly rendered. Rendered message:\n#{rendered_html}"
-    )
-
-    html = %|This message is already tagged: <a href="message://<12345>">Call bob</a>."|
-    rendered_html = auto_link_message(html)
-    assert_equal(html, rendered_html)
+  test "textile markup" do
+    actual = render_text("This is *strong*.")
+    assert_equal("<p>This is <strong>strong</strong>.</p>", actual)
   end
 
-  test "textile" do
-    raw_textile = "This should end up *strong*."
-    rendered_textile = textile(raw_textile)
-    assert_equal("<p>This should end up <strong>strong</strong>.</p>", rendered_textile)
+  test "onenote link" do
+    url = 'onenote:///E:\OneNote\dir\notes.one#PAGE&section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&end'
+    actual = render_text(url)
+    expected = '<p>onenote:///E:\OneNote\dir\notes.one#<span class="caps">PAGE</span>&amp;section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&amp;page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&amp;end</p>'
+    assert_equal(expected, actual)
   end
 
-  test "render_text" do
-    simple_textile = render_text("This is *strong*.")
-    assert_equal("<p>This is <strong>strong</strong>.</p>", simple_textile)
+  test "textile onenote link" do
+    url = '"link me to onenote":onenote://foo/bar'
+    actual = render_text(url)
+    expected = '<p><a href="onenote://foo/bar">link me to onenote</a></p>'
+    assert_equal(expected, actual)
+  end
 
-    autolink_message = render_text("Call message://<123>.")
-    assert_equal(%|<p>Call <a href="message://&lt;123&gt;">message://&lt;123&gt;</a>.</p>|, autolink_message)
+  test "tagged onenote link" do
+    actual = render_text('Link to onenote <a href="onenote://foobar">here</a>.')
+    assert_equal('<p>Link to onenote <a href="onenote://foobar">here</a>.</p>', actual)
+  end
 
-    onenote_links = render_text(%|Link to onenote <a href="onenote://foobar">here</a>.|)
-    assert_equal(%|<p>Link to onenote <a href="onenote://foobar">here</a>.</p>|, onenote_links)
+  test "message link" do
+    actual = render_text("Call message://<123>.")
+    assert_equal('<p>Call <a href="message://&lt;123&gt;">message://&lt;123&gt;</a>.</p>', actual)
+  end
+
+  test "tagged message link" do
+    expected = '<p>This message is already tagged: <a href="message://&lt;12345&gt;">Call bob</a>.</p>'
+    actual = render_text(expected)
+    assert_equal(expected, actual)
+  end
+
+  test "http link (in new window)" do
+    actual = render_text("A link to http://github.com/.")
+    expected = '<p>A link to <a target="_blank" href="http://github.com/">http://github.com/</a>.</p>'
+    assert_equal(expected, actual)
+  end
+
+  test "textile http link" do
+    actual = render_text('A link to "GitHub":http://github.com/.')
+    expected = '<p>A link to <a href="http://github.com/">GitHub</a>.</p>'
+    assert_equal(expected, actual)
+  end
+
+  test "url with slash in query string" do
+    # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
+    actual = render_text("foo http://example.com/foo?bar=/baz bar")
+    expected = '<p>foo <a target="_blank" href="http://example.com/foo?bar=/baz">http://example.com/foo?bar=/baz</a> bar</p>'
+    assert_equal(expected, actual)
   end
 end
