@@ -978,77 +978,16 @@ class TodosControllerTest < ActionController::TestCase
   # todo notes
   ############
 
-  def test_url_with_slash_in_query_string_are_parsed_correctly
-    # See http://blog.swivel.com/code/2009/06/rails-auto_link-and-certain-query-strings.html
+  def test_format_note
     login_as(:admin_user)
     todo = users(:admin_user).todos.first
-    url = 'http://example.com/foo?bar=/baz'
-    todo.notes = "foo #{url} bar"
+    todo.notes = "Normal *bold* http://foo.bar/baz"
     todo.save!
     get :index
-    assert_select "a[href='#{url}']"
-  end
-
-  def test_link_opened_in_new_window
-    # issue #1747
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    url = 'http://example.com/'
-    todo.notes = "foo #{url} bar"
-    todo.save!
-    get :index
-    assert_select "a[target='_blank']"
-  end
-
-  def test_format_note_normal
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.notes = "A normal description."
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", "A normal description.")
-  end
-
-  def test_format_note_textile
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.notes = "A *bold description*."
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", "A bold description.")
-    assert_select("div#notes_todo_#{todo.id} strong", "bold description")
-  end
-
-  def test_format_note_link
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.notes = "A link to http://github.com/."
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", 'A link to http://github.com/.')
-    assert_select("div#notes_todo_#{todo.id} a[href='http://github.com/']", 'http://github.com/')
-  end
-
-  def test_format_note_link_message
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.raw_notes = "A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link"
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", 'A Mail.app message://<ABCDEF-GHADB-123455-FOO-BAR@example.com> link')
-    assert_select("div#notes_todo_#{todo.id} a", 'message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>')
-    assert_select("div#notes_todo_#{todo.id} a[href='message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>']", "message://<ABCDEF-GHADB-123455-FOO-BAR@example.com>")
-  end
-
-  def test_format_note_link_onenote
-    login_as(:admin_user)
-    todo = users(:admin_user).todos.first
-    todo.notes = ' "link me to onenote":onenote:///E:\OneNote\dir\notes.one#PAGE&section-id={FD597D3A-3793-495F-8345-23D34A00DD3B}&page-id={1C95A1C7-6408-4804-B3B5-96C28426022B}&end'
-    todo.save!
-    get :index
-    assert_select("div#notes_todo_#{todo.id}", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a", 'link me to onenote')
-    assert_select("div#notes_todo_#{todo.id} a[href='onenote:///E:%5COneNote%5Cdir%5Cnotes.one#PAGE&section-id=%7BFD597D3A-3793-495F-8345-23D34A00DD3B%7D&page-id=%7B1C95A1C7-6408-4804-B3B5-96C28426022B%7D&end']", 'link me to onenote')
+    assert_select("div#notes_todo_#{todo.id}", "Normal bold http://foo.bar/baz")
+    assert_select("a[href='http://foo.bar/baz']", "http://foo.bar/baz")
+    assert_select("a[target='_blank']")
+    assert_select("strong", "bold")
   end
 
   ##############
