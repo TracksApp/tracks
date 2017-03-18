@@ -27,9 +27,9 @@
   function clear_form(next_steps) {
     $('#todo-form-new-action').clearForm();
     $('#todo-form-new-action').clearDeps();
-    TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
-    TracksForm.set_project_name_and_default_project_name('<%=escape_javascript @initial_project_name%>');
-    TracksForm.set_tag_list_and_default_tag_list('<%=escape_javascript @initial_tags%>');
+    TracksForm.set_context_name('<%=escape_javascript raw @initial_context_name%>');
+    TracksForm.set_project_name_and_default_project_name('<%= escape_javascript raw @initial_project_name %>');
+    TracksForm.set_tag_list_and_default_tag_list('<%=escape_javascript raw @initial_tags%>');
     $('#todo-form-new-action input:text:first').focus();
     $('#new_todo_starred_link .todo_star').removeClass('starred');
     $('#new_todo_starred').val('false');
