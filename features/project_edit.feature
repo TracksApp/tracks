@@ -68,6 +68,22 @@ Feature: Edit a project
     And I submit a new action with description "a new next action"
     Then I should see the todo "a new next action"
 
+  # Ticket #2048
+  @javascript
+  Scenario: I can change the name of the project and it should still allow me to add multiple new actions
+    Given I have a project "bananas"
+    When I go to the "bananas" project
+    And I edit the project name to "cherries"
+    And I edit the default context to "@pc"
+    And I follow "Add multiple next actions"
+    And I submit multiple actions with using
+      """
+      one new next action
+      another new next action
+      """
+    Then I should see the todo "one new next action"
+    And I should see the todo "another new next action"
+
   @javascript
   Scenario: I can change the default context of the project and it should update the new todo form
     Given I have a project "bananas" with 1 todos
