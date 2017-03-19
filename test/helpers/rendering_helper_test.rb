@@ -45,10 +45,11 @@ class RenderingHelperTest < ActionView::TestCase
   end
 
   test "http link (with double hyphens)" do
-    # not implemented, see issue #2056
-    # actual = render_text("http://foo.bar/foo--bar")
-    # expected = '<p><a target="_blank" href="http://foo.bar/foo--bar">http://foo.bar/foo--bar</a></p>'
-    # assert_equal(expected, actual)
+    skip("see issue #2056")
+
+    actual = render_text("http://foo.bar/foo--bar")
+    expected = '<p><a target="_blank" href="http://foo.bar/foo--bar">http://foo.bar/foo--bar</a></p>'
+    assert_equal(expected, actual)
   end
 
   test "textile http link" do
@@ -58,10 +59,11 @@ class RenderingHelperTest < ActionView::TestCase
   end
 
   test "textile http link (in new window)" do
-    # not implemented, see issue #2066
-    # actual = render_text('A link to "GitHub":http://github.com/.')
-    # expected = '<p>A link to <a target="_blank" href="http://github.com/">GitHub</a>.</p>'
-    # assert_equal(expected, actual)
+    skip("see issue #2066")
+
+    actual = render_text('A link to "GitHub":http://github.com/.')
+    expected = '<p>A link to <a target="_blank" href="http://github.com/">GitHub</a>.</p>'
+    assert_equal(expected, actual)
   end
 
   test "url with slash in query string" do
