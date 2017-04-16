@@ -51,7 +51,7 @@ module Todos
   private
 
     def actions
-      user.todos.not_completed.includes(included_tables).reorder("due")
+      user.todos.not_completed.includes(included_tables).reorder("show_from - due ASC")
     end
 
   end
