@@ -174,6 +174,7 @@ class ProjectsController < ApplicationController
       return
     end
     @project = current_user.projects.build(project_params)
+    @project.last_reviewed = Time.zone.now
     @go_to_project = params['go_to_project']
     @saved = @project.save
     @project_not_done_counts = { @project.id => 0 }

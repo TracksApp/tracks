@@ -23,6 +23,7 @@ class ProjectFromTodo
       p.default_context = todo.context
       p.default_tags = todo.tag_list
       p.user = todo.user
+      p.last_reviewed = Time.zone.now
     end
   end
 end
