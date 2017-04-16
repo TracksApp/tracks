@@ -441,6 +441,8 @@ class TodosController < ApplicationController
 
     provide_project_or_context_for_view
 
+    provide_project_or_context_for_view
+
     # this is set after save and cleared after reload, so save it here
     @removed_predecessors = @todo.removed_predecessors
 
