@@ -277,11 +277,9 @@ module TodosHelper
   end
 
   def grip_span(todo=@todo)
-    unless todo.completed?
-      image_tag('grip.png', :width => '7', :height => '16', :border => '0',
-        :title => t('todos.drag_action_title'),
-        :class => 'grip')
-    end
+    image_tag('grip.png', :width => '7', :height => '16', :border => '0',
+      :title => t('todos.drag_action_title'),
+      :class => 'grip')
   end
 
   def tag_list_text(todo=@todo)
