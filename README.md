@@ -1,5 +1,7 @@
 # Tracks: a GTD(TM) web application, built with Ruby on Rails
 
+[![Join the chat at https://gitter.im/TracksApp/tracks](https://badges.gitter.im/TracksApp/tracks.svg)](https://gitter.im/TracksApp/tracks?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 * Project homepage: http://www.getontracks.org/
 * Manual: http://www.getontracks.org/manual/
 * Source at GitHub: https://github.com/TracksApp/tracks
