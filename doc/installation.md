@@ -10,7 +10,9 @@ If you are not confident installing Tracks from source using these instructions,
 
 * If you’d like to install Tracks on a local machine, try the packaged version offered by [Bitnami](http://bitnami.org/stack/tracks) — it runs on Windows, Mac OS X and Linux.
 * If you’d like to run Tracks within a dedicated virtual machine, [JumpBox](http://jumpbox.com/app/tracks) provides preconfigured virtual machine images.
+* If you'd like more installation opptions, Turnkey Linux offers a pre-built appliance available in many formats.   Supported formats are open virtual format (OVA, for VMWare or VirtualBox), bare metal or virtualization installation (ISO image), [Docker](https://hub.docker.com/r/turnkeylinux/tracks-14.1/), and deployment to Amazon EC2.  A full list of options can be seen on the [Turnkey Linux page](https://github.com/turnkeylinux-apps/tracks) and there is also a [GitHub project](https://github.com/turnkeylinux-apps/tracks).
 * Several providers offer individual Tracks user accounts. A list of these providers can be found [on the wiki](https://github.com/TracksApp/tracks/wiki/Hosted-Tracks).
+
 
 (Please note that these third-party options may use older versions of Tracks.)
 
