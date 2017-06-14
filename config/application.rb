@@ -4,7 +4,8 @@ require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
-Bundler.require(*Rails.groups)
+database_group = Rails.configuration.database_configuration[Rails.env]['adapter'].sub(/\d$/, '')
+Bundler.require(*Rails.groups, database_group)
 
 require 'yaml'
 SITE_CONFIG = YAML.load_file(File.join(File.dirname(__FILE__), 'site.yml'))
