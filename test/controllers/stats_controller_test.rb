@@ -51,6 +51,9 @@ class StatsControllerTest < ActionController::TestCase
     assert_equal 4, totals.tags
     assert_equal 2, totals.unique_tags
 
+    longest_running_projects = assigns['stats'].projects.runtime
+    assert_equal longest_running_projects, users(:admin_user).projects.order('created_at').reverse
+
     Time.zone = users(:admin_user).prefs.time_zone # calculations are done in users timezone
     assert_equal 2.weeks.ago.at_midnight, totals.first_action_at.at_midnight
   end
