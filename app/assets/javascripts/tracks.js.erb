@@ -527,6 +527,10 @@ var ProjectListPage = {
     setup_behavior: function() {
         /* in-place edit of project name */
         $('span#project_name').editable(ProjectListPage.save_project_name, {
+            data:function(encoded, config){
+              var decoded = $('<p></p>').html(encoded).text();
+              return decoded; 
+            },
             style: 'padding: 0px; width=100%;',
             submit: i18n['common.ok'],
             cancel: i18n['common.cancel'],
@@ -657,6 +661,10 @@ var ContextListPage = {
     setup_behavior: function() {
         /* in place edit of context name */
         $('div.context span#context_name').editable(ContextListPage.save_context_name, {
+            data:function(encoded, config){
+              var decoded = $('<p></p>').html(encoded).text();
+              return decoded;
+            },
             style: 'padding:0px',
             submit: i18n['common.ok'],
             cancel: i18n['common.cancel']
