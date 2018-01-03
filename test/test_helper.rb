@@ -10,6 +10,14 @@ require 'rails/test_help'
   "time_zone" => "Amsterdam"  # force UTC+1 so Travis triggers time zone failures
 }.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
 
+if ENV["COVERAGE"]
+  require "codeclimate-test-reporter"
+  CodeClimate::TestReporter.start
+
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
+
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   #
