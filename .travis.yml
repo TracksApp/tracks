@@ -15,7 +15,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - "cp config/site.yml.tmpl config/site.yml"
-script: "if [[ $DATABASE_URL == mysql* ]]; then bundle exec rake ci:full; else bundle exec rake ci:lite; fi"
+script: script/cibuild
 notifications:
   email: false
   irc:
