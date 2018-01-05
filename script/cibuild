@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-if [[ "$DATABASE_URL" == 'mysql*' ]]
+export RAILS_ENV=test
+export COVERAGE=true
+
+bundle exec rake db:create
+if [[ $DATABASE_URL == mysql* ]]
 then
-    bundle exec rake ci:full
+    bundle exec cucumber --profile default && bundle exec rake test
 else
-    bundle exec rake ci:lite
+    bundle exec rake test
 fi
 
