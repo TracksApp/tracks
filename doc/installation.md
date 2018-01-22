@@ -65,6 +65,7 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
 3. Open the file `config/site.yml`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change are the `secret_token`, the administrator email address (`admin_email`), and the time zone setting. For the time zone setting you can use the command `bundle exec rake time:zones:local` to see all available timezones on your machine
 4. If you are using Windows, you may need to check the ‘shebang’ lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all Unix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
 5. If you intend to deploy Tracks using its included web server, you’ll need to uncomment and change the `serve_static_assets` configuration option to `true` in `config/site.yml` in order for the images, stylesheets, and javascript files to be served correctly.
+6. If you intend to use Tracks behind a web server or reverse proxy with https enabled, ensure to set `force_ssl` option to `true`.
 
 ## Populate your database with the Tracks schema
 
