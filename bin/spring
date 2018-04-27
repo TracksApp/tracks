@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+if ENV["RAILS_ENV"] != "production"
+  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
+end
 
 # This file loads spring without using Bundler, in order to be fast
 # It gets overwritten when you run the `spring binstub` command

@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+if ENV["RAILS_ENV"] != "production"
+  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
+end
 require_relative '../config/boot'
 require 'rake'
 Rake.application.run
