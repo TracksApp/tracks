@@ -3,7 +3,6 @@ sudo: true
 services:
   - docker
 env:
-  - DATABASE_URL=mysql2://db/tracks_test
   - DOCKER_COMPOSE_VERSION=1.21.0
 bundler_args: --without development --jobs=3 --retry=3
 before_install:
