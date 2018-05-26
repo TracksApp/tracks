@@ -9,7 +9,7 @@ services:
   web:
     build: .
     volumes:
-      - "${VOLUME:-:/app/workdir}"
+      - "${VOLUME:-.:/app/workdir}"
     ports:
       - "3000:3000"
     depends_on:
