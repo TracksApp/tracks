@@ -9,7 +9,7 @@ before_install:
   - chmod -x docker-compose
   - sudo mv docker-compose /usr/local/bin
 install: true
-script: "docker --version ; bundle exec rake ci:lite"
+script: "docker-compose build; bin/rake ci:lite"
 addons:
   apt:
     packages:
