@@ -8,6 +8,16 @@ development:
   username: root
   password:
 
+test:
+  adapter: mysql2
+  database: tracks_test
+  # set this if you are storing utf8 in your mysql database to handle strings
+  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
+  # encoding: utf8
+  host: db
+  username: root
+  password:
+
 # Production config is disabled by default
 #
 # production:
