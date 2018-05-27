@@ -9,7 +9,7 @@ before_install:
   - chmod 0755 docker-compose
   - sudo mv docker-compose /usr/local/bin
 install: true
-script: "docker-compose build; bin/rake ci:lite"
+script: "cp config/site.yml.tmpl config/site.yml ; docker-compose build ; bin/rake ci:lite"
 addons:
   apt:
     packages:
