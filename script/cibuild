@@ -1,0 +1,27 @@
+#!/bin/bash
+set -e
+
+docker_compose="docker-compose --file docker-compose.yml"
+
+function cleanup() {
+  $docker_compose down
+}
+
+trap cleanup EXIT
+
+export RAILS_ENV=test
+
+# Put a config/site.yml file in place since it's needed for operation
+cp config/site.yml.tmpl config/site.yml
+
+$docker_compose build
+$docker_compose up -d
+sleep 2 # janky way of waiting for the database to be up
+
+# Leaving this in since it will be needed for Rails 5
+# bin/rails db:environment:set RAILS_ENV=test || true
+
+bin/rake db:create db:test:prepare
+
+bin/rake ci:lite
+
