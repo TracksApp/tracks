@@ -16,7 +16,7 @@ cp config/site.yml.tmpl config/site.yml
 
 $docker_compose build
 $docker_compose up -d
-sleep 2 # janky way of waiting for the database to be up
+sleep 5 # janky way of waiting for the database to be up
 
 # Leaving this in since it will be needed for Rails 5
 # bin/rails db:environment:set RAILS_ENV=test || true
