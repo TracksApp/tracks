@@ -7,6 +7,12 @@ function cleanup() {
   $docker_compose down
 }
 
+function die() {
+    echo $@
+    exit 1
+}
+
+
 trap cleanup EXIT
 
 export RAILS_ENV=test
@@ -16,7 +22,7 @@ cp config/site.yml.tmpl config/site.yml
 
 $docker_compose build
 $docker_compose up -d
-sleep 5 # janky way of waiting for the database to be up
+script/poll-for-db
 
 # Leaving this in since it will be needed for Rails 5
 # bin/rails db:environment:set RAILS_ENV=test || true
