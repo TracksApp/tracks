@@ -19,7 +19,6 @@
 /log/*.log
 /public/assets/
 /tmp
-config/database.yml
 config/deploy.rb
 config/site.yml
 db/data.yml

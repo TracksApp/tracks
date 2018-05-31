@@ -1,22 +1,19 @@
-language: ruby
-sudo: false
-cache: bundler
-rvm:
- - 1.9.3
- - 2.0.0
- - 2.1
- - 2.2
-addons:
-  firefox: 45.8.0esr
+sudo: true
+services:
+  - docker
 env:
-  - DATABASE_URL=mysql2://localhost/tracks_test
-  - DATABASE_URL=sqlite3:db/test.sqlite3
-bundler_args: --without development --jobs=3 --retry=3
-before_script:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - "cp config/site.yml.tmpl config/site.yml"
-script: "if [[ $DATABASE_URL == mysql* ]]; then bundle exec rake ci:full; else bundle exec rake ci:lite; fi"
+  - DOCKER_COMPOSE_VERSION=1.21.0
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod 0755 docker-compose
+  - sudo mv docker-compose /usr/local/bin
+install: true
+script: "script/cibuild"
+addons:
+  apt:
+    packages:
+      - docker-ce
 notifications:
   email: false
   irc:
