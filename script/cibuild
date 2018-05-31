@@ -27,7 +27,6 @@ script/poll-for-db
 # Leaving this in since it will be needed for Rails 5
 # bin/rails db:environment:set RAILS_ENV=test || true
 
-bin/rake db:create db:test:prepare
-
+bin/rake db:reset
 bin/rake ci:lite
 
