@@ -28,5 +28,5 @@ script/poll-for-db
 # bin/rails db:environment:set RAILS_ENV=test || true
 
 bin/rake db:reset
-bin/rake ci:lite
+bin/rake test
 
