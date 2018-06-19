@@ -61,7 +61,7 @@ end
 
 group :development, :test do
   gem 'pry'
-  gem "rubocop", "~> 0.41.2", require: false
+  gem "rubocop", "~> 0.49", require: false
 end
 
 group :test do
