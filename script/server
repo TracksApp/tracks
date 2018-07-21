@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export BIND_DOCKER_SERVICE_PORTS=1
+appdir=$(cd $(dirname "$0")/.. && pwd)
+[ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
+
+bin/rails server -b 0.0.0.0

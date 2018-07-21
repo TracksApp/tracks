@@ -13,4 +13,5 @@ cmd="$@"; [ "$#" -eq 0 ] && cmd=bash
 export VOLUME="$appdir:/app"
 image=${DOCKER_IMAGE:=web}
 
-exec docker-compose run --rm $image $cmd
+port_publish=""; [ "${BIND_DOCKER_SERVICE_PORTS:-}" = 1 ] && port_publish="--service-ports"
+exec docker-compose run $port_publish --rm $image $cmd
