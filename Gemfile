@@ -49,7 +49,6 @@ gem "font-awesome-sass", "~> 4.5.0"
 
 group :development do
   gem "spring"
-  gem "spring-commands-cucumber"
   gem "yard"
 
   gem 'tolk', '~> 1.9.3'
@@ -71,7 +70,6 @@ group :test do
 
   gem "factory_girl_rails"
   gem "capybara"
-  gem "cucumber-rails", :require => false
   gem "rspec-expectations"
   gem "database_cleaner"
   gem "mocha", :require => false
