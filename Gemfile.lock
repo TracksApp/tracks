@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/rails/rails-dom-testing.git
+  remote: https://github.com/rails/rails-dom-testing.git
   revision: a64f30514ee65f172c43f42cfd4500b5e11a561a
   ref: a64f30514ee65f172c43f42cfd4500b5e11a561a
   specs:
