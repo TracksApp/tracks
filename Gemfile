@@ -14,8 +14,8 @@ gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-rails' , '~> 3.1.3'
+gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
@@ -28,7 +28,7 @@ gem "RedCloth"
 gem "sanitize", ">=3.0.0"
 gem "will_paginate"
 gem "acts_as_list"
-gem "aasm"
+gem "aasm", '~> 3.4.0'
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
