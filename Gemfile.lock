@@ -54,12 +54,6 @@ GEM
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
     arel (6.0.4)
-    aruba (0.14.5)
-      childprocess (>= 0.6.3, < 0.10.0)
-      contracts (~> 0.9)
-      ffi (~> 1.9.10)
-      rspec-expectations (>= 2.99)
-      thor (~> 0.19)
     ast (2.4.0)
     autoprefixer-rails (8.6.3)
       execjs
@@ -284,7 +278,6 @@ DEPENDENCIES
   aasm
   actionpack-xml_parser (>= 1.0.1)
   acts_as_list
-  aruba (>= 0.5.4)
   bcrypt (~> 3.1.7)
   bootstrap-sass (= 3.3.3)
   bullet

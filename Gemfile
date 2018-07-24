@@ -75,8 +75,6 @@ group :test do
   gem "mocha", :require => false
   gem "minitest-stub-const"
 
-  gem "aruba", ">=0.5.4", :require => false
-
   gem "selenium-webdriver", "~> 2.53"
 
   # uncomment to use the webkit option. This depends on Qt being installed
