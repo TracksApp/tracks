@@ -69,7 +69,6 @@ group :test do
     gem 'rails-dom-testing', :git => 'https://github.com/rails/rails-dom-testing', :ref => 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
 
   gem "factory_girl_rails"
-  gem "capybara"
   gem "rspec-expectations"
   gem "database_cleaner"
   gem "mocha", :require => false
