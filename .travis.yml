@@ -16,6 +16,6 @@ addons:
       - docker-ce
 notifications:
   email: false
-  irc:
-    channels: "chat.freenode.net#tracks"
-    skip_join: true
+  #irc:
+  #channels: "chat.freenode.net#tracks"
+  #skip_join: true
