@@ -21,7 +21,7 @@ class RichMessageExtractorTest < Minitest::Test
     extractor = RichMessageExtractor.new(message)
     assert_equal "ohai", extractor.description
     assert_equal "some-context", extractor.context
-    assert_equal nil, extractor.project
+    assert_nil extractor.project
   end
 
   def test_message_without_context
@@ -37,7 +37,7 @@ class RichMessageExtractorTest < Minitest::Test
     extractor = RichMessageExtractor.new(message)
     assert_equal "ohai", extractor.description
     assert_equal "", extractor.context
-    assert_equal nil, extractor.project
+    assert_nil extractor.project
   end
 
   def test_message_without_anything
@@ -45,7 +45,7 @@ class RichMessageExtractorTest < Minitest::Test
     extractor = RichMessageExtractor.new(message)
     assert_equal "", extractor.description
     assert_equal "", extractor.context
-    assert_equal nil, extractor.project
+    assert_nil extractor.project
   end
 
   def test_message_with_just_a_context
@@ -53,7 +53,7 @@ class RichMessageExtractorTest < Minitest::Test
     extractor = RichMessageExtractor.new(message)
     assert_equal "", extractor.description
     assert_equal "some-context", extractor.context
-    assert_equal nil, extractor.project
+    assert_nil extractor.project
   end
 
   def test_message_with_tags
@@ -65,7 +65,7 @@ class RichMessageExtractorTest < Minitest::Test
   def test_message_with_no_tags
     message = "no tags"
     extractor = RichMessageExtractor.new(message)
-    assert_equal nil, extractor.tags
+    assert_nil extractor.tags
   end
 
   def test_message_with_due_date
@@ -77,7 +77,7 @@ class RichMessageExtractorTest < Minitest::Test
   def test_message_with_no_due_date
     message = "no date"
     extractor = RichMessageExtractor.new(message)
-    assert_equal nil, extractor.due
+    assert_nil extractor.due
   end
 
   def test_message_with_show_from
@@ -89,7 +89,7 @@ class RichMessageExtractorTest < Minitest::Test
   def test_message_with_no_show_from
     message = "no tickler"
     extractor = RichMessageExtractor.new(message)
-    assert_equal nil, extractor.show_from
+    assert_nil extractor.show_from
   end
 
   def test_message_with_star

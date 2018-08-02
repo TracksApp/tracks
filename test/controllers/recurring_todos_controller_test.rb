@@ -224,7 +224,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert_equal UserTime.new(user).midnight(target_date), new_todo.due
 
     # show_from should be nil since now+4.days-10.days is in the past
-    assert_equal nil, new_todo.show_from
+    assert_nil new_todo.show_from
   end
 
   def test_last_sunday_of_march

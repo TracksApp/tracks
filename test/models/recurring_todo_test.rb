@@ -30,8 +30,8 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
     @every_day.target='show_from_date'
     # when recurrence is targeted on show_from, due date should remain nil
-    assert_equal nil, @every_day.get_due_date(nil)
-    assert_equal nil, @every_day.get_due_date(@today-3.days)
+    assert_nil @every_day.get_due_date(nil)
+    assert_nil @every_day.get_due_date(@today-3.days)
 
     # check show from get the next day
     assert_equal_dmy @today, @every_day.get_show_from_date(@today-1.days)
@@ -40,7 +40,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     @every_day.target='due_date'
     # when target on due_date, show_from is relative to due date unless show_always is true
     @every_day.show_always = true
-    assert_equal nil, @every_day.get_show_from_date(@today-1.days)
+    assert_nil @every_day.get_show_from_date(@today-1.days)
 
     @every_day.show_always = false
     @every_day.show_from_delta=10
@@ -52,7 +52,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
 
     # when show_from is nil, show always (happend in tests)
     @every_day.show_from_delta=nil
-    assert_equal nil, @every_day.get_show_from_date(@today+9.days)
+    assert_nil @every_day.get_show_from_date(@today+9.days)
 
     # TODO: show_from has no use case for daily pattern. Need to test on
     # weekly/monthly/yearly
