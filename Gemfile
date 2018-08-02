@@ -86,5 +86,5 @@ group :test do
 
   gem "simplecov"
   # get test coverage info on codeclimate
-  gem "codeclimate-test-reporter", group: :test, require: nil
+  gem "codeclimate-test-reporter", "1.0.7", group: :test, require: nil
 end
