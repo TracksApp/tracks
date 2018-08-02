@@ -9,7 +9,7 @@ class ProjectFromTodoTest < ActiveSupport::TestCase
     project = ProjectFromTodo.new(todo).create
     assert_equal project.name, todo.description
     assert_equal project.description, todo.notes
-    if project.default.context.nil?
+    if project.default_context.nil?
         assert_nil todo.context
     else
         assert_equal project.default_context, todo.context
