@@ -85,10 +85,10 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
-    factory_girl (4.9.0)
+    factory_bot (4.9.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
+    factory_bot_rails (4.9.0)
+      factory_bot (~> 4.9.0)
       railties (>= 3.0.0)
     ffi (1.9.25)
     font-awesome-sass (4.5.0)
@@ -267,7 +267,7 @@ DEPENDENCIES
   codeclimate-test-reporter
   coffee-rails (~> 4.1.0)
   database_cleaner
-  factory_girl_rails
+  factory_bot_rails
   font-awesome-sass (~> 4.5.0)
   htmlentities
   jquery-rails (~> 3.1.3)
