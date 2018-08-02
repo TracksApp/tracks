@@ -8,7 +8,11 @@ class ProjectFromTodoTest < ActiveSupport::TestCase
     todo = todos(:upgrade_rails)
     project = ProjectFromTodo.new(todo).create
     assert_equal project.name, todo.description
-    assert_equal project.description, todo.notes
+    if project.desription.nil?
+        assert_nil todo.notes
+    else
+        assert_equal project.description, todo.notes
+    end
     if project.default_context.nil?
         assert_nil todo.context
     else
