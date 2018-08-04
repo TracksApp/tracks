@@ -57,7 +57,11 @@ class PreferencesControllerTest < ActionController::TestCase
       :prefs => { :date_format => "%m-%d-%Y", :week_starts => "0", :show_number_completed => "10", :show_completed_projects_in_sidebar => "false", :show_hidden_contexts_in_sidebar => "false", :staleness_starts => "14", :due_style => "1" }}
 
     updated_admin_user = users(:admin_user).reload
-    assert_equal old_password_hash, updated_admin_user.password
+    if old_password_hash.nil?
+        assert_nil updated_admin_user.password
+    else
+        assert_equal old_password_hash, updated_admin_user.password
+    end
   end
 
 end
