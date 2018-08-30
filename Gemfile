@@ -14,8 +14,8 @@ gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+gem 'jquery-rails' , '~> 3.1.3'
+gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
 # This will prevent a native build of the driver. Building native drivers is not
@@ -28,7 +28,7 @@ gem "RedCloth"
 gem "sanitize", ">=3.0.0"
 gem "will_paginate"
 gem "acts_as_list"
-gem "aasm"
+gem "aasm", '~> 3.4.0'
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
@@ -49,7 +49,6 @@ gem "font-awesome-sass", "~> 4.5.0"
 
 group :development do
   gem "spring"
-  gem "spring-commands-cucumber"
   gem "yard"
 
   gem 'tolk', '~> 1.9.3'
@@ -61,23 +60,20 @@ end
 
 group :development, :test do
   gem 'pry'
-  gem "rubocop", "~> 0.41.2", require: false
+  gem "rubocop", "~> 0.49", require: false
 end
 
 group :test do
   # Pull in the fix for rails-dom-testing issue #42
   # TODO: Remove with Rails 5 and rails-dom-testing 2.x
-  gem 'rails-dom-testing', github: 'rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
+    gem 'rails-dom-testing', git: 'https://github.com/rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
 
-  gem "factory_girl_rails"
-  gem "capybara"
-  gem "cucumber-rails", :require => false
+
+  gem "factory_bot_rails"
   gem "rspec-expectations"
   gem "database_cleaner"
   gem "mocha", :require => false
   gem "minitest-stub-const"
-
-  gem "aruba", ">=0.5.4", :require => false
 
   gem "selenium-webdriver", "~> 2.53"
 
@@ -90,5 +86,5 @@ group :test do
 
   gem "simplecov"
   # get test coverage info on codeclimate
-  gem "codeclimate-test-reporter", group: :test, require: nil
+  gem "codeclimate-test-reporter", "1.0.7", group: :test, require: nil
 end

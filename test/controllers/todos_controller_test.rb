@@ -32,9 +32,9 @@ class TodosControllerTest < ActionController::TestCase
     p.save!
     login_as(:admin_user)
     get :index
-    assert_equal nil, assigns['project_not_done_counts'][projects(:timemachine).id]
+    assert_nil assigns['project_not_done_counts'][projects(:timemachine).id]
     assert_equal 2, assigns['context_not_done_counts'][contexts(:call).id]
-    assert_equal nil, assigns['context_not_done_counts'][contexts(:lab).id]
+    assert_nil assigns['context_not_done_counts'][contexts(:lab).id]
   end
 
   def test_not_done_counts_after_hiding_project
