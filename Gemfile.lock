@@ -279,7 +279,7 @@ DEPENDENCIES
   pry
   rack-dev-mark
   rack-mini-profiler
-  rails (~> 4.2.6)
+  rails (~> 4.2.10)
   rails-dom-testing!
   rails_autolink
   rspec-expectations
