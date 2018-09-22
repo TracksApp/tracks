@@ -38,7 +38,7 @@ class NotesController < ApplicationController
         end
       end
       format.html do
-        render :text => 'unexpected request for html rendering'
+        render :body => 'unexpected request for html rendering'
       end
     end
   end

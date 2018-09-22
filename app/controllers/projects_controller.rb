@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
         end
         format.autocomplete do
           projects = current_user.projects.active + current_user.projects.hidden
-          render :text => for_autocomplete(projects, params[:term])
+          render :body => for_autocomplete(projects, params[:term])
         end
       end
     end
@@ -237,7 +237,7 @@ class ProjectsController < ApplicationController
         @projects = current_user.projects
         template = 'projects/update_project_name'
       else
-        render :text => success_text || 'Success'
+        render :body => success_text || 'Success'
         return
       end
     else
@@ -252,7 +252,7 @@ class ProjectsController < ApplicationController
         if @saved
           render :xml => @project.to_xml( :except => :user_id )
         else
-          render :text => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+          render :body => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
         end
       }
     end
@@ -274,7 +274,7 @@ class ProjectsController < ApplicationController
         @down_count = current_user.projects.size
         update_state_counts
       }
-      format.xml { render :text => "Deleted project #{@project.name}" }
+      format.xml { render :body => "Deleted project #{@project.name}" }
     end
   end
 

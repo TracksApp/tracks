@@ -28,7 +28,7 @@ class PreferencesController < ApplicationController
 
   def render_date_format
     format = params[:date_format]
-    render :text => l(Date.current, :format => format)
+    render :body => l(Date.current, :format => format)
   end
 
 private

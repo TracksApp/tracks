@@ -52,7 +52,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_failure message, status = 404
-    render :text => message, :status => status
+    render :body => message, :status => status
   end
 
   # Returns a count of next actions in the given context or project The result
@@ -147,7 +147,7 @@ class ApplicationController < ActionController::Base
 
   def admin_login_required
     unless User.find(session['user_id']).is_admin
-      render :text => t('errors.user_unauthorized'), :status => 401
+      render :body => t('errors.user_unauthorized'), :status => 401
       return false
     end
   end

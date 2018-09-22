@@ -544,7 +544,7 @@ class TodosController < ApplicationController
         render
       end
 
-      format.xml { render :text => '200 OK. Action deleted.', :status => 200 }
+      format.xml { render :body => '200 OK. Action deleted.', :status => 200 }
 
     end
   end
@@ -710,7 +710,7 @@ class TodosController < ApplicationController
     tags_all = tags_all - tags_beginning
 
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, params[:term]) }
+      format.autocomplete { render :body => for_autocomplete(tags_beginning+tags_all, params[:term]) }
     end
   end
 
