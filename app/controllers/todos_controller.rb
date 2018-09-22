@@ -1030,12 +1030,12 @@ end
         context = current_user.contexts.find(todo.context_id)
         @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
-        remaining_actions_in_context = context.todos(true).active
+        remaining_actions_in_context = context.todos.reload.active
         remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hidden?
         @remaining_in_context = remaining_actions_in_context.count
 
         if @todo_was_deferred_or_blocked
-          actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
+          actions_in_target = current_user.contexts.find(@todo.context_id).todos.reload.active
           actions_in_target = actions_in_target.not_hidden if !context.hidden?
         else
           actions_in_target = @todo.context.todos.deferred_or_blocked
@@ -1212,7 +1212,7 @@ end
   def update_tags
     if params[:tag_list]
       @todo.tag_with(params[:tag_list])
-      @todo.tags(true) #force a reload for proper rendering
+      @todo.tags.reload #force a reload for proper rendering
     end
   end
 
