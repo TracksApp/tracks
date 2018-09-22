@@ -119,10 +119,10 @@ class ApplicationController < ActionController::Base
   # versions. Unfortunately, I ran into a lot of trouble simply registering a
   # new mime type 'text/html' with format :m because :html already is linked to
   # that mime type and the new registration was forcing all html requests to be
-  # rendered in the mobile view. The before_action and after_filter hackery
+  # rendered in the mobile view. The before_action and after_action hackery
   # below accomplishs that implementation goal by using a 'fake' mime type
   # during the processing and then setting it to 'text/html' in an
-  # 'after_filter' -LKM 2007-04-01
+  # 'after_action' -LKM 2007-04-01
   def mobile?
     return params[:format] == 'm'
   end
