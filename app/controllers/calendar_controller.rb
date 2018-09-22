@@ -1,6 +1,6 @@
 class CalendarController < ApplicationController
-  skip_before_filter :login_required, :only => [:show]
-  prepend_before_filter :login_or_feed_token_required, :only => [:show]
+  skip_before_action :login_required, :only => [:show]
+  prepend_before_action :login_or_feed_token_required, :only => [:show]
 
   def show
     @source_view = 'calendar'

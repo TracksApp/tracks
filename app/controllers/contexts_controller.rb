@@ -2,10 +2,10 @@ class ContextsController < ApplicationController
 
   helper :todos
 
-  before_filter :init, :except => [:index, :create, :destroy, :order]
-  before_filter :set_context_from_params, :only => [:update, :destroy]
-  skip_before_filter :login_required, :only => [:index]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  before_action :init, :except => [:index, :create, :destroy, :order]
+  before_action :set_context_from_params, :only => [:update, :destroy]
+  skip_before_action :login_required, :only => [:index]
+  prepend_before_action :login_or_feed_token_required, :only => [:index]
 
   def index
     @all_contexts    = current_user.contexts

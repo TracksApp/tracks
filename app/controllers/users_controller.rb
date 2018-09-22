@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
 
-  before_filter :admin_login_required, :only => [ :index, :show, :destroy ]
-  skip_before_filter :login_required, :only => [ :new, :create ]
-  prepend_before_filter :login_optional, :only => [ :new, :create ]
+  before_action :admin_login_required, :only => [ :index, :show, :destroy ]
+  skip_before_action :login_required, :only => [ :new, :create ]
+  prepend_before_action :login_optional, :only => [ :new, :create ]
 
   # GET /users GET /users.xml
   def index
