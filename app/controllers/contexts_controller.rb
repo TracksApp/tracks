@@ -151,7 +151,7 @@ class ContextsController < ApplicationController
   def order
     context_ids = params["container_context"]
     @projects = current_user.contexts.update_positions( context_ids )
-    render :nothing => true
+    head :ok
   rescue
     notify :error, $!
     redirect_to :action => 'index'

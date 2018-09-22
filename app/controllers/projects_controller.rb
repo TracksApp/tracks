@@ -281,7 +281,7 @@ class ProjectsController < ApplicationController
   def order
     project_ids = params["container_project"]
     @projects = current_user.projects.update_positions( project_ids )
-    render :nothing => true
+    head :ok
   rescue
     notify :error, $!
     redirect_to :action => 'index'
