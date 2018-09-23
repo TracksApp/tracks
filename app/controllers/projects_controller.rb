@@ -1,11 +1,11 @@
 class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes
-  before_filter :set_source_view
-  before_filter :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
-  before_filter :default_context_filter, :only => [:create, :update]
-  skip_before_filter :login_required, :only => [:index]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  before_action :set_source_view
+  before_action :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
+  before_action :default_context_filter, :only => [:create, :update]
+  skip_before_action :login_required, :only => [:index]
+  prepend_before_action :login_or_feed_token_required, :only => [:index]
 
   def index
     @source_view = params['_source_view'] || 'project_list'
@@ -48,7 +48,7 @@ class ProjectsController < ApplicationController
         end
         format.autocomplete do
           projects = current_user.projects.active + current_user.projects.hidden
-          render :text => for_autocomplete(projects, params[:term])
+          render :body => for_autocomplete(projects, params[:term])
         end
       end
     end
@@ -237,7 +237,7 @@ class ProjectsController < ApplicationController
         @projects = current_user.projects
         template = 'projects/update_project_name'
       else
-        render :text => success_text || 'Success'
+        render :body => success_text || 'Success'
         return
       end
     else
@@ -252,7 +252,7 @@ class ProjectsController < ApplicationController
         if @saved
           render :xml => @project.to_xml( :except => :user_id )
         else
-          render :text => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+          render :body => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
         end
       }
     end
@@ -274,14 +274,14 @@ class ProjectsController < ApplicationController
         @down_count = current_user.projects.size
         update_state_counts
       }
-      format.xml { render :text => "Deleted project #{@project.name}" }
+      format.xml { render :body => "Deleted project #{@project.name}" }
     end
   end
 
   def order
     project_ids = params["container_project"]
     @projects = current_user.projects.update_positions( project_ids )
-    render :nothing => true
+    head :ok
   rescue
     notify :error, $!
     redirect_to :action => 'index'

@@ -1,6 +1,6 @@
 class NotesController < ApplicationController
 
-  before_filter :set_source_view
+  before_action :set_source_view
 
   def index
     @all_notes = current_user.notes
@@ -38,7 +38,7 @@ class NotesController < ApplicationController
         end
       end
       format.html do
-        render :text => 'unexpected request for html rendering'
+        render :body => 'unexpected request for html rendering'
       end
     end
   end

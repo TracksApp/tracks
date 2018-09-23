@@ -2,10 +2,10 @@ class ContextsController < ApplicationController
 
   helper :todos
 
-  before_filter :init, :except => [:index, :create, :destroy, :order]
-  before_filter :set_context_from_params, :only => [:update, :destroy]
-  skip_before_filter :login_required, :only => [:index]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index]
+  before_action :init, :except => [:index, :create, :destroy, :order]
+  before_action :set_context_from_params, :only => [:update, :destroy]
+  skip_before_action :login_required, :only => [:index]
+  prepend_before_action :login_or_feed_token_required, :only => [:index]
 
   def index
     @all_contexts    = current_user.contexts
@@ -61,7 +61,7 @@ class ContextsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :text => 'Context not found', :status => 404 }
+        format.html { render :body => 'Context not found', :status => 404 }
         format.xml  { render :xml => '<error>Context not found</error>', :status => 404 }
       end
     end
@@ -116,7 +116,7 @@ class ContextsController < ApplicationController
           if @saved
             render :xml => @context.to_xml( :except => :user_id )
           else
-            render :text => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+            render :body => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
           end
         }
     end
@@ -142,7 +142,7 @@ class ContextsController < ApplicationController
         @down_count = current_user.contexts.size
         update_state_counts
       end
-      format.xml { render :text => "Deleted context #{@context.name}" }
+      format.xml { render :body => "Deleted context #{@context.name}" }
     end
   end
 
@@ -151,7 +151,7 @@ class ContextsController < ApplicationController
   def order
     context_ids = params["container_context"]
     @projects = current_user.contexts.update_positions( context_ids )
-    render :nothing => true
+    head :ok
   rescue
     notify :error, $!
     redirect_to :action => 'index'
@@ -222,7 +222,7 @@ class ContextsController < ApplicationController
 
   def render_autocomplete
     lambda do
-      render :text => for_autocomplete(current_user.contexts, params[:term])
+      render :body => for_autocomplete(current_user.contexts, params[:term])
     end
   end
 

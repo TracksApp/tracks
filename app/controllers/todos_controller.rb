@@ -1,8 +1,8 @@
 class TodosController < ApplicationController
 
-  skip_before_filter :login_required, :only => [:index, :tag]
-  prepend_before_filter :login_or_feed_token_required, :only => [:index, :tag]
-  append_before_filter :find_and_activate_ready, :only => [:index, :list_deferred]
+  skip_before_action :login_required, :only => [:index, :tag]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :tag]
+  append_before_action :find_and_activate_ready, :only => [:index, :list_deferred]
 
   protect_from_forgery :except => :check_deferred
 
@@ -544,7 +544,7 @@ class TodosController < ApplicationController
         render
       end
 
-      format.xml { render :text => '200 OK. Action deleted.', :status => 200 }
+      format.xml { render :body => '200 OK. Action deleted.', :status => 200 }
 
     end
   end
@@ -710,7 +710,7 @@ class TodosController < ApplicationController
     tags_all = tags_all - tags_beginning
 
     respond_to do |format|
-      format.autocomplete { render :text => for_autocomplete(tags_beginning+tags_all, params[:term]) }
+      format.autocomplete { render :body => for_autocomplete(tags_beginning+tags_all, params[:term]) }
     end
   end
 
@@ -1030,12 +1030,12 @@ end
         context = current_user.contexts.find(todo.context_id)
         @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
-        remaining_actions_in_context = context.todos(true).active
+        remaining_actions_in_context = context.todos.reload.active
         remaining_actions_in_context = remaining_actions_in_context.not_hidden if !context.hidden?
         @remaining_in_context = remaining_actions_in_context.count
 
         if @todo_was_deferred_or_blocked
-          actions_in_target = current_user.contexts.find(@todo.context_id).todos(true).active
+          actions_in_target = current_user.contexts.find(@todo.context_id).todos.reload.active
           actions_in_target = actions_in_target.not_hidden if !context.hidden?
         else
           actions_in_target = @todo.context.todos.deferred_or_blocked
@@ -1212,7 +1212,7 @@ end
   def update_tags
     if params[:tag_list]
       @todo.tag_with(params[:tag_list])
-      @todo.tags(true) #force a reload for proper rendering
+      @todo.tags.reload #force a reload for proper rendering
     end
   end
 

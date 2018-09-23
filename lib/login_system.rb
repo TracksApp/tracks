@@ -55,7 +55,7 @@ module LoginSystem
     true
   end
 
-  # When called with before_filter :login_from_cookie will check for an :auth_token
+  # When called with before_action :login_from_cookie will check for an :auth_token
   # cookie and log the user back in if appropriate
   def login_from_cookie
     return unless cookies[:auth_token] && !logged_in?
@@ -82,7 +82,7 @@ module LoginSystem
 
   # login_required filter. add
   #
-  #   before_filter :login_required
+  #   before_action :login_required
   #
   # if the controller should be under any rights management.
   # for finer access control you can overwrite
@@ -206,7 +206,7 @@ module LoginSystem
 
   def basic_auth_denied
       response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
-      render :text => t('login.unsuccessful'), :status => 401
+      render :body => t('login.unsuccessful'), :status => 401
   end
 
 private
