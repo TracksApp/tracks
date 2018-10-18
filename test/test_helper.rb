@@ -33,12 +33,6 @@ class ActiveSupport::TestCase
     @thursday = Time.zone.local(2008,6,12)
   end
 
-  # Add more helper methods to be used by all tests here...
-  def assert_value_changed(object, method = nil)
-    initial_value = object.send(method)
-    yield
-    assert_not_equal initial_value, object.send(method), "#{object}##{method}"
-  end
   # Generates a random string of ascii characters (a-z, "1 0")
   # of a given length for testing assignment to fields
   # for validation purposes
