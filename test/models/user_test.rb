@@ -162,7 +162,7 @@ class UserTest < ActiveSupport::TestCase
   def test_generate_token_updates_token
     old_token = @admin_user.token
     @admin_user.generate_token
-    assert_not_equal old_token, @admin_user.token
+    refute_equal old_token, @admin_user.token
   end
 
   def test_find_admin

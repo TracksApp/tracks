@@ -25,7 +25,7 @@ class NotesControllerTest < ActionController::TestCase
 
   	note = users(:admin_user).notes.first
 
-  	assert_not_equal "test", note.body
+	refute_equal "test", note.body
   	post :update, id: note.id, note: {body: "test"}, format: :js
   	assert_equal "test", note.reload.body
   end
