@@ -397,7 +397,7 @@ class TodosControllerTest < ActionController::TestCase
     todo = users(:admin_user).todos.active.first
     context = users(:admin_user).contexts.first
 
-    assert_not_equal todo.context.id, context.id
+    refute_equal todo.context.id, context.id
 
     xhr :post, :change_context, :id => todo.id, :todo=>{:context_id => context.id}, :_source_view=>"todo"
     assert assigns['context_changed'], "context should have changed"
@@ -820,7 +820,7 @@ class TodosControllerTest < ActionController::TestCase
     next_todo = Todo.where(:recurring_todo_id => recurring_todo_1.id, :state => 'active').first
     assert_equal "Call Bill Gates every day", next_todo.description
     # check that the new todo is not the same as todo_1
-    assert_not_equal todo_1.id, next_todo.id
+    refute_equal todo_1.id, next_todo.id
 
     # change recurrence pattern to monthly and set show_from 2 days before due
     # date this forces the next todo to be put in the tickler
@@ -891,7 +891,7 @@ class TodosControllerTest < ActionController::TestCase
       assert !new_todo.nil?, "the todo should be in the tickler"
 
       assert_equal "Call Bill Gates every day", new_todo.description
-      assert_not_equal todo_1.id, new_todo.id, "check that the new todo is not the same as todo_1"
+      refute_equal todo_1.id, new_todo.id, "check that the new todo is not the same as todo_1"
       assert !new_todo.show_from.nil?, "check that the new_todo is in the tickler to show next month"
 
       assert_equal today + 1.month, new_todo.show_from

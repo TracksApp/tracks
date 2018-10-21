@@ -160,9 +160,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_generate_token_updates_token
-    assert_value_changed @admin_user, :token do
-      @admin_user.send :generate_token
-    end
+    old_token = @admin_user.token
+    @admin_user.generate_token
+    refute_equal old_token, @admin_user.token
   end
 
   def test_find_admin

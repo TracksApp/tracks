@@ -1,6 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+require 'securerandom'
 
 # set config for tests. Overwrite those read from config/site.yml. Use inject to avoid warning about changing CONSTANT
 {
@@ -9,6 +10,7 @@ require 'rails/test_help'
   "email_dispatch" => nil,
   "time_zone" => "Amsterdam"  # force UTC+1 so Travis triggers time zone failures
 }.inject( SITE_CONFIG ) { |h, elem| h[elem[0]] = elem[1]; h }
+
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
@@ -33,24 +35,13 @@ class ActiveSupport::TestCase
     @thursday = Time.zone.local(2008,6,12)
   end
 
-  # Add more helper methods to be used by all tests here...
-  def assert_value_changed(object, method = nil)
-    initial_value = object.send(method)
-    yield
-    assert_not_equal initial_value, object.send(method), "#{object}##{method}"
-  end
   # Generates a random string of ascii characters (a-z, "1 0")
   # of a given length for testing assignment to fields
   # for validation purposes
   #
   def generate_random_string(length)
-    string = ""
-    characters = %w(a b c d e f g h i j k l m n o p q r s t u v w z y z 1\ 0)
-    length.times do
-      pick = characters[rand(26)]
-      string << pick
-    end
-    return string
+    o = [('a'..'z'), ('A'..'Z'), (0..9)].flat_map(&:to_a)
+    (0...length).map { o[rand(o.length)] }.join
   end
 
   def assert_equal_dmy(date1, date2)
