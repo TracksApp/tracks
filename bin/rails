@@ -3,6 +3,6 @@ if ENV["RAILS_ENV"] != "production"
   exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
 end
 
-APP_PATH = File.expand_path('../../config/application', __FILE__)
+APP_PATH = File.expand_path('../config/application', __dir__)
 require_relative '../config/boot'
 require 'rails/commands'

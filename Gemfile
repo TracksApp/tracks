@@ -1,20 +1,21 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.2.10'
+gem 'rails', '~> 5.0.0'
 gem 'sass-rails', '~> 5.0'
-gem 'coffee-rails', '~> 4.1.0'
+gem 'coffee-rails', '~> 4.2.0'
 
 #gem 'json'
 
 # todo: remove xml api
-gem 'actionpack-xml_parser', '>=1.0.1'
+gem "actionpack-xml_parser", "~> 2.0"
+gem "activemodel-serializers-xml", "~> 1.0.1"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails' , '~> 3.1.3'
+gem 'jquery-rails' , '~> 4.0'
 gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
@@ -32,7 +33,7 @@ gem "aasm", '~> 3.4.0'
 gem "htmlentities"
 gem "swf_fu"
 gem "rails_autolink"
-gem 'thin'
+gem 'puma', '~> 3.0'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
@@ -51,7 +52,7 @@ group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 1.9.3'
+  gem 'tolk', '~> 2.0.0'
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -59,14 +60,13 @@ group :development do
 end
 
 group :development, :test do
-  gem 'pry'
+  gem 'byebug'
   gem "rubocop", "~> 0.49", require: false
 end
 
 group :test do
-  # Pull in the fix for rails-dom-testing issue #42
-  # TODO: Remove with Rails 5 and rails-dom-testing 2.x
-    gem 'rails-dom-testing', git: 'https://github.com/rails/rails-dom-testing', ref: 'a64f30514ee65f172c43f42cfd4500b5e11a561a'
+  gem 'rails-controller-testing'
+  gem 'rails-dom-testing', '~> 2.0.0'
 
 
   gem "factory_bot_rails"
