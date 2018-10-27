@@ -383,7 +383,14 @@ class TodosControllerTest < ActionController::TestCase
     assert todo.hidden?, 'todo should be hidden'
 
     # clear project from todo: the todo should be unhidden
-    xhr :post, :update, :id => todo.id, :_source_view => 'todo', "project_name"=>"", "todo"=>{}
+    post :update, xhr: true, params: {
+      "id" => todo.id,
+      "_source_view" => 'todo',
+      "project_name" => "",
+      "todo" => {
+        "id" => todo.id
+        }
+    }
 
     assert assigns['project_changed'], "the project of the todo should be changed"
     todo = Todo.find(todo.id) # reload does not seem to work anymore
