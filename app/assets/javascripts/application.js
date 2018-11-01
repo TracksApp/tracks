@@ -14,12 +14,12 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 
-//= require jquery-ui/autocomplete
-//= require jquery-ui/datepicker
-//= require jquery-ui/dialog
-//= require jquery-ui/droppable
-//= require jquery-ui/effect-highlight
-//= require jquery-ui/sortable
+//= require jquery-ui/widgets/autocomplete
+//= require jquery-ui/widgets/datepicker
+//= require jquery-ui/widgets/dialog
+//= require jquery-ui/widgets/droppable
+//= require jquery-ui/effects/effect-highlight
+//= require jquery-ui/widgets/sortable
 
 // Stuff in app/assets
 //= require tracks

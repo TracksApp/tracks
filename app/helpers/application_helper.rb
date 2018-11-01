@@ -169,7 +169,7 @@ module ApplicationHelper
     locale = I18n.locale
     # do not include en as locale since this the available by default
     if locale && locale != :en
-      javascript_include_tag("jquery-ui/datepicker-#{locale}")
+      javascript_include_tag("jquery-ui/widgets/datepicker-#{locale}")
     end
   end
 
