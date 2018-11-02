@@ -51,12 +51,12 @@ GEM
       activerecord (>= 3.0)
     arel (7.1.4)
     ast (2.4.0)
-    autoprefixer-rails (8.6.5)
+    autoprefixer-rails (9.3.1)
       execjs
     bcrypt (3.1.12)
-    bootstrap-sass (3.3.3)
-      autoprefixer-rails (>= 5.0.0.1)
-      sass (>= 3.2.19)
+    bootstrap-sass (3.3.7)
+      autoprefixer-rails (>= 5.2.1)
+      sass (>= 3.3.4)
     builder (3.2.3)
     bullet (5.7.5)
       activesupport (>= 3.0.0)
@@ -198,7 +198,7 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.4.4)
       nokogumbo (~> 1.4)
-    sass (3.5.7)
+    sass (3.6.0)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -265,7 +265,7 @@ DEPENDENCIES
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list
   bcrypt (~> 3.1.7)
-  bootstrap-sass (= 3.3.3)
+  bootstrap-sass (= 3.3.7)
   bullet
   byebug
   codeclimate-test-reporter (= 1.0.7)
