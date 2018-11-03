@@ -43,8 +43,8 @@ class ProjectsController < ApplicationController
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
         end
         format.text do
-          # somehow passing Mime::TEXT using content_type to render does not work
-          headers['Content-Type']=Mime::TEXT.to_s
+          # somehow passing Mime[:text] using content_type to render does not work
+          headers['Content-Type']=Mime[:text].to_s
         end
         format.autocomplete do
           projects = current_user.projects.active + current_user.projects.hidden
@@ -114,9 +114,9 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.active
     respond_to do |format|
       format.text  {
-        # somehow passing Mime::TEXT using content_type to render does not work
-        headers['Content-Type']=Mime::TEXT.to_s
-        render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime::TEXT
+        # somehow passing Mime[:text] using content_type to render does not work
+        headers['Content-Type']=Mime[:text].to_s
+        render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime[:text]
       }
     end
   end
