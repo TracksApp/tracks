@@ -117,7 +117,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # check error message
     errors = assigns(:recurring_todo).errors
     assert_equal 1, errors.size
-    assert_equal errors.get(:description), ["can't be blank"]
+    assert_equal errors[:description], ["can't be blank"]
   end
 
   def test_new_recurring_todo_handles_attribs_outside_rec_todo
