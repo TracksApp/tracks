@@ -43,9 +43,9 @@ class TodosController < ApplicationController
         render :action => 'index'.freeze
       end
       format.text  do
-        # somehow passing Mime::TEXT using content_type to render does not work
-        headers['Content-Type'.freeze]=Mime::TEXT.to_s
-        render :content_type => Mime::TEXT
+        # somehow passing Mime[:text] using content_type to render does not work
+        headers['Content-Type'.freeze]=Mime[:text].to_s
+        render :content_type => Mime[:text]
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
@@ -670,7 +670,7 @@ class TodosController < ApplicationController
         cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
       }
       format.text {
-        render :action => 'index', :layout => false, :content_type => Mime::TEXT
+        render :action => 'index', :layout => false, :content_type => Mime[:text]
       }
     end
   end

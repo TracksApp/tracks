@@ -13,7 +13,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     rc = RecurringTodo.find(1)
     todo = rc.todos.first
 
-    xhr :post, :destroy, :id => 1, :_source_view => 'todo'
+    post :destroy, xhr: true, params: { :id => 1, :_source_view => 'todo' }
 
     begin
       rc = RecurringTodo.find(1)
@@ -30,7 +30,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     orig_rt_count = RecurringTodo.count
     orig_todo_count = Todo.count
-    put :create,
+    put :create, params: {
       "context_name"=>"library",
       "project_name"=>"Build a working time machine",
       "recurring_todo" =>
@@ -63,6 +63,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_selector"=>"yearly_every_x_day"
     },
       "tag_list"=>"one, two, three, four", :format => :js
+    }
 
     # check new recurring todo added
     assert_equal orig_rt_count+1, RecurringTodo.count
@@ -74,7 +75,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     orig_rt_count = RecurringTodo.count
     orig_todo_count = Todo.count
-    put :create,
+    put :create, params: {
       "context_name"=>"library",
       "project_name"=>"Build a working time machine",
       "recurring_todo" =>
@@ -107,6 +108,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_selector"=>"yearly_every_x_day"
     },
       "tag_list"=>"one, two, three, four", :format => :js
+    }
 
     # check no new recurring todo added
     assert_equal orig_rt_count, RecurringTodo.count
@@ -115,7 +117,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # check error message
     errors = assigns(:recurring_todo).errors
     assert_equal 1, errors.size
-    assert_equal errors.get(:description), ["can't be blank"]
+    assert_equal errors[:description], ["can't be blank"]
   end
 
   def test_new_recurring_todo_handles_attribs_outside_rec_todo
@@ -124,7 +126,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     # check new rec todo is not there
     assert_nil RecurringTodo.where(:description => "new recurrence pattern").first
 
-    put :create,
+    put :create, params: {
       "context_name"=>"library",
       "project_name"=>"Build a working time machine",
       "recurring_todo" =>
@@ -157,6 +159,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_selector"=>"yearly_every_x_day"
     },
       "tag_list"=>"one, two, three, four", :format => :js
+    }
 
     new_rec_todo = RecurringTodo.where(:description => "new recurrence pattern").first
 
@@ -171,7 +174,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
 
     # mark as complete
-    xhr :post, :toggle_check, :id=>1, :_source_view=>""
+    post :toggle_check, xhr: true, params: { :id=>1, :_source_view=>"" }
     recurring_todo_1 = RecurringTodo.find(1)
     assert recurring_todo_1.completed?
 
@@ -183,7 +186,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     todo_count = Todo.count
 
     # mark as active
-    xhr :post, :toggle_check, :id=>1, :_source_view=>""
+    post :toggle_check, xhr: true, params: { :id=>1, :_source_view=>"" }
 
     recurring_todo_1 = RecurringTodo.find(1) # reload seems to not work
     assert recurring_todo_1.active?, "recurring todo should be active but is #{recurring_todo_1.aasm.current_state}"
@@ -213,8 +216,8 @@ class RecurringTodosControllerTest < ActionController::TestCase
     assert @yearly.save
 
     # toggle twice to force generation of new todo
-    xhr :post, :toggle_check, :id=>5, :_source_view=>""
-    xhr :post, :toggle_check, :id=>5, :_source_view=>""
+    post :toggle_check, xhr: true, params: { :id=>5, :_source_view=>"" }
+    post :toggle_check, xhr: true, params: { :id=>5, :_source_view=>"" }
 
     new_todo = Todo.where(:recurring_todo_id => 5).first
 
@@ -238,7 +241,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       orig_rt_count = RecurringTodo.count
       orig_todo_count = Todo.count
 
-      put :create,
+      put :create, params: {
         "context_name"=>"library",
         "project_name"=>"Build a working time machine",
         "recurring_todo" =>
@@ -271,6 +274,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "yearly_selector"=>"yearly_every_xth_day"
       },
         "tag_list"=>"one, two, three, four", :format => :js
+      }
 
       # check new recurring todo added
       assert_equal orig_rt_count+1, RecurringTodo.count
@@ -292,7 +296,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     orig_rt_count = RecurringTodo.count
     orig_todo_count = Todo.count
 
-    put :create,
+    put :create, params: {
       "context_name"=>"library",
       "project_name"=>"Build a working time machine",
       "recurring_todo" =>
@@ -325,6 +329,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "yearly_selector"=>"yearly_every_xth_day"
     },
       "tag_list"=>"one, two, three, four", :format => :js
+    }
 
     # check new recurring todo added
     assert_equal orig_rt_count+1, RecurringTodo.count
@@ -344,7 +349,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
 
       login_as(:admin_user)
 
-      put :create,
+      put :create, params: {
         "context_name"=>"library",
         "project_name"=>"Build a working time machine",
         "recurring_todo" =>
@@ -377,6 +382,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
         "yearly_selector"=>"yearly_every_x_day"
       },
         "tag_list"=>"one, two, three, four", format: :js
+      }
 
       assert_equal "new recurrence pattern", assigns['recurring_todo'].description
       assert_equal "2013-01-02 00:00:00 +0000", assigns['recurring_todo'].start_from.to_s
@@ -419,7 +425,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     rt = recurring_todos(:call_bill_gates_every_day)
 
-    put :update,
+    put :update, params: {
       "recurring_todo" => {
         "description"        => "changed",
         "daily_selector"     => "daily_every_x_day",
@@ -436,6 +442,7 @@ class RecurringTodosControllerTest < ActionController::TestCase
       "id"                             => "#{rt.id}",
       "context_name"                   => "library",
       format: :js
+    }
 
     assert_equal "changed", rt.reload.description
   end

@@ -29,9 +29,9 @@ class StoriesTest < ActionDispatch::IntegrationTest
       get "/signup"
       assert_response :success
       assert_template "users/new"
-      post "/users", :user => {:login => "newbie",
-                                    :password => "newbiepass",
-                                    :password_confirmation => "newbiepass"}
+      post "/users", params: { :user => {:login => "newbie",
+                                         :password => "newbiepass",
+                                         :password_confirmation => "newbiepass"} }
       assert_response :redirect
       follow_redirect!
       assert_response :success
@@ -47,9 +47,9 @@ class StoriesTest < ActionDispatch::IntegrationTest
 
       def logs_in_as(user,plain_pass)
         @user = user
-        post "/login", :user_login => @user.login,
-                      :user_password => plain_pass,
-                      :user_noexpiry => 'n'
+        post "/login", params: { :user_login => @user.login,
+                                 :user_password => plain_pass,
+                                 :user_noexpiry => 'n' }
         assert_response :redirect
         follow_redirect!
         assert_response :success
@@ -75,7 +75,7 @@ class StoriesTest < ActionDispatch::IntegrationTest
       end
 
       def signs_up_with(options)
-        post "/users", options
+        post "/users", params: options
         assert_response :redirect
         follow_redirect!
         assert_response :success

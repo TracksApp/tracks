@@ -108,7 +108,7 @@ module Tracks
 
     def normalize(attributes)
       # make sure the hash keys are all symbols
-      Hash[attributes.map{|k,v| [k.to_sym,v]}]
+      attributes.transform_keys(&:to_sym)
     end
 
     def safe_attributes

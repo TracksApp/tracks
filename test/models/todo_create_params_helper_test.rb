@@ -6,13 +6,13 @@ class TodoCreateParamsHelperTest < ActiveSupport::TestCase
   def test_works_with_request_as_root_hash_entry
     params =  ActionController::Parameters.new({'request' => { 'todo' => { 'description' => 'foo'}}})
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
-    assert_equal({'description' => 'foo'}, params_helper.attributes)
+    assert_equal({'description' => 'foo'}, params_helper.attributes.to_h)
   end
 
   def test_works_with_todo_as_root_hash_entry
     params = ActionController::Parameters.new({ 'todo' => { 'description' => 'foo'}})
     params_helper = Todos::TodoCreateParamsHelper.new(params, users(:admin_user))
-    assert_equal({'description' => 'foo'}, params_helper.attributes)
+    assert_equal({'description' => 'foo'}, params_helper.attributes.to_h)
   end
 
   def test_show_from_accessor
