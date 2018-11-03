@@ -1039,9 +1039,9 @@ class TodosControllerTest < ActionController::TestCase
     # other_todo -> predecessor -> successor
     put :add_predecessor, params: { :predecessor=>other_todo.id, :successor=>predecessor.id, :format => "js" }
 
-    assert_equal 1, successor.predecessors(true).count
-    assert_equal 0, other_todo.predecessors(true).count
-    assert_equal 1, predecessor.predecessors(true).count
+    assert_equal 1, successor.predecessors.reload.count
+    assert_equal 0, other_todo.predecessors.reload.count
+    assert_equal 1, predecessor.predecessors.reload.count
     assert_equal predecessor.id, successor.predecessors.first.id
     assert_equal other_todo.id, predecessor.predecessors.first.id
   end
