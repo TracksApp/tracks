@@ -1,4 +1,4 @@
-class Attachment < ActiveRecord::Base
+class Attachment < ApplicationRecord
   belongs_to :todo, touch: true
 
   has_attached_file :file,

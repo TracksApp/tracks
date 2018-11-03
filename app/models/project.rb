@@ -1,4 +1,4 @@
-class Project < ActiveRecord::Base
+class Project < ApplicationRecord
   has_many :todos, -> {order("todos.due IS NULL, todos.due ASC, todos.created_at ASC")}, dependent: :delete_all
   has_many :notes, -> {order "created_at DESC"}, dependent: :delete_all
   has_many :recurring_todos

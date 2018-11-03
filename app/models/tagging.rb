@@ -1,7 +1,7 @@
 
 # The Tagging join model.
 
-class Tagging < ActiveRecord::Base
+class Tagging < ApplicationRecord
 
   belongs_to :tag
   belongs_to :taggable, :polymorphic => true, :touch => true
