@@ -1,4 +1,4 @@
-class Todo < ActiveRecord::Base
+class Todo < ApplicationRecord
 
   MAX_DESCRIPTION_LENGTH = 300
   MAX_NOTES_LENGTH = 60000

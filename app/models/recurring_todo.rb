@@ -1,4 +1,4 @@
-class RecurringTodo < ActiveRecord::Base
+class RecurringTodo < ApplicationRecord
   belongs_to :context
   belongs_to :project
   belongs_to :user
