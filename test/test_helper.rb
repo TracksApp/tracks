@@ -69,7 +69,7 @@ class ActionController::TestCase
   end
 
   def ajax_create(name)
-    xhr :post, :create, get_model_class.downcase => {:name => name}
+    post :create, xhr: true, params: { get_model_class.downcase => {:name => name} }
   end
 
   def assert_number_of_items_in_rss_feed(expected)
@@ -110,7 +110,7 @@ end
 class ActionDispatch::IntegrationTest
 
   def authenticated_post_xml(url, username, password, parameters, headers = {})
-    post url, parameters,
+    post url, params: parameters, headers:
         { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
           'ACCEPT' => 'application/xml',
           'CONTENT_TYPE' => 'application/xml'
@@ -118,7 +118,7 @@ class ActionDispatch::IntegrationTest
   end
 
   def authenticated_get_xml(url, username, password, parameters, headers = {})
-    get url, parameters,
+    get url, params: parameters, headers:
         { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),
           'ACCEPT' => 'application/xml',
           'CONTENT_TYPE' => 'application/xml'

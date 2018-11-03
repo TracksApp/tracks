@@ -17,7 +17,7 @@ class IntegrationsControllerTest < ActionController::TestCase
     stub_site_config do
       SITE_CONFIG['cloudmailin'] = "123456789"
       SITE_CONFIG['email_dispatch'] = 'from'
-      post :cloudmailin, {
+      post :cloudmailin, params: {
         "html"=>"",
         "plain"=>"asdasd",
         "x_to_header"=>"[\"81496ecea21032d35a7a@cloudmailin.net\"]",
@@ -37,7 +37,7 @@ class IntegrationsControllerTest < ActionController::TestCase
   def test_cloudmailin_integration_invalid_signature
     stub_site_config do
       SITE_CONFIG['cloudmailin'] = "12345678901234567890"
-      post :cloudmailin, {
+      post :cloudmailin, params: {
         "html"=>"",
         "plain"=>"asdasd",
         "x_to_header"=>"[\"81496ecea21032d35a7a@cloudmailin.net\"]",
@@ -57,7 +57,7 @@ class IntegrationsControllerTest < ActionController::TestCase
   def test_cloudmailin_integration_unknown_address
     stub_site_config do
       SITE_CONFIG['cloudmailin'] = "123456789"
-      post :cloudmailin, {
+      post :cloudmailin, params: {
         "html"=>"",
         "plain"=>"asdasd",
         "x_to_header"=>"[\"81496ecea21032d35a7a@cloudmailin.net\"]",

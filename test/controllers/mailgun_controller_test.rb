@@ -18,7 +18,7 @@ class MailgunControllerTest < ActionController::TestCase
       SITE_CONFIG['mailgun_api_key'] = "123456789"
       SITE_CONFIG['email_dispatch']  = 'from'
 
-      post :mailgun, {
+      post :mailgun, params: {
         "timestamp" => "1379539674",
         "token"     => "5km6cwo0e3bfvg78hw4s69znro09xhk1h8u6-s633yasc8hcr5",
         "signature" => "da92708b8f2c9dcd7ecdc91d52946c01802833e6683e46fc00b3f081920dd5b1",
@@ -38,7 +38,7 @@ class MailgunControllerTest < ActionController::TestCase
       }
 
       todo_count = Todo.count
-      post :mailgun, {
+      post :mailgun, params: {
         "timestamp" => "1379539674",
         "token"     => "5km6cwo0e3bfvg78hw4s69znro09xhk1h8u6-s633yasc8hcr5",
         "signature" => "da92708b8f2c9dcd7ecdc91d52946c01802833e6683e46fc00b3f081920dd5b1",
@@ -60,7 +60,7 @@ class MailgunControllerTest < ActionController::TestCase
       SITE_CONFIG['mailgun_api_key'] = "invalidkey"
       SITE_CONFIG['email_dispatch']  = 'from'
 
-      post :mailgun, {
+      post :mailgun, params: {
         "timestamp" => "1379539674",
         "token"     => "5km6cwo0e3bfvg78hw4s69znro09xhk1h8u6-s633yasc8hcr5",
         "signature" => "da92708b8f2c9dcd7ecdc91d52946c01802833e6683e46fc00b3f081920dd5b1",
