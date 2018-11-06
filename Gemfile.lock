@@ -137,7 +137,7 @@ GEM
       ast (~> 2.4.0)
     powerpack (0.1.2)
     puma (3.12.0)
-    rack (2.0.5)
+    rack (2.0.6)
     rack-dev-mark (0.7.7)
       rack (>= 1.1, < 2.1)
     rack-mini-profiler (1.0.0)
