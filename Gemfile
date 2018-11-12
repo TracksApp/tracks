@@ -57,7 +57,6 @@ group :development do
 
   gem "bullet"
   gem "rack-mini-profiler"
-  gem "rack-dev-mark"
 end
 
 group :development, :test do
