@@ -45,10 +45,6 @@ class Context < ApplicationRecord
     name
   end
 
-  def new_record_before_save?
-    @new_record_before_save
-  end
-
   def no_active_todos?
     return todos.active.count == 0
   end
