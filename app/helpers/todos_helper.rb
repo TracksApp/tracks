@@ -1,3 +1,5 @@
+require 'staleness'
+
 module TodosHelper
 
   # === helpers for rendering container

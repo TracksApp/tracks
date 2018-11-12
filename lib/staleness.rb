@@ -1,4 +1,5 @@
 require 'active_support/all'
+require 'user_time'
 
 class Staleness
   SECONDS_PER_DAY = 86400
