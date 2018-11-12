@@ -103,6 +103,10 @@ GEM
       railties (>= 3.2.16)
     json (2.1.0)
     libv8 (3.16.14.19)
+    listen (3.1.5)
+      rb-fsevent (~> 0.9, >= 0.9.4)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -192,6 +196,7 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
+    ruby_dep (1.5.0)
     rubyzip (1.2.2)
     safe_yaml (1.0.4)
     sanitize (4.6.6)
@@ -276,6 +281,7 @@ DEPENDENCIES
   htmlentities
   jquery-rails (~> 4.0)
   jquery-ui-rails (~> 5.0.5)
+  listen
   minitest-stub-const
   mocha
   mysql2 (~> 0.3.17)
