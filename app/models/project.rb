@@ -118,10 +118,6 @@ class Project < ApplicationRecord
     end
   end
 
-  def new_record_before_save?
-    @new_record_before_save
-  end
-
   def age_in_days
     @age_in_days ||= (Time.current.to_date - created_at.to_date).to_i + 1
   end

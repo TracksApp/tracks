@@ -174,12 +174,6 @@ class ProjectTest < ActiveSupport::TestCase
     assert_equal 3, @moremoney.todos.not_completed.count
   end
 
-  def test_new_record_before_save
-    assert !@timemachine.new_record_before_save?, "existing records should not be new_record"
-    p = Project.where(:name => "I do not exist").first_or_create
-    assert p.new_record_before_save?, "newly created record should be new_record"
-  end
-
   def test_shortened_name
     s = "project"*7 # len=49
     p = users(:admin_user).projects.create(:name => s)

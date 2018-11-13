@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 gem 'sass-rails', '~> 5.0'
 gem 'coffee-rails', '~> 4.2.0'
 
@@ -61,6 +61,7 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'listen'
   gem "rubocop", "~> 0.49", require: false
 end
 

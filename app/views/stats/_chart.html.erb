@@ -1,6 +1,2 @@
 <% @swf_count ||= 0 -%>
-<div class="open-flash-chart"><%= swf_tag "open-flash-chart.swf",
-  :flashvars => { 'width' => chart.width, 'height' => chart.height, 'data' => url_for(:action => chart.action)},
-  :parameters => { 'allowScriptAccess' => 'sameDomain', 'wmode' => 'transparent'},
-  :div_id => "chart_#{@swf_count+=1}",
-  :size => chart.dimensions %></div>
+<div class="open-flash-chart"></div>
