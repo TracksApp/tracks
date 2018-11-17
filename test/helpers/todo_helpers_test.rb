@@ -17,7 +17,7 @@ class TodosHelpersTest < ActionView::TestCase
     todo = todos(:call_bill_gates_every_day)
     predecessor = todos(:call_bill)
     html = remote_delete_dependency(todo, predecessor)
-    assert_equal "<a class=\"delete_dependency_button\" x_predecessors_id=\"1\" href=\"/todos/18/remove_predecessor\"><img title=\"Remove dependency (does not delete the action)\" align=\"absmiddle\" class=\"delete_item\" src=\"/images/blank.png\" alt=\"Blank\" /></a>", html
+    assert_equal "<a class=\"delete_dependency_button\" x_predecessors_id=\"1\" href=\"/todos/18/remove_predecessor\"><img title=\"Remove dependency (does not delete the action)\" align=\"absmiddle\" class=\"delete_item\" src=\"/images/blank.png\" /></a>", html
   end
 
   test "remote_promote_to_project_menu_item" do
