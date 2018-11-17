@@ -122,7 +122,7 @@ GEM
     mini_portile2 (2.3.0)
     minitest (5.11.3)
     minitest-stub-const (0.6)
-    mocha (1.6.0)
+    mocha (1.7.0)
       metaclass (~> 0.0.1)
     mysql2 (0.3.21)
     nio4r (2.3.1)
