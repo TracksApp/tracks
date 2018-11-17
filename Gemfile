@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '~> 5.2.1'
 gem 'sass-rails', '~> 5.0'
 gem 'coffee-rails', '~> 4.2.0'
+gem 'bootsnap', '~> 1.1'
 
 #gem 'json'
 
