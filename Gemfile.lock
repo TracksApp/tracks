@@ -252,9 +252,10 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.8)
-    tolk (2.0.0)
-      rails (>= 4.0)
+    tolk (3.1.0)
+      rails (>= 5.0)
       safe_yaml (>= 0.8.6)
+      sass
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uglifier (4.1.17)
@@ -311,7 +312,7 @@ DEPENDENCIES
   sqlite3
   swf_fu
   therubyracer
-  tolk (~> 2.0.0)
+  tolk (~> 3.1.0)
   uglifier (>= 1.3.0)
   will_paginate
   yard
