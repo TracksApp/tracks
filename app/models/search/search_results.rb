@@ -29,7 +29,7 @@ module Search
       @user.todos.
         where("(todos.description LIKE ? OR todos.notes LIKE ?) AND todos.completed_at IS NULL", terms, terms).
         includes(Todo::DEFAULT_INCLUDES).
-        reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC")
+        reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
     end
 
     def complete_todos(terms)

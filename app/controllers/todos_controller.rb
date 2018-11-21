@@ -629,19 +629,19 @@ class TodosController < ApplicationController
 
     @not_done_todos = todos_with_tag_ids.
       active.not_hidden.
-      reorder('todos.due IS NULL, todos.due ASC, todos.created_at ASC').
+      reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).
       includes(Todo::DEFAULT_INCLUDES)
     @hidden_todos = todos_with_tag_ids.
       hidden.
-      reorder('todos.completed_at DESC, todos.created_at DESC').
+      reorder(Arel.sql('todos.completed_at DESC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @deferred_todos = todos_with_tag_ids.
       deferred.
-      reorder('todos.show_from ASC, todos.created_at DESC').
+      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @pending_todos = todos_with_tag_ids.
       blocked.
-      reorder('todos.show_from ASC, todos.created_at DESC').
+      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
     @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
@@ -1323,7 +1323,7 @@ end
     end
 
     not_done_todos = not_done_todos.
-      reorder("todos.due IS NULL, todos.due ASC, todos.created_at ASC").
+      reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")).
       includes(Todo::DEFAULT_INCLUDES)
 
     not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
