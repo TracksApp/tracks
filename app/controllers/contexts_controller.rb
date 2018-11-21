@@ -39,8 +39,8 @@ class ContextsController < ApplicationController
 
     unless @context.nil?
       @max_completed = current_user.prefs.show_number_completed
-      @done = @context.todos.completed.limit(@max_completed).reorder("todos.completed_at DESC, todos.created_at DESC").includes(Todo::DEFAULT_INCLUDES)
-      @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder('todos.due IS NULL, todos.due ASC, todos.created_at ASC').includes(Todo::DEFAULT_INCLUDES)
+      @done = @context.todos.completed.limit(@max_completed).reorder(Arel.sql("todos.completed_at DESC, todos.created_at DESC")).includes(Todo::DEFAULT_INCLUDES)
+      @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).includes(Todo::DEFAULT_INCLUDES)
       @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)

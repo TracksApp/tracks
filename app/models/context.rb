@@ -1,6 +1,6 @@
 class Context < ApplicationRecord
 
-  has_many :todos, -> { order("todos.due IS NULL, todos.due ASC, todos.created_at ASC").includes(:project) }, :dependent => :delete_all
+  has_many :todos, -> { order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")).includes(:project) }, :dependent => :delete_all
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
 
