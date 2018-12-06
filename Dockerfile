@@ -11,6 +11,4 @@ RUN mkdir /app/log
 
 COPY . /app/
 
-RUN cp /app/config/site.yml.tmpl /app/config/site.yml
-
 EXPOSE 3000

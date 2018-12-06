@@ -9,7 +9,6 @@ services:
       - db-data:/var/lib/mysql
   web:
     build: .
-    command: rails s
     volumes:
       - ${VOLUME:-.:/app}
     ports:
