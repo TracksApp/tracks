@@ -192,7 +192,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
     rspec-support (3.7.1)
-    rubocop (0.60.0)
+    rubocop (0.61.0)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.5, != 2.5.1.1)
@@ -299,7 +299,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 0.60)
+  rubocop (~> 0.61)
   sanitize (>= 3.0.0)
   sass-rails (~> 5.0)
   selenium-webdriver (~> 2.53)
