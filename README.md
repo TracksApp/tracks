@@ -13,7 +13,6 @@
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.svg?branch=master)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
-[![Dependency Status](https://gemnasium.com/TracksApp/tracks.svg)](https://gemnasium.com/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
 can be found within the /doc directory.
