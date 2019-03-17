@@ -46,7 +46,7 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'jbuilder', '~> 1.2'
 
 gem "bootstrap-sass", "3.4.1"
-gem "font-awesome-sass", "~> 4.5.0"
+gem "font-awesome-sass", "~> 5.6.1"
 
 group :development do
   gem "spring"
