@@ -29,6 +29,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_interaction (3.7.1)
+      activemodel (>= 4, < 7)
     activejob (5.2.2.1)
       activesupport (= 5.2.2.1)
       globalid (>= 0.3.6)
@@ -278,6 +280,7 @@ DEPENDENCIES
   RedCloth
   aasm (~> 3.4.0)
   actionpack-xml_parser (~> 2.0)
+  active_interaction (~> 3.0)
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list
   bcrypt (~> 3.1.7)

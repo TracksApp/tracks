@@ -48,6 +48,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem "bootstrap-sass", "3.4.1"
 gem "font-awesome-sass", "~> 4.5.0"
 
+gem "active_interaction", "~> 3.0"
+
 group :development do
   gem "spring"
   gem "yard"
