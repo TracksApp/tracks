@@ -1316,7 +1316,6 @@ end
   end
 
   def get_not_done_todos
-    Todos::UndoneTodosQuery.new(current_user).query(params)
     if params[:done]
       not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
     else
@@ -1349,7 +1348,7 @@ end
       not_done_todos = not_done_todos.where('project_id' => project)
     end
 
-    return not_done_todos
+    return Todos::UndoneTodosQuery.new(current_user).query(params)
   end
 
   def onsite_redirect_to(destination)
