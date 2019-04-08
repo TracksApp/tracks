@@ -1316,6 +1316,7 @@ end
   end
 
   def get_not_done_todos
+    Todos::UndoneTodosQuery.new(current_user).query(params)
     if params[:done]
       not_done_todos = current_user.todos.completed.completed_after(Time.zone.now - params[:done].to_i.days)
     else
