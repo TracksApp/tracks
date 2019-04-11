@@ -32,17 +32,15 @@ module Todos
 
     def test_filtering_by_due_date
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
       # Only gets todos that are due today or are past their due date.
-      undone_todos = UndoneTodosQuery.new(user).query(due: '0', 'due' => '0')
+      undone_todos = UndoneTodosQuery.new(user).query(due: '0')
       expected = [todos(:package_delivered)]
       assert_equal expected, undone_todos.to_a
     end
 
     def test_filtering_by_tag
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
-      undone_todos = UndoneTodosQuery.new(user).query(tag: 'bar', "tag" => "bar")
+      undone_todos = UndoneTodosQuery.new(user).query(tag: 'bar')
       expected = [todos(:package_delivered),
                   todos(:buy_tix)]
       assert_equal expected, undone_todos.to_a
@@ -50,8 +48,7 @@ module Todos
 
     def test_filtering_by_context
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
-      undone_todos = UndoneTodosQuery.new(user).query(context_id: '11', 'context_id' => '11')
+      undone_todos = UndoneTodosQuery.new(user).query(context_id: '11')
       expected = [todos(:package_delivered),
                   todos(:pal_confirmation)]
       assert_equal expected, undone_todos.to_a
@@ -59,37 +56,33 @@ module Todos
 
     def test_using_a_non_existant_context_raises_an_exception
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
       assert_raises(ActiveRecord::RecordNotFound) do
-        undone_todos = UndoneTodosQuery.new(user).query(context_id: '110', 'context_id' => '110')
+        undone_todos = UndoneTodosQuery.new(user).query(context_id: '110')
       end
     end
 
     def test_filtering_by_project
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
-      undone_todos = UndoneTodosQuery.new(user).query(project_id: '5', 'project_id' => '5')
+      undone_todos = UndoneTodosQuery.new(user).query(project_id: '5')
       expected = [todos(:package_delivered)]
       assert_equal expected, undone_todos.to_a
     end
 
     def test_using_a_non_existant_project_raises_an_exception
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
       assert_raises(ActiveRecord::RecordNotFound) do
-        undone_todos = UndoneTodosQuery.new(user).query(project_id: '110', 'project_id' => '110')
+        undone_todos = UndoneTodosQuery.new(user).query(project_id: '110')
       end
     end
 
     def test_combination_of_all_params
       user = users(:other_user)
-      # FIXME normalize HashWithIndifferentHash usage
       undone_todos = UndoneTodosQuery.new(user).query({
         limit: "1",
-        project_id: "5", "project_id" => "5",
-        context_id: "11", "context_id" => "11",
-        tag: "bar", "tag" => "bar",
-        due: "0", "due" => "0"})
+        project_id: "5",
+        context_id: "11",
+        tag: "bar",
+        due: "0"})
       expected = [todos(:package_delivered)]
       assert_equal expected, undone_todos.to_a
     end

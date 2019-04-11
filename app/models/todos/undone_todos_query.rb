@@ -21,12 +21,12 @@ module Todos
       not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
 
       if params[:due]
-        due_within_when = Time.zone.now + params['due'].to_i.days
+        due_within_when = Time.zone.now + params[:due].to_i.days
         not_done_todos = not_done_todos.where('todos.due <= ?', due_within_when)
       end
 
       if params[:tag]
-        tag = Tag.where(:name => params['tag']).first
+        tag = Tag.where(:name => params[:tag]).first
         not_done_todos = not_done_todos.joins(:taggings).where('taggings.tag_id = ?', tag.id)
       end
 
