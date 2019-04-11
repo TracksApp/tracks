@@ -56,3 +56,13 @@ attendrailsconf:
   user_id: 2
   created_at: <%= today %>
   updated_at: <%= today %>
+
+attendgophercon:
+  id: 5
+  name: Attend Gophercon
+  description: 'Because those little gopher drawing are cute'
+  position: 2
+  state: 'active'
+  user_id: 2
+  created_at: <%= today %>
+  updated_at: <%= today %>

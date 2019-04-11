@@ -23,3 +23,15 @@ foo2:
   tag_id: 1
   taggable_id: 3 # Buy milk - completed
   taggable_type: Todo
+
+bar1:
+  id: 5
+  tag_id: 2
+  taggable_id: 16
+  taggable_type: Todo
+
+bar2:
+  tag_id: 2
+  taggable_id: 20
+  taggable_type: Todo
+

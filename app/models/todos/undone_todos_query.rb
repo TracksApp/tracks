@@ -27,7 +27,7 @@ module Todos
 
       if params[:tag]
         tag = Tag.where(:name => params['tag']).first
-        not_done_todos = not_done_todos.where('taggings.tag_id = ?', tag.id)
+        not_done_todos = not_done_todos.joins(:taggings).where('taggings.tag_id = ?', tag.id)
       end
 
       if params[:context_id]
