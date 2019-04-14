@@ -4,8 +4,15 @@
 # rails does automatically in models or controllers! Convert to utc manually!
 
 <%
+def yesterday
+  Time.zone.now.utc.beginning_of_day - 1.day
+end
 def today
   Time.zone.now.utc.beginning_of_day.to_s(:db)
+end
+
+def tomorrow
+  (Time.zone.now.utc.beginning_of_day + 1.day).to_s(:db)
 end
 
 def next_week
@@ -255,3 +262,29 @@ email_broker:
   description: Ask about better stocks
   notes: ~
   state: pending
+
+package_delivered:
+  id: 20
+  context_id: 11
+  project_id: 5
+  description: Package delivery date
+  notes: ~
+  state: active
+  created_at: <%= two_weeks_ago %>
+  due: <%= today %>
+  completed_at: ~
+  show_from: ~
+  user_id: 2
+
+assemble_furniture:
+  id: 21
+  context_id: 11
+  project_id: 5
+  description: Put together the furniture we bought
+  notes: ~
+  state: completed
+  created_at: <%= two_weeks_ago %>
+  due: <%= today %>
+  completed_at: <%= yesterday %>
+  show_from: ~
+  user_id: 2
