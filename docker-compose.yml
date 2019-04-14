@@ -3,17 +3,17 @@ services:
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: '1'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: ${TRACKS_DB:-tracks}
     volumes:
-      - "db-data:/var/lib/mysql"
+      - db-data:/var/lib/mysql
   web:
     build: .
     volumes:
-      - "${VOLUME:-.:/app/workdir}"
+      - ${VOLUME:-.:/app}
     ports:
-      - "3000:3000"
+      - 3000:3000
     depends_on:
       - db
 volumes:
   db-data:
-

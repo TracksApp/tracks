@@ -16,6 +16,7 @@ function die() {
 trap cleanup EXIT
 
 export RAILS_ENV=test
+export TRACKS_DB=tracks_test
 
 # Put a config/site.yml file in place since it's needed for operation
 cp config/site.yml.tmpl config/site.yml
