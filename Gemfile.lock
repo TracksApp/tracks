@@ -242,7 +242,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.3.13)
+    sqlite3 (1.4.0)
     swf_fu (2.0.4)
       coffee-script
       rails (>= 3.1)
