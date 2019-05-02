@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get "tickler" => "todos#list_deferred"
   get 'review' => "projects#review"
   get 'calendar' => "calendar#show"
+  get 'hidden' => "todos#list_hidden"
   get 'done' => "stats#done", :as => 'done_overview'
 
   get 'search' => 'search#index'
