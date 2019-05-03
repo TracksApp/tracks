@@ -20,7 +20,7 @@ class ContextsController < ApplicationController
     respond_to do |format|
       format.html &render_contexts_html
       format.m    &render_contexts_mobile
-      format.xml  { render :xml => @all_contexts.to_xml( :except => :user_id ) }
+      format.xml  { render :xml => @all_contexts.to_xml(:root => :contexts, :except => :user_id) }
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Contexts'
         @feed_description = "Lists all the contexts for #{current_user.display_name}"
@@ -57,7 +57,7 @@ class ContextsController < ApplicationController
       respond_to do |format|
         format.html
         format.m    &render_context_mobile
-        format.xml  { render :xml => @context.to_xml( :except => :user_id ) }
+        format.xml  { render :xml => @context.to_xml(:root => :context, :except => :user_id) }
       end
     else
       respond_to do |format|
