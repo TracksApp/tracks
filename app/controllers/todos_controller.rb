@@ -12,6 +12,14 @@ class TodosController < ApplicationController
     init_data_for_sidebar unless mobile?
 
     @todos = current_user.todos.includes(Todo::DEFAULT_INCLUDES)
+    if params[:context_id]
+      context = current_user.contexts.find(params[:context_id])
+      @todos = @todos.where('context_id' => context.id)
+    end
+    if params[:project_id]
+      project = current_user.projects.find(params[:project_id])
+      @todos = @todos.where('project_id' => project.id)
+    end
     @todos = @todos.limit(sanitize(params[:limit])) if params[:limit]
 
     @not_done_todos = get_not_done_todos
