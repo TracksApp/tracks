@@ -1,7 +1,7 @@
 <div class="container-fluid">
 <%= form_tag(search_results_path, class: 'navbar-form') do %>
   <div class="input-group">
-    <%= text_field_tag(:search, params[:search], class: 'form-control', autofocus: true) %>
+    <%= text_field_tag(:search, params[:search], class: 'form-control') %>
     <div class="input-group-btn">
       <%= button_tag(type: 'submit', class: 'btn pull-right') do%>
         <%= icon('search', class: 'hidden-xs') %>

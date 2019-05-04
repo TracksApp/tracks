@@ -5,7 +5,7 @@
       <%= form_tag(search_results_path) do %>
         <div class="form-group">
           <%= label_tag 'Search', nil, class: 'sr-only' %>
-          <%= text_field_tag(:search, params[:search], class: 'form-control', autofocus: true) %>
+          <%= text_field_tag(:search, params[:search], class: 'form-control') %>
         </div>
         <%= submit_tag t('common.search'), class: 'btn btn-primary pull-right' %>
       <% end %>
