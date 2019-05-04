@@ -260,10 +260,10 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_response 401
   end
 
-  def test_xml_not_accessible_to_anonymous_user_with_valid_token
+  def test_xml_accessible_to_anonymous_user_with_valid_token
     login_as nil
     get :index, params: { :format => "xml", :token => users(:admin_user).token }
-    assert_response 401
+    assert_response :ok
   end
 
 end
