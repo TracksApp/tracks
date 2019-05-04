@@ -4,8 +4,8 @@ class ProjectsController < ApplicationController
   before_action :set_source_view
   before_action :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
   before_action :default_context_filter, :only => [:create, :update]
-  skip_before_action :login_required, :only => [:index]
-  prepend_before_action :login_or_feed_token_required, :only => [:index]
+  skip_before_action :login_required, :only => [:index, :show]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :show]
 
   def index
     @source_view = params['_source_view'] || 'project_list'
