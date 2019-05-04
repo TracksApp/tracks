@@ -4,8 +4,8 @@ class ContextsController < ApplicationController
 
   before_action :init, :except => [:index, :create, :destroy, :order]
   before_action :set_context_from_params, :only => [:update, :destroy]
-  skip_before_action :login_required, :only => [:index]
-  prepend_before_action :login_or_feed_token_required, :only => [:index]
+  skip_before_action :login_required, :only => [:index, :show]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :show]
 
   def index
     @all_contexts    = current_user.contexts
