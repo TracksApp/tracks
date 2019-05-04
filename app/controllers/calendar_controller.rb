@@ -20,7 +20,7 @@ class CalendarController < ApplicationController
         render :action => 'show', :layout => false, :content_type => Mime[:ics]
       }
       format.xml {
-        render :xml => @due_all.to_xml( *todo_xml_params )
+        render :xml => @due_all.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       }
     end
   end

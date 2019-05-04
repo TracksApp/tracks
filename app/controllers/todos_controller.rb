@@ -49,7 +49,7 @@ class TodosController < ApplicationController
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
-        render :xml => @xml_todos.to_xml( *todo_xml_params )
+        render :xml => @xml_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       end
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Actions'.freeze
@@ -251,7 +251,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m { render :action => 'show' }
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @todo.to_xml( *[todo_xml_params[0].merge({:root => :todo})] ) }
     end
   end
 
@@ -560,7 +560,7 @@ class TodosController < ApplicationController
       format.html
       format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *todo_xml_params )
+        render :xml => completed_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       end
     end
   end
@@ -593,7 +593,7 @@ class TodosController < ApplicationController
         init_data_for_sidebar unless mobile?
       end
       format.m
-      format.xml { render :xml => @not_done_todos.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @not_done_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] ) }
     end
   end
 
@@ -759,7 +759,7 @@ class TodosController < ApplicationController
     @hidden = current_user.todos.hidden
     respond_to do |format|
       format.xml {
-        render :xml => @hidden.to_xml( *todo_xml_params )
+        render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
       }
     end
   end

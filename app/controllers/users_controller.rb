@@ -17,7 +17,7 @@ class UsersController < ApplicationController
       end
       format.xml do
         @users  = User.order('login')
-        render :xml => @users.to_xml(:except => [ :password ])
+        render :xml => @users.to_xml(:root => :users, :except => [ :password ])
       end
     end
   end
@@ -25,7 +25,7 @@ class UsersController < ApplicationController
   # GET /users/id GET /users/id.xml
   def show
     @user = User.find(params[:id])
-    render :xml => @user.to_xml(:except => [ :password ])
+    render :xml => @user.to_xml(:root => :user, :except => [ :password ])
   end
 
   # GET /users/new

@@ -37,7 +37,7 @@ class ProjectsController < ApplicationController
           @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
           cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         end
-        format.xml   { render :xml => @projects.to_xml( :except => :user_id )  }
+        format.xml { render :xml => @projects.to_xml(:root => :projects, :except => :user_id) }
         format.any(:rss, :atom) do
           @feed_title = I18n.t('models.project.feed_title')
           @feed_description = I18n.t('models.project.feed_description', :username => current_user.display_name)
@@ -158,7 +158,7 @@ class ProjectsController < ApplicationController
         @mobile_from_project = @project.id
       end
       format.xml   do
-        render :xml => @project.to_xml(:except => :user_id) { |xml|
+        render :xml => @project.to_xml(:root => :project, :except => :user_id) { |xml|
           xml.not_done { @not_done_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.deferred { @deferred_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.pending { @pending_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
