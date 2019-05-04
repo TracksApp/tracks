@@ -72,7 +72,14 @@ module LoginSystem
 
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics', 'xml'].include?(params[:format])
+      # Login based on the token GET parameter
       if user = User.where(:token => params[:token]).first
+        set_current_user(user)
+        return true
+      end
+      # Allow also login based on auth data
+      auth = get_basic_auth_data
+      if user = User.where(:login => auth[:user], :token => auth[:pass]).first
         set_current_user(user)
         return true
       end
