@@ -103,7 +103,7 @@ class Project < ApplicationRecord
   def stalled?
     # Stalled projects are active projects with no active next actions
     return false if self.completed? || self.hidden?
-    return self.todos.deferred_or_blocked.empty? && self.todos.active.empty?
+    return !self.todos.deferred_or_blocked.exists? && !self.todos.active.exists?
   end
 
   def shortened_name(length=40)
