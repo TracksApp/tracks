@@ -12,7 +12,7 @@
 
     <label for="todo_description" style="float:left"><%= Todo.human_attribute_name('description') %></label>
     <a href="#" id="new_todo_starred_link" class="undecorated_link" ><%= image_tag("blank.png", :title =>t('todos.star_action'), :class => "todo_star", :style=> "float: right")%></a>
-    <%= t.text_field("description", "size" => 30, "maxlength" => 100, "autocomplete" => "off", :autofocus => 1) %>
+    <%= t.text_field("description", "size" => 30, "maxlength" => 100, "autocomplete" => "off", :autofocus => true) %>
 
     <label for="todo_notes"><%= Todo.human_attribute_name('notes') %></label>
     <%= t.text_area("notes", "cols" => 29, "rows" => 6) %>
