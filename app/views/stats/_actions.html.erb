@@ -15,3 +15,21 @@
     render :partial => 'chart', :locals => {:chart => chart}
 -%><% end %>
 
+<h2>Current running time of all incomplete actions</h2>
+<%= column_chart actions.running_time_data %>
+
+<h2>Active (visible and hidden) next actions per week</h2>
+<%= column_chart actions.open_per_week_data, xtitle: "Weeks ago" %>
+
+<h2>Day of week (all actions)</h2>
+<%= column_chart actions.day_of_week_all_data %>
+
+<h2>Day of week (past 30 days)</h2>
+<%= column_chart actions.day_of_week_30days_data %>
+
+<h2>Time of day (all actions)</h2>
+<%= column_chart actions.time_of_day_all_data %>
+
+<h2>Time of day (last 30 days)</h2>
+<%= column_chart actions.time_of_day_30days_data %>
+

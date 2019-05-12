@@ -164,23 +164,6 @@ class StatsController < ApplicationController
     render :layout => false
   end
 
-  def actions_open_per_week_data
-    @actions_started = current_user.todos.created_after(@today-53.weeks).
-      select("todos.created_at, todos.completed_at").
-      reorder("todos.created_at DESC")
-
-    @max_weeks = difference_in_weeks(@today, @actions_started.last.created_at)
-
-    # cut off chart at 52 weeks = one year
-    @count = [52, @max_weeks].min
-
-    @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks+1)
-    @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
-    @max_actions = (@actions_open_per_week_array.max or 0)
-
-    render :layout => false
-  end
-
   def context_total_actions_data
     actions = Stats::TopContextsQuery.new(current_user).result
 
@@ -194,75 +177,6 @@ class StatsController < ApplicationController
     @data = Stats::PieChartData.new(actions, t('stats.spread_of_running_actions_for_visible_contexts'), 60)
 
     render :pie_chart_data, :layout => false
-  end
-
-  def actions_day_of_week_all_data
-    @actions_creation_day = current_user.todos.select("created_at")
-    @actions_completion_day = current_user.todos.completed.select("completed_at")
-
-    # convert to array and fill in non-existing days
-    @actions_creation_day_array = Array.new(7) { |i| 0}
-    @actions_creation_day.each { |t| @actions_creation_day_array[ t.created_at.wday ] += 1 }
-    @max = @actions_creation_day_array.max
-
-    # convert to array and fill in non-existing days
-    @actions_completion_day_array = Array.new(7) { |i| 0}
-    @actions_completion_day.each { |t| @actions_completion_day_array[ t.completed_at.wday ] += 1 }
-    @max = @actions_completion_day_array.max
-
-    render :layout => false
-  end
-
-  def actions_day_of_week_30days_data
-    @actions_creation_day = current_user.todos.created_after(@cut_off_month).select("created_at")
-    @actions_completion_day = current_user.todos.completed_after(@cut_off_month).select("completed_at")
-
-    # convert to hash to be able to fill in non-existing days
-    @max=0
-    @actions_creation_day_array = Array.new(7) { |i| 0}
-    @actions_creation_day.each { |r| @actions_creation_day_array[ r.created_at.wday ] += 1 }
-
-    # convert to hash to be able to fill in non-existing days
-    @actions_completion_day_array = Array.new(7) { |i| 0}
-    @actions_completion_day.each { |r| @actions_completion_day_array[r.completed_at.wday] += 1 }
-
-    @max = [@actions_creation_day_array.max, @actions_completion_day_array.max].max
-
-    render :layout => false
-  end
-
-  def actions_time_of_day_all_data
-    @actions_creation_hour = current_user.todos.select("created_at")
-    @actions_completion_hour = current_user.todos.completed.select("completed_at")
-
-    # convert to hash to be able to fill in non-existing days
-    @actions_creation_hour_array = Array.new(24) { |i| 0}
-    @actions_creation_hour.each{|r| @actions_creation_hour_array[r.created_at.hour] += 1 }
-
-    # convert to hash to be able to fill in non-existing days
-    @actions_completion_hour_array = Array.new(24) { |i| 0}
-    @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
-
-    @max = [@actions_creation_hour_array.max, @actions_completion_hour_array.max].max
-
-    render :layout => false
-  end
-
-  def actions_time_of_day_30days_data
-    @actions_creation_hour = current_user.todos.created_after(@cut_off_month).select("created_at")
-    @actions_completion_hour = current_user.todos.completed_after(@cut_off_month).select("completed_at")
-
-    # convert to hash to be able to fill in non-existing days
-    @actions_creation_hour_array = Array.new(24) { |i| 0}
-    @actions_creation_hour.each{|r| @actions_creation_hour_array[r.created_at.hour] += 1 }
-
-    # convert to hash to be able to fill in non-existing days
-    @actions_completion_hour_array = Array.new(24) { |i| 0}
-    @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
-
-    @max = [@actions_creation_hour_array.max, @max = @actions_completion_hour_array.max].max
-
-    render :layout => false
   end
 
   def show_selected_actions_from_chart

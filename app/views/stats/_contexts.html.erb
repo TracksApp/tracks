@@ -1,8 +1,14 @@
-<% contexts.charts.each do |chart| %><%=
-    render :partial => 'chart', :locals => {:chart => chart}
--%><% end %>
-
 <br style="clear:both">
+
+<h2>Spread of actions for all contexts</h2>
+<%= pie_chart Stats::TopContextsQuery.new(current_user).result.map { |context|
+  [context.name, context.total]
+} %>
+
+<h2>Spread of actions for visible contexts</h2>
+<%= pie_chart Stats::TopContextsQuery.new(current_user, :running => true).result.map { |context|
+  [context.name, context.total]
+} %>
 
 <%= render :partial => 'contexts_list', :locals => {:contexts => contexts.actions, :key => 'contexts'} -%>
 

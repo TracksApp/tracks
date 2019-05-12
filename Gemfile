@@ -88,3 +88,5 @@ group :test do
   # get test coverage info on codeclimate
   gem "codeclimate-test-reporter", "1.0.7", group: :test, require: nil
 end
+
+gem "chartkick"
