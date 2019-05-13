@@ -1,4 +1,4 @@
-class AddLastReviewedToProject < ActiveRecord::Migration
+class AddLastReviewedToProject < ActiveRecord::Migration[5.2]
 
   def self.up
       add_column :projects, :last_reviewed, :timestamp

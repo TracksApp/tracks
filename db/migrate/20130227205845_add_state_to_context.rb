@@ -1,4 +1,4 @@
-class AddStateToContext < ActiveRecord::Migration
+class AddStateToContext < ActiveRecord::Migration[5.2]
 
   class Context < ActiveRecord::Base
   end

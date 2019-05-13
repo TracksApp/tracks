@@ -1,4 +1,4 @@
-class AddSmsToPreference < ActiveRecord::Migration
+class AddSmsToPreference < ActiveRecord::Migration[5.2]
   def self.up
     add_column :preferences, :sms_email, :string
     add_column :preferences, :sms_context_id, :integer

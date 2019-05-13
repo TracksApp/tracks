@@ -1,4 +1,4 @@
-class AddRememberMeToUser < ActiveRecord::Migration
+class AddRememberMeToUser < ActiveRecord::Migration[5.2]
   def self.up
     rename_column :users, 'password', 'crypted_password' #bug in sqlite requires column names as strings
     add_column :users, :remember_token, :string

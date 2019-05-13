@@ -1,4 +1,4 @@
-class CreatedAt < ActiveRecord::Migration
+class CreatedAt < ActiveRecord::Migration[5.2]
   # Current bug in Rails that prevents rename_column working in SQLite
   # if the column names use symbols instead of strings.
   # <http://dev.rubyonrails.org/changeset/2731>

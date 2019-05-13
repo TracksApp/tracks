@@ -1,4 +1,4 @@
-class UpdateOpenIdUrls < ActiveRecord::Migration
+class UpdateOpenIdUrls < ActiveRecord::Migration[5.2]
 
   class User < ActiveRecord::Base
     

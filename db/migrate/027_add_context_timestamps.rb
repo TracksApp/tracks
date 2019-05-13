@@ -1,4 +1,4 @@
-class AddContextTimestamps < ActiveRecord::Migration
+class AddContextTimestamps < ActiveRecord::Migration[5.2]
 
   def self.up
     add_column :contexts, :created_at, :timestamp

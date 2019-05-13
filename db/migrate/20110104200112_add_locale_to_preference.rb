@@ -1,4 +1,4 @@
-class AddLocaleToPreference < ActiveRecord::Migration
+class AddLocaleToPreference < ActiveRecord::Migration[5.2]
   def self.up
     add_column :preferences, :locale, :string
   end

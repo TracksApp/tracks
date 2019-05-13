@@ -1,4 +1,4 @@
-class AddIndexToNotes < ActiveRecord::Migration
+class AddIndexToNotes < ActiveRecord::Migration[5.2]
   def self.up
     add_index :notes, [:project_id]
     add_index :notes, [:user_id]

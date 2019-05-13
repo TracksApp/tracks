@@ -1,4 +1,4 @@
-class MakeOldRecurringTodosValidate < ActiveRecord::Migration
+class MakeOldRecurringTodosValidate < ActiveRecord::Migration[5.2]
   def self.up
     RecurringTodo.all.each do |rt|
       # show_always may not be nil

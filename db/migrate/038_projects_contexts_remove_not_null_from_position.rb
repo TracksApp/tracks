@@ -1,4 +1,4 @@
-class ProjectsContextsRemoveNotNullFromPosition < ActiveRecord::Migration
+class ProjectsContextsRemoveNotNullFromPosition < ActiveRecord::Migration[5.2]
   def self.up
     change_column :projects, :position, :integer, {:null => true, :default => nil}
     change_column :contexts, :position, :integer, {:null => true, :default => nil}
