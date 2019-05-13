@@ -13,7 +13,7 @@ module RenderingHelper
         # do not change string; URL is already linked
         href
       else
-        content_tag(:a, h(href), :href => h(href))
+        content_tag(:a, h(href), :href => URI.escape(href))
       end
     end
   end

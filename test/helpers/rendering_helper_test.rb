@@ -28,12 +28,13 @@ class RenderingHelperTest < ActionView::TestCase
   end
 
   test "message link" do
+    expected = '<p>Call <a href="message://%3C123%3E">message://&lt;123&gt;</a>.</p>'
     actual = render_text("Call message://<123>.")
-    assert_equal('<p>Call <a href="message://&lt;123&gt;">message://&lt;123&gt;</a>.</p>', actual)
+    assert_equal(expected, actual)
   end
 
   test "tagged message link" do
-    expected = '<p>This message is already tagged: <a href="message://&lt;12345&gt;">Call bob</a>.</p>'
+    expected = '<p>This message is already tagged: <a href="message://%3C12345%3E">Call bob</a>.</p>'
     actual = render_text(expected)
     assert_equal(expected, actual)
   end
