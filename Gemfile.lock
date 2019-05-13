@@ -134,8 +134,8 @@ GEM
     nio4r (2.3.1)
     nokogiri (1.10.3)
       mini_portile2 (~> 2.4.0)
-    nokogumbo (1.5.0)
-      nokogiri
+    nokogumbo (2.0.1)
+      nokogiri (~> 1.8, >= 1.8.4)
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -206,10 +206,10 @@ GEM
     ruby_dep (1.5.0)
     rubyzip (1.2.2)
     safe_yaml (1.0.4)
-    sanitize (4.6.6)
+    sanitize (5.0.0)
       crass (~> 1.0.2)
-      nokogiri (>= 1.4.4)
-      nokogumbo (~> 1.4)
+      nokogiri (>= 1.8.0)
+      nokogumbo (~> 2.0)
     sass (3.7.3)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -305,7 +305,7 @@ DEPENDENCIES
   rails_autolink
   rspec-expectations
   rubocop (~> 0.65)
-  sanitize (>= 3.0.0)
+  sanitize (~> 5.0)
   sass-rails (~> 5.0)
   selenium-webdriver (~> 2.53)
   simplecov
