@@ -696,7 +696,7 @@ es:
       stats: "%a %d-%m"
     pm: pm
   todos:
-    action_deferred: La acción \'%{description}\' se aplazó
+    action_deferred: La acción '%{description}' se aplazó
     action_deleted_error: Failed to delete the action
     action_deleted_success: Successfully deleted next action
     action_due_on: "(action due on %{date})"
@@ -777,11 +777,11 @@ es:
     error_completing_todo: There was an error completing / activating the recurring
       todo %{description}
     error_deleting_item: There was an error deleting the item %{description}
-    error_deleting_recurring: There was an error deleting the recurring todo \'%{description}\'
+    error_deleting_recurring: There was an error deleting the recurring todo '%{description}'
     error_removing_dependency: There was an error removing the dependency
-    error_saving_recurring: There was an error saving the recurring todo \'%{description}\'
-    error_starring: Could not toggle the star of this todo \'%{description}\'
-    error_starring_recurring: Could not toggle the star of recurring todo \'%{description}\'
+    error_saving_recurring: There was an error saving the recurring todo '%{description}'
+    error_starring: Could not toggle the star of this todo '%{description}'
+    error_starring_recurring: Could not toggle the star of recurring todo '%{description}'
     error_toggle_complete: Could not mark this todo complete
     feed_title_in_context: in context '%{context}'
     feed_title_in_project: in project '%{project}'

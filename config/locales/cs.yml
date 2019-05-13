@@ -770,11 +770,11 @@ cs:
     edit_recurring_todo: Upravit opakovaný úkol
     error_completing_todo: Nepodařilo se ukončit / aktivovat opakovaný úkol %{description}
     error_deleting_item: Nepodařilo se smazat položku %{description}
-    error_deleting_recurring: Nepodařilo se smazat opakovaný úkol \'%{description}\'
+    error_deleting_recurring: Nepodařilo se smazat opakovaný úkol '%{description}'
     error_removing_dependency: Nepodařilo se odstranit závislost
-    error_saving_recurring: Nepodařilo se uložit opakovaný úkol \'%{description}\'
+    error_saving_recurring: Nepodařilo se uložit opakovaný úkol '%{description}'
     error_starring: Nepodařilo se označit úkol hvězdičkou '%{description}'
-    error_starring_recurring: Nebylo možno ohvězdičkovat opakovaný úkol \'%{description}\'
+    error_starring_recurring: Nebylo možno ohvězdičkovat opakovaný úkol '%{description}'
     error_toggle_complete: Nepodařilo se označit úkol jako hotový
     feeds:
       completed: 'Hotové: %{date}'
