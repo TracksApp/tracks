@@ -821,14 +821,14 @@ fr:
     error_deleting_item: Il s'est produit une erreur lors de la suppression de l'élément
       %{description}
     error_deleting_recurring: Il s'est produit une erreur lors de la suppression de
-      la tâche récurrente \'%{description}\'
+      la tâche récurrente '%{description}'
     error_removing_dependency: Il s'est produit une erreur lors de la suppression
       de la dépendance
     error_saving_recurring: Il s'est produit une erreur lors de la sauvegarde de la
-      tâche récurrente \'%{description}\'
-    error_starring: Impossible d'actionner l'étoile de cette tache \'%{description}\'
+      tâche récurrente '%{description}'
+    error_starring: Impossible d'actionner l'étoile de cette tache '%{description}'
     error_starring_recurring: Impossible d'actionner l'étoile de la tache récurrente
-      \'%{description}\'
+      '%{description}'
     error_toggle_complete: Impossible de marquer cette tache comme complétée
     feeds:
       completed: 'Complété : %{date}'
@@ -839,7 +839,7 @@ fr:
       one: A une action en attente
       other: A %{count} actions en attente
     hidden_actions: Actions cachées
-    in_hidden_state: a l\'état caché
+    in_hidden_state: a l'état caché
     in_pending_state: en attente
     list_incomplete_next_actions: Liste les prochaines actions incomplètes
     list_incomplete_next_actions_with_limit: Liste les %{count} dernières actions

@@ -791,9 +791,9 @@ de:
     error_removing_dependency: Beim Entfernen der Abhängigkeit ist ein Fehler aufgetreten
     error_saving_recurring: Es gab einen Fehler beim Speichern der wiederkehrenden
       Aufgabe '%{description}'
-    error_starring: Konnte die Hervorhebung von \'%{description}\' nicht durchführen
+    error_starring: Konnte die Hervorhebung von '%{description}' nicht durchführen
     error_starring_recurring: Konnte die Hervorhebung der wiederkehrenden Aufgabe
-      \'%{description}\' nicht durchführen
+      '%{description}' nicht durchführen
     error_toggle_complete: Könnte nicht diese Marke todo komplett
     feeds:
       completed: 'Erledigt: %{date}'

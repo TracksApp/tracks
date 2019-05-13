@@ -482,7 +482,7 @@ en:
     completed_rest_of_week: Completed in the rest of this week
     completed_rest_of_month: Completed in the rest of this month
     show_from: Show from
-    error_starring_recurring: "Could not toggle the star of recurring todo \'%{description}\'"
+    error_starring_recurring: "Could not toggle the star of recurring todo '%{description}'"
     recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
     completed_recurring: Completed recurring todos
     added_new_next_action: Added new next action
@@ -535,7 +535,7 @@ en:
     completed_last_day: Completed in the last 24 hours
     show_in_days: Show in %{days} days
     no_project: --No project--
-    error_saving_recurring: "There was an error saving the recurring todo \'%{description}\'"
+    error_saving_recurring: "There was an error saving the recurring todo '%{description}'"
     new_related_todo_created_short: created a new todo
     all_completed: All completed actions
     feed_title_in_context: "in context '%{context}'"
@@ -582,7 +582,7 @@ en:
       one: Has one pending action
       other: Has %{count} pending actions
     delete_action: Delete action
-    error_deleting_recurring: "There was an error deleting the recurring todo \'%{description}\'"
+    error_deleting_recurring: "There was an error deleting the recurring todo '%{description}'"
     recurring_todos: Recurring todos
     delete: Delete
     cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!

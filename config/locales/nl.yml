@@ -898,14 +898,14 @@ nl:
     error_deleting_item: Er is een fout opgetreden bij het verwijderen van het item
       '%{description}'
     error_deleting_recurring: Er is een fout opgetreden bij het verwijderen van het
-      item \'%{description}\'
+      item '%{description}'
     error_removing_dependency: Er is een fout opgetreden het verwijderen van de afhankelijke
       actie
     error_saving_recurring: Er is een fout opgetreden het opslaan van de terugkerende
       actie '%{description}'
-    error_starring: Kon niet de ster van deze actie niet omzetten \'%{description}\'
+    error_starring: Kon niet de ster van deze actie niet omzetten '%{description}'
     error_starring_recurring: Kon niet de ster van deze terugkerende actie niet omzetten
-      \'%{description}\'
+      '%{description}'
     error_toggle_complete: Kon deze actie niet als afgerond markeren
     feeds:
       completed: 'Voltooid: %{date}'
