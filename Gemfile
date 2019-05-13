@@ -26,7 +26,7 @@ gem "sqlite3", group: :sqlite
 gem "mysql2", "~> 0.5.2", group: :mysql
 
 gem "RedCloth"
-gem "sanitize", ">=3.0.0"
+gem "sanitize", "~> 5.0"
 gem "will_paginate"
 gem "acts_as_list"
 gem "aasm", '~> 3.4.0'
