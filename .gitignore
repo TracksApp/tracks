@@ -25,3 +25,4 @@ db/data.yml
 nbproject
 rerun.txt
 tags
+.skip-docker
