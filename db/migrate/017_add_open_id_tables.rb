@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-class AddOpenIdTables < ActiveRecord::Migration
+class AddOpenIdTables < ActiveRecord::Migration[5.2]
   def self.up
     create_table "open_id_associations", :force => true do |t|
       t.column "server_url", :binary

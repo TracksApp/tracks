@@ -1,4 +1,4 @@
-class AddUserId < ActiveRecord::Migration
+class AddUserId < ActiveRecord::Migration[5.2]
   
   class Project < ActiveRecord::Base; end
   class Context < ActiveRecord::Base; end

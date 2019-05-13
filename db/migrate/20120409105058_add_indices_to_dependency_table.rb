@@ -1,4 +1,4 @@
-class AddIndicesToDependencyTable < ActiveRecord::Migration
+class AddIndicesToDependencyTable < ActiveRecord::Migration[5.2]
   def self.up
     add_index :dependencies, :successor_id
     add_index :dependencies, :predecessor_id

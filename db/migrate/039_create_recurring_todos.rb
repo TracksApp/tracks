@@ -1,4 +1,4 @@
-class CreateRecurringTodos < ActiveRecord::Migration
+class CreateRecurringTodos < ActiveRecord::Migration[5.2]
   def self.up
     create_table :recurring_todos do |t|
       # todo data

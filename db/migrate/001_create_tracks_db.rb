@@ -1,5 +1,5 @@
 # Verision 1.0.3 database
-class CreateTracksDb < ActiveRecord::Migration
+class CreateTracksDb < ActiveRecord::Migration[5.2]
   def self.up
     create_table :contexts do |t|
       t.column :name,           :string,      :null => false

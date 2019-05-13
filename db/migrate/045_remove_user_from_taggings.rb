@@ -1,4 +1,4 @@
-class RemoveUserFromTaggings < ActiveRecord::Migration
+class RemoveUserFromTaggings < ActiveRecord::Migration[5.2]
   def self.up
     remove_index :taggings, [:tag_id, :taggable_id, :taggable_type]
     remove_index :tags, :name

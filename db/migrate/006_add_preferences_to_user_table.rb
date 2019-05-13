@@ -1,4 +1,4 @@
-class AddPreferencesToUserTable < ActiveRecord::Migration
+class AddPreferencesToUserTable < ActiveRecord::Migration[5.2]
   
   class User < ActiveRecord::Base; end
   

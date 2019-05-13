@@ -1,4 +1,4 @@
-class AddTagSupport < ActiveRecord::Migration
+class AddTagSupport < ActiveRecord::Migration[5.2]
   def self.up
     create_table :taggings do |t| 
       t.column :taggable_id, :integer 

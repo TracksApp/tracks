@@ -1,4 +1,4 @@
-class ConvertProjectToStateMachine < ActiveRecord::Migration
+class ConvertProjectToStateMachine < ActiveRecord::Migration[5.2]
 
   class Project < ActiveRecord::Base; end
 

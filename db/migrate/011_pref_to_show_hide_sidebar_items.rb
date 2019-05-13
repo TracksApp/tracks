@@ -1,4 +1,4 @@
-class PrefToShowHideSidebarItems < ActiveRecord::Migration
+class PrefToShowHideSidebarItems < ActiveRecord::Migration[5.2]
 
   class User < ActiveRecord::Base; serialize :preferences; end
 

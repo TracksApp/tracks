@@ -1,4 +1,4 @@
-class ConvertTodoToStateMachine < ActiveRecord::Migration
+class ConvertTodoToStateMachine < ActiveRecord::Migration[5.2]
 
   class Todo < ActiveRecord::Base; belongs_to :project; end
   class Immediate < Todo; end

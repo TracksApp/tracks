@@ -1,4 +1,4 @@
-class FixIncorrectlyHiddenTodos < ActiveRecord::Migration
+class FixIncorrectlyHiddenTodos < ActiveRecord::Migration[5.2]
   def self.up
     hidden_todos_without_project =
       Todo.where(:state => 'project_hidden', :project_id => nil)

@@ -1,4 +1,4 @@
-class AddTodoDependencies < ActiveRecord::Migration
+class AddTodoDependencies < ActiveRecord::Migration[5.2]
   def self.up
     create_table :dependencies do |t|
       t.integer :successor_id,     :null => false

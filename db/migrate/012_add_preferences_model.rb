@@ -1,4 +1,4 @@
-class AddPreferencesModel < ActiveRecord::Migration
+class AddPreferencesModel < ActiveRecord::Migration[5.2]
 
   class User < ActiveRecord::Base; serialize :preferences; end
 

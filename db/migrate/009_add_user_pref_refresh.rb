@@ -1,4 +1,4 @@
-class AddUserPrefRefresh < ActiveRecord::Migration
+class AddUserPrefRefresh < ActiveRecord::Migration[5.2]
   
   class User < ActiveRecord::Base; serialize :preferences; end
   
