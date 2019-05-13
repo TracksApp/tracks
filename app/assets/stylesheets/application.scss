@@ -17,6 +17,10 @@
  *= require_self
  */
 
+//= require peek
+//= require peek/views/rblineprof
+//= require peek/views/performance_bar
+
 @import "icons";
 
 .legacy-ui {
@@ -52,4 +56,13 @@ body {
   font-family: $font-family-base;
   color: $text-color;
   background-color: $body-bg;
+}
+
+#peek {
+  background: black;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }

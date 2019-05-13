@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount Peek::Railtie => '/peek', :defaults => { :format => 'json' }
   mount Tolk::Engine => '/tolk', :as => 'tolk' if Rails.env=='development'
 
   root :to => 'todos#index'

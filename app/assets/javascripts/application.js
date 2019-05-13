@@ -21,6 +21,10 @@
 //= require jquery-ui/effect-highlight
 //= require jquery-ui/sortable
 
+//= require peek
+//= require peek/views/rblineprof
+//= require peek/views/performance_bar
+
 // Stuff in app/assets
 //= require tracks
 //= require tracks_pages

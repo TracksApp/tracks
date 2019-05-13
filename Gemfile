@@ -55,6 +55,11 @@ group :development do
   gem 'tolk', '~> 3.1.0'
 
   gem "bullet"
+
+  gem "peek"
+  gem "peek-git"
+  gem "peek-rblineprof"
+  gem "peek-performance_bar"
 end
 
 group :development, :test do
