@@ -52,7 +52,7 @@ group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 3.1.0'
+  gem 'tolk', '~> 3.2.0'
 
   gem "bullet"
   gem "rack-mini-profiler"
