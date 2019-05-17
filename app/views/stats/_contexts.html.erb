@@ -1,14 +1,41 @@
 <br style="clear:both">
 
-<h2>Spread of actions for all contexts</h2>
-<%= pie_chart Stats::TopContextsQuery.new(current_user).result.map { |context|
-  [context.name, context.total]
-} %>
+<% data = {
+  datasets: [{
+    data: Array.new
+  }],
+  labels: Array.new
+}
+Stats::TopContextsQuery.new(current_user).result.map { |context|
+  data[:datasets][0][:data].append(context.total)
+  data[:labels].append(context.name)
+}
+options = {
+	width: "400px",
+	height: "400px",
+	maintainAspectRatio: false,
+	responsive: false,
+	plugins: {
+	  colorschemes: {
+            scheme: 'brewer.Paired12'
+	  }
+        }
+}
+%>
+<%= pie_chart data, options.merge({'title': {'display': true, 'text': 'Spread of actions for all contexts'}}) %>
 
-<h2>Spread of actions for visible contexts</h2>
-<%= pie_chart Stats::TopContextsQuery.new(current_user, :running => true).result.map { |context|
-  [context.name, context.total]
-} %>
+<% data = {
+  datasets: [{
+    data: Array.new
+  }],
+  labels: Array.new
+  }
+Stats::TopContextsQuery.new(current_user, :running => true).result.map { |context|
+  data[:datasets][0][:data].append(context.total)
+  data[:labels].append(context.name)
+}
+%>
+<%= pie_chart data, options.merge({'title': {'display': true, 'text': 'Spread of actions for visible contexts'}}) %>
 
 <%= render :partial => 'contexts_list', :locals => {:contexts => contexts.actions, :key => 'contexts'} -%>
 

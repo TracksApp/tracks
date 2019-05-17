@@ -66,7 +66,8 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.0.1)
-    chartkick (3.0.2)
+    chartjs-ror (3.6.4)
+      rails (>= 3.1)
     childprocess (0.9.0)
       ffi (~> 1.0, >= 1.0.11)
     climate_control (0.2.0)
@@ -285,7 +286,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.4.1)
   bullet
   byebug
-  chartkick
+  chartjs-ror
   codeclimate-test-reporter (= 1.0.7)
   coffee-rails (~> 4.2.0)
   database_cleaner

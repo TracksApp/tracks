@@ -69,6 +69,11 @@ module Stats
   
       # get percentage done cumulative
       @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
+
+      return [
+        {name: "Percentage", data: @cum_percent_done.each_with_index.map { |total, week| [week, total] } , type: "line"},
+	{name: "Actions", data: @actions_running_time_array.each_with_index.map { |total, week| [week, total] } }
+      ]
     end
 
     def open_per_week_data
@@ -101,10 +106,13 @@ module Stats
       @actions_completion_day.each { |t| @actions_completion_day_array[ t.completed_at.wday ] += 1 } 
   
       # FIXME: Day of week as string instead of number
-      return [
-        {name: "Created", data: @actions_creation_day_array.each_with_index.map { |total, day| [day, total] } },
-        {name: "Completed", data: @actions_completion_day_array.each_with_index.map { |total, day| [day, total] } }
-      ]
+      return {
+	datasets: [
+	  {label: "Created", data: @actions_creation_day_array.map { |total| [total] } },
+	  {label: "Completed", data: @actions_completion_day_array.map { |total| [total] } }
+	],
+	labels: @actions_creation_day_array.each_with_index.map { |total, day| [day] }
+      }
     end
 
     def day_of_week_30days_data
@@ -121,10 +129,13 @@ module Stats
       @actions_completion_day.each { |r| @actions_completion_day_array[r.completed_at.wday] += 1 }
   
       # FIXME: Day of week as string instead of number
-      return [
-        {name: "Created", data: @actions_creation_day_array.each_with_index.map { |total, day| [day, total] } },
-        {name: "Completed", data: @actions_completion_day_array.each_with_index.map { |total, day| [day, total] } }
-      ]
+      return {
+	datasets: [
+	  {label: "Created", data: @actions_creation_day_array.map { |total| [total] } },
+	  {label: "Completed", data: @actions_completion_day_array.map { |total| [total] } }
+	],
+	labels: @actions_creation_day_array.each_with_index.map { |total, day| [day] }
+      }
     end
 
     def time_of_day_all_data
@@ -139,10 +150,13 @@ module Stats
       @actions_completion_hour_array = Array.new(24) { |i| 0}
       @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 } 
   
-      return [
-        {name: "Created", data: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour, total] } },
-        {name: "Completed", data: @actions_completion_hour_array.each_with_index.map { |total, hour| [hour, total] } }
-      ]
+      return {
+	datasets: [
+	  {label: "Created", data: @actions_creation_hour_array.map { |total| [total] } },
+	  {label: "Completed", data: @actions_completion_hour_array.map { |total| [total] } }
+	],
+	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] }
+      }
     end
 
     def time_of_day_30days_data
@@ -157,10 +171,13 @@ module Stats
       @actions_completion_hour_array = Array.new(24) { |i| 0}
       @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 } 
   
-      return [
-        {name: "Created", data: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour, total] } },
-        {name: "Completed", data: @actions_completion_hour_array.each_with_index.map { |total, hour| [hour, total] } }
-      ]
+      return {
+	datasets: [
+	  {label: "Created", data: @actions_creation_hour_array.map { |total| [total] } },
+	  {label: "Completed", data: @actions_completion_hour_array.map { |total| [total] } }
+	],
+	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] }
+      }
     end
 
     private
@@ -218,5 +235,26 @@ module Stats
       end_week.upto(start_week) { |i| a << i };
       return a
     end
+
+    def convert_to_weeks_from_today_array(records, array_size, date_method_on_todo)
+      return convert_to_array(records, array_size) { |r| [difference_in_weeks(@today, r.send(date_method_on_todo))]}
+    end
+
+    def cut_off_array_with_sum(array, cut_off)
+      # +1 to hold sum of rest
+      a = Array.new(cut_off+1){|i| array[i]||0}
+      # add rest of array to last elem
+      a[cut_off] += array.inject(:+) - a.inject(:+)
+      return a
+    end
+
+    def convert_to_cumulative_array(array, max)
+      # calculate fractions
+      a = Array.new(array.size){|i| array[i]*100.0/max}
+      # make cumulative
+      1.upto(array.size-1){ |i| a[i] += a[i-1] }
+      return a
+    end
+
   end
 end

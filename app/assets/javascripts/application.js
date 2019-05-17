@@ -37,5 +37,5 @@
 //= require superfish
 //= require supersubs
 
-//= require Chart.bundle
-//= require chartkick
+//= require Chart.min
+//= require chartjs-plugin-colorschemes.min
