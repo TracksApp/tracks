@@ -37,6 +37,8 @@ Stats::TopContextsQuery.new(current_user, :running => true).result.map { |contex
 %>
 <%= pie_chart data, options.merge({'title': {'display': true, 'text': 'Spread of actions for visible contexts'}}) %>
 
+<br style="clear:both">
+
 <%= render :partial => 'contexts_list', :locals => {:contexts => contexts.actions, :key => 'contexts'} -%>
 
 <%= render :partial => 'contexts_list', :locals => {:contexts => contexts.running_actions, :key => 'visible_contexts_with_incomplete_actions'} -%>
