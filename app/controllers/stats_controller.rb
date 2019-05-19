@@ -44,13 +44,6 @@ class StatsController < ApplicationController
     render :layout => false
   end
 
-  def context_running_actions_data
-    actions = Stats::TopContextsQuery.new(current_user, :running => true).result
-    @data = Stats::PieChartData.new(actions, t('stats.spread_of_running_actions_for_visible_contexts'), 60)
-
-    render :pie_chart_data, :layout => false
-  end
-
   def show_selected_actions_from_chart
     @page_title = t('stats.action_selection_title')
     @count = 99
@@ -169,5 +162,15 @@ class StatsController < ApplicationController
 
   def put_events_into_month_buckets(records, array_size, date_method_on_todo)
     convert_to_array(records.select { |x| x.send(date_method_on_todo) }, array_size) { |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
+  end
+
+  # assumes date1 > date2
+  def difference_in_days(date1, date2)
+    return ((date1.utc.at_midnight-date2.utc.at_midnight)/SECONDS_PER_DAY).to_i
+  end
+
+  # assumes date1 > date2
+  def difference_in_weeks(date1, date2)
+    return difference_in_days(date1, date2) / 7
   end
 end

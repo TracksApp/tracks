@@ -54,6 +54,7 @@ module Stats
       @actions_created_avg_last12months_array = compute_running_avg_array(created_in_last_15_months, 13)
   
       # interpolate avg for current month.
+      # FIXME: These should also be used.
       @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last12months_array)
       @interpolated_actions_done_this_month = interpolate_avg_for_current_month(@actions_done_last12months_array)
   
@@ -62,14 +63,14 @@ module Stats
 
       return {
 	datasets: [
-	  {label: "Avg created", data: @created_count_array.map { |total| [total] }, type: "line"},
-	  {label: "Avg completed", data: @done_count_array.map { |total| [total] }, type: "line"},
-	  {label: "3 months avg completed", data: @actions_done_avg_last12months_array.map { |total| [total] }, type: "line"},
-	  {label: "3 months avg created", data: @actions_created_avg_last12months_array.map { |total| [total] }, type: "line"},
-	  {label: "Created", data: @actions_created_last12months_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_done_last12months_array.map { |total| [total] } }
+	  {label: I18n.t('stats.labels.avg_created'), data: @created_count_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.avg_completed'), data: @done_count_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.month_avg_completed', :months => 3), data: @actions_done_avg_last12months_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.month_avg_created', :months => 3), data: @actions_created_avg_last12months_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.created'), data: @actions_created_last12months_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_done_last12months_array.map { |total| [total] } },
 	],
-	labels: @actions_done_avg_last12months_array.each_with_index.map { |total, month| [month] }
+	labels: array_of_month_labels(@done_count_array.size),
       }
     end
 
@@ -88,18 +89,16 @@ module Stats
       created_count_array = Array.new(30){ |i| @actions_created_last30days.size/30.0 }
       done_count_array    = Array.new(30){ |i| @actions_done_last30days.size/30.0 }
       # TODO: make the strftime i18n proof
-      # TODO: Fix this, broke during transition from Flash-based stats.
-#      time_labels         = Array.new(30){ |i| l(Time.zone.now-i.days, :format => :stats)  }
+      time_labels         = Array.new(30){ |i| I18n.l(Time.zone.now-i.days, :format => :stats)  }
   
       return {
 	datasets: [
-	  {label: "Avg created", data: created_count_array.map { |total| [total] }, type: "line"},
-	  {label: "Avg completed", data: done_count_array.map { |total| [total] }, type: "line"},
-	  {label: "Created", data: @actions_created_last30days_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_done_last30days_array.map { |total| [total] } }
+	  {label: I18n.t('stats.labels.avg_created'), data: created_count_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.completed'), data: done_count_array.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.labels.created'), data: @actions_created_last30days_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_done_last30days_array.map { |total| [total] } },
 	],
-#	labels: time_labels
-	labels: @actions_done_last30days_array.each_with_index.map { |total, days| [days] }
+	labels: time_labels,
       }
     end
 
@@ -122,10 +121,10 @@ module Stats
   
       return {
 	datasets: [
-	  {label: "Percentage", data: @cum_percent_done.map { |total| [total] }, type: "line"},
-	  {label: "Actions", data: @actions_completion_time_array.map { |total| [total] } }
+	  {label: I18n.t('stats.legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.legend.actions'), data: @actions_completion_time_array.map { |total| [total] } },
 	],
-	labels: @actions_completion_time_array.each_with_index.map { |total, week| [week] }
+	labels: @actions_completion_time_array.each_with_index.map { |total, week| [week] },
       }
     end
 
@@ -148,10 +147,10 @@ module Stats
 
       return {
 	datasets: [
-	  {label: "Percentage", data: @cum_percent_done.map { |total| [total] }, type: "line"},
-	  {label: "Actions", data: @actions_running_time_array.map { |total| [total] } }
+	  {label: I18n.t('stats.running_time_all_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.running_time_all_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
 	],
-	labels: @actions_running_time_array.each_with_index.map { |total, week| [week] }
+	labels: @actions_running_time_array.each_with_index.map { |total, week| [week] },
       }
     end
 
@@ -183,10 +182,10 @@ module Stats
   
       return {
 	datasets: [
-	  {label: "Percentage", data: @cum_percent_done.map { |total| [total] }, type: "line"},
-	  {label: "Actions", data: @actions_running_time_array.map { |total| [total] } }
+	  {label: I18n.t('stats.running_time_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
+	  {label: I18n.t('stats.running_time_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
 	],
-	labels: @actions_running_time_array.each_with_index.map { |total, week| [week] }
+	labels: @actions_running_time_array.each_with_index.map { |total, week| [week] },
       }
     end
 
@@ -205,9 +204,9 @@ module Stats
 
       return {
 	datasets: [
-	  {label: "Actions", data: @actions_open_per_week_array.map { |total| [total] } }
+          {label: I18n.t('stats.open_per_week_legend.actions'), data: @actions_open_per_week_array.map { |total| [total] } },
 	],
-	labels: @actions_open_per_week_array.each_with_index.map { |total, week| [week] }
+	labels: @actions_open_per_week_array.each_with_index.map { |total, week| [week] },
       }
     end
 
@@ -224,13 +223,12 @@ module Stats
       @actions_completion_day_array = Array.new(7) { |i| 0}
       @actions_completion_day.each { |t| @actions_completion_day_array[ t.completed_at.wday ] += 1 } 
   
-      # FIXME: Day of week as string instead of number
       return {
 	datasets: [
-	  {label: "Created", data: @actions_creation_day_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_completion_day_array.map { |total| [total] } }
+          {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array.map { |total| [total] } },
 	],
-	labels: @actions_creation_day_array.each_with_index.map { |total, day| [day] }
+	labels: I18n.t('date.day_names'),
       }
     end
 
@@ -247,13 +245,12 @@ module Stats
       @actions_completion_day_array = Array.new(7) { |i| 0}
       @actions_completion_day.each { |r| @actions_completion_day_array[r.completed_at.wday] += 1 }
   
-      # FIXME: Day of week as string instead of number
       return {
 	datasets: [
-	  {label: "Created", data: @actions_creation_day_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_completion_day_array.map { |total| [total] } }
+	  {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array.map { |total| [total] } },
 	],
-	labels: @actions_creation_day_array.each_with_index.map { |total, day| [day] }
+	labels: I18n.t('date.day_names'),
       }
     end
 
@@ -271,10 +268,10 @@ module Stats
   
       return {
 	datasets: [
-	  {label: "Created", data: @actions_creation_hour_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_completion_hour_array.map { |total| [total] } }
+	  {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array.map { |total| [total] } },
 	],
-	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] }
+	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] },
       }
     end
 
@@ -292,10 +289,10 @@ module Stats
   
       return {
 	datasets: [
-	  {label: "Created", data: @actions_creation_hour_array.map { |total| [total] } },
-	  {label: "Completed", data: @actions_completion_hour_array.map { |total| [total] } }
+	  {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array.map { |total| [total] } },
+	  {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array.map { |total| [total] } },
 	],
-	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] }
+	labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] },
       }
     end
 
@@ -414,5 +411,13 @@ module Stats
       result[0] = "null"
       result
     end # unsolved, not triggered, edge case for set.length == upper_bound + 1
+
+    def month_label(i)
+      I18n.t('date.month_names')[ (Time.zone.now.mon - i -1 ) % 12 + 1 ]
+    end
+  
+    def array_of_month_labels(count)
+      Array.new(count) { |i| month_label(i) }
+    end
   end
 end
