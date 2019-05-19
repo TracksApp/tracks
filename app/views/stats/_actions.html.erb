@@ -25,9 +25,6 @@ options = {
   'title': {'display': true, 'text': t('stats.actions_30days_title')},
 }) %>
 
-<%
-# TODO: Missing the first 3 month avg values because they're null?
-%>
 <%= bar_chart actions.done_last12months_data, options.merge({
   scales: {
     xAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.months_ago')}}],
