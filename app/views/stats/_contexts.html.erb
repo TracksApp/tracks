@@ -13,15 +13,15 @@ Stats::TopContextsQuery.new(current_user).result.map { |context|
   data[:ids].append(context.id)
 }
 options = {
-	width: "400px",
-	height: "400px",
-	maintainAspectRatio: false,
-	responsive: false,
-	plugins: {
-	  colorschemes: {
-            scheme: 'brewer.Paired12',
-	  },
-        },
+  width: "400px",
+  height: "400px",
+  maintainAspectRatio: false,
+  responsive: false,
+  plugins: {
+    colorschemes: {
+      scheme: 'brewer.Paired12',
+    },
+  },
 }
 %>
 <% #TODO: Move data handling to model. Show value as percentage %>

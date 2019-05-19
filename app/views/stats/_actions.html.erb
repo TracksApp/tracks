@@ -1,15 +1,15 @@
 <%= render :partial => 'time_to_complete', :locals => {:ttc => actions.ttc} -%>
 <%
 options = {
-        width: "400px",
-        height: "400px",
-        maintainAspectRatio: false,
-        responsive: false,
-        plugins: {
-          colorschemes: {
-            scheme: 'brewer.Paired12',
-          },
-        },
+  width: "400px",
+  height: "400px",
+  maintainAspectRatio: false,
+  responsive: false,
+  plugins: {
+    colorschemes: {
+      scheme: 'brewer.Paired12',
+    },
+  },
 }
 %>
 <p><%= t('stats.actions_actions_avg_created_30days', :count => (actions.created_last30days*10.0/30.0).round/10.0 )%>
