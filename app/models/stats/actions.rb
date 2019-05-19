@@ -94,7 +94,7 @@ module Stats
       return {
         datasets: [
           {label: I18n.t('stats.labels.avg_created'), data: created_count_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.completed'), data: done_count_array.map { |total| [total] }, type: "line"},
+          {label: I18n.t('stats.labels.avg_completed'), data: done_count_array.map { |total| [total] }, type: "line"},
           {label: I18n.t('stats.labels.created'), data: @actions_created_last30days_array.map { |total| [total] } },
           {label: I18n.t('stats.labels.completed'), data: @actions_done_last30days_array.map { |total| [total] } },
         ],
@@ -119,12 +119,16 @@ module Stats
       # get percentage done cumulative
       @cum_percent_done = convert_to_cumulative_array(@actions_completion_time_array, @actions_completion_time.count(:all))
 
+      time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
+      time_labels[0]      = I18n.t('stats.within_one')
+      time_labels[@count] = "> #{@count}"
+
       return {
         datasets: [
           {label: I18n.t('stats.legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
           {label: I18n.t('stats.legend.actions'), data: @actions_completion_time_array.map { |total| [total] } },
         ],
-        labels: @actions_completion_time_array.each_with_index.map { |total, week| [week] },
+        labels: time_labels,
       }
     end
 
@@ -145,12 +149,16 @@ module Stats
       # get percentage done cumulative
       @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
 
+      time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
+      time_labels[0] = "< 1"
+      time_labels[@count] = "> #{@count}"
+
       return {
         datasets: [
           {label: I18n.t('stats.running_time_all_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
           {label: I18n.t('stats.running_time_all_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
         ],
-        labels: @actions_running_time_array.each_with_index.map { |total, week| [week] },
+        labels: time_labels,
       }
     end
 
@@ -180,12 +188,16 @@ module Stats
       # get percentage done cumulative
       @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
 
+      time_labels         = Array.new(@count){ |i| "#{i}-#{i+1}" }
+      time_labels[0] = "< 1"
+      time_labels[@count] = "> #{@count}"
+
       return {
         datasets: [
           {label: I18n.t('stats.running_time_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
           {label: I18n.t('stats.running_time_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
         ],
-        labels: @actions_running_time_array.each_with_index.map { |total, week| [week] },
+        labels: time_labels,
       }
     end
 
@@ -202,11 +214,14 @@ module Stats
       @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks+1)
       @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
 
+      time_labels         = Array.new(@count+1){ |i| "#{i}-#{i+1}" }
+      time_labels[0]      = "< 1"
+
       return {
         datasets: [
           {label: I18n.t('stats.open_per_week_legend.actions'), data: @actions_open_per_week_array.map { |total| [total] } },
         ],
-        labels: @actions_open_per_week_array.each_with_index.map { |total, week| [week] },
+        labels: time_labels,
       }
     end
 

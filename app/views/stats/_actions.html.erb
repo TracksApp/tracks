@@ -58,7 +58,7 @@ options = {
     yAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_legend.actions')}}],
   },
   'title': {'display': true, 'text': t('stats.current_running_time_of_incomplete_visible_actions')},
-  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "art") + '?index=" + array[0]._index; }',
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "avrt") + '?index=" + array[0]._index; }',
 }) %>
 
 <%
@@ -67,10 +67,10 @@ options = {
 <%= bar_chart actions.running_time_data, options.merge({
   scales: {
     xAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_all_legend.running_time')}}],
-    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_legend.actions')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_all_legend.actions')}}],
   },
   'title': {'display': true, 'text': t('stats.running_time_all')},
-  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "avrt") + '?index=" + array[0]._index; }',
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "art") + '?index=" + array[0]._index; }',
 }) %>
 
 <br style="clear:both">
