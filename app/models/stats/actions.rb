@@ -63,12 +63,12 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.avg_created'), data: @created_count_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.avg_completed'), data: @done_count_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.month_avg_completed', :months => 3), data: @actions_done_avg_last12months_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.month_avg_created', :months => 3), data: @actions_created_avg_last12months_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.created'), data: @actions_created_last12months_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_done_last12months_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.avg_created'), data: @created_count_array, type: "line"},
+          {label: I18n.t('stats.labels.avg_completed'), data: @done_count_array, type: "line"},
+          {label: I18n.t('stats.labels.month_avg_completed', :months => 3), data: @actions_done_avg_last12months_array, type: "line"},
+          {label: I18n.t('stats.labels.month_avg_created', :months => 3), data: @actions_created_avg_last12months_array, type: "line"},
+          {label: I18n.t('stats.labels.created'), data: @actions_created_last12months_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_done_last12months_array},
         ],
         labels: array_of_month_labels(@done_count_array.size),
       }
@@ -93,10 +93,10 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.avg_created'), data: created_count_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.avg_completed'), data: done_count_array.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.labels.created'), data: @actions_created_last30days_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_done_last30days_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.avg_created'), data: created_count_array, type: "line"},
+          {label: I18n.t('stats.labels.avg_completed'), data: done_count_array, type: "line"},
+          {label: I18n.t('stats.labels.created'), data: @actions_created_last30days_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_done_last30days_array},
         ],
         labels: time_labels,
       }
@@ -125,8 +125,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.legend.actions'), data: @actions_completion_time_array.map { |total| [total] } },
+          {label: I18n.t('stats.legend.percentage'), data: @cum_percent_done, type: "line"},
+          {label: I18n.t('stats.legend.actions'), data: @actions_completion_time_array},
         ],
         labels: time_labels,
       }
@@ -155,8 +155,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.running_time_all_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.running_time_all_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
+          {label: I18n.t('stats.running_time_all_legend.percentage'), data: @cum_percent_done, type: "line"},
+          {label: I18n.t('stats.running_time_all_legend.actions'), data: @actions_running_time_array},
         ],
         labels: time_labels,
       }
@@ -194,8 +194,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.running_time_legend.percentage'), data: @cum_percent_done.map { |total| [total] }, type: "line"},
-          {label: I18n.t('stats.running_time_legend.actions'), data: @actions_running_time_array.map { |total| [total] } },
+          {label: I18n.t('stats.running_time_legend.percentage'), data: @cum_percent_done, type: "line"},
+          {label: I18n.t('stats.running_time_legend.actions'), data: @actions_running_time_array},
         ],
         labels: time_labels,
       }
@@ -219,7 +219,7 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.open_per_week_legend.actions'), data: @actions_open_per_week_array.map { |total| [total] } },
+          {label: I18n.t('stats.open_per_week_legend.actions'), data: @actions_open_per_week_array},
         ],
         labels: time_labels,
       }
@@ -240,8 +240,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array},
         ],
         labels: I18n.t('date.day_names'),
       }
@@ -262,8 +262,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.created'), data: @actions_creation_day_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_completion_day_array},
         ],
         labels: I18n.t('date.day_names'),
       }
@@ -283,8 +283,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array},
         ],
         labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] },
       }
@@ -304,8 +304,8 @@ module Stats
 
       return {
         datasets: [
-          {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array.map { |total| [total] } },
-          {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array.map { |total| [total] } },
+          {label: I18n.t('stats.labels.created'), data: @actions_creation_hour_array},
+          {label: I18n.t('stats.labels.completed'), data: @actions_completion_hour_array},
         ],
         labels: @actions_creation_hour_array.each_with_index.map { |total, hour| [hour] },
       }
