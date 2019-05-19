@@ -27,7 +27,7 @@ options = {
 <% #TODO: Move data handling to model. Show value as percentage %>
 <%= pie_chart data, options.merge({
   'title': {'display': true, 'text': t('stats.spread_of_actions_for_all_context')},
-  'onClick': 'function(event, array) { console.log(array); window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }'
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }'
 }) %>
 
 <% data = {
@@ -44,7 +44,7 @@ Stats::TopContextsQuery.new(current_user, :running => true).result.map { |contex
 }
 %>
 <%= pie_chart data, options.merge({
-  'onClick': 'function(event, array) { console.log(array); window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }',
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }',
   'title': {'display': true, 'text': t('stats.spread_of_running_actions_for_visible_contexts')}}) %>
 
 <br style="clear:both">
