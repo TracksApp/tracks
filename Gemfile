@@ -31,13 +31,14 @@ gem "will_paginate"
 gem "acts_as_list"
 gem "aasm", '~> 3.4.0'
 gem "htmlentities"
-gem "swf_fu"
 gem "rails_autolink"
 gem 'puma', '~> 3.12'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
+gem 'chartjs-ror'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
@@ -88,5 +89,3 @@ group :test do
   # get test coverage info on codeclimate
   gem "codeclimate-test-reporter", "1.0.7", group: :test, require: nil
 end
-
-gem 'chartjs-ror'
