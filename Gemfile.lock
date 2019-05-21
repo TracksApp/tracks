@@ -245,9 +245,6 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.1)
-    swf_fu (2.0.4)
-      coffee-script
-      rails (>= 3.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     therubyracer (0.12.3)
@@ -314,7 +311,6 @@ DEPENDENCIES
   simplecov
   spring
   sqlite3
-  swf_fu
   therubyracer
   tolk (~> 3.1.0)
   uglifier (>= 1.3.0)
