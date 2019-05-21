@@ -84,6 +84,10 @@ class FeedSmokeTest < ActionDispatch::IntegrationTest
     assert_success "/todos.rss?token=#{ users(:admin_user).token }&done=7"
   end
   
+  def test_all_starred_active_actions_rss
+    assert_success "/todos.rss?token=#{ users(:admin_user).token }&tag=starred"
+  end
+
   def test_all_actions_completed_in_last_7_days_txt
     assert_success "/todos.txt?token=#{ users(:admin_user).token }&done=7"
   end
