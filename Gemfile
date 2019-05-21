@@ -62,7 +62,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.65", require: false
+  gem "rubocop", "~> 0.69", require: false
 end
 
 group :test do
@@ -76,7 +76,7 @@ group :test do
   gem "mocha", :require => false
   gem "minitest-stub-const"
 
-  gem "selenium-webdriver", "~> 2.53"
+  gem "selenium-webdriver", "~> 3.142"
 
   # uncomment to use the webkit option. This depends on Qt being installed
   # gem "capybara-webkit"
