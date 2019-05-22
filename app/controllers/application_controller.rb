@@ -75,8 +75,10 @@ class ApplicationController < ActionController::Base
     if todos_parent.nil?
       count = 0
     elsif (todos_parent.is_a?(Project) && todos_parent.hidden?)
+      init_hidden_todo_counts(['project']) if !@project_hidden_todo_counts
       count = @project_hidden_todo_counts[todos_parent.id]
     elsif (todos_parent.is_a?(Context) && todos_parent.hidden?)
+      init_hidden_todo_counts(['context']) if !@context_hidden_todo_counts
       count = @context_hidden_todo_counts[todos_parent.id]
     else
       count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
