@@ -61,7 +61,7 @@ en:
         date_format: Date format
         show_hidden_contexts_in_sidebar: Show hidden contexts in sidebar
         mobile_todos_per_page: Actions per page (Mobile View)
-        verbose_action_descriptors: Verbose action descriptors
+        verbose_action_descriptors: Show descriptors (context, project) of actions in a verbose form
         staleness_starts: Start of staleness
         review_period: Project review interval
         sms_context: Default email context

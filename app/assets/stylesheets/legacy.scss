@@ -428,6 +428,10 @@ a.footer_link {
         width: 250px;
     }
 
+    input[type="checkbox"] {
+        height: auto;
+    }
+
     /* override jquery css to match tracks defaults better */
     div.pref_new_token a { color: #CC3334; }
 }
