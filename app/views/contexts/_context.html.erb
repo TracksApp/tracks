@@ -8,7 +8,7 @@ cache [context, source_view_key, current_user.date.strftime("%Y%m%d"), @tag_name
     render :partial => 'todos/collection',
       :object => @not_done,
       :locals => { :settings => {
-        :id => "c#{context.id}",
+        :id => "context_#{context.id}",
         :collapsible => settings[:collapsible],
         :container_name => 'context',
         :title => show_context_name(context),

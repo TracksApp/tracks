@@ -648,7 +648,7 @@ var ContextListPage = {
         }
     },
     save_context_name: function(value, settings) {
-        var context_id = $(this).parents('.container.context').get(0).id.split('c')[1];
+        var context_id = $(this).parents('.container.context').get(0).id.split('_')[1];
         var highlight = function(){
             $('div.context span#context_name').effect('highlight', {}, 500);
         };
