@@ -1085,7 +1085,7 @@ function update_order(event, ui){
 
 function set_defaults(defaults, field, input_name) {
   if(defaults[field.val()] !== undefined) {
-    var input = field.parents(".edit_todo_form").find('input[name='+input_name+']');
+    var input = field.parents("form").find('input[name='+input_name+']');
     if(input.attr('edited') === undefined) {
       input.val(defaults[field.val()]);
     }
