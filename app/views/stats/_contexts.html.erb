@@ -1,6 +1,51 @@
-<% contexts.charts.each do |chart| %><%=
-    render :partial => 'chart', :locals => {:chart => chart}
--%><% end %>
+<br style="clear:both">
+
+<% data = {
+  datasets: [{
+    data: Array.new,
+  }],
+  labels: Array.new,
+  ids: Array.new,
+}
+Stats::TopContextsQuery.new(current_user).result.map { |context|
+  data[:datasets][0][:data].append(context.total)
+  data[:labels].append(context.name)
+  data[:ids].append(context.id)
+}
+options = {
+  width: "400px",
+  height: "400px",
+  maintainAspectRatio: false,
+  responsive: false,
+  plugins: {
+    colorschemes: {
+      scheme: 'brewer.Paired12',
+    },
+  },
+}
+%>
+<% #TODO: Move data handling to model. Show value as percentage %>
+<%= pie_chart data, options.merge({
+  'title': {'display': true, 'text': t('stats.spread_of_actions_for_all_context')},
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }'
+}) %>
+
+<% data = {
+  datasets: [{
+    data: Array.new,
+  }],
+  labels: Array.new,
+  ids: Array.new,
+}
+Stats::TopContextsQuery.new(current_user, :running => true).result.map { |context|
+  data[:datasets][0][:data].append(context.total)
+  data[:labels].append(context.name)
+  data[:ids].append(context.id)
+}
+%>
+<%= pie_chart data, options.merge({
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'contexts', :action => 'show', :id => -1).gsub('-1', '') + '" + array[0]._chart.chart.data.ids[array[0]._index]; }',
+  'title': {'display': true, 'text': t('stats.spread_of_running_actions_for_visible_contexts')}}) %>
 
 <br style="clear:both">
 

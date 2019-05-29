@@ -36,3 +36,6 @@
 //= require jquery.truncator
 //= require superfish
 //= require supersubs
+
+//= require Chart.min
+//= require chartjs-plugin-colorschemes.min

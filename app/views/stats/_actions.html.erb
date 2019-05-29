@@ -1,17 +1,111 @@
 <%= render :partial => 'time_to_complete', :locals => {:ttc => actions.ttc} -%>
-
+<%
+options = {
+  width: "400px",
+  height: "400px",
+  maintainAspectRatio: false,
+  responsive: false,
+  plugins: {
+    colorschemes: {
+      scheme: 'brewer.Paired12',
+    },
+  },
+}
+%>
 <p><%= t('stats.actions_actions_avg_created_30days', :count => (actions.created_last30days*10.0/30.0).round/10.0 )%>
 <%= t('stats.actions_avg_completed_30days', :count => (actions.done_last30days*10.0/30.0).round/10.0 )%>
 <%= t('stats.actions_avg_created', :count => (actions.created_last12months*10.0/12.0).round/10.0 )%>
 <%= t('stats.actions_avg_completed', :count => (actions.done_last12months*10.0/12.0).round/10.0 )%></p>
 
-<% actions.completion_charts.each do |chart| %><%=
-    render :partial => 'chart', :locals => {:chart => chart}
--%><% end %>
+<%= bar_chart actions.done_last30days_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.number_of_days')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.actions_30days_title')},
+}) %>
+
+<%= bar_chart actions.done_last12months_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.months_ago')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.actions_lastyear_title')},
+  'onClick': 'function() { window.location.href = "' + url_for(:controller => 'stats', :action => 'actions_done_last_years') + '"; }',
+  }) %>
+
+<%
+# TODO: There should be separate scales for percentage and amount of tasks so that the max of both is in the top of the chart, ie. the left y-axis should be "Percentage".
+%>
+<%= bar_chart actions.completion_time_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.running_time')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.legend.actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.action_completion_time_title')}}) %>
 
 <br style="clear:both">
 
-<% actions.timing_charts.each do |chart| %><%=
-    render :partial => 'chart', :locals => {:chart => chart}
--%><% end %>
+<%
+# TODO: There should be separate scales for percentage and amount of tasks so that the max of both is in the top of the chart, ie. the left y-axis should be "Percentage".
+%>
+<%= bar_chart actions.visible_running_time_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_legend.weeks')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_legend.actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.current_running_time_of_incomplete_visible_actions')},
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "avrt") + '?index=" + array[0]._index; }',
+}) %>
+
+<%
+# TODO: There should be separate scales for percentage and amount of tasks so that the max of both is in the top of the chart, ie. the left y-axis should be "Percentage".
+%>
+<%= bar_chart actions.running_time_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_all_legend.running_time')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.running_time_all_legend.actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.running_time_all')},
+  'onClick': 'function(event, array) { window.location.href = "' + url_for(:controller => 'stats', :action => 'show_selected_actions_from_chart', :id => "art") + '?index=" + array[0]._index; }',
+}) %>
+
+<br style="clear:both">
+
+<%= bar_chart actions.open_per_week_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.open_per_week_legend.weeks')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.open_per_week_legend.actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.open_per_week')}}) %>
+
+<%= bar_chart actions.day_of_week_all_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.actions_day_of_week_legend.day_of_week')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.actions_day_of_week_legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.actions_day_of_week_title')}}) %>
+
+<%= bar_chart actions.day_of_week_30days_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.actions_dow_30days_legend.day_of_week')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.actions_dow_30days_legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.actions_dow_30days_title')}}) %>
+
+<br style="clear:both">
+
+<%= bar_chart actions.time_of_day_all_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.time_of_day_legend.time_of_day')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.time_of_day_legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.time_of_day')}}) %>
+
+<%= bar_chart actions.time_of_day_30days_data, options.merge({
+  scales: {
+    xAxes: [{ scaleLabel: { display: true, labelString: t('stats.tod30_legend.time_of_day')}}],
+    yAxes: [{ scaleLabel: { display: true, labelString: t('stats.tod30_legend.number_of_actions')}}],
+  },
+  'title': {'display': true, 'text': t('stats.tod30')}}) %>
 
