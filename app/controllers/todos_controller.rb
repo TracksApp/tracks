@@ -279,7 +279,7 @@ class TodosController < ApplicationController
       end
 
       @status_message = t('todos.added_dependency', :dependency => @predecessor.description)
-      @status_message += t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
+      @status_message += ' ' + t('todos.set_to_pending', :task => @todo.description) unless @original_state == 'pending'
     else
       @saved = false
     end
