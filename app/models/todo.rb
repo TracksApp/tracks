@@ -349,7 +349,7 @@ class Todo < ApplicationRecord
   def add_tags=(params)
     unless params[:tag].nil?
       tag_list = params[:tag].inject([]) { |list, value| list << value[:name] }
-      tag_with tag_list.join(", "), user
+      tag_with tag_list.join(", ")
     end
   end
 

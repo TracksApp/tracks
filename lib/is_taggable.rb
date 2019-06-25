@@ -26,13 +26,13 @@ module IsTaggable
       end
 
       # Replace the existing tags on <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
-      def tag_with(list, user)
+      def tag_with(list)
         list = tag_cast_to_string(list)
 
         # Transactions may not be ideal for you here; be aware.
         Tag.transaction do
           current = tags.to_a.map(&:name)
-          _add_tags(list - current, user)
+          _add_tags(list - current)
           _remove_tags(current - list)
         end
 
@@ -46,12 +46,12 @@ module IsTaggable
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       #
       # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.
-      def _add_tags(incoming, user)
+      def _add_tags(incoming)
         tag_cast_to_string(incoming).each do |tag_name|
           # added following check to prevent empty tags from being saved (which will fail)
           if tag_name.present?
             begin
-              tag = user.tags.where(:name => tag_name).first_or_create
+              tag = self.user.tags.where(:name => tag_name).first_or_create
               raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
               tags << tag
             rescue ActiveRecord::StatementInvalid => e
@@ -62,9 +62,9 @@ module IsTaggable
       end
 
       # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
-      def _remove_tags outgoing
+      def _remove_tags(outgoing)
         outgoing = tag_cast_to_string(outgoing)
-        tags.destroy(*(tags.select{|tag| outgoing.include? tag.name}))
+        tags.destroy(*(self.user.tags.select{|tag| outgoing.include? tag.name}))
       end
 
       def get_tag_name_from_item(item)

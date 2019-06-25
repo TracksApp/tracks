@@ -129,7 +129,7 @@ module RecurringTodos
     end
 
     def save_tags
-      @recurring_todo.tag_with(@filterred_attributes[:tag_list], @user) if @filterred_attributes[:tag_list].present?
+      @recurring_todo.tag_with(@filterred_attributes[:tag_list]) if @filterred_attributes[:tag_list].present?
       @recurring_todo.reload
     end
 
