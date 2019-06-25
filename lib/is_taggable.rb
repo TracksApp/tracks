@@ -15,43 +15,43 @@ module IsTaggable
           self.to_a.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
         end
       end
-      
+
       def tag_list
         tags.reload
         tags.to_s
       end
-            
+
       def tag_list=(value)
         tag_with(value)
       end
-      
+
       # Replace the existing tags on <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
-      def tag_with list
+      def tag_with(list, user)
         list = tag_cast_to_string(list)
-  
+
         # Transactions may not be ideal for you here; be aware.
         Tag.transaction do
           current = tags.to_a.map(&:name)
-          _add_tags(list - current)
+          _add_tags(list - current, user)
           _remove_tags(current - list)
         end
-  
+
         self
       end
 
       def has_tag?(tag_name)
         return tags.any? {|tag| tag.name == tag_name}
       end
-      
+
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       #
       # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.
-      def _add_tags incoming
+      def _add_tags(incoming, user)
         tag_cast_to_string(incoming).each do |tag_name|
           # added following check to prevent empty tags from being saved (which will fail)
           if tag_name.present?
             begin
-              tag = Tag.where(:name => tag_name).first_or_create
+              tag = user.tags.where(:name => tag_name).first_or_create
               raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
               tags << tag
             rescue ActiveRecord::StatementInvalid => e
@@ -66,7 +66,7 @@ module IsTaggable
         outgoing = tag_cast_to_string(outgoing)
         tags.destroy(*(tags.select{|tag| outgoing.include? tag.name}))
       end
-      
+
       def get_tag_name_from_item(item)
         case item
         # removed next line as it prevents using numbers as tags
@@ -94,8 +94,6 @@ module IsTaggable
           raise "Invalid object of class #{obj.class} as tagging method parameter"
         end
       end
-            
     end
   end
-  
 end

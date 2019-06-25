@@ -3,13 +3,15 @@ class Tag < ApplicationRecord
   has_many :taggings
   has_many :taggable, :through => :taggings
 
+  belongs_to :user
+
   DELIMITER = ",".freeze # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
   JOIN_DELIMITER = ", ".freeze
 
   # If database speed becomes an issue, you could remove these validations and
   # rescue the ActiveRecord database constraint errors instead.
   validates_presence_of :name
-  validates_uniqueness_of :name, :case_sensitive => false
+  validates_uniqueness_of :name, :scope => "user_id", :case_sensitive => false
 
   before_create :before_create
 

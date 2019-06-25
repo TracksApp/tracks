@@ -106,7 +106,7 @@ class TodosController < ApplicationController
       if @todo.errors.empty?
         @todo.add_predecessor_list(p.predecessor_list)
         @saved = @todo.save
-        @todo.tag_with(tag_list) if @saved && tag_list.present?
+        @todo.tag_with(tag_list, current_user) if @saved && tag_list.present?
         @todo.block! if @todo.uncompleted_predecessors?
       else
         @saved = false
@@ -194,7 +194,7 @@ class TodosController < ApplicationController
           todo.block!
         end
 
-        todo.tag_with(tag_list) if @saved && tag_list.present?
+        todo.tag_with(tag_list, current_user) if @saved && tag_list.present?
 
         @todos << todo
         @not_done_todos << todo if p.new_context_created || p.new_project_created
@@ -712,9 +712,8 @@ class TodosController < ApplicationController
 
 
   def tags
-    # TODO: limit to current_user
-    tags_beginning = Tag.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
-    tags_all = Tag.where(Tag.arel_table[:name].matches("%#{params[:term]}%"))
+    tags_beginning = current_user.tags.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
+    tags_all = current_user.tags.where(Tag.arel_table[:name].matches("%#{params[:term]}%"))
     tags_all = tags_all - tags_beginning
 
     respond_to do |format|
@@ -1219,7 +1218,7 @@ end
 
   def update_tags
     if params[:tag_list]
-      @todo.tag_with(params[:tag_list])
+      @todo.tag_with(params[:tag_list], current_user)
       @todo.tags.reload #force a reload for proper rendering
     end
   end
