@@ -570,7 +570,7 @@ module TodosHelper
   end
 
   def context_container_id(todo)
-    return "c#{todo.context_id}"
+    return "context_#{todo.context_id}"
   end
 
   def todo_container_id(todo)
