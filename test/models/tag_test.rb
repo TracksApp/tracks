@@ -25,20 +25,20 @@ class TagTest < ActiveSupport::TestCase
     tag = Tag.where(:name => "8.1.2").first_or_create
     assert !tag.new_record?
   end
-  
+
   def test_tag_name_always_lowercase
     tag = Tag.where(:name => "UPPER").first_or_create
     assert !tag.new_record?
-    
+
     upper = Tag.where(:name => "upper").first
     assert_not_nil upper
     assert upper.name == "upper"
   end
-  
+
   def test_tag_name_stripped_of_spaces
     tag = Tag.where(:name => "  strip spaces  ").first_or_create
     assert !tag.new_record?
-    
+
     assert tag.name == "strip spaces"
   end
 

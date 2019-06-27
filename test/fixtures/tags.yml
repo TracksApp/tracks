@@ -10,18 +10,21 @@ end
 foo:
   id: 1
   name: foo
+  user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
 
 bar:
   id: 2
   name: bar
+  user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
 
 baz:
   id: 3
   name: baz
+  user_id: 1
   created_at: <%= today %>
   updated_at: <%= today %>
-  
+
