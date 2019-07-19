@@ -65,12 +65,21 @@ class AddUserIdToTag < ActiveRecord::Migration[5.2]
       tag.save!
     end
 
-    # Set all unowned tags to user ID #1, because they're unused.
-    execute <<-EOQ
-      UPDATE tags
-      SET user_id = 1
-      WHERE user_id IS NULL
-    EOQ
+    # Set all unowned tags to the only user, if there's only one. Otherwise
+    # remove them since there's no way of knowing who they belong to.
+    if User.all.count == 1
+      uid = User.first.id
+      execute <<-EOQ
+        UPDATE tags
+        SET user_id = #{uid}
+        WHERE user_id IS NULL
+      EOQ
+    else
+      execute <<-EOQ
+        DELETE FROM tags
+        WHERE user_id IS NULL
+      EOQ
+    end
   end
   def self.down
     remove_column :tags, :user_id
