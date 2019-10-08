@@ -1,4 +1,5 @@
-## Version 2.4
+## Version 2.4.0
+
 ### New features
 * Removed support for deprecated password-hashing algorithm. This
   eliminates config.salt. Note the addition of a pre-upgrade step to
@@ -9,9 +10,9 @@
 * All REST APIs now also accept user token as password.
 * The stats view now uses Charts.js instead of the Flash-based chart library.
 * A Docker environment is used unless the .skip-docker file exists.
-* Rails 4.2
+* Rails 5.2
 * Thin replaces WEBrick as the included web server
-* Tracks is tested on Ruby 1.9.3, 2.0.0, 2.1, and 2.2.
+* Tracks is tested on Ruby 2.4 and 2.5
 * The MessageGateway will save the received email as an attachement to the todo
 * Add a configuration option for serving static assets from Rails
 
