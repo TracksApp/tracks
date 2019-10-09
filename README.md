@@ -9,7 +9,7 @@
 * IRC channel: #tracks on Freenode
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.4devel
+* Version: 2.4.0
 
 [![Build Status](https://travis-ci.org/TracksApp/tracks.svg?branch=master)](https://travis-ci.org/TracksApp/tracks)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
