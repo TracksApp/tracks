@@ -6,7 +6,7 @@ RUN touch /etc/app-env
 
 COPY Gemfile* /app/
 RUN gem install bundler
-RUN bundle install
+RUN bundle install --jobs 4
 
 RUN mkdir /app/log
 

@@ -11,7 +11,7 @@
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * Version: 2.4.0
 
-[![Build Status](https://travis-ci.org/TracksApp/tracks.svg?branch=master)](https://travis-ci.org/TracksApp/tracks)
+[![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
