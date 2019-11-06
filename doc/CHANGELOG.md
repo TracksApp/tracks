@@ -1,3 +1,10 @@
+## Version 2.4.1
+
+### Bug fixes
+* Fixed a bug in the tag migration that prevented the migration from completing
+  at least in some MySQL environments. The bug only affected upgrading an existing Tracks
+  installation.
+
 ## Version 2.4.0
 
 ### New features
