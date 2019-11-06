@@ -4,7 +4,7 @@ class AddUserIdToTag < ActiveRecord::Migration[5.2]
 
     # Find uses of each tag for both Todos and RecurringTodos to
     # figure out which users use which tags.
-    @tags = execute <<-EOQ
+    @tags = exec_query <<-EOQ
       SELECT t.id AS tid, tds.user_id AS todo_uid, rt.user_id AS rtodo_uid
       FROM tags t
       JOIN taggings tgs ON tgs.tag_id = t.id
