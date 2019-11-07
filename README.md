@@ -29,7 +29,7 @@ you cannot find a solution to your problem.
 The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
 
 If you are thinking about contributing towards the development of Tracks,
-please read /doc/README_DEVELOPERS for general information. Also you can find
+please read /CONTRIBUTING.md for general information. Also you can find
 some information on development, testing and contributing on the wiki.
 
 While fully usable for everyday use, Tracks is still a work in progress. Make
