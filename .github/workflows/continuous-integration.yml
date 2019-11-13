@@ -1,7 +1,9 @@
 ---
 name: Continuous Integration
 
-on: [push, pull_request]
+on:
+  pull_request:
+    types: opened, edited
 
 jobs:
   test:
