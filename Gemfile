@@ -15,7 +15,7 @@ gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails' , '~> 4.0'
+gem 'jquery-rails' , '~> 4.3'
 gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
@@ -32,7 +32,7 @@ gem "acts_as_list"
 gem "aasm", '~> 3.4.0'
 gem "htmlentities"
 gem "rails_autolink"
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 4.1'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
@@ -53,7 +53,7 @@ group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 3.1.0'
+  gem 'tolk', '~> 3.2.1'
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -62,7 +62,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.71", require: false
+  gem "rubocop", "~> 0.74", require: false
 end
 
 group :test do

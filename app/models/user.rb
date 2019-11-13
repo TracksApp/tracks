@@ -94,6 +94,7 @@ class User < ApplicationRecord
               end
            end
 
+  has_many :tags, dependent: :delete_all
   has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
   has_one :preference, dependent: :destroy
   has_many :attachments, through: :todos

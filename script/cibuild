@@ -26,8 +26,8 @@ $docker_compose up -d
 script/poll-for-db
 
 # Leaving this in since it will be needed for Rails 5
-bin/rails db:environment:set RAILS_ENV=test || true
+$docker_compose run web bin/rails db:environment:set RAILS_ENV=test || true
 
-bin/rake db:reset
-bin/rake test
+$docker_compose run web bin/rake db:reset
+$docker_compose run web bin/rake test
 

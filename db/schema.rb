@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2016_01_31_233303) do
+ActiveRecord::Schema.define(version: 2019_06_18_202817) do
 
   create_table "attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "todo_id"
@@ -159,6 +159,7 @@ ActiveRecord::Schema.define(version: 2016_01_31_233303) do
     t.string "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer "user_id"
     t.index ["name"], name: "index_tags_on_name"
   end
 

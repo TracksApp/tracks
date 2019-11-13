@@ -9,9 +9,9 @@
 * IRC channel: #tracks on Freenode
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
-* Version: 2.4devel
+* Version: 2.4.1
 
-[![Build Status](https://travis-ci.org/TracksApp/tracks.svg?branch=master)](https://travis-ci.org/TracksApp/tracks)
+[![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
 
 Full instructions for both new installations and upgrades from older installations of Tracks
@@ -29,7 +29,7 @@ you cannot find a solution to your problem.
 The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
 
 If you are thinking about contributing towards the development of Tracks,
-please read /doc/README_DEVELOPERS for general information. Also you can find
+please read /CONTRIBUTING.md for general information. Also you can find
 some information on development, testing and contributing on the wiki.
 
 While fully usable for everyday use, Tracks is still a work in progress. Make
