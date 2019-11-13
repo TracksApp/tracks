@@ -38,7 +38,7 @@ gem 'paperclip'
 # To use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.13'
 
-gem 'chartjs-ror', :github => 'ZeiP/chartjs-ror', :branch => 'bug/41_container_element'
+gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'

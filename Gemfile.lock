@@ -1,7 +1,6 @@
 GIT
   remote: git://github.com/ZeiP/chartjs-ror.git
   revision: e9d3aabbda3059c001144833d915a386d8b511c5
-  branch: bug/41_container_element
   specs:
     chartjs-ror (3.6.4)
       rails (>= 3.1)
