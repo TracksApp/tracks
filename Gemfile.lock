@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/ZeiP/chartjs-ror.git
+  revision: e9d3aabbda3059c001144833d915a386d8b511c5
+  specs:
+    chartjs-ror (3.6.4)
+      rails (>= 3.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -66,8 +73,6 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.0.1)
-    chartjs-ror (3.6.4)
-      rails (>= 3.1)
     childprocess (2.0.0)
       rake (< 13.0)
     climate_control (0.2.0)
@@ -277,7 +282,7 @@ DEPENDENCIES
   bootstrap-sass (= 3.4.1)
   bullet
   byebug
-  chartjs-ror
+  chartjs-ror!
   codeclimate-test-reporter (= 1.0.7)
   coffee-rails (~> 4.2.0)
   database_cleaner
