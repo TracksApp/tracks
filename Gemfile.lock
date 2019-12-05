@@ -138,7 +138,7 @@ GEM
     mocha (1.9.0)
       metaclass (~> 0.0.1)
     mysql2 (0.5.2)
-    nio4r (2.5.1)
+    nio4r (2.5.2)
     nokogiri (1.10.6)
       mini_portile2 (~> 2.4.0)
     nokogumbo (2.0.1)
@@ -152,7 +152,7 @@ GEM
     parallel (1.17.0)
     parser (2.6.3.0)
       ast (~> 2.4.0)
-    puma (4.1.1)
+    puma (4.3.1)
       nio4r (~> 2.0)
     rack (2.0.7)
     rack-mini-profiler (1.0.2)
@@ -296,7 +296,7 @@ DEPENDENCIES
   mocha
   mysql2 (~> 0.5.2)
   paperclip
-  puma (~> 4.1)
+  puma (~> 4.3)
   rack-mini-profiler
   rails (~> 5.2.3)
   rails-controller-testing
