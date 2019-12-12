@@ -14,7 +14,7 @@ div.depends_on label {
     float: left;
 }
 
-div#input_box div#todo_new_action_container div#todo_multi_add form#todo-form-multi-new-action.inline-form label {
+div#input_box div#todo_multi_add form#todo-form-multi-new-action.inline-form label {
     float: center;
 }
 
@@ -900,10 +900,12 @@ input#go_to_project, input#context_hide {
     text-align:right;
 }
 
-#todo-form-new-action label, .edit_todo_form label {
+.edit_todo_form label {
     display: block;
     padding-bottom: 3px;
 }
+
+
 
 form.button-to {
     border: none;

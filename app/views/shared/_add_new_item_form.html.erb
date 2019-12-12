@@ -7,14 +7,14 @@
 @initial_tags ||= @default_tags
 @initial_tags ||= @project.default_tags unless @project.nil?
 -%>
-<div id="todo_new_action_container">
+<div class="bootstrap" id="todo_new_action_container">
 
   <div id="toggle_forms" class="toggle_forms">
     <a title="<%= t('shared.hide_action_form_title') %>" accesskey="n" href="#" id="toggle_action_new"><%= t('shared.hide_form') %></a> |
     <a title="<%= t('shared.toggle_multi_title') %>" accesskey="m" href="#" id="toggle_multi"><%= t('shared.toggle_multi') %></a>
   </div>
 
-  <%= render :partial => 'todos/new_todo_form', :object => Todo.new %>
-  <%= render :partial => 'todos/new_multi_todo_form', :object => Todo.new %>
+  <%= render :partial => 'todos/new_todo_form', :locals => {todo: Todo.new} %>
+  <%= render :partial => 'todos/new_multi_todo_form', :locals => {todo: Todo.new} %>
 
 </div>
