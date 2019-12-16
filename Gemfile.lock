@@ -236,6 +236,10 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    sorbet (0.4.5133)
+      sorbet-static (= 0.4.5133)
+    sorbet-runtime (0.4.5133)
+    sorbet-static (0.4.5133-universal-darwin-14)
     spring (2.1.0)
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
@@ -294,7 +298,7 @@ DEPENDENCIES
   listen
   minitest-stub-const
   mocha
-  mysql2 (~> 0.5.2)
+  mysql2 (~> 0.5)
   paperclip
   puma (~> 4.1)
   rack-mini-profiler
@@ -308,6 +312,8 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver (~> 3.142)
   simplecov
+  sorbet
+  sorbet-runtime
   spring
   sqlite3
   therubyracer
@@ -317,4 +323,4 @@ DEPENDENCIES
   yard
 
 BUNDLED WITH
-   2.0.1
+   2.0.2

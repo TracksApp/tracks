@@ -23,7 +23,7 @@ gem 'jquery-ui-rails' , '~>5.0.5'
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
-gem "mysql2", "~> 0.5.2", group: :mysql
+gem "mysql2", "~> 0.5", group: :mysql
 
 gem "RedCloth"
 gem "sanitize", "~> 5.0"
@@ -49,6 +49,9 @@ gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 gem "bootstrap-sass", "3.4.1"
 gem "font-awesome-sass", "~> 4.5.0"
 
+# Type checking
+gem "sorbet-runtime"
+
 group :development do
   gem "spring"
   gem "yard"
@@ -57,6 +60,7 @@ group :development do
 
   gem "bullet"
   gem "rack-mini-profiler"
+  gem "sorbet"
 end
 
 group :development, :test do
