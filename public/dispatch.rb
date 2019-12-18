@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# typed: false
 
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 

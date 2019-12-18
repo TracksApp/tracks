@@ -1,3 +1,4 @@
+# typed: false
 class TodosController < ApplicationController
 
   skip_before_action :login_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
@@ -45,7 +46,7 @@ class TodosController < ApplicationController
         @page_title = t('todos.mobile_todos_page_title')
         @home = true
 
-        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url] = { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
         determine_down_count
 
         render :action => 'index'.freeze

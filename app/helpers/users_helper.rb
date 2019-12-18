@@ -1,3 +1,4 @@
+# typed: false
 module UsersHelper
   def remote_delete_user(user)
     return link_to(

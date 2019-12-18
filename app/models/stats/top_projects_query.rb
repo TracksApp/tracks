@@ -1,3 +1,4 @@
+# typed: true
 # Get the first 10 projects with their actions count of actions.
 # When a cutoff is passed in, only actions that have been created
 # or completed since that cutoff will be included.

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# typed: true
 
 #
 # Based on the tracks_cli by Vitalie Lazu (https://gist.github.com/45537)

@@ -1,3 +1,4 @@
+# typed: true
 class TodoFromRecurringTodo
   attr_reader :user, :recurring_todo, :todo
 

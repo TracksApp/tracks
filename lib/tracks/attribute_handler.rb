@@ -1,3 +1,4 @@
+# typed: true
 module Tracks
 
   class AttributeHandler

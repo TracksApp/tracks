@@ -1,3 +1,4 @@
+# typed: true
 require 'net/https'
 require File.expand_path(File.dirname(__FILE__) + '/tracks_xml_builder')
 

@@ -1,3 +1,4 @@
+# typed: false
 class AddFindByNameIndices < ActiveRecord::Migration[5.2]
   def self.up
     add_index :projects, [:user_id, :name]

@@ -1,3 +1,4 @@
+# typed: false
 class ChangeDatesToDatetimes < ActiveRecord::Migration[5.2]
   def self.up
     change_column :todos, :show_from, :datetime

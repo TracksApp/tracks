@@ -1,3 +1,4 @@
+# typed: false
 class NotesController < ApplicationController
 
   before_action :set_source_view

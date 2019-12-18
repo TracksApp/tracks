@@ -1,3 +1,4 @@
+# typed: false
 class ContextsController < ApplicationController
 
   helper :todos

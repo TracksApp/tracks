@@ -1,3 +1,4 @@
+# typed: false
 class AddSeveralIndexes < ActiveRecord::Migration[5.2]
   def self.up
     add_index :taggings, [:taggable_id, :taggable_type]

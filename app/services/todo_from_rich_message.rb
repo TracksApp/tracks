@@ -1,3 +1,4 @@
+# typed: false
 class TodoFromRichMessage
 
   attr_reader :user, :default_context_id, :description, :notes

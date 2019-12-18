@@ -1,3 +1,4 @@
+# typed: true
 require 'minitest/stub_const'
 
 module StubSiteConfigHelper

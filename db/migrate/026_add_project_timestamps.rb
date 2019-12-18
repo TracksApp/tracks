@@ -1,3 +1,4 @@
+# typed: false
 class AddProjectTimestamps < ActiveRecord::Migration[5.2]
   def self.up
     add_column :projects, :created_at, :timestamp

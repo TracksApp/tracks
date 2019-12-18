@@ -1,3 +1,4 @@
+# typed: false
 class AddFirstAndLastNameToUser < ActiveRecord::Migration[5.2]
   def self.up
     add_column :users, :first_name, :string

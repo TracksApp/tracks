@@ -1,3 +1,4 @@
+# typed: false
 class RecurringTodosController < ApplicationController
 
   helper :todos, :recurring_todos

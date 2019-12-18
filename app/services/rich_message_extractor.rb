@@ -1,3 +1,4 @@
+# typed: true
 require 'date'
 class RichMessageExtractor
   include ActionView::Helpers::SanitizeHelper

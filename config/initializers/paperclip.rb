@@ -1,3 +1,4 @@
+# typed: true
 #config/initilizers/paperclip.rb
 require 'paperclip/media_type_spoof_detector'
 

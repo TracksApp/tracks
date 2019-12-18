@@ -1,3 +1,4 @@
+# typed: false
 class AddTimeZonePreference < ActiveRecord::Migration[5.2]
 
   def self.up

@@ -1,3 +1,4 @@
+# typed: false
 class RemoveProjectHiddenStateFromTodos < ActiveRecord::Migration[5.2]
   class Todo < ActiveRecord::Base
     has_many :successor_dependencies, :foreign_key => 'successor_id', :class_name => 'Dependency'

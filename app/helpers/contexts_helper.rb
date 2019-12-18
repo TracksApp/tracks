@@ -1,3 +1,4 @@
+# typed: false
 module ContextsHelper
 
   def show_context_name(context)

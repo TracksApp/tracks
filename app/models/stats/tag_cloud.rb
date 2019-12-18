@@ -1,3 +1,4 @@
+# typed: true
 # tag cloud code inspired by this article
 #  http://www.juixe.com/techknow/index.php/2006/07/15/acts-as-taggable-tag-cloud/
 module Stats

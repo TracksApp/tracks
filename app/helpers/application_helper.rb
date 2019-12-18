@@ -1,3 +1,4 @@
+# typed: false
 module ApplicationHelper
 
   def group_view_by_menu_entry

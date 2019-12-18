@@ -1,3 +1,4 @@
+# typed: false
 require 'test_helper'
 require 'support/html_entity_helper'
 

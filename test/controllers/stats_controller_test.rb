@@ -1,3 +1,4 @@
+# typed: false
 require 'test_helper'
 
 # TODO: Add more detailed testing of the charts. There are previously defined tests in VCS before the Flash to Chart.js change.

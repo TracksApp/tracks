@@ -1,3 +1,4 @@
+# typed: strict
 # encoding: utf-8
 
 # Tolk config file. Generated on July 18, 2012 13:01

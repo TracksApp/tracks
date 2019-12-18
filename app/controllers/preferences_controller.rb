@@ -1,3 +1,4 @@
+# typed: false
 class PreferencesController < ApplicationController
 
   def index

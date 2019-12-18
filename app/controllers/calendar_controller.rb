@@ -1,3 +1,4 @@
+# typed: false
 class CalendarController < ApplicationController
   skip_before_action :login_required, :only => [:show]
   prepend_before_action :login_or_feed_token_required, :only => [:show]

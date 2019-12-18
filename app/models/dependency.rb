@@ -1,3 +1,4 @@
+# typed: true
 class Dependency < ApplicationRecord
 
   # touch to make sure todo caches for predecessor and successor are invalidated

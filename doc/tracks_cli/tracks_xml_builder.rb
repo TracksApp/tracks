@@ -1,3 +1,4 @@
+# typed: true
 require 'active_support/time_with_zone'
 
 module TracksCli

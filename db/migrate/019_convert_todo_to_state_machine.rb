@@ -1,3 +1,4 @@
+# typed: false
 class ConvertTodoToStateMachine < ActiveRecord::Migration[5.2]
 
   class Todo < ActiveRecord::Base; belongs_to :project; end

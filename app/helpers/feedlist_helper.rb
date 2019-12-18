@@ -1,3 +1,4 @@
+# typed: false
 module FeedlistHelper
 
   def linkoptions(format, options)

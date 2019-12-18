@@ -1,3 +1,4 @@
+# typed: false
 class AddUpdatedAtToTodos < ActiveRecord::Migration[5.2]
   def self.up
       add_column :todos, :updated_at, :timestamp

@@ -1,3 +1,4 @@
+# typed: strict
 Rails.application.routes.draw do
   mount Tolk::Engine => '/tolk', :as => 'tolk' if Rails.env=='development'
 

@@ -1,3 +1,4 @@
+# typed: true
 class IntegrationsController < ApplicationController
   require 'mail'
 

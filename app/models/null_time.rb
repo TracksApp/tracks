@@ -1,3 +1,4 @@
+# typed: true
 class NullTime
   include Comparable
 

@@ -1,3 +1,4 @@
+# typed: true
 class FixIncorrectlyHiddenTodos < ActiveRecord::Migration[5.2]
   def self.up
     hidden_todos_without_project =

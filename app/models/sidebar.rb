@@ -1,3 +1,4 @@
+# typed: true
 class Sidebar
   attr_reader :contexts, :projects
 

@@ -1,3 +1,4 @@
+# typed: false
 class AddIndicesToDependencyTable < ActiveRecord::Migration[5.2]
   def self.up
     add_index :dependencies, :successor_id

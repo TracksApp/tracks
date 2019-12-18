@@ -1,3 +1,4 @@
+# typed: false
 class AdaptToNewAasm < ActiveRecord::Migration[5.2]
   def self.up
     change_column_default :todos, :state, nil

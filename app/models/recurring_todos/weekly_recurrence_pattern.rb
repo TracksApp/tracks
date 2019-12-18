@@ -1,3 +1,4 @@
+# typed: false
 module RecurringTodos
 
   class WeeklyRecurrencePattern < AbstractRecurrencePattern

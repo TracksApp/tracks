@@ -1,3 +1,4 @@
+# typed: true
 module IconHelper
   include FontAwesome::Sass::Rails::ViewHelpers
 

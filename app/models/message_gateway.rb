@@ -1,3 +1,4 @@
+# typed: false
 class MessageGateway < ActionMailer::Base
 
   def receive(email)

@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# typed: false
 
 # CLI ruby client for Tracks: rails application for GTD methodology (First author: Vitalie Lazu <vitalie.lazu@gmail.com>)
 # http://www.getontracks.org/development/

@@ -1,3 +1,4 @@
+# typed: true
 class ProjectFromTodo
   attr_reader :todo
 

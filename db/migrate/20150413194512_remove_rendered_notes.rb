@@ -1,3 +1,4 @@
+# typed: false
 class RemoveRenderedNotes < ActiveRecord::Migration[5.2]
   def self.up
     remove_column :todos, 'rendered_notes'

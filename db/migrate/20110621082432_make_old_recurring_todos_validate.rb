@@ -1,3 +1,4 @@
+# typed: false
 class MakeOldRecurringTodosValidate < ActiveRecord::Migration[5.2]
   def self.up
     RecurringTodo.all.each do |rt|

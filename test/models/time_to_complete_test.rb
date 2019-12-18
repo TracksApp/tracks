@@ -1,3 +1,4 @@
+# typed: true
 require 'date'
 require 'time'
 require 'minimal_test_helper'

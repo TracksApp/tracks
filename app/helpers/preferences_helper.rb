@@ -1,3 +1,4 @@
+# typed: false
 module PreferencesHelper
 
   def pref(model, pref_name, &block)

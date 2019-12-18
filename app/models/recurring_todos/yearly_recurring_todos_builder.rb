@@ -1,3 +1,4 @@
+# typed: true
 module RecurringTodos
 
   class YearlyRecurringTodosBuilder < AbstractRecurringTodosBuilder

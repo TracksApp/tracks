@@ -1,3 +1,4 @@
+# typed: false
 require 'test_helper'
 require 'todos_controller'
 

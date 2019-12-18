@@ -1,3 +1,4 @@
+# typed: ignore
 module RenderingHelper
   AUTO_LINK_MESSAGE_RE = %r{message://<[^>]+>} unless const_defined?(:AUTO_LINK_MESSAGE_RE)
 

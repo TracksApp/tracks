@@ -1,3 +1,4 @@
+# typed: true
 class SetNilTimestamps < ActiveRecord::Migration[5.2]
 
   class Project < ActiveRecord::Base; end

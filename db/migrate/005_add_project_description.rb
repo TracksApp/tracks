@@ -1,3 +1,4 @@
+# typed: false
 class AddProjectDescription < ActiveRecord::Migration[5.2]
   def self.up
     add_column :projects, :description, :text

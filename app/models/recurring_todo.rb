@@ -1,3 +1,4 @@
+# typed: false
 class RecurringTodo < ApplicationRecord
   belongs_to :context
   belongs_to :project

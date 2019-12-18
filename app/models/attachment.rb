@@ -1,3 +1,4 @@
+# typed: true
 class Attachment < ApplicationRecord
   belongs_to :todo, touch: true
 

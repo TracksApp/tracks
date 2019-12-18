@@ -1,3 +1,4 @@
+# typed: true
 module Search
 
   class SearchResults

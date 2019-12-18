@@ -1,3 +1,4 @@
+# typed: true
 tracks_version='2.4.1'
 # comment out next two lines if you do not want (or can not) the date of the
 # last git commit in the footer

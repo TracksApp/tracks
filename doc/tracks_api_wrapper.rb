@@ -1,3 +1,4 @@
+# typed: false
 require 'activeresource'
 
 # WARNING: this is not really maintained or tested...

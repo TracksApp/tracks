@@ -1,3 +1,4 @@
+# typed: false
 class AddUserIdToTag < ActiveRecord::Migration[5.2]
   def self.up
     add_column :tags, :user_id, :integer

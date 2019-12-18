@@ -1,3 +1,4 @@
+# typed: strong
 # config for bullet gem
 
 if defined? Bullet

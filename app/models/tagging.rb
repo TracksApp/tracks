@@ -1,3 +1,4 @@
+# typed: true
 
 # The Tagging join model.
 

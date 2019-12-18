@@ -1,3 +1,4 @@
+# typed: false
 class DataController < ApplicationController
 
   require 'csv'

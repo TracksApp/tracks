@@ -1,3 +1,4 @@
+# typed: true
 module Stats
   class Actions
 

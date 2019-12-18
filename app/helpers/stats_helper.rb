@@ -1,3 +1,4 @@
+# typed: false
 module StatsHelper
 
   def font_size(cloud, tag)

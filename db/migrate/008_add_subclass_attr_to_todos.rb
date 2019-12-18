@@ -1,3 +1,4 @@
+# typed: false
 class AddSubclassAttrToTodos < ActiveRecord::Migration[5.2]
 
   class Todo < ActiveRecord::Base; end

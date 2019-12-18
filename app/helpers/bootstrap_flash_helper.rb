@@ -1,3 +1,4 @@
+# typed: false
 module BootstrapFlashHelper
   ALERT_MAPPING = {
     :notice => :success,

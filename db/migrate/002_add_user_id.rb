@@ -1,3 +1,4 @@
+# typed: false
 class AddUserId < ActiveRecord::Migration[5.2]
   
   class Project < ActiveRecord::Base; end

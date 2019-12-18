@@ -1,3 +1,4 @@
+# typed: false
 class StatsController < ApplicationController
 
   SECONDS_PER_DAY = 86400;

@@ -1,3 +1,4 @@
+# typed: false
 require 'digest/sha1'
 require 'bcrypt'
 

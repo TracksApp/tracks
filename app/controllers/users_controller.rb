@@ -1,3 +1,4 @@
+# typed: false
 class UsersController < ApplicationController
 
   before_action :admin_login_required, :only => [ :index, :show, :destroy ]

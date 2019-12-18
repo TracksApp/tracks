@@ -1,3 +1,4 @@
+# typed: true
 require 'net/https'
 require 'minimal_test_helper'
 require './doc/tracks_cli/tracks_api'

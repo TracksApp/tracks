@@ -1,3 +1,4 @@
+# typed: false
 module NotesHelper
   def truncated_note(note, characters = 50)
     render_text(truncate(note.body, :length => characters, :omission => "..."))

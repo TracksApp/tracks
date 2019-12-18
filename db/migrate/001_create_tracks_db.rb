@@ -1,3 +1,4 @@
+# typed: false
 # Verision 1.0.3 database
 class CreateTracksDb < ActiveRecord::Migration[5.2]
   def self.up

@@ -1,3 +1,4 @@
+# typed: false
 require 'staleness'
 
 module TodosHelper

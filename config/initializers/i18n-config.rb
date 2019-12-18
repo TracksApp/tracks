@@ -1,3 +1,4 @@
+# typed: false
 module I18n::Backend::Pluralization
   # rules taken from : http://www.gnu.org/software/hello/manual/gettext/Plural-forms.html
   def pluralize(locale, entry, n)

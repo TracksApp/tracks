@@ -1,3 +1,4 @@
+# typed: false
 class ChangeCryptedPasswordLength < ActiveRecord::Migration[5.2]
   def self.up
     change_column 'users', 'crypted_password', :string, :limit => 60

@@ -1,3 +1,4 @@
+# typed: false
 class AddIndexToNotes < ActiveRecord::Migration[5.2]
   def self.up
     add_index :notes, [:project_id]

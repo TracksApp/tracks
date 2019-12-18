@@ -1,3 +1,4 @@
+# typed: false
 class AddStateToContext < ActiveRecord::Migration[5.2]
 
   class Context < ActiveRecord::Base

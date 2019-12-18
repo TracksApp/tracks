@@ -1,3 +1,4 @@
+# typed: true
 require 'openssl'
 
 class MailgunController < ApplicationController

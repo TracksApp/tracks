@@ -1,3 +1,4 @@
+# typed: false
 class ProjectsController < ApplicationController
 
   helper :application, :todos, :notes

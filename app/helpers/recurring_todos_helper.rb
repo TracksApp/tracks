@@ -1,3 +1,4 @@
+# typed: false
 module RecurringTodosHelper
 
   def recurring_todo_tag_list

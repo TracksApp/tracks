@@ -1,3 +1,4 @@
+# typed: true
 require 'active_support/all'
 require 'user_time'
 

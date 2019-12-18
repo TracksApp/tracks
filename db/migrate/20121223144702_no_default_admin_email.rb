@@ -1,3 +1,4 @@
+# typed: true
 class NoDefaultAdminEmail < ActiveRecord::Migration[5.2]
   def up
     remove_column :preferences, :admin_email

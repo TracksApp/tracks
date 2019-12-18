@@ -1,3 +1,4 @@
+# typed: true
 require 'active_support/values/time_zone'
 
 class UserTime

@@ -1,3 +1,4 @@
+# typed: true
 # Get action count for the top n contexts (default: all)
 # If initialized with :running => true, then only active
 # and visible contexts will be included.

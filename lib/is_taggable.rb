@@ -1,3 +1,4 @@
+# typed: false
 # These methods are adapted from has_many_polymorphs' tagging_extensions
 
 module IsTaggable

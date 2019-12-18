@@ -1,3 +1,4 @@
+# typed: false
 class AddContextTimestamps < ActiveRecord::Migration[5.2]
 
   def self.up

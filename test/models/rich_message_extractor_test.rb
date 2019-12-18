@@ -1,3 +1,4 @@
+# typed: true
 require 'date'
 require 'active_support/core_ext/object/blank'
 require_relative '../../app/services/rich_message_extractor.rb'

@@ -1,3 +1,4 @@
+# typed: false
 class ConvertPreferences < ActiveRecord::Migration[5.2]
 
   class User < ActiveRecord::Base; has_one :preference; serialize :preferences; end

@@ -1,3 +1,4 @@
+# typed: true
 require 'minimal_test_helper'
 require 'app/models/stats/tag_cloud'
 

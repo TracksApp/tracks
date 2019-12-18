@@ -1,3 +1,4 @@
+# typed: false
 class CreateTolkTables < ActiveRecord::Migration[5.2]
   def self.up
     create_table :tolk_locales do |t|

@@ -1,3 +1,4 @@
+# typed: false
 class Todo < ApplicationRecord
 
   MAX_DESCRIPTION_LENGTH = 300

@@ -1,3 +1,4 @@
+# typed: false
 require 'test_helper'
 require 'support/stub_site_config_helper'
 

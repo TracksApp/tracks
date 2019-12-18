@@ -1,3 +1,4 @@
+# typed: false
 # Inspiration from Bruce Williams [http://codefluency.com/articles/2006/07/01/rails-views-getting-in-context/]
 module Tracks
   

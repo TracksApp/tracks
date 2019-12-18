@@ -1,3 +1,4 @@
+# typed: false
 require_dependency "login_system"
 require_dependency "tracks/source_view"
 

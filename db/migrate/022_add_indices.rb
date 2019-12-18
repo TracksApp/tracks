@@ -1,3 +1,4 @@
+# typed: false
 class AddIndices < ActiveRecord::Migration[5.2]
   def self.up
     add_index :todos, [:user_id, :state]

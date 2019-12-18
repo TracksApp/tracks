@@ -1,3 +1,4 @@
+# typed: false
 class AddNextReviewPreferences < ActiveRecord::Migration[5.2]
 
   def self.up

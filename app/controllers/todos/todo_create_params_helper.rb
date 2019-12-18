@@ -1,3 +1,4 @@
+# typed: true
 module Todos
   class TodoCreateParamsHelper
 

@@ -1,3 +1,4 @@
+# typed: false
 module ProjectsHelper
 
   def show_project_name(project)
