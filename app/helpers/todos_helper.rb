@@ -501,7 +501,13 @@ module TodosHelper
         @todo_was_deferred_from_active_state                                              ||
         @tag_was_removed                                                                  ||
         @todo_was_destroyed                                                               ||
-        (@todo.completed? && !(@original_item_was_deferred || @original_item_was_hidden || @original_item_was_pending))
+        (
+          @todo.completed? && !(
+            @original_item.deferred? ||
+            @original_item.hidden? ||
+            @original_item.pending?
+          )
+        )
       )
     end
 
@@ -662,9 +668,9 @@ module TodosHelper
       page.calendar { container_id = "#{@original_item_due_id}_container-empty-d" if @old_due_empty }
       page.tag      {
         container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
-          (@remaining_hidden_count == 0 && @todo.completed? && @original_item_was_hidden)
+          (@remaining_hidden_count == 0 && @todo.completed? && @original_item.hidden?)
         container_id = "deferred_pending_container-empty-d" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
-          (@original_item_was_deferred && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
+          (@original_item.deferred? && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
       }
       page.context  {

@@ -12,7 +12,7 @@
 
 function show_empty_messages() {
   <% if @old_due_empty -%>
-    $('#empty_<%=@original_item_due_id%>').slideDown(1000);
+    $('#empty_<%=get_due_id_for_calendar(@original_item.due)%>').slideDown(1000);
   <% end -%>
 
   <% if todo_container_is_empty -%>
