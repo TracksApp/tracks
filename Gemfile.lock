@@ -242,7 +242,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.1)
+    sqlite3 (1.4.2)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     therubyracer (0.12.3)
