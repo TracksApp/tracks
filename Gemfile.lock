@@ -257,7 +257,7 @@ GEM
       sass
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    uglifier (4.1.20)
+    uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.6.0)
     uniform_notifier (1.13.0)
