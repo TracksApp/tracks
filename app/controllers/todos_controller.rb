@@ -864,14 +864,16 @@ class TodosController < ApplicationController
   def get_params_for_tag_view
     filter_format_for_tag_view
 
-    # use sanitize to prevent XSS attacks
+    # Don't use sanitize here because these are only used for a DB query.
     @tag_expr = []
-    @tag_expr << sanitize(params[:name]).split(',')
-    @tag_expr << sanitize(params[:and]).split(',') if params[:and]
+    # Tag conditions handled as OR.
+    @tag_expr << params[:name].split(',')
 
+    # Additional tag condition(s) handled as AND.
+    @tag_expr << params[:and].split(',') if params[:and]
     i = 1
     while params['and'+i.to_s]
-      @tag_expr << sanitize(params['and'+i.to_s]).split(',')
+      @tag_expr << params['and'+i.to_s].split(',')
       i=i+1
     end
 
