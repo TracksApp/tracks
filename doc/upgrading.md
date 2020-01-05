@@ -1,6 +1,6 @@
 # Upgrading Tracks
 
-## Upgrading from Tracks 2.3 to 2.4.1
+## Upgrading from Tracks 2.3 to 2.4.2
 
 These upgrade instructions are rough. Please suggest improvements in a GitHub issue if you run into problems.
 

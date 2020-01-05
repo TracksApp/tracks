@@ -1,3 +1,12 @@
+## Version 2.4.2
+
+### New features
+* The new todo UI form has been updated.
+
+### Bug fixes
+* Needless sanitization of tags has been removed.
+* Security vulnerabilities have been fixed.
+
 ## Version 2.4.1
 
 ### Bug fixes
