@@ -264,7 +264,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
     will_paginate (3.2.1)
-    yard (0.9.23)
+    yard (0.9.24)
 
 PLATFORMS
   ruby
