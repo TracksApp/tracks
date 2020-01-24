@@ -72,7 +72,7 @@ GEM
     bullet (6.1.0)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
-    byebug (11.1.0)
+    byebug (11.1.1)
     childprocess (3.0.0)
     climate_control (0.2.0)
     codeclimate-test-reporter (1.0.7)
