@@ -57,6 +57,7 @@ group :development do
 
   gem "bullet"
   gem "rack-mini-profiler"
+  gem "solargraph"
 end
 
 group :development, :test do
