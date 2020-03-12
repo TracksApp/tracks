@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 5.2.4'
 gem 'sass-rails', '~> 5.0'
-gem 'coffee-rails', '~> 4.2.0'
+gem 'coffee-rails', '~> 5.0.0'
 
 #gem 'json'
 
