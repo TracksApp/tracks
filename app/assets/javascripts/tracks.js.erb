@@ -1134,15 +1134,6 @@ function enable_rich_interaction(){
 
 $(document).ready(function() {
 
-    // fix for IE7/8. Without this checkboxes don't work AJAXy. See #1152
-    var msie8 = /MSIE 8.0/.test(navigator.userAgent);
-    var msie7 = /MSIE 7.0/.test(navigator.userAgent);
-    if(msie8 || msie7) {
-        $('body').bind('change', function() {
-            return true;
-        });
-    }
-
     TodoItemsContainer.setup_container_toggles();
 
     /* enable page specific behavior */
