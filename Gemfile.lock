@@ -149,7 +149,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.19.1)
-    parser (2.7.0.4)
+    parser (2.7.0.5)
       ast (~> 2.4.0)
     puma (4.3.3)
       nio4r (~> 2.0)
@@ -237,7 +237,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
-    solargraph (0.38.5)
+    solargraph (0.38.6)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -267,7 +267,7 @@ GEM
       ref
     thor (1.0.1)
     thread_safe (0.3.6)
-    tilt (2.0.8)
+    tilt (2.0.10)
     tolk (3.2.1)
       rails (>= 5.0)
       safe_yaml (>= 0.8.6)
