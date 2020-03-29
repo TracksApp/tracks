@@ -40,7 +40,6 @@ class LoginController < ApplicationController
       if session
         return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
-        expiry_time = session['expiry_time'] || Time.now + 10
         time_left = expiry_time - Time.now
         @session_expired = ( time_left < (10*60) ) # Session will time out before the next check
       end
@@ -74,6 +73,11 @@ class LoginController < ApplicationController
 
   def should_expire_sessions?
     session['noexpiry'] != "on"
+  end
+
+  def expiry_time
+    return Time.now + 10 unless session['expiry_time']
+    DateTime.strptime(session['expiry_time'], "%FT%T%Z")
   end
 
 end
