@@ -15,7 +15,7 @@ gem 'therubyracer', group: :therubyracer
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'jquery-rails' , '~> 4.3'
+gem 'jquery-rails' , '~> 4.4'
 gem 'jquery-ui-rails' , '~>5.0.5'
 
 # you may comment out the database driver(s) you will not be using.
