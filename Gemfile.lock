@@ -211,7 +211,7 @@ GEM
       rubocop-ast (>= 0.0.3, < 1.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.0.3)
+    rubocop-ast (0.1.0)
       parser (>= 2.7.0.1)
     ruby-progressbar (1.10.1)
     rubyzip (2.0.0)
@@ -241,7 +241,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
-    solargraph (0.39.8)
+    solargraph (0.39.10)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
