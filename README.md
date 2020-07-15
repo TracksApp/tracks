@@ -1,4 +1,9 @@
-# Tracks: a GTD(TM) web application, built with Ruby on Rails
+## As of July 2020, this project has entered a dormant period and is no longer actively maintained. Please see the [Task Management](https://github.com/awesome-selfhosted/awesome-selfhosted#task-managementto-do-lists) section of the awesome-selfhosted repo for other projects to try.
+
+
+**Tracks: a GTD(TM) web application, built with Ruby on Rails**
+
+----
 
 * Project homepage: http://www.getontracks.org/
 * Manual: http://www.getontracks.org/manual/
