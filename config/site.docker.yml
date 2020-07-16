@@ -1,0 +1,72 @@
+# NOTE: openid, ldap and cas are currently not supported anymore.
+authentication_schemes:
+  - "database"
+
+# You'll probably want to change this to the time zone of the computer where
+# Tracks is running. Run rake time:zones:local have Rails suggest time zone
+# names on your system
+time_zone: "UTC"
+
+# setting this to true will make the cookies only available over HTTPS
+secure_cookies: false
+
+# Your secret key for verifying the integrity of signed cookies.
+# If you change this key, all old signed cookies will become invalid!
+# Make sure the secret is at least 30 characters and all random,
+# no regular words or you'll be exposed to dictionary attacks.
+#
+# if you want a nice random key, run this from the tracks directory and
+# copy-and-paste the result:
+#
+#   rake secret
+#
+secret_token: "secret"
+
+# Set to true when your application is running with https
+force_ssl: false
+
+# Configure how static assets (images, stylesheets, etc.) will be served.
+# The best practice is to have a proxying web server such as Apache or Nginx
+# serve static assets (images, stylesheets, javascript) for you. Change
+# this to 'true' if you want Rails to be responsible for serving the static assets
+# serve_static_assets: false
+
+# Uncomment if you want to dispatch todos that come from email based on the To: 
+# address rather than the From: address.
+# email_dispatch: 'to'
+
+# If you want to send all email to a specific user, uncomment the following line 
+# and set the environment variable TRACKS_MAIL_RECEIVER to the login name of the 
+# user that will receive all email
+# email_dispatch: 'single_user'
+
+# Set this to the subdirectory you're hosting tracks in and uncomment if 
+# applicable. NOTE: you will also need to set up your web server to deal with 
+# the relative URL. Mongrel, for example, has a --prefix option.
+# subdir: "/tracks"
+
+# Set to true to allow anyone to sign up for a username.
+open_signups: false
+
+# When integrating your tracks instance with http://cloudmailin.com/ by using 
+# the /integrations/cloudmailin URL, this value is the cloudmailin-secret for 
+# verifying the authenticity of the request.
+# (see http://docs.cloudmailin.com/validating_the_sender)
+# cloudmailin: asdasd
+
+# Mailgun api key - used to verify incoming HTTP requests from Mailgun.org
+# mailgun_api_key: key-abcdef1234567890
+
+# change this to reflect the email address of the admin that you want to show 
+# on the signup page
+admin_email: my.email@domain.com
+
+# Map of allowed incoming email addresses to real users
+# Requires email_dispatch == 'to'
+# This allows you to specify _who_ can send email Todos to your list
+# The format is your incoming email (as per preferences page) for the key, and
+# an array-list of acceptable senders for that account
+#mailmap:
+#  'user@preferences.from.value':
+#  - 'acceptable1@personal.org'
+#  - 'acceptable2@work.com'
