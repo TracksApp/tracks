@@ -9,25 +9,15 @@
 * IRC channel: #tracks on Freenode
 * Gitter: https://gitter.im/TracksApp/tracks
 * Original developer: bsag (http://www.rousette.org.uk/)
+* Principal maintainer: [Jyri-Petteri ”ZeiP” Paloposki](https://github.com/ZeiP) (sponsored by Ardcoras oy, https://www.ardcoras.fi/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 * License: See COPYING
 
 [![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
 
-Full instructions for both new installations and upgrades from older installations of Tracks
-can be found within the /doc directory.
-
-The instructions might appear long and intimidatingly complex, but that is
-mostly because of the number of different platforms supported, and the
-different configurations which can be used (e.g. running Tracks on your local
-computer or on a remote server). If you choose the appropriate section for your
-situation (installation vs. upgrade), and use the easiest (recommended) method,
-you should find the instructions easy to follow. If you encounter problems, try
-searching the wiki or mailing list (URLs above), and ask a question if
-you cannot find a solution to your problem.
-
-The wiki has a lot of user contributed installation HOWTOs for various webhosts, specific OS's and more.
+Full instructions for both new installations and upgrades from older installations
+of Tracks can be found in the [wiki](https://github.com/TracksApp/tracks/wiki/Installation).
 
 If you are thinking about contributing towards the development of Tracks,
 please read /CONTRIBUTING.md for general information. Also you can find
