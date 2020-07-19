@@ -1,10 +1,10 @@
 # Installing Tracks
 
-The following instructions will guide you through the installation of Tracks from source.
+Tracks can be installed several ways: You can run it through Docker, which is recommended because all requirements have already been taken care of for you, or you can install it on a custom server from source.
+
+Instructions for the Docker-based installation as well as other options are available in the Tracks wiki: https://github.com/TracksApp/tracks/wiki/Installation. The wiki also has tips and instructions for specific environments. These instructions are only for installation from source in a custom environment.
 
 This description is intended for people installing Tracks from scratch. If you would like to upgrade an existing installation, please see the [upgrade documentation](upgrading.md).
-
-For alternative installation options and tips for specific environments, please see [Installation](https://github.com/TracksApp/tracks/wiki/Installation) on the wiki.
 
 ## Prerequisites
 
@@ -12,7 +12,7 @@ Tracks has a few software requirements that must be satisfied before installatio
 
 1. **Ruby**. Tracks requires Ruby 2.4 or greater, but is not tested with 2.7.
 2. **Bundler**. Tracks requires a recent version of [Bundler](http://bundler.io) to handle the installation of dependencies. Bundler is typically installed by running `gem install bundler`.
-3. **Database**. Tracks is tested on [MySQL](http://www.mysql.com/) and [SQLite](http://www.sqlite.org/), but [PostgreSQL](http://www.postgresql.org/) can also be used. Of the three, SQLite requires the least configuration. Whatever your choice, the appropriate database software must be installed.
+3. **Database**. Tracks is tested on [MySQL](http://www.mysql.com/) and [SQLite](http://www.sqlite.org/), but [PostgreSQL](http://www.postgresql.org/) can also be used. Of the three, SQLite requires the least configuration but is also the least performant and may make it difficult to operate in the future. We recommend either MySQL or PostgreSQL. Whatever your choice, the appropriate database software must be installed.
 
 ## Get Tracks
 
@@ -29,14 +29,22 @@ There are two methods of downloading Tracks:
 
 ## Set up the database
 
-*This section only applies if you will be using Tracks with a MySQL database.*
+*This section doesn't apply if using SQLite.*
 
-You need to create a database and database-user to use with Tracks. For this, you can use MySQL Administrator or go into a terminal and issue the following commands:
+You need to create a database and database-user to use with Tracks. For this, you can use an GUI tool or go into a terminal and issue the following commands:
 
-    mysql -u root -p
+### MySQL
+
+    $ mysql -u root -p
     mysql> CREATE DATABASE tracks;
     mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost \
     IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
+
+### PostgreSQL
+
+    $ sudo -u postgres psql
+    postgres=# CREATE USER tracks WITH ENCRYPTED PASSWORD 'password-goes-here';
+    postgres=# CREATE DATABASE tracks OWNER=tracks;
 
 ## Install dependencies
 
@@ -64,8 +72,7 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
 2. Open the file `config/database.yml` and edit the `production:` section with the details of your database. If you are using MySQL the `adapter:` line should read `adapter: mysql2`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks.db`.
 3. Open the file `config/site.yml`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change are the `secret_token`, the administrator email address (`admin_email`), and the time zone setting. For the time zone setting you can use the command `bundle exec rake time:zones:local` to see all available timezones on your machine
 4. If you are using Windows, you may need to check the ‘shebang’ lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all Unix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
-5. If you intend to deploy Tracks using its included web server, you’ll need to uncomment and change the `serve_static_assets` configuration option to `true` in `config/site.yml` in order for the images, stylesheets, and javascript files to be served correctly.
-6. If you intend to use Tracks behind a web server or reverse proxy with https enabled, ensure to set `force_ssl` option to `true`.
+5. If you intend to use Tracks behind a web server or reverse proxy with https enabled, ensure to set `force_ssl` option to `true`.
 
 ## Populate your database with the Tracks schema
 
@@ -85,9 +92,11 @@ Static assets (images, stylesheets, and javascript) need to be compiled in order
 
 While still in the Terminal inside the Tracks root directory, issue the following command:
 
-    bundle exec rails server -e production
+    RAILS_SERVE_STATIC_FILES=TRUE bundle exec rails server -e production
 
 If all goes well, you should see some text informing you that the server is running: `=> Rails application starting in production on http://localhost:3000`. If you are already running other services on port 3000, you need to select a different port when running the server, using the `-p` option.
+
+Optimally you should serve static files using Nginx or Apache, especially in larger production instances. If you do this, you can omit the RAILS_SERVE_STATIC_FILES=TRUE from the start of the command.
 
 ## Visit Tracks in a browser
 

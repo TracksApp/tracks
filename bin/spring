@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-unless ENV["RAILS_ENV"] == "production" || File.exist?("#{__dir__}/../.skip-docker")
-  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
+if File.exist?("#{__dir__}/../.use-docker")
+  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV)
 end
 
 # This file loads spring without using Bundler, in order to be fast
