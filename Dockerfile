@@ -18,7 +18,7 @@ COPY config/site.docker.yml /app/config/site.yml
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 
 COPY docker-entrypoint.sh /
-ENTRYPOINT ["./docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
 EXPOSE 3000
 

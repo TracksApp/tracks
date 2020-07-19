@@ -2,6 +2,9 @@
 
 set -e
 
+# Find our app dir
+appdir=$(cd $(dirname "$0")/.. && pwd)
+
 # Check if we've been told to run the command in Docker Composer.
 cmd="$@"; [ "$#" -eq 0 ] && cmd=bash
 export VOLUME="$appdir:/app"
