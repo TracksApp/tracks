@@ -10,11 +10,13 @@ You can easily run Tracks using Docker Compose. This option mounts the repositor
 
 1. Make sure you have Docker Compose and Docker properly installed.
 2. Get the Tracks code base by either downloading the archive file for the latest releast or cloning it from GitHub.
-3. On the installation run the following command:
+3. Create a file to enable the Docker Compose support in Tracks. *Note*: This is not needed or useful for the separate container, only Docker Composer!
+    $ touch .use-docker
+4. On the installation run the following command:
     $ ./script/setup
-4. Run the server using the following command:
+5. Run the server using the following command:
     $ ./script/server
-5. You should now be able to access Tracks in http://localhost:3000
+6. You should now be able to access Tracks in http://localhost:3000
 
 ## Docker installation using a separate container
 
