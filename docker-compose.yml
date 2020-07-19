@@ -10,6 +10,9 @@ services:
   web:
     build: .
     environment:
+      # These are set in script/ci-build, so we need to pass-thru them.
+      RAILS_ENV: $RAILS_ENV
+      DATABASE_NAME: $DATABASE_NAME
       DATABASE_USERNAME: root
       DATABASE_PASSWORD_EMPTY: 1
     volumes:
