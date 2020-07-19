@@ -21,8 +21,9 @@
 /tmp
 config/deploy.rb
 config/site.yml
+config/database.yml
 db/data.yml
 nbproject
 rerun.txt
 tags
-.skip-docker
+.use-docker

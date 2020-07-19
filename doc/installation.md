@@ -55,12 +55,17 @@ Tracks container. In future there should be an official image in Docker Hub. You
    postgres=# CREATE USER tracks WITH ENCRYPTED PASSWORD 'password-goes-here';
    postgres=# CREATE DATABASE tracks OWNER=tracks;
 ```
-4. Start the Tracks container:
+4. Install the schema
+```
+   $ docker run --link mariadb:db --rm -t tracks bin/rake db:reset
+   $ docker run --link postgres:db --rm -t tracks bin/rake db:reset
+```
+5. Start the Tracks server:
 ```
    $ docker run -p 3000:3000 --name tracks --link mariadb:db -t tracks
    $ docker run -p 3000:3000 --name tracks --link postgres:db -t tracks
 ```
-5. You should now be able to access Tracks in http://localhost:3000
+6. You should now be able to access Tracks in http://localhost:3000
 
 ## Environmental variables in the Docker image
 
