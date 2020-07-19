@@ -9,6 +9,8 @@ services:
       - db-data:/var/lib/mysql
   web:
     build: .
+    environment:
+      DATABASE_USERNAME: root
     volumes:
       - ${VOLUME:-.:/app}
     ports:
