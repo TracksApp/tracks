@@ -9,3 +9,6 @@ docker_compose="docker-compose --file docker-compose.yml"
 
 echo "==> Building Docker image…"
 $docker_compose build
+
+echo "==> Building assets…"
+bin/rake assets:precompile

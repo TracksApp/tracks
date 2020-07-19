@@ -13,6 +13,6 @@ script/poll-for-db
 
 echo "==> Setting up DB…"
 # reset database to a fresh state.
-bin/rake db:create db:reset
+bin/rake db:reset
 
 echo "==> App is now ready to go!"
