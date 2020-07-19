@@ -2,12 +2,14 @@
 
 set -e
 
+echo "Doing it here"
+
 # Find our app dir
 appdir=$(cd $(dirname "$0")/.. && pwd)
 
 # Check if we've been told to run the command in Docker Composer.
 cmd="$@"; [ "$#" -eq 0 ] && cmd=bash
-export VOLUME="$appdir:/app"
+export VOLUME="$appdir"
 image=${DOCKER_IMAGE:=web}
 
 port_publish=""; [ "${BIND_DOCKER_SERVICE_PORTS:-}" = 1 ] && port_publish="--service-ports"

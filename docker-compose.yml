@@ -13,7 +13,9 @@ services:
       DATABASE_USERNAME: root
       DATABASE_PASSWORD_EMPTY: 1
     volumes:
-      - ${VOLUME:-.:/app}:Z
+      - ${VOLUME:-.}:/app:Z
+      - ${VOLUME:-.}/config/database.docker.yml:/app/config/database.yml:Z
+      - ${VOLUME:-.}/config/site.docker.yml:/app/config/site.yml:Z
     ports:
       - 3000:3000
     depends_on:
