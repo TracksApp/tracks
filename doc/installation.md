@@ -11,11 +11,17 @@ You can easily run Tracks using Docker Compose. This option mounts the repositor
 1. Make sure you have Docker Compose and Docker properly installed.
 2. Get the Tracks code base by either downloading the archive file for the latest releast or cloning it from GitHub.
 3. Create a file to enable the Docker Compose support in Tracks. *Note*: This is not needed or useful for the separate container, only Docker Composer!
-    $ touch .use-docker
+```
+   $ touch .use-docker
+```
 4. On the installation run the following command:
-    $ ./script/setup
+```
+   $ ./script/setup
+```
 5. Run the server using the following command:
-    $ ./script/server
+```
+   $ ./script/server
+```
 6. You should now be able to access Tracks in http://localhost:3000
 
 ## Docker installation using a separate container
@@ -27,25 +33,33 @@ Tracks container. In future there should be an official image in Docker Hub. You
 
 1. Get the Tracks code base by either downloading the archive file for the latest releast or cloning it from GitHub.
 2. Run the following command in the Tracks directory to build the image:
-    $ docker build -t="tracks" .
+```
+   $ docker build -t="tracks" .
+```
 
 1. Make sure you have Docker properly installed.
 2. Start a database container with either MySQL or PostgreSQL:
-    $ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
-    $ docker run -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
+```
+   $ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
+   $ docker run -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
+```
 3. Create a database and a user for Tracks in the database:
-    # MySQL
-    $ mysql -u root -p
-    mysql> CREATE DATABASE tracks;
-    mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
+```
+   # MySQL
+   $ mysql -u root -p
+   mysql> CREATE DATABASE tracks;
+   mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
 
-    # PostgreSQL
-    $ sudo -u postgres psql
-    postgres=# CREATE USER tracks WITH ENCRYPTED PASSWORD 'password-goes-here';
-    postgres=# CREATE DATABASE tracks OWNER=tracks;
+   # PostgreSQL
+   $ sudo -u postgres psql
+   postgres=# CREATE USER tracks WITH ENCRYPTED PASSWORD 'password-goes-here';
+   postgres=# CREATE DATABASE tracks OWNER=tracks;
+```
 4. Start the Tracks container:
-    $ docker run -p 3000:3000 --name tracks --link mariadb:db -t tracks
-    $ docker run -p 3000:3000 --name tracks --link postgres:db -t tracks
+```
+   $ docker run -p 3000:3000 --name tracks --link mariadb:db -t tracks
+   $ docker run -p 3000:3000 --name tracks --link postgres:db -t tracks
+```
 5. You should now be able to access Tracks in http://localhost:3000
 
 ## Environmental variables in the Docker image
