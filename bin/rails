@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 if File.exist?("#{__dir__}/../.use-docker")
-  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV)
+  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
 end
 
 APP_PATH = File.expand_path('../config/application', __dir__)
