@@ -2,8 +2,6 @@
 
 set -e
 
-echo "Doing it here"
-
 # Find our app dir
 appdir=$(cd $(dirname "$0")/.. && pwd)
 
