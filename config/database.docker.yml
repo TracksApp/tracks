@@ -1,44 +1,24 @@
-#development:
-#  adapter: mysql2
-#  database: tracks_dev
-#  # set this if you are storing utf8 in your mysql database to handle strings
-#  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
-#  # encoding: utf8
-#  host: docker
-#  port: 3307
-#  username: tracks_dev
-#  password: FqUKMWPz5mh8UPhypZvq
+test:
+  adapter: <%= ENV.fetch('DATABASE_TYPE') %>
+  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
+  database: <%= ENV.fetch('DATABASE_NAME') %>
+  host: <%= ENV.fetch('DATABASE_HOST') %>
+  port: <%= ENV.fetch('DATABASE_PORT') %>
+  username: <%= ENV.fetch('DATABASE_USERNAME') %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') %>
 
-#development:
-#  adapter: postgresql
-#  database: tracks_dev
-#  # set this if you are storing utf8 in your mysql database to handle strings
-#  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
-#  # encoding: utf8
-#  host: docker
-#  port: 5432
-#  username: tracks_dev
-#  password: password
-
-#development:
-#  adapter: sqlite3
-#  database: db.sqlite
-
-#test:
-#  adapter: mysql2
-#  database: tracks_test
-#  # set this if you are storing utf8 in your mysql database to handle strings
-#  # like "Réné". Not needed for sqlite. For PostgreSQL use encoding: unicode
-#  # encoding: utf8
-#  host: docker
-#  port: 3307
-#  username: tracks_tst
-#  password: 9rMNV4y6RVcqmJTo2QoR
-
-# Production config is disabled by default
-#
 development:
   adapter: <%= ENV.fetch('DATABASE_TYPE') %>
+  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
+  database: <%= ENV.fetch('DATABASE_NAME') %>
+  host: <%= ENV.fetch('DATABASE_HOST') %>
+  port: <%= ENV.fetch('DATABASE_PORT') %>
+  username: <%= ENV.fetch('DATABASE_USERNAME') %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') %>
+
+production:
+  adapter: <%= ENV.fetch('DATABASE_TYPE') %>
+  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
   database: <%= ENV.fetch('DATABASE_NAME') %>
   host: <%= ENV.fetch('DATABASE_HOST') %>
   port: <%= ENV.fetch('DATABASE_PORT') %>
