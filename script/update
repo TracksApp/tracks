@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# script/update: Update application to run for its current checkout.
+
+set -e
+
+docker_compose="docker-compose --file docker-compose.yml"
+
+script/bootstrap
+
+echo "==> Updating db…"
+# run all database migrations to ensure everything is up to date.
+$docker_compose run web bin/rake db:migrate

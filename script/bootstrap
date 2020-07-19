@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# script/bootstrap: Resolve all dependencies that the application requires to
+#                   run.
+
+set -e
+
+docker_compose="docker-compose --file docker-compose.yml"
+
+echo "==> Building Docker image…"
+$docker_compose build

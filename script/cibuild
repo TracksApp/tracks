@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 docker_compose="docker-compose --file docker-compose.yml"
