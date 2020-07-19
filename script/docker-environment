@@ -2,6 +2,8 @@
 
 set -e
 
+docker_compose="docker-compose --file docker-compose.yml"
+
 # Find our app dir
 appdir=$(cd $(dirname "$0")/.. && pwd)
 
@@ -11,4 +13,4 @@ export VOLUME="$appdir"
 image=${DOCKER_IMAGE:=web}
 
 port_publish=""; [ "${BIND_DOCKER_SERVICE_PORTS:-}" = 1 ] && port_publish="--service-ports"
-exec docker-compose run $port_publish --rm $image $cmd
+exec $docker_compose run $port_publish --rm $image $cmd
