@@ -1,20 +1,22 @@
 require 'test_helper'
 
 class UsersXmlApiTest < ActionDispatch::IntegrationTest
-  
+
   @@foobar_postdata = "<user><login>foo</login><password>bar</password></user>"
+  @@barfoo_postdata = "<user><login>bar</login><email>barfoo@example.org</email><password>foo</password></user>"
   @@johnny_postdata = "<user><login>johnny</login><password>barracuda</password></user>"
-  
+  @@barracuda_postdata = "<user><login>barracuda</login><email>barracuda@example.org</email><password>johnny</password></user>"
+
   def test_fails_with_401_if_not_authorized_user
     authenticated_post_xml_to_user_create @@foobar_postdata, 'nobody', 'nohow'
     assert_401_unauthorized_admin
   end
-  
+
  def test_fails_with_401_if_not_admin_user
    authenticated_post_xml_to_user_create @@foobar_postdata, users(:other_user).login, 'sesame'
    assert_401_unauthorized_admin
  end
- 
+
  def test_content_type_must_be_xml
    authenticated_post_xml_to_user_create @@foobar_postdata, users(:admin_user).login, 'abracadabra', {'CONTENT_TYPE' => "application/x-www-form-urlencoded"}
    assert_response 400, "Expected response 400"
@@ -25,12 +27,12 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
  #   authenticated_post_xml_to_user_create "<foo></bar>"
  #   assert_equal 500, @integration_session.status
  # end
-    
+
   def test_fails_with_invalid_xml_format2
     authenticated_post_xml_to_user_create "<username>foo</username>"
     assert_response_and_body 400, "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>."
   end
-  
+
   def test_xml_simple_param_parsing
     authenticated_post_xml_to_user_create
     assert @controller.params.has_key?(:user)
@@ -39,18 +41,18 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     assert_equal 'foo', @controller.params['user'][:login]
     assert_equal 'bar', @controller.params['user'][:password]
   end
-  
+
   def test_fails_with_too_short_password
     authenticated_post_xml_to_user_create
     assert_responses_with_error "Password is too short (minimum is 5 characters"
   end
-  
+
   def test_fails_with_nonunique_login
     existing_login = users(:other_user).login
     authenticated_post_xml_to_user_create "<user><login>#{existing_login}</login><password>barracuda</password></user>"
     assert_responses_with_error "Login has already been taken"
   end
-  
+
   def test_creates_new_user
     assert_difference 'User.count' do
       authenticated_post_xml_to_user_create @@johnny_postdata
@@ -61,16 +63,27 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     johnny2 = User.authenticate('johnny','barracuda')
     assert_not_nil johnny2, "expected user johnny to be authenticated"
   end
-  
+
+  def test_creates_new_user
+    assert_difference 'User.count' do
+      authenticated_post_xml_to_user_create @@barracuda_postdata
+      assert_response_and_body 200, "User created."
+    end
+    barracuda1 = User.where(:login => 'barracuda').first
+    assert_not_nil barracuda1, "expected user barracuda to be created"
+    barracuda2 = User.authenticate('barracuda','johnny')
+    assert_not_nil barracuda2, "expected user barracuda to be authenticated"
+  end
+
   def test_fails_with_get_verb
     authenticated_get_xml "/users.xml", users(:admin_user).login, 'abracadabra', {}
   end
-  
+
   def test_get_users_as_xml
     get '/users.xml', params: {}, headers: basic_auth_headers()
     assert_response :success
     assert_select 'users' do
-      assert_select 'user', count: 4
+      assert_select 'user', count: 5
     end
     assert_select 'password', false
   end
@@ -81,7 +94,15 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     assert_select 'user'
     assert_select 'password', false
   end
-    
+
+  def test_get_email_user_as_xml
+    get "/users/#{users(:other_user_email).id}.xml", params: {}, headers: basic_auth_headers()
+    assert_response :success
+    assert_select 'user'
+    assert_select 'email'
+    assert_select 'password', false
+  end
+
   private
 
   def basic_auth_headers(username = users(:admin_user).login, password = 'abracadabra')
@@ -89,6 +110,10 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
   end
 
   def authenticated_post_xml_to_user_create(postdata = @@foobar_postdata, user = users(:admin_user).login, password = 'abracadabra', headers = {})
+    authenticated_post_xml "/users.xml", user, password, postdata, headers
+  end
+
+  def authenticated_post_xml_to_user_create_with_email(postdata = @@barfoo_postdata, user = users(:admin_user).login, password = 'abracadabra', headers = {})
     authenticated_post_xml "/users.xml", user, password, postdata, headers
   end
 end

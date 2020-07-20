@@ -11,6 +11,9 @@ body {
 
 .login-wrapper {
   @include make-row();
+  .footer {
+    z-index: 1;
+  }
 }
 
 .login-box {

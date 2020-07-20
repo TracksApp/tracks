@@ -51,6 +51,7 @@ en:
       user:
         auth_type: Auth type
         display_name: Display name
+        email: Email address
         first_name: First name
         last_name: Last name
         login: Login
@@ -87,7 +88,7 @@ en:
         confirmation: doesn't match confirmation
         less_than_or_equal_to: must be less than or equal to %{count}
         blank: can't be blank
-        invalid: "cannot contain the comma (',') character"
+        invalid: "is not valid"
         exclusion: is reserved
         odd: must be odd
         even: must be even
@@ -961,6 +962,7 @@ en:
     change_password_prompt: Enter your new password in the fields below and click 'Change password' to replace your current password with your new one.
     password_confirmation_label: Confirm password
     destroy_error: There was an error deleting the user %{login}
+    email_address: Email address
     choose_password: Choose password
     register_with_cas: With your CAS username
     label_auth_type: Authentication type

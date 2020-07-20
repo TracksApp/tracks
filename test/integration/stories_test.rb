@@ -3,7 +3,7 @@ require 'support/stub_site_config_helper'
 
 class StoriesTest < ActionDispatch::IntegrationTest
   include StubSiteConfigHelper
-  
+
   # ####################################################
   # Testing login and signup by different kinds of users
   # ####################################################
@@ -11,10 +11,11 @@ class StoriesTest < ActionDispatch::IntegrationTest
     admin = new_session_as(:admin_user,"abracadabra")
     admin.goes_to_signup
     admin.signs_up_with(:user => {:login => "newbie",
+                                  :email => "test.person@example.org",
                                   :password => "newbiepass",
                                   :password_confirmation => "newbiepass"})
   end
-  
+
   def test_signup_new_user_by_nonadmin
     stub_site_config do
       SITE_CONFIG['open_signups'] = false
@@ -22,7 +23,7 @@ class StoriesTest < ActionDispatch::IntegrationTest
       other_user.goes_to_signup_as_nonadmin
     end
   end
-  
+
   def test_open_signup_new_user
     stub_site_config do
       SITE_CONFIG['open_signups'] = true
@@ -30,6 +31,7 @@ class StoriesTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template "users/new"
       post "/users", params: { :user => {:login => "newbie",
+                                         :email => "test.person@example.org",
                                          :password => "newbiepass",
                                          :password_confirmation => "newbiepass"} }
       assert_response :redirect
@@ -37,8 +39,8 @@ class StoriesTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template "todos/index"
     end
-  end    
-  
+  end
+
   private
 
     module CustomAssertions
@@ -67,7 +69,7 @@ class StoriesTest < ActionDispatch::IntegrationTest
         assert_response :success
         assert_template "users/new"
       end
-      
+
       def goes_to_signup_as_nonadmin
         get "/signup"
         assert_response :success
@@ -81,7 +83,6 @@ class StoriesTest < ActionDispatch::IntegrationTest
         assert_response :success
         assert_template "todos/index"
       end
-      
     end
 
     def new_session_as(user,plainpass)
@@ -92,5 +93,4 @@ class StoriesTest < ActionDispatch::IntegrationTest
         yield sess if block_given?
       end
     end
-    
 end

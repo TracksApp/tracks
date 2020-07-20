@@ -44,7 +44,7 @@ private
   end
 
   def user_params
-    params.require(:user).permit(:login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url)
+    params.require(:user).permit(:login, :first_name, :last_name, :email, :password_confirmation, :password, :auth_type, :open_id_url)
   end
 
   # Display notification if preferences are successful updated

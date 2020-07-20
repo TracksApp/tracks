@@ -89,6 +89,19 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_validate_correct_email
+    assert_difference 'User.count' do
+      create_user :email=> 'testi@example.org'
+    end
+  end
+
+  def test_validate_email_format
+    assert_no_difference 'User.count' do
+      u = create_user :email=> 'test'
+      assert_equal ["is not valid"], u.errors[:email]
+    end
+  end
+
   def test_display_name_with_first_and_last_name_set
     @other_user.first_name = "Jane"
     @other_user.last_name = "Doe"

@@ -23,6 +23,10 @@
             <%= text_field "user", "login", class: "form-control" %>
           </div>
           <div class="label-element-combo">
+            <%= label_tag "user_email", t('users.email_address') %>
+            <%= text_field "user", "email", class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
             <%= label_tag "user_password", t('users.choose_password') %>
             <%= password_field "user", "password", class: "form-control" %>
           </div>
