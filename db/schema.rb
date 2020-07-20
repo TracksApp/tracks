@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_09_231555) do
+ActiveRecord::Schema.define(version: 2020_07_20_151220) do
 
   create_table "attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "todo_id"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 2020_01_09_231555) do
     t.string "open_id_url"
     t.string "remember_token"
     t.datetime "remember_token_expires_at"
+    t.string "email"
     t.index ["login"], name: "index_users_on_login"
   end
 
