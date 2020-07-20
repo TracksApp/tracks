@@ -20,16 +20,25 @@
 
           <div class="label-element-combo">
             <%= label_tag "user_login", t('users.desired_login') %>
-            <%= text_field_tag "user_login", nil, class: "form-control" %>
+            <%= text_field "user", "login", class: "form-control" %>
           </div>
           <div class="label-element-combo">
             <%= label_tag "user_password", t('users.choose_password') %>
-            <%= password_field_tag "user_password", nil, class: "form-control" %>
+            <%= password_field "user", "password", class: "form-control" %>
           </div>
           <div class="label-element-combo">
             <%= label_tag "user_password_confirmation", t('users.confirm_password') %>
-            <%= password_field_tag "user_password_confirmation", nil, class: "form-control" %>
+            <%= password_field "user", "password_confirmation", class: "form-control" %>
           </div>
+          <% unless SITE_CONFIG['tos_link'].blank? -%>
+            <div class="label-element-combo">
+              <div class="checkbox">
+                <input name="approve_tos" id="approve_tos" type="checkbox" />
+                <label for="approve_tos"><%= t("users.approve_tos") %></label>
+                (<a href="<%= SITE_CONFIG['tos_link'] %>"><%= t('users.tos_link') %></a>)
+              </div>
+            </div>
+          <% end -%>
           <%= submit_tag t("users.signup"), class: "btn btn-default" %>
         <% end %>
       </div>

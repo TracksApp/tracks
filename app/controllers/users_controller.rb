@@ -76,10 +76,14 @@ class UsersController < ApplicationController
           return
         end
 
+        unless params['approve_tos'] == 'on' || SITE_CONFIG['tos_link'].blank?
+          render_failure "You have to accept the terms of service to sign up!"
+          return
+        end
+
         user = User.new(user_params)
 
         unless user.valid?
-          session['new_user'] = user
           redirect_to signup_path
           return
         end
@@ -106,6 +110,11 @@ class UsersController < ApplicationController
           render_failure "Expected post format is valid xml like so: <user><login>username</login><password>abc123</password></user>.", 400
           return
         end
+        unless user_params['approve_tos'] == 'on' || SITE_CONFIG['tos_link'].blank?
+          render_failure "You have to accept the terms of service to sign up!"
+          return
+        end
+
         user = User.new(user_params)
         user.password_confirmation = user_params[:password]
         saved = user.save
