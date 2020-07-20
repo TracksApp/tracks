@@ -71,7 +71,7 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     end
     barracuda1 = User.where(:login => 'barracuda').first
     assert_not_nil barracuda1, "expected user barracuda to be created"
-    johnny2 = User.authenticate('barracuda','johnny')
+    barracuda2 = User.authenticate('barracuda','johnny')
     assert_not_nil barracuda2, "expected user barracuda to be authenticated"
   end
 
@@ -83,7 +83,7 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     get '/users.xml', params: {}, headers: basic_auth_headers()
     assert_response :success
     assert_select 'users' do
-      assert_select 'user', count: 4
+      assert_select 'user', count: 5
     end
     assert_select 'password', false
   end

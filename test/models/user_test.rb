@@ -98,7 +98,7 @@ class UserTest < ActiveSupport::TestCase
   def test_validate_email_format
     assert_no_difference 'User.count' do
       u = create_user :email=> 'test'
-      assert_equal "is not valid", u.errors[:email]
+      assert_equal ["is not valid"], u.errors[:email]
     end
   end
 
