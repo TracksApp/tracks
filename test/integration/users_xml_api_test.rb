@@ -92,7 +92,6 @@ class UsersXmlApiTest < ActionDispatch::IntegrationTest
     get "/users/#{users(:other_user).id}.xml", params: {}, headers: basic_auth_headers()
     assert_response :success
     assert_select 'user'
-    assert_select 'email', false
     assert_select 'password', false
   end
 
