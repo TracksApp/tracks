@@ -19,10 +19,16 @@ body {
   @include make-sm-column-offset(3);
   margin: 2em auto 1em;
   background-color: rgba(0, 0, 0, 0.75);
-  color: #eaeaea;
   padding: 0 0 1em 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 2px 3px rgba(0, 0, 0, 0.3);
+  color: #eaeaea;
+
+  a {
+    color: #eaeaea;
+    text-decoration: underline;
+  }
 }
+
 
 @media(min-width: $screen-sm-min) {
   .login-box {
@@ -34,7 +40,7 @@ body {
   padding: 1em 0;
 }
 
-.login-form {
+.login-form, .signup-form {
   @include make-xs-column(12);
   @include make-sm-column(8);
   @include make-sm-column-offset(2)

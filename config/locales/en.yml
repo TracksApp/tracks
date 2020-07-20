@@ -978,6 +978,8 @@ en:
     change_authentication_type: Change authentication type
     total_notes: Total notes
     select_authentication_type: Select your new authentication type and click 'Change authentication type' to replace your current settings.
+    approve_tos: I approve the Terms of Service
+    tos_link: read the Terms of Service
   feedlist:
     choose_context: Choose the context you want a feed of
     actions_due_today: Actions due today or earlier
