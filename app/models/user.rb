@@ -107,6 +107,7 @@ class User < ApplicationRecord
   validates_length_of :login, within: 3..80
   validates_uniqueness_of :login, on: :create
   validate :validate_auth_type
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password

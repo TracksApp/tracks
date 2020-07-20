@@ -187,7 +187,7 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:login, :first_name, :last_name, :password_confirmation, :password, :auth_type, :open_id_url)
+    params.require(:user).permit(:login, :first_name, :last_name, :email, :password_confirmation, :password, :auth_type, :open_id_url)
   end
 
   def get_new_user
