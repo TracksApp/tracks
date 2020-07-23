@@ -12,6 +12,10 @@ class IntegrationsController < ApplicationController
     @page_title = 'TRACKS::REST API Documentation'
   end
 
+  def help
+    @page_title = 'TRACKS::Help'
+  end
+
   def search_plugin
     @icon_data = [File.open(File.join(Rails.root, 'app', 'assets', 'images', 'done.png')).read].
       pack('m').gsub(/\n/, '')
