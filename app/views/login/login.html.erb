@@ -29,6 +29,11 @@
           </div>
           <%= submit_tag t("login.sign_in"), class: "btn btn-default" %>
         <% end %>
+        <% if SITE_CONFIG['open_signups'] -%>
+          <div class="signup-prompt">
+            <%= link_to t('login.signup_prompt'), url_for(:action => 'new', :controller => 'users') %>
+          </div>
+        <% end -%>
       </div>
     </div>
   </div>

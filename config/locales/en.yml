@@ -1009,6 +1009,7 @@ en:
   login:
     login_cas: go to the CAS
     sign_in: Sign in
+    signup_prompt: Want to create an account?
     openid_identity_url_not_found: "Sorry, no user by that identity URL exists (%{identity_url})"
     user_no_expiry: Stay logged in
     cas_no_user_found: "Hello, %{username}! You do not have an account on Tracks."
