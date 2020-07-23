@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   get 'data/xml_export' => 'data#xml_export'
   get 'data/csv_actions' => 'data#csv_actions'
 
+  get 'help' => "integrations#help"
   get 'integrations' => "integrations#index"
   get 'integrations/rest_api' => "integrations#rest_api", :as => 'rest_api_docs'
   post 'integrations/cloudmailin' => 'integrations#cloudmailin'

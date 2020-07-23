@@ -401,6 +401,7 @@ en:
       import_title: Import data
       preferences: Preferences
       integrations_: Integrate Tracks
+      help_page: Help
       feeds_title: See a list of available feeds
       calendar_title: Calendar of due actions
       completed_tasks: Done
