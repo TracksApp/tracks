@@ -6,6 +6,7 @@
   <tr>
     <th><%= User.human_attribute_name('login') %></th>
     <th><%= User.human_attribute_name('display_name') %></th>
+    <th><%= User.human_attribute_name('email') %></th>
     <th><%= User.human_attribute_name('auth_type') %></th>
     <th><%= User.human_attribute_name('open_id_url') %></th>
     <th><%= t('users.total_actions') %></th>
@@ -18,6 +19,7 @@
     <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>">
       <td><%=h user.login %></td>
       <td><%=h user.display_name %></td>
+      <td><%=h user.email %></td>
       <td><%= h user.auth_type %></td>
       <td><%= h user.open_id_url || '-' %></td>
       <td><%= h user.todos.size %></td>
