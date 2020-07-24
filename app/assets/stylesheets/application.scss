@@ -53,3 +53,7 @@ body {
   color: $text-color;
   background-color: $body-bg;
 }
+
+.ui-datepicker {
+  z-index: 999999 !important;
+}
