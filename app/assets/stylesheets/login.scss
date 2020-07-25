@@ -21,7 +21,7 @@ body {
   @include make-sm-column(6);
   @include make-sm-column-offset(3);
   margin: 2em auto 1em;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: $brand-primary;
   padding: 0 0 1em 0;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), 0 2px 3px rgba(0, 0, 0, 0.3);
   color: #eaeaea;

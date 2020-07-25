@@ -28,6 +28,8 @@
 }
 
 .bootstrap {
+  @import "colors";
+
   @import "bootstrap-sprockets";
   @import "bootstrap";
   @import "tracks-logo";
