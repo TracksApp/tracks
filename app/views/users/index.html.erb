@@ -13,6 +13,7 @@
     <th><%= t('users.total_contexts') %></th>
     <th><%= t('users.total_projects') %></th>
     <th><%= t('users.total_notes') %></th>
+    <th><%= User.human_attribute_name('created_at') %></th>
     <th>&nbsp;</th>
   </tr>
   <% for user in @users %>
@@ -26,6 +27,7 @@
       <td><%= h user.contexts.size %></td>
       <td><%= h user.projects.size %></td>
       <td><%= h user.notes.size %></td>
+      <td><%= format_date(user.created_at) %></td>
       <td><%= !user.is_admin? ? remote_delete_user(user) : "&nbsp;".html_safe %></td>
     </tr>
   <% end %>
