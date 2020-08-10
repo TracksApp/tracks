@@ -14,6 +14,7 @@ class LoginController < ApplicationController
     case request.method
     when 'POST'
       if @user = User.authenticate(params['user_login'], params['user_password'])
+        @user.update_attribute(:last_login_at, Time.now)
         return handle_post_success
       else
         handle_post_failure
