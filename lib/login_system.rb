@@ -222,6 +222,7 @@ private
   def redirect_to_login
     respond_to do |format|
       format.html { redirect_to login_path }
+      format.js { render js: "redirect_to('" + login_path + "')" }
       format.m { redirect_to login_path(:format => 'm') }
     end
   end

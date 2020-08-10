@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  before_action :admin_login_required, :only => [ :index, :show, :destroy ]
+  before_action :admin_login_required, :only => [ :index, :show ]
   skip_before_action :login_required, :only => [ :new, :create ]
   prepend_before_action :login_optional, :only => [ :new, :create ]
 
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
       end
       format.xml do
         unless current_user && current_user.is_admin
-          render :body => "401 Unauthorized: Only admin users are allowed access to this function.", :status => 401
+          render :body => t('errors.user_unauthorized'), :status => 401
           return
         end
         unless check_create_user_params
@@ -131,7 +131,15 @@ class UsersController < ApplicationController
   # DELETE /users/id DELETE /users/id.xml
   def destroy
     @deleted_user = User.find(params[:id])
+    unless current_user && (current_user.is_admin || current_user == @deleted_user)
+      render :body => t('errors.user_unauthorized'), :status => 401
+      return
+    end
+
     @saved = @deleted_user.destroy
+    if current_user == @deleted_user
+      logout_user
+    end
     @total_users = User.count
 
     respond_to do |format|
@@ -141,10 +149,16 @@ class UsersController < ApplicationController
         else
           notify :error, t('users.failed_to_delete_user', :username => @deleted_user.login)
         end
-        redirect_to users_url
+        if current_user == @deleted_user
+          redirect_to login
+        else
+          redirect_to users_url
+        end
       end
       format.js
-      format.xml { head :ok }
+      format.xml do
+        head :ok
+      end
     end
   end
 

@@ -18,4 +18,14 @@ module PreferencesHelper
     pref(model, pref_name) { text_field(model, pref_name, class: "form-control") }
   end
 
+  def profile_delete_user(user)
+    return link_to(
+      t('users.destroy_user'),
+      url_for({:controller => 'users', :action => 'destroy', :id => user.id}),
+      {:id => "delete_user_#{user.id}",
+        :class => "delete_user_button btn btn-danger",
+        :title => t('users.destroy_user'),
+        :x_confirm_message => t('users.destroy_confirmation', :login => user.login)
+      })
+  end
 end
