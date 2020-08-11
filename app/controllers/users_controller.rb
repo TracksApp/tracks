@@ -131,16 +131,20 @@ class UsersController < ApplicationController
   # DELETE /users/id DELETE /users/id.xml
   def destroy
     @deleted_user = User.find(params[:id])
+
+    # Check that the user has access (logged in as admin or the target user.)
     unless current_user && (current_user.is_admin || current_user == @deleted_user)
       render :body => t('errors.user_unauthorized'), :status => 401
       return
     end
 
+    # Remove the user
     @saved = @deleted_user.destroy
-    if current_user == @deleted_user
+
+    # Log out the user if they've deleted their own user and it succeeded.
+    if @saved && current_user == @deleted_user
       logout_user
     end
-    @total_users = User.count
 
     respond_to do |format|
       format.html do
@@ -155,7 +159,9 @@ class UsersController < ApplicationController
           redirect_to users_url
         end
       end
-      format.js
+      format.js do
+        @total_users = User.count
+      end
       format.xml do
         head :ok
       end
