@@ -242,7 +242,7 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
     simplecov-html (0.12.2)
-    solargraph (0.39.13)
+    solargraph (0.39.14)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
