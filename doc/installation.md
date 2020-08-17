@@ -98,7 +98,7 @@ This description is intended for people installing Tracks from scratch. If you w
 
 Tracks has a few software requirements that must be satisfied before installation:
 
-1. **Ruby**. Tracks requires Ruby 2.4 or greater, but is not tested with 2.7.
+1. **Ruby**. Tracks requires Ruby 2.5 or greater. Most of the testing is done with 2.6.
 2. **Bundler**. Tracks requires a recent version of [Bundler](http://bundler.io) to handle the installation of dependencies. Bundler is typically installed by running `gem install bundler`.
 3. **Database**. Tracks is tested on [MySQL](http://www.mysql.com/) and [SQLite](http://www.sqlite.org/), but [PostgreSQL](http://www.postgresql.org/) can also be used. Of the three, SQLite requires the least configuration but is also the least performant and may make it difficult to operate in the future. We recommend either MySQL or PostgreSQL. Whatever your choice, the appropriate database software must be installed.
 
