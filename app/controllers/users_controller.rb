@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
 
   before_action :admin_login_required, :only => [ :index, :show ]
+  before_action :admin_or_self_login_required, :only => [ :destroy ]
   skip_before_action :login_required, :only => [ :new, :create ]
   prepend_before_action :login_optional, :only => [ :new, :create ]
 
@@ -131,12 +132,6 @@ class UsersController < ApplicationController
   # DELETE /users/id DELETE /users/id.xml
   def destroy
     @deleted_user = User.find(params[:id])
-
-    # Check that the user has access (logged in as admin or the target user.)
-    unless current_user && (current_user.is_admin || current_user == @deleted_user)
-      render :body => t('errors.user_unauthorized'), :status => 401
-      return
-    end
 
     # Remove the user
     @saved = @deleted_user.destroy
