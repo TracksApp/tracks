@@ -1,7 +1,4 @@
 #!/bin/sh
 
-appdir=$(cd $(dirname "$0")/.. && pwd)
-[ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
-
 export RAILS_ENV='development'
 bin/rails console

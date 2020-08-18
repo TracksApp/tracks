@@ -1,4 +1,5 @@
 #!/bin/bash
+
 set -e
 
 docker_compose="docker-compose --file docker-compose.yml"
@@ -12,14 +13,10 @@ function die() {
     exit 1
 }
 
-
 trap cleanup EXIT
 
 export RAILS_ENV=test
-export TRACKS_DB=tracks_test
-
-# Put a config/site.yml file in place since it's needed for operation
-cp config/site.yml.tmpl config/site.yml
+export DATABASE_NAME=tracks_test
 
 $docker_compose build
 $docker_compose up -d

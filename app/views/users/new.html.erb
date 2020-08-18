@@ -1,31 +1,55 @@
-<div title="<%= t('users.account_signup') %>" id="signupform" class="form">
-<%= form_tag :action=> "create" do %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="login-flash">
+      <%= bootstrap_flash :close_button => false %>
+    </div>
+  </div>
+  <div class="login-wrapper">
+    <div class="login-box">
+      <div class="icon-box">
+        <div class="tracks-icon"><div class="tracks-icon-text">10</div>
+      </div>
+      <div title="<%= t('users.account_signup') %>" id="signupform" class="signup-form" class="form">
+        <%= form_tag :action=> "create" do %>
 
-  <%= get_list_of_error_messages_for @user %><br/>
+          <%= get_list_of_error_messages_for @user %><br/>
 
-  <%= render_flash %>
+          <%= render_flash %>
 
-  <h3><%= @heading -%></h3>
+          <h3><%= @heading -%></h3>
 
-  <table>
-    <tr>
-      <td><label for="user_login"><%= t('users.desired_login') %>:</label></td>
-      <td> <%= text_field "user", "login", :size => 20 %></td>
-    </tr>
-    <tr>
-      <td><label for="user_password"><%= t('users.choose_password') %>:</label></td>
-      <td><%= password_field "user", "password", :size => 20 %></td>
-    </tr>
-    <tr>
-      <td><label for="user_password_confirmation"><%= t('users.confirm_password') %>:</label></td>
-      <td><%= password_field "user", "password_confirmation", :size => 20 %></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><input type="submit" id="signup" value="<%= t('users.signup') %> &#187;" class="primary" /></td>
-    </tr>
-  </table>
-<%end-%>
+          <div class="label-element-combo">
+            <%= label_tag "user_login", t('users.desired_login') %>
+            <%= text_field "user", "login", class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
+            <%= label_tag "user_email", t('users.email_address') %>
+            <%= text_field "user", "email", class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
+            <%= label_tag "user_password", t('users.choose_password') %>
+            <%= password_field "user", "password", class: "form-control" %>
+          </div>
+          <div class="label-element-combo">
+            <%= label_tag "user_password_confirmation", t('users.confirm_password') %>
+            <%= password_field "user", "password_confirmation", class: "form-control" %>
+          </div>
+          <% unless SITE_CONFIG['tos_link'].blank? -%>
+            <div class="label-element-combo">
+              <div class="checkbox">
+                <input name="approve_tos" id="approve_tos" type="checkbox" />
+                <label for="approve_tos"><%= t("users.approve_tos") %></label>
+                (<a href="<%= SITE_CONFIG['tos_link'] %>"><%= t('users.tos_link') %></a>)
+              </div>
+            </div>
+          <% end -%>
+          <%= submit_tag t("users.signup"), class: "btn btn-default" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <%= render :partial => "shared/footer" %>
+  </div>
 </div>
-
 

@@ -25,12 +25,6 @@ secret_token: "secret"
 # Set to true when your application is running with https
 force_ssl: false
 
-# Configure how static assets (images, stylesheets, etc.) will be served.
-# The best practice is to have a proxying web server such as Apache or Nginx
-# serve static assets (images, stylesheets, javascript) for you. Change
-# this to 'true' if you want Rails to be responsible for serving the static assets
-# serve_static_assets: false
-
 # Uncomment if you want to dispatch todos that come from email based on the To: 
 # address rather than the From: address.
 # email_dispatch: 'to'
@@ -47,6 +41,9 @@ force_ssl: false
 
 # Set to true to allow anyone to sign up for a username.
 open_signups: false
+
+# Set to require TOS approval on signup.
+#tos_link: "https://www.example.com"
 
 # When integrating your tracks instance with http://cloudmailin.com/ by using 
 # the /integrations/cloudmailin URL, this value is the cloudmailin-secret for 

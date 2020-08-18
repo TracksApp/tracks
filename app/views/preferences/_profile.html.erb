@@ -5,5 +5,8 @@
   <%= pref_with_text_field 'user', 'last_name' %>
 </div>
 <div class="form-group">
+  <%= pref_with_text_field 'user', 'email' %>
+</div>
+<div class="form-group">
   <%= pref_with_select_field('prefs', 'locale', I18n.available_locales.map {|l| l.to_s}) %>
 </div>

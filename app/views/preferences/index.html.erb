@@ -21,16 +21,20 @@
           <li role="presentation">
             <%= link_to t('preferences.tabs.tracks_behavior'), "#behavior", data: { toggle: "tab" } %>
           </li>
+          <li role="presentation">
+            <%= link_to t('preferences.tabs.remove_account'), "#remove_account", data: { toggle: "tab" } %>
+          </li>
         </ul>
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="profile"><%= render :partial => 'profile'%></div>
           <div role="tabpanel" class="tab-pane" id="authentication"><%= render :partial => 'authentication'%></div>
           <div role="tabpanel" class="tab-pane" id="date_and_time"><%= render :partial => 'date_and_time'%></div>
           <div role="tabpanel" class="tab-pane" id="behavior"><%= render :partial => 'tracks_behavior'%></div>
+          <div role="tabpanel" class="tab-pane" id="remove_account"><%= render :partial => 'remove_account'%></div>
         </div>
-
-        <button type="submit" id="prefs_submit" class="btn btn-default"><%= t('common.update') %></button>
-
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="submit" id="prefs_submit" class="btn btn-default"><%= t('common.update') %></button>
+        </div>
       <% end %>
     </div>
   </div>

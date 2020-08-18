@@ -51,6 +51,7 @@ en:
       user:
         auth_type: Auth type
         display_name: Display name
+        email: Email address
         first_name: First name
         last_name: Last name
         login: Login
@@ -87,7 +88,7 @@ en:
         confirmation: doesn't match confirmation
         less_than_or_equal_to: must be less than or equal to %{count}
         blank: can't be blank
-        invalid: "cannot contain the comma (',') character"
+        invalid: "is not valid"
         exclusion: is reserved
         odd: must be odd
         even: must be even
@@ -400,6 +401,7 @@ en:
       import_title: Import data
       preferences: Preferences
       integrations_: Integrate Tracks
+      help_page: Help
       feeds_title: See a list of available feeds
       calendar_title: Calendar of due actions
       completed_tasks: Done
@@ -819,11 +821,13 @@ en:
     authentication_header: Your authentication
     current_authentication_type: Your authentication type is %{auth_type}
     change_authentication_type: Change your authentication type
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     tabs:
       authentication: Authentication
       tracks_behavior: Tracks behavior
       profile: Profile
       date_and_time: Date and time
+      remove_account: Remove account
     generate_new_token_confirm: Are you sure? Generating a new token will replace the existing one and break any external usages of this token.
   data:
     import_successful: Import was successful.
@@ -961,6 +965,7 @@ en:
     change_password_prompt: Enter your new password in the fields below and click 'Change password' to replace your current password with your new one.
     password_confirmation_label: Confirm password
     destroy_error: There was an error deleting the user %{login}
+    email_address: Email address
     choose_password: Choose password
     register_with_cas: With your CAS username
     label_auth_type: Authentication type
@@ -978,6 +983,8 @@ en:
     change_authentication_type: Change authentication type
     total_notes: Total notes
     select_authentication_type: Select your new authentication type and click 'Change authentication type' to replace your current settings.
+    approve_tos: I approve the Terms of Service
+    tos_link: read the Terms of Service
   feedlist:
     choose_context: Choose the context you want a feed of
     actions_due_today: Actions due today or earlier
@@ -1005,6 +1012,7 @@ en:
   login:
     login_cas: go to the CAS
     sign_in: Sign in
+    signup_prompt: Want to create an account?
     openid_identity_url_not_found: "Sorry, no user by that identity URL exists (%{identity_url})"
     user_no_expiry: Stay logged in
     cas_no_user_found: "Hello, %{username}! You do not have an account on Tracks."

@@ -140,7 +140,7 @@ class ActionDispatch::IntegrationTest
   end
 
   def assert_401_unauthorized_admin
-    assert_response_and_body 401, "401 Unauthorized: Only admin users are allowed access to this function."
+    assert_response_and_body 401, "401 Unauthorized: Only administrative users are allowed access to this function."
   end
 
   def assert_responses_with_error(error_msg)

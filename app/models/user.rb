@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   #for will_paginate plugin
   cattr_accessor :per_page
-  @@per_page = 5
+  @@per_page = 10
 
   has_many(:contexts, -> { order 'position ASC' }, dependent: :delete_all) do
              def find_by_params(params)
@@ -107,6 +107,7 @@ class User < ApplicationRecord
   validates_length_of :login, within: 3..80
   validates_uniqueness_of :login, on: :create
   validate :validate_auth_type
+  validates :email, :allow_blank => true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password

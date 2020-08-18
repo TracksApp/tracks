@@ -1,17 +1,16 @@
 #!/bin/sh
-# Run a command in the app's environment 
 
 set -e
 
-# Find our app dir and just run the command in we're in the container since the
-# container is built with an /etc/app-env file inside of it.
-appdir=$(cd $(dirname "$0")/.. && pwd)
-[ -f /etc/app-env ] && exec "$@"
+docker_compose="docker-compose --file docker-compose.yml"
 
-# Otherwise, run docker compose to run our command in the container
+# Find our app dir
+appdir=$(cd $(dirname "$0")/.. && pwd)
+
+# Check if we've been told to run the command in Docker Composer.
 cmd="$@"; [ "$#" -eq 0 ] && cmd=bash
-export VOLUME="$appdir:/app"
+export VOLUME="$appdir"
 image=${DOCKER_IMAGE:=web}
 
 port_publish=""; [ "${BIND_DOCKER_SERVICE_PORTS:-}" = 1 ] && port_publish="--service-ports"
-exec docker-compose run $port_publish --rm $image $cmd
+exec $docker_compose run $port_publish --rm $image $cmd

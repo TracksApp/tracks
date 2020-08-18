@@ -9,8 +9,16 @@ services:
       - db-data:/var/lib/mysql
   web:
     build: .
+    environment:
+      # These are set in script/ci-build, so we need to pass-thru them.
+      RAILS_ENV: $RAILS_ENV
+      DATABASE_NAME: $DATABASE_NAME
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD_EMPTY: 1
     volumes:
-      - ${VOLUME:-.:/app}
+      - ${VOLUME:-.}:/app:Z
+      - ${VOLUME:-.}/config/database.docker.yml:/app/config/database.yml:Z
+      - ${VOLUME:-.}/config/site.docker.yml:/app/config/site.yml:Z
     ports:
       - 3000:3000
     depends_on:

@@ -154,6 +154,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def admin_or_self_login_required
+    unless User.find(session['user_id']).is_admin || session['user_id'] == params[:id].to_i
+      render :body => t('errors.user_unauthorized'), :status => 401
+      return false
+    end
+  end
+
   def redirect_back_or_home
     respond_to do |format|
       format.html { redirect_back_or_default root_url }

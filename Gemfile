@@ -29,14 +29,14 @@ gem "RedCloth"
 gem "sanitize", "~> 5.2"
 gem "will_paginate"
 gem "acts_as_list"
-gem "aasm", '~> 3.4.0'
+gem "aasm", '~> 4.12.3'
 gem "htmlentities"
 gem "rails_autolink"
 gem 'puma', '~> 4.3'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.13'
+gem 'bcrypt', '~> 3.1.15'
 
 gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 
@@ -53,7 +53,7 @@ group :development do
   gem "spring"
   gem "yard"
 
-  gem 'tolk', '~> 3.2.1'
+  gem 'tolk', '~> 4.0.0'
 
   gem "bullet"
   gem "rack-mini-profiler"
@@ -63,7 +63,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.88", require: false
+  gem "rubocop", "~> 0.89", require: false
 end
 
 group :test do

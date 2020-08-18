@@ -51,6 +51,7 @@
             <%= t('layouts.navigation.help') %> <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
+            <li><%= link_to t('layouts.navigation.help_page'), help_path %></li>
             <li><%= link_to t('layouts.navigation.integrations_'), integrations_path %></li>
             <li><%= link_to t('layouts.navigation.api_docs'), rest_api_docs_path %></li>
           </ul>

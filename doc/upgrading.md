@@ -1,4 +1,13 @@
 # Upgrading Tracks
+## Upgrading from Tracks 2.4.2 to 2.5
+
+* If you're using the Docker Compose environment and want to run the commands in
+  the bin/ directory inside the container from the host system, add a .use-docker
+  file to the root directory. This replaces the old .skip-docker file requirement
+  to favor the more common setup and avoid placing unexpected requirements.
+
+* The Docker environment has been changed quite a bit. However, it should work
+  at least as before for the usual needs.
 
 ## Upgrading from Tracks 2.3 to 2.4.2
 

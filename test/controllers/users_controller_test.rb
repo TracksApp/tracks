@@ -18,7 +18,7 @@ class UsersControllerTest < ActionController::TestCase
     get :index
     assert_response :success
     assert_equal "TRACKS::Manage Users", assigns['page_title']
-    assert_equal 4, assigns['total_users']
+    assert_equal 5, assigns['total_users']
     assert_equal users_url, session['return-to']
   end
 
@@ -36,7 +36,7 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal assigns['users'],[User.where(:login => 'jane').first]
   end
 
-  def test_destroy_user
+  def test_destroy_user_as_admin
     login_as :admin_user
     @no_users_before = User.count
     user_id = users(:ldap_user).id
@@ -44,8 +44,16 @@ class UsersControllerTest < ActionController::TestCase
     assert_equal @no_users_before-1, User.count
   end
 
+  def test_destroy_user_as_user
+    login_as :other_user
+    @no_users_before = User.count
+    user_id = users(:other_user).id
+    post :destroy, xhr: true, params: { :id => user_id.to_param }
+    assert_equal @no_users_before-1, User.count
+  end
+
   def test_update_password_successful
-    get :change_password, params: { :id => users(:admin_user).id } 
+    get :change_password, params: { :id => users(:admin_user).id }
     # should fail because no login
     assert_redirected_to login_path
     login_as :admin_user
