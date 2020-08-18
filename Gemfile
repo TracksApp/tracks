@@ -47,7 +47,7 @@ gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 # gem 'jbuilder', '~> 1.2'
 
 gem "bootstrap-sass", "3.4.1"
-gem "font-awesome-sass", "~> 4.5.0"
+gem "font-awesome-sass", "~> 5.13.0"
 
 group :development do
   gem "spring"
