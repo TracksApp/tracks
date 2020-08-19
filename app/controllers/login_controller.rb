@@ -1,10 +1,12 @@
 class LoginController < ApplicationController
+  include Common
 
   layout 'login'
   skip_before_action :set_session_expiration
   skip_before_action :login_required
   before_action :login_optional
   before_action :get_current_user
+  before_action :set_theme
 
   protect_from_forgery :except => [:check_expiry, :login]
 

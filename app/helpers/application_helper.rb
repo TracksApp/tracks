@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   def group_view_by_menu_entry
     # not set, no menu entry
     return "" if @group_view_by.nil?

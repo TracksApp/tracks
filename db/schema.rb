@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_10_123316) do
+ActiveRecord::Schema.define(version: 2020_08_20_000743) do
 
   create_table "attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "todo_id"
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 2020_08_10_123316) do
     t.integer "sms_context_id"
     t.string "locale"
     t.integer "review_period", default: 14, null: false
+    t.string "theme"
     t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 

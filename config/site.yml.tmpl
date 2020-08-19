@@ -2,16 +2,13 @@
 authentication_schemes:
   - "database"
 
-
 # You'll probably want to change this to the time zone of the computer where 
 # Tracks is running. Run rake time:zones:local have Rails suggest time zone 
 # names on your system
 time_zone: "UTC"
 
-
 # setting this to true will make the cookies only available over HTTPS
 secure_cookies: false
-
 
 # Your secret key for verifying the integrity of signed cookies.
 # If you change this key, all old signed cookies will become invalid!
@@ -32,21 +29,21 @@ force_ssl: false
 # address rather than the From: address.
 # email_dispatch: 'to'
 
-
 # If you want to send all email to a specific user, uncomment the following line 
 # and set the environment variable TRACKS_MAIL_RECEIVER to the login name of the 
 # user that will receive all email
 # email_dispatch: 'single_user'
-
 
 # Set this to the subdirectory you're hosting tracks in and uncomment if 
 # applicable. NOTE: you will also need to set up your web server to deal with 
 # the relative URL. Mongrel, for example, has a --prefix option.
 # subdir: "/tracks"
 
-
 # Set to true to allow anyone to sign up for a username.
 open_signups: false
+
+# Default theme and theme for the login form.
+# default_theme: light_blue
 
 # Set to require TOS approval on signup.
 #tos_link: "https://www.example.com"
@@ -63,7 +60,6 @@ open_signups: false
 # change this to reflect the email address of the admin that you want to show 
 # on the signup page
 admin_email: my.email@domain.com
-
 
 # Map of allowed incoming email addresses to real users
 # Requires email_dispatch == 'to'

@@ -11,7 +11,4 @@ Rails.application.config.assets.paths << Rails.root.join('node_modules')
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
-Rails.application.config.assets.precompile += %w( print.css mobile.css jquery-ui/datepicker-*.js swf_fu.js )
-
-# add /app/assets/swfs to asset pipeline for charts
-Rails.application.config.assets.paths << Rails.root.join("app", "assets", "swfs")
+Rails.application.config.assets.precompile += %w( light_blue.css black.css print.css mobile.css jquery-ui/datepicker-*.js )

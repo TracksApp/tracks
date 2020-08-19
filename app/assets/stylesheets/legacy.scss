@@ -75,9 +75,15 @@ p {
 }
 
 a, a:link, a:active, a:visited {
+    color: $link-color;
     text-decoration: none;
     padding-left: 1px;
     padding-right: 1px;
+}
+
+a:hover {
+    color: $link-hover-color;
+    background-color: $link-bgcolor;
 }
 
 h1 {
@@ -816,11 +822,11 @@ form {
 #todo_new_action_container, #project_new_project_container, #context_new_container, #recurring_new_container {
     width: 270px;
     padding: 5px 10px;
-    background-color: #3C6997;
-    color: lighten(#000, 93.5%);
+    background-color: $brand-primary;
+    color: $gray-lighter;
     border-radius: 5px;
     a {
-        color: lighten(#000, 85%);
+        color: $box-tablink-color;
     }
 }
 

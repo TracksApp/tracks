@@ -40,7 +40,7 @@ private
       :staleness_starts, :due_style, :locale, :title_date_format, :time_zone,
       :show_hidden_projects_in_sidebar, :show_project_on_todo_done,
       :review_period, :refresh, :verbose_action_descriptors,
-      :mobile_todos_per_page, :sms_email, :sms_context_id)
+      :mobile_todos_per_page, :sms_email, :sms_context_id, :theme)
   end
 
   def user_params

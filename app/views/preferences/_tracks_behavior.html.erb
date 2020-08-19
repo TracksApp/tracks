@@ -1,4 +1,3 @@
-
 <div class="form-group">
   <%= pref_with_select_field('prefs', "due_style", [[t('models.preference.due_styles')[0],Preference.due_styles[:due_in_n_days]],[t('models.preference.due_styles')[1],Preference.due_styles[:due_on]]]) %>
 </div>
@@ -37,4 +36,7 @@
 </div>
 <div class="form-group">
   <%= pref('prefs', "sms_context") { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}, {}, class: "form-control") } %>
+</div>
+<div class="form-group">
+  <%= pref_with_select_field('prefs', 'theme', [[t('models.preference.themes.black'), Preference.themes[:black]], [t('models.preference.themes.light_blue'), Preference.themes[:light_blue]]]) %>
 </div>

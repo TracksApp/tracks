@@ -3,4 +3,10 @@ $brand-primary: #3C6997;
 $navbar-inverse-bg: $brand_primary;
 $navbar-inverse-color: $gray-lighter;
 $navbar-inverse-link-color: $gray-lighter;
+$link-color: unset;
+$link-hover-color: unset;
+$link-bgcolor: unset;
+$box-tablink-color: lighten(#000, 85%);
 
+// Import all components
+@import 'manifest';

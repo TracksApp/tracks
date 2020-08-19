@@ -132,6 +132,9 @@ en:
       due_styles:
       - Due in ___ days
       - Due on _______
+      themes:
+        black: Black
+        light_blue: Light blue
   datetime:
     prompts:
       minute: Minute

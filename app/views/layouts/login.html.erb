@@ -6,7 +6,7 @@
     <%= favicon_link_tag 'favicon.ico' %>
     <%= favicon_link_tag 'apple-touch-icon.png', :rel => 'apple-touch-icon', :type => 'image/png' %>
     <title><%= @page_title -%></title>
-    <%= stylesheet_link_tag "application" %>
+    <%= stylesheet_link_tag @user_theme %>
   </head>
   <body class="bootstrap">
     <%= yield %>
