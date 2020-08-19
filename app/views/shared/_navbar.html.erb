@@ -63,20 +63,20 @@
         </li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <%= icon('cog', class: 'hidden-xs') %>
+            <%= icon('fas', 'cog', class: 'hidden-xs') %>
             <%= content_tag :span, t('layouts.navigation.options'), class: 'visible-xs-inline' %>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to icon_fw('sign-out', t('common.logout')), logout_path %></li>
+            <li><%= link_to icon_fw('fas', 'sign-out', t('common.logout')), logout_path %></li>
             <li class="divider"></li>
             <li class="dropdown-header"><%= current_user.display_name %></li>
-            <li><%= link_to icon_fw('wrench', t('layouts.navigation.preferences')), preferences_path, accesskey: 'u', title: t('layouts.navigation.preferences_title') %></li>
-            <li><%= link_to icon_fw('download', t('layouts.navigation.export')), data_path, accesskey: 'e', title: t('layouts.navigation.export_title') %></li>
-            <li><%= link_to icon_fw('upload', t('layouts.navigation.import')), import_data_path, accesskey: 'i', title: t('layouts.navigation.import_title') %></li>
+            <li><%= link_to icon_fw('fas', 'wrench', t('layouts.navigation.preferences')), preferences_path, accesskey: 'u', title: t('layouts.navigation.preferences_title') %></li>
+            <li><%= link_to icon_fw('fas', 'download', t('layouts.navigation.export')), data_path, accesskey: 'e', title: t('layouts.navigation.export_title') %></li>
+            <li><%= link_to icon_fw('fas', 'upload', t('layouts.navigation.import')), import_data_path, accesskey: 'i', title: t('layouts.navigation.import_title') %></li>
             <% if current_user.is_admin? %>
             <li class="divider"></li>
             <li class="dropdown-header"><%= t('layouts.navigation.admin') %></li>
-            <li><%= link_to icon_fw('users', t('layouts.navigation.manage_users')), users_path, accesskey: 'a', title: t('layouts.navigation.manage_users_title') %></li>
+            <li><%= link_to icon_fw('fas', 'users', t('layouts.navigation.manage_users')), users_path, accesskey: 'a', title: t('layouts.navigation.manage_users_title') %></li>
             <% end %>
           </ul>
         </li>
