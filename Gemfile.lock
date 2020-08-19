@@ -226,17 +226,9 @@ GEM
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
-    sass-rails (6.0.0)
-      sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.0.0)
       ffi (~> 1.9.6)
       rake
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
@@ -327,7 +319,7 @@ DEPENDENCIES
   rspec-expectations
   rubocop (~> 0.89)
   sanitize (~> 5.2)
-  sass-rails (~> 6.0)
+  sassc (~> 2.0.0)
   selenium-webdriver (~> 3.142)
   simplecov
   solargraph
