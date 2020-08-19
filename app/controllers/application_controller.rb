@@ -19,7 +19,7 @@ class ApplicationController < ActionController::Base
   append_before_action :set_group_view_by
   prepend_before_action :login_required
   prepend_before_action :enable_mobile_content_negotiation
-  
+
   def set_locale
     locale = params[:locale] # specifying a locale in the request takes precedence
     locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
