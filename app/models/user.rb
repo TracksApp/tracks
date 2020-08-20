@@ -105,7 +105,7 @@ class User < ApplicationRecord
   validates_presence_of :password_confirmation, if: :password_required?
   validates_confirmation_of :password
   validates_length_of :login, within: 3..80
-  validates_uniqueness_of :login, on: :create
+  validates_uniqueness_of :login, on: :create, :case_sensitive => false
   validate :validate_auth_type
   validates :email, :allow_blank => true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
