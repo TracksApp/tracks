@@ -2,8 +2,8 @@
 authentication_schemes:
   - "database"
 
-# You'll probably want to change this to the time zone of the computer where 
-# Tracks is running. Run rake time:zones:local have Rails suggest time zone 
+# You'll probably want to change this to the time zone of the computer where
+# Tracks is running. Run rake time:zones:local have Rails suggest time zone
 # names on your system
 time_zone: "UTC"
 
@@ -15,7 +15,7 @@ secure_cookies: false
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
 #
-# if you want a nice random key, run this from the tracks directory and 
+# if you want a nice random key, run this from the tracks directory and
 # copy-and-paste the result:
 #
 #   rake secret
@@ -25,17 +25,17 @@ secret_token: "change-me"
 # Set to true when your application is running with https
 force_ssl: false
 
-# Uncomment if you want to dispatch todos that come from email based on the To: 
+# Uncomment if you want to dispatch todos that come from email based on the To:
 # address rather than the From: address.
 # email_dispatch: 'to'
 
-# If you want to send all email to a specific user, uncomment the following line 
-# and set the environment variable TRACKS_MAIL_RECEIVER to the login name of the 
+# If you want to send all email to a specific user, uncomment the following line
+# and set the environment variable TRACKS_MAIL_RECEIVER to the login name of the
 # user that will receive all email
 # email_dispatch: 'single_user'
 
-# Set this to the subdirectory you're hosting tracks in and uncomment if 
-# applicable. NOTE: you will also need to set up your web server to deal with 
+# Set this to the subdirectory you're hosting tracks in and uncomment if
+# applicable. NOTE: you will also need to set up your web server to deal with
 # the relative URL. Mongrel, for example, has a --prefix option.
 # subdir: "/tracks"
 
@@ -48,8 +48,8 @@ open_signups: false
 # Set to require TOS approval on signup.
 #tos_link: "https://www.example.com"
 
-# When integrating your tracks instance with http://cloudmailin.com/ by using 
-# the /integrations/cloudmailin URL, this value is the cloudmailin-secret for 
+# When integrating your tracks instance with http://cloudmailin.com/ by using
+# the /integrations/cloudmailin URL, this value is the cloudmailin-secret for
 # verifying the authenticity of the request.
 # (see http://docs.cloudmailin.com/validating_the_sender)
 # cloudmailin: asdasd
@@ -57,7 +57,7 @@ open_signups: false
 # Mailgun api key - used to verify incoming HTTP requests from Mailgun.org
 # mailgun_api_key: key-abcdef1234567890
 
-# change this to reflect the email address of the admin that you want to show 
+# change this to reflect the email address of the admin that you want to show
 # on the signup page
 admin_email: my.email@domain.com
 
