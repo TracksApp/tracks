@@ -67,7 +67,7 @@
             <%= content_tag :span, t('layouts.navigation.options'), class: 'visible-xs-inline' %>
           </a>
           <ul class="dropdown-menu">
-            <li><%= link_to icon_fw('fas', 'sign-out', t('common.logout')), logout_path %></li>
+            <li><%= link_to icon_fw('fas', 'sign-out-alt', t('common.logout')), logout_path %></li>
             <li class="divider"></li>
             <li class="dropdown-header"><%= current_user.display_name %></li>
             <li><%= link_to icon_fw('fas', 'wrench', t('layouts.navigation.preferences')), preferences_path, accesskey: 'u', title: t('layouts.navigation.preferences_title') %></li>
