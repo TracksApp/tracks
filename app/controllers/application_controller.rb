@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   include LoginSystem
+  include Common
   helper_method :current_user, :prefs, :format_date
 
   layout proc{ |controller| controller.mobile? ? "mobile" : "application" }
@@ -16,6 +17,7 @@ class ApplicationController < ActionController::Base
   before_action :set_time_zone
   before_action :set_zindex_counter
   before_action :set_locale
+  before_action :set_theme
   append_before_action :set_group_view_by
   prepend_before_action :login_required
   prepend_before_action :enable_mobile_content_negotiation

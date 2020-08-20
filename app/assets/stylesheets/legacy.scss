@@ -75,15 +75,15 @@ p {
 }
 
 a, a:link, a:active, a:visited {
-    color: #cc3334;
+    color: $link-color;
     text-decoration: none;
     padding-left: 1px;
     padding-right: 1px;
 }
 
 a:hover {
-    color: #fff;
-    background-color: #cc3334;
+    color: $link-hover-color;
+    background-color: $link-bgcolor;
 }
 
 h1 {
@@ -820,12 +820,14 @@ form {
 }
 
 #todo_new_action_container, #project_new_project_container, #context_new_container, #recurring_new_container {
-    background: #ddd;
     width: 270px;
     padding: 5px 10px;
-    background-color: #000;
-    color: #eee;
+    background-color: $brand-primary;
+    color: $gray-lighter;
     border-radius: 5px;
+    a {
+        color: $box-tablink-color;
+    }
 }
 
 #recurring_new_container img {

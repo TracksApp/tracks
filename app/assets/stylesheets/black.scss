@@ -1,0 +1,12 @@
+$gray-lighter: #EEE;
+$brand-primary: rgba(0, 0, 0, 0.75);
+$navbar-inverse-bg: $brand_primary;
+$navbar-inverse-color: $gray-lighter;
+$navbar-inverse-link-color: $gray-lighter;
+$link-color: #CC3334;
+$link-hover-color: #FFF;
+$link-bgcolor: $link-color;
+$box-tablink-color: unset;
+
+// Import all components
+@import 'manifest';
