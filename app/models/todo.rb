@@ -70,13 +70,13 @@ class Todo < ApplicationRecord
 
   # state machine
   include AASM
-  aasm_initial_state = Proc.new { (show_from && user && (show_from > user.date)) ? :deferred : :active}
+  aasm_initial_state = Proc.new { (self.show_from && self.user && (self.show_from > self.user.date)) ? :deferred : :active}
 
   aasm :column => :state do
 
     state :active
-    state :completed, :before_enter => Proc.new { completed_at = Time.zone.now }, :before_exit => Proc.new { completed_at = nil}
-    state :deferred,  :before_exit => Proc.new { show_from = nil }
+    state :completed, :before_enter => Proc.new { self.completed_at = Time.zone.now }, :before_exit => Proc.new { self.completed_at = nil}
+    state :deferred,  :before_exit => Proc.new { self[:show_from] = nil }
     state :pending
 
     event :defer do
