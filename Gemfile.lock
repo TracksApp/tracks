@@ -165,6 +165,7 @@ GEM
     parallel (1.19.2)
     parser (2.7.1.4)
       ast (~> 2.4.1)
+    pg (1.2.3)
     puma (4.3.5)
       nio4r (~> 2.0)
     rack (2.2.3)
@@ -326,6 +327,7 @@ DEPENDENCIES
   mocha
   mysql2 (~> 0.5.3)
   paperclip
+  pg (~> 1.2.3)
   puma (~> 4.3)
   rack-mini-profiler
   rails (~> 6.0.3)

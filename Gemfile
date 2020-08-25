@@ -24,6 +24,7 @@ gem 'jquery-ui-rails' , '~>6.0.1'
 # Alternatively use --without <group> arguments to bundler to not install that group
 gem "sqlite3", group: :sqlite
 gem "mysql2", "~> 0.5.3", group: :mysql
+gem "pg", "~> 1.2.3", group: :postgresql
 
 gem "RedCloth"
 gem "sanitize", "~> 5.2"
@@ -69,7 +70,6 @@ end
 group :test do
   gem 'rails-controller-testing'
   gem 'rails-dom-testing', '~> 2.0.0'
-
 
   gem "factory_bot_rails"
   gem "rspec-expectations"
