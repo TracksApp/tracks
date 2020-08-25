@@ -18,7 +18,7 @@ class Project < ApplicationRecord
 
   validates_presence_of :name
   validates_length_of :name, :maximum => 255
-  validates_uniqueness_of :name, :scope => "user_id"
+  validates_uniqueness_of :name, :scope => "user_id", :case_sensitive => true
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\'', :top_of_list => 0
 

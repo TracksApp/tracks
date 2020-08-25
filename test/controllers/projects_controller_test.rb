@@ -82,7 +82,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_rss_feed_content
     login_as(:admin_user)
     get :index, params: { :format => "rss" }
-    assert_equal 'application/rss+xml', @response.content_type
+    assert_equal 'application/rss+xml', @response.media_type
     #puts @response.body
 
     assert_select 'rss[version="2.0"]' do
@@ -128,7 +128,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_atom_feed_content
     login_as :admin_user
     get :index, params: { :format => "atom" }
-    assert_equal 'application/atom+xml', @response.content_type
+    assert_equal 'application/atom+xml', @response.media_type
     assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
     assert_select 'feed' do
       assert_select '>title', 'Tracks Projects'
@@ -166,7 +166,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_text_feed_content
     login_as :admin_user
     get :index, params: { :format => "txt" }
-    assert_equal 'text/plain', @response.content_type
+    assert_equal 'text/plain', @response.media_type
     assert !(/&nbsp;/.match(@response.body))
   end
 
@@ -238,7 +238,7 @@ class ProjectsControllerTest < ActionController::TestCase
   def test_xml_content
     login_as(:admin_user)
     get :index, params: { :format => "xml" }
-    assert_equal 'application/xml', @response.content_type
+    assert_equal 'application/xml', @response.media_type
 
     assert_select 'projects' do
       assert_select 'project', 3 do

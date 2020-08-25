@@ -12,8 +12,8 @@ class RecurringTodo < ApplicationRecord
 
   include AASM
   aasm :column => :state do
-    state :active, :initial => true, :before_enter => Proc.new { |t| t.occurrences_count = 0 }
-    state :completed, :before_enter => Proc.new { |t| t.completed_at = Time.zone.now }, :before_exit => Proc.new { |t| t.completed_at = nil }
+    state :active, :initial => true, :before_enter => Proc.new { self.occurrences_count = 0 }
+    state :completed, :before_enter => Proc.new { self.completed_at = Time.zone.now }, :before_exit => Proc.new { self.completed_at = nil }
 
     event :complete do
       transitions :to => :completed, :from => [:active]

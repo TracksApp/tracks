@@ -128,17 +128,17 @@ class TodosControllerTest < ActionController::TestCase
 
     get :tag, params: { name: 'first.last.m' }
     assert_equal "text/html", request.format, "controller should set right content type"
-    assert_equal "text/html", @response.content_type
+    assert_equal "text/html", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ".m should be chomped"
 
     get :tag, params: { name: 'first.last.txt' }
     assert_equal "text/plain", request.format, "controller should set right content type"
-    assert_equal "text/plain", @response.content_type
+    assert_equal "text/plain", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ".txt should be chomped"
 
     get :tag, params: { name: 'first.last' }
     assert_equal "text/html", request.format, "controller should set right content type"
-    assert_equal "text/html", @response.content_type
+    assert_equal "text/html", @response.media_type
     assert_equal "first.last", assigns['tag_name'], ":name should be correct"
   end
 
@@ -479,7 +479,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_rss_feed_not_completed
     login_as(:admin_user)
     get :index, params: { :format => "rss" }
-    assert_equal 'application/rss+xml', @response.content_type
+    assert_equal 'application/rss+xml', @response.media_type
     # puts @response.body
 
     assert_select 'rss[version="2.0"]' do
@@ -502,7 +502,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_atom_feed_not_completed
     login_as :admin_user
     get :index, params: { :format => "atom" }
-    assert_equal 'application/atom+xml', @response.content_type
+    assert_equal 'application/atom+xml', @response.media_type
     assert_equal 'http://www.w3.org/2005/Atom', html_document.children[0].namespace.href
     assert_select 'feed' do
       assert_select '>title', 'Tracks Actions'
@@ -518,7 +518,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_text_feed_not_completed
     login_as(:admin_user)
     get :index, params: { :format => "txt" }
-    assert_equal 'text/plain', @response.content_type
+    assert_equal 'text/plain', @response.media_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_text_feed 11
   end
@@ -526,7 +526,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_ical_feed_not_completed
     login_as :admin_user
     get :index, params: { :format => "ics" }
-    assert_equal 'text/calendar', @response.content_type
+    assert_equal 'text/calendar', @response.media_type
     assert !(/&nbsp;/.match(@response.body))
     assert_number_of_items_in_ical_feed 11
   end
@@ -756,7 +756,7 @@ class TodosControllerTest < ActionController::TestCase
   def test_mobile_index_uses_text_html_content_type
     login_as(:admin_user)
     get :index, params: { :format => "m" }
-    assert_equal 'text/html', @response.content_type
+    assert_equal 'text/html', @response.media_type
   end
 
   def test_mobile_index_assigns_down_count

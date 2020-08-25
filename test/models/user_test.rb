@@ -274,12 +274,12 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_should_reset_password
-    users(:other_user).update_attributes(:password => 'new password', :password_confirmation => 'new password')
+    users(:other_user).update(:password => 'new password', :password_confirmation => 'new password')
     assert_equal users(:other_user), User.authenticate('jane', 'new password')
   end
 
   def test_should_not_rehash_password
-    users(:other_user).update_attributes(:login => 'jane2')
+    users(:other_user).update(:login => 'jane2')
     assert_equal users(:other_user), User.authenticate('jane2', 'sesame')
   end
 

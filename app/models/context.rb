@@ -35,7 +35,7 @@ class Context < ApplicationRecord
 
   validates_presence_of :name, :message => "context must have a name"
   validates_length_of :name, :maximum => 255, :message => "context name must be less than 256 characters"
-  validates_uniqueness_of :name, :message => "already exists", :scope => "user_id"
+  validates_uniqueness_of :name, :message => "already exists", :scope => "user_id", :case_sensitive => false
 
   def self.null_object
     NullContext.new
