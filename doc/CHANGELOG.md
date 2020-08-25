@@ -1,3 +1,28 @@
+## Version 2.5.0
+
+See doc/upgrading.md for the upgrade documentation!
+
+### New features
+* Updated documentation both in the doc directory and online.
+* .skip-docker file has been replaced with .use-docker, see upgrading.md for
+  details.
+* Added email, last login, creation and update time to the user model.
+* Added terms of service and email fields to the signup form. The TOS link is
+  defined in site.yml, see config/site.yml.tmpl.
+* New, lighter default color scheme. The black color scheme is also available
+  for selection in the user preferences. Default theme can be set in site.yml.
+* Added a help page to the ? menu linking to online help assets.
+* Allow the user to remove their own account.
+
+### Removed features
+* Ruby versions below 2.5 are no longer supported.
+* Old Internet Explorer versions (7 and 8) are no longer supported.
+
+### Bug fixes
+* Fixed the signup form to use login form styles.
+* Lots of dependencies have been upgraded, including Rails major upgrade.
+* Fixed some minor UI bugs.
+
 ## Version 2.4.2
 
 ### New features
