@@ -1,3 +1,15 @@
+/*
+ * Apparently the requires need to be in the "root" stylesheet file, not
+ * the imported manifest.
+ *
+ *= require jquery-ui/menu
+ *= require jquery-ui/autocomplete
+ *= require jquery-ui/datepicker
+ *= require jquery-ui/dialog
+ *= require jquery-ui/sortable
+ *= require_self
+ */
+
 $gray-lighter: lighten(#000, 93.5%);
 $brand-primary: #3C6997;
 $navbar-inverse-bg: $brand_primary;
