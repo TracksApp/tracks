@@ -1,5 +1,26 @@
 # Upgrading Tracks
-## Upgrading from Tracks 2.4.2 to 2.5
+
+## General upgrade instructions
+
+* Remember to always backup your database before upgrading! Test before
+  upgrading production environments.
+
+* For information regarding installation see doc/installation.md.
+
+* Make sure to run database migrations using one one of the following:
+```
+   # For pure (Dockerless) installation:
+   $ rake db:migrate
+
+   # For Docker Compose installation:
+   $ bin/rake db:migrate
+
+   # For separate Docker container installation either one of:
+   $ docker run --link mariadb:db --rm -t tracks bin/rake db:migrate
+   $ docker run --link postgres:db --rm -t tracks bin/rake db:migrate
+```
+
+## Upgrading from Tracks 2.4.2 to 2.5.0
 
 * If you're using the Docker Compose environment and want to run the commands in
   the bin/ directory inside the container from the host system, add a .use-docker
