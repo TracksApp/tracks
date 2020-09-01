@@ -1384,3 +1384,7 @@ ul.todo-submenu > li > a {
         background: image-url('to_project_off.png') no-repeat;
     }
 }
+
+.recurring_todos .ui-dialog .ui-dialog-title {
+  float: inherit;
+}
