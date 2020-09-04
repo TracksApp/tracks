@@ -766,7 +766,7 @@ class TodosController < ApplicationController
 
   def get_not_completed_for_predecessor(relation, todo_id=nil)
     items = relation.todos.not_completed.
-      where('(LOWER(todos.description) LIKE ?)', "%#{params[:term].downcase}%")
+      where('(LOWER(todos.description) ' + Common.like_operator + '?)', "%#{params[:term].downcase}%")
     items = items.where("AND NOT(todos.id=?)", todo_id) unless todo_id.nil?
 
     items.
