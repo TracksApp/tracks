@@ -36,7 +36,7 @@ gem 'puma', '~> 4.3'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.15'
+gem 'bcrypt', '~> 3.1.16'
 
 gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 
