@@ -11,8 +11,8 @@ class Project < ApplicationRecord
   scope :completed,   -> { where state: 'completed' }
   scope :uncompleted, -> { where("NOT(state = ?)", 'completed') }
 
-  scope :with_name_or_description, lambda { |body| where("name LIKE ? OR description LIKE ?", body, body) }
-  scope :with_namepart, lambda { |body| where("name LIKE ?", body + '%') }
+  scope :with_name_or_description, lambda { |body| where("name " + Common.like_operator + " ? OR description " + Common.like_operator + " ?", body, body) }
+  scope :with_namepart, lambda { |body| where("name " + Common.like_operator + " ?", body + '%') }
 
   before_create :set_last_reviewed_now
 

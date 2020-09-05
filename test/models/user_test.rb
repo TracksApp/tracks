@@ -364,16 +364,16 @@ class UserTest < ActiveSupport::TestCase
 
     # test group counts for projects and contexts
     project_counts = u.todos.count_by_group(:project_id)
-    assert_equal [6,3,4,4], project_counts.values
+    assert_equal [6,3,4,4].sort, project_counts.values.sort
 
     context_counts = u.todos.count_by_group(:context_id)
-    assert_equal [7,3,1,3,1,2], context_counts.values
+    assert_equal [7,3,1,3,1,2].sort, context_counts.values.sort
 
     # add a todo to the first context and check that the count is increased
     u.todos.create!(:description => "yet another todo", :context => u.contexts.first)
 
     context_counts = u.todos.reload.count_by_group(:context_id)
-    assert_equal [8,3,1,3,1,2], context_counts.values
+    assert_equal [8,3,1,3,1,2].sort, context_counts.values.sort
   end
 
   def test_deleting_user_deletes_all_related_data

@@ -1,11 +1,38 @@
 ---
-name: Continuous Integration
+name: Automated tests
 
 on: pull_request
 
 jobs:
-  test:
+  test25mysql:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: bash -x script/cibuild
+      - run: bash -x script/cibuild 2.5 mysql
+
+  test26mysql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash -x script/cibuild 2.6 mysql
+
+  test27mysql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash -x script/cibuild 2.7 mysql
+
+  test26postgres:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash -x script/cibuild 2.6 postgres
+
+  test26sqlite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - run: bash -x script/cibuild 2.6 sqlite
+
+#      - run: bash -x script/cibuild 2.5 postgres
+#      - run: bash -x script/cibuild 2.7 postgres

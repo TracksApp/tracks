@@ -7,7 +7,7 @@ class Context < ApplicationRecord
   scope :active,    -> { where state: :active }
   scope :hidden,    -> { where state: :hidden }
   scope :closed,    -> { where state: :closed }
-  scope :with_name, lambda { |name| where("name LIKE ?", name) }
+  scope :with_name, lambda { |name| where("name " + Common.like_operator + " ?", name) }
 
   acts_as_list :scope => :user, :top_of_list => 0
 

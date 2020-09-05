@@ -2,7 +2,7 @@
 
 set -e
 
-docker_compose="docker-compose --file docker-compose.yml"
+docker_compose="docker-compose --file test-envs/docker-compose-$1-$2.yml"
 
 function cleanup() {
   $docker_compose down
@@ -25,6 +25,12 @@ script/poll-for-db
 # Leaving this in since it will be needed for Rails 5
 $docker_compose run web bin/rails db:environment:set RAILS_ENV=test || true
 
-$docker_compose run web bin/rake db:reset
+if [ "$2" == "mysql" ];
+then
+  $docker_compose run web bin/rake db:reset
+else
+  $docker_compose run web bin/rake db:migrate
+  $docker_compose run web bin/rake db:seed
+fi
 $docker_compose run web bin/rake test
 

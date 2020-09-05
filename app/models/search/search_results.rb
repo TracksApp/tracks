@@ -27,14 +27,14 @@ module Search
 
     def incomplete_todos(terms)
       @user.todos.
-        where("(todos.description LIKE ? OR todos.notes LIKE ?) AND todos.completed_at IS NULL", terms, terms).
+        where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND todos.completed_at IS NULL", terms, terms).
         includes(Todo::DEFAULT_INCLUDES).
         reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
     end
 
     def complete_todos(terms)
       @user.todos.
-        where("(todos.description LIKE ? OR todos.notes LIKE ?) AND NOT (todos.completed_at IS NULL)", terms, terms).
+        where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND NOT (todos.completed_at IS NULL)", terms, terms).
         includes(Todo::DEFAULT_INCLUDES).
         reorder("todos.completed_at DESC")
     end
@@ -46,7 +46,7 @@ module Search
             "LEFT JOIN taggings ON tags.id = taggings.tag_id "+
             "LEFT JOIN todos ON taggings.taggable_id = todos.id "+
             "WHERE todos.user_id=? "+
-            "AND tags.name LIKE ? ", @user.id, terms])
+            "AND tags.name " + Common.like_operator + " ? ", @user.id, terms])
     end
 
   end

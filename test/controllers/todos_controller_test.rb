@@ -480,7 +480,6 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     get :index, params: { :format => "rss" }
     assert_equal 'application/rss+xml', @response.media_type
-    # puts @response.body
 
     assert_select 'rss[version="2.0"]' do
       assert_select 'channel' do
@@ -996,7 +995,7 @@ class TodosControllerTest < ActionController::TestCase
 
   def test_format_note
     login_as(:admin_user)
-    todo = users(:admin_user).todos.first
+    todo = users(:admin_user).todos.where("state='active'").first
     todo.notes = "Normal *bold* http://foo.bar/baz"
     todo.save!
     get :index
