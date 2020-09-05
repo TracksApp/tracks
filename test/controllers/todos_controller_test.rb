@@ -223,14 +223,15 @@ class TodosControllerTest < ActionController::TestCase
     login_as(:admin_user)
     assert_difference 'Todo.count' do
       put :create, xhr: true, params: {
-        "context_name"=>"library",
-        "project_name"=>"Build a working time machine",
+        "context_name" => "library",
+        "project_name" => "Build a working time machine",
         "todo" => {
-          "notes"=>"",
+          "notes" => "",
           "description" => "Call Warren Buffet to find out how much he makes per day",
-          "due"=>"30/11/2006"
+          "due" => "30/11/2006"
         },
-        "tag_list"=>"foo bar"
+        "_source_view" => "context",
+        "tag_list" => "foo bar"
       }
       assert_response 200
     end
