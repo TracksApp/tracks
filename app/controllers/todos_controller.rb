@@ -309,7 +309,7 @@ class TodosController < ApplicationController
     @source_view = params['_source_view'] || 'todo'
 
     # Create a (unsaved) copy of the original todo, before it was toggled
-    @original_item = current_user.todos.build(@todo.attributes)  
+    @original_item = current_user.todos.build(@todo.attributes)
     @original_completed_period = DoneTodos.completed_period(@todo.completed_at)
 
     @todo_was_completed_from_deferred_or_blocked_state =
@@ -940,7 +940,7 @@ end
         @down_count = current_user.todos.active.not_hidden.count
       end
       from.context do
-        context_id = @original_item.context_id || @todo.context_id
+        context_id = @original_item ? @original_item.context_id || @todo.context_id : @todo.context_id
         todos = current_user.contexts.find(context_id).todos.not_completed
 
         if @todo.context.hidden?
