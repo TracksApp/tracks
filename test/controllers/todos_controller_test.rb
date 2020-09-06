@@ -440,6 +440,14 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal context.id, todo.reload.context.id, 'context of todo should be changed'
   end
 
+  def test_update_todo_due_in_calendar_view
+    t = Todo.find(1)
+    login_as(:admin_user)
+    post :update, xhr: true, params: { :id => 1, :_source_view => 'calendar', "context_name"=>"library", "project_name"=>"Build a working time machine", "todo"=>{"id"=>"1", "notes"=>"", "description"=>"Call Warren Buffet to find out how much he makes per day", "due"=>"31/11/2006"}, "tag_list"=>"foo bar" }
+    t = Todo.find(1)
+    assert_response 200
+  end
+
   #######
   # defer
   #######
