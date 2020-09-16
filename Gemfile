@@ -64,7 +64,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.90", require: false
+  gem "rubocop", "~> 0.91", require: false
 end
 
 group :test do
