@@ -95,68 +95,72 @@ class TodosController < ApplicationController
     if is_multiple
       create_multiple
     else
-      p = Todos::TodoCreateParamsHelper.new(params, current_user)
-      p.parse_dates unless mobile?
-      tag_list = p.tag_list
+      create_single
+    end
+  end
 
-      @todo = current_user.todos.build
-      @todo.assign_attributes(p.attributes)
-      p.add_errors(@todo)
+  def create_single
+    p = Todos::TodoCreateParamsHelper.new(params, current_user)
+    p.parse_dates unless mobile?
+    tag_list = p.tag_list
 
-      if @todo.errors.empty?
-        @todo.add_predecessor_list(p.predecessor_list)
-        @saved = @todo.save
-        @todo.tag_with(tag_list) if @saved && tag_list.present?
-        @todo.block! if @todo.uncompleted_predecessors?
-      else
-        @saved = false
+    @todo = current_user.todos.build
+    @todo.assign_attributes(p.attributes)
+    p.add_errors(@todo)
+
+    if @todo.errors.empty?
+      @todo.add_predecessor_list(p.predecessor_list)
+      @saved = @todo.save
+      @todo.tag_with(tag_list) if @saved && tag_list.present?
+      @todo.block! if @todo.uncompleted_predecessors?
+    else
+      @saved = false
+    end
+
+    @todo_was_created_deferred = @todo.deferred?
+    @todo_was_created_blocked = @todo.pending?
+    @not_done_todos = [@todo] if p.new_project_created || p.new_context_created
+    @new_project_created = p.new_project_created
+    @new_context_created = p.new_context_created
+
+    respond_to do |format|
+      format.html do
+        redirect_to :action => "index"
       end
-
-      @todo_was_created_deferred = @todo.deferred?
-      @todo_was_created_blocked = @todo.pending?
-      @not_done_todos = [@todo] if p.new_project_created || p.new_context_created
-      @new_project_created = p.new_project_created
-      @new_context_created = p.new_context_created
-
-      respond_to do |format|
-        format.html do
-          redirect_to :action => "index"
+      format.m do
+        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+        if @saved
+          onsite_redirect_to @return_path
+        else
+          @projects = current_user.projects
+          @contexts = current_user.contexts
+          render :action => "new"
         end
-        format.m do
-          @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
-          if @saved
-            onsite_redirect_to @return_path
-          else
-            @projects = current_user.projects
-            @contexts = current_user.contexts
-            render :action => "new"
-          end
+      end
+      format.js do
+        if @saved
+          determine_down_count
+          @contexts = current_user.contexts
+          @projects = current_user.projects
+          @context = @todo.context
+          @project = @todo.project
+          @initial_context_name = params['default_context_name']
+          @initial_project_name = params['default_project_name']
+          @initial_tags = params['initial_tag_list']
+          @status_message = t('todos.added_new_next_action')
+          @status_message += ' ' + t('todos.to_tickler') if @todo.deferred?
+          @status_message += ' ' + t('todos.in_pending_state') if @todo.pending?
+          @status_message += ' ' + t('todos.in_hidden_state') if @todo.hidden?
+          @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
+          @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
         end
-        format.js do
-          if @saved
-            determine_down_count
-            @contexts = current_user.contexts
-            @projects = current_user.projects
-            @context = @todo.context
-            @project = @todo.project
-            @initial_context_name = params['default_context_name']
-            @initial_project_name = params['default_project_name']
-            @initial_tags = params['initial_tag_list']
-            @status_message = t('todos.added_new_next_action')
-            @status_message += ' ' + t('todos.to_tickler') if @todo.deferred?
-            @status_message += ' ' + t('todos.in_pending_state') if @todo.pending?
-            @status_message += ' ' + t('todos.in_hidden_state') if @todo.hidden?
-            @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
-            @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
-          end
-          render :action => 'create'
-        end
-        format.xml do
-          if @saved
-            head :created, :location => todo_url(@todo)
-          else
-            render_failure @todo.errors.to_xml.html_safe, 409
-          end
+        render :action => 'create'
+      end
+      format.xml do
+        if @saved
+          head :created, :location => todo_url(@todo)
+        else
+          render_failure @todo.errors.to_xml.html_safe, 409
         end
       end
     end
