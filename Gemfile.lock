@@ -169,7 +169,7 @@ GEM
     puma (4.3.6)
       nio4r (~> 2.0)
     rack (2.2.3)
-    rack-mini-profiler (2.0.4)
+    rack-mini-profiler (2.1.0)
       rack (>= 1.2.0)
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
