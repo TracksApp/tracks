@@ -33,7 +33,7 @@ gem "acts_as_list"
 gem "aasm", '~> 5.1.1'
 gem "htmlentities"
 gem "rails_autolink"
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.0'
 gem 'paperclip'
 
 # To use ActiveModel has_secure_password
