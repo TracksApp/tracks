@@ -9,8 +9,7 @@
 * Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Wiki (community contributed information): https://github.com/TracksApp/tracks/wiki
 * Mailing list: http://groups.google.com/group/TracksApp
-* IRC channel: #tracks on Freenode
-* Gitter: https://gitter.im/TracksApp/tracks
+* IRC channel: #tracks on Freenode, available also on [Matrix](https://matrix.to/#/#tracks:matrix.org)
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Principal maintainer: [Jyri-Petteri ”ZeiP” Paloposki](https://github.com/ZeiP) (sponsored by Ardcoras oy, https://www.ardcoras.fi/)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
