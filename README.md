@@ -26,7 +26,7 @@ Enjoy being productive!
 
 * Original developer: bsag (http://www.rousette.org.uk/)
 * Principal maintainer: [Jyri-Petteri ”ZeiP” Paloposki](https://github.com/ZeiP)
-  (sponsored by Ardcoras oy, https://www.ardcoras.fi/).
+  (sponsored by [Ardcoras oy](https://www.ardcoras.fi/), also available for paid consulting)
 * Contributors: https://github.com/TracksApp/tracks/wiki/Contributors
 
 If you are thinking about contributing towards the development of Tracks,
