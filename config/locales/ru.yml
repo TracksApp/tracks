@@ -43,6 +43,7 @@ ru:
       user:
         auth_type: Тип авторизации
         display_name: Отображаемое имя
+        email: Email address
         first_name: Имя
         last_name: Фамилия
         login: Пользователь
@@ -178,6 +179,7 @@ ru:
     last_completed_in_context: "(осталось %{number})"
     new_context_post: "' будет также создан. Вы уверены?"
     new_context_pre: Новый контекст '
+    no_contexts_: 'No contexts '
     no_contexts_active: На текущий момент нет активных контекстов
     no_contexts_closed: На текущий момент нет закрытых контекстов
     no_contexts_hidden: На текущий момент нет скрытых контекстов
@@ -193,6 +195,7 @@ ru:
     import_destination_invalid: Неверный путь назначения для импорта
     import_errors: При импорте произошли ошибки
     import_successful: Импорт завершен.
+    invalid_import_destination: Invalid import destination
   date:
     abbr_day_names:
     - Вс
@@ -368,6 +371,7 @@ ru:
     opensearch_description: Искать в Tracks
   layouts:
     mobile_navigation:
+      calendar: Calendar
       contexts: Контекст
       feeds: Рассылка
       full: Полная версия
@@ -393,6 +397,7 @@ ru:
       group_view_by_project: Группировать по проекту
       group_view_by_title: Изменить группировку действий на этой странице
       help: "?"
+      help_page: Help
       home: Начало
       home_title: Начало
       import: Импорт
@@ -402,6 +407,7 @@ ru:
       manage_users_title: Добавить или удалить пользователей
       mobile: Мобильная версия
       notes_title: Показать все заметки
+      options: Options
       organize: Организация
       preferences: Настройки
       preferences_title: Показать мои настройки
@@ -446,6 +452,7 @@ ru:
     session_will_expire: сессия истекает после %{hours} часов отсутствия активности.
     session_will_not_expire: сессия не будет истекать.
     sign_in: Войти
+    signup_prompt: Want to create an account?
     successful: Вход успешен. С возвращением!
     successful_with_session_info: 'Вход выполнен:'
     unsuccessful: Неудачная попытка входа.
@@ -457,6 +464,9 @@ ru:
       due_styles:
       - Выполнить за ___ дней
       - Выполнить к _______
+      themes:
+        black: Black
+        light_blue: Light blue
     project:
       feed_description: Список всех проектов %{username}
       feed_title: Проекты Tracks
@@ -477,6 +487,7 @@ ru:
     note_header: Заметка %{id}
     note_link_title: Показать заметку %{id}
     note_location_link: 'В:'
+    save_status_message: Note %{id} was saved
     show_note_title: Показать заметку
   number:
     currency:
@@ -541,6 +552,7 @@ ru:
     page_title: TRACKS::Настройки
     page_title_edit: TRACKS::Редактирование настроек
     password_changed: Пароль изменен, пожалуйста войдите снова.
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     show_number_completed: Отображать %{number} выполненных элементов
     sms_context_none: Нет
     staleness_starts_after: Устаревание начинается после %{days} дней
@@ -548,6 +560,7 @@ ru:
       authentication: Авторизация
       date_and_time: Дата и время
       profile: Профиль
+      remove_account: Remove account
       tracks_behavior: Поведение Tracks
     title: Ваши настройки
     token_description: Ключ (используется для лент новостей и API)
@@ -560,12 +573,16 @@ ru:
     add_note_submit: Добавить заметку
     add_project: Добавить проект
     all_completed_tasks_title: TRACKS::Список выполненных действий в проекте '%{project_name}'
+    completed_actions: Completed actions
+    completed_actions_empty: Completed actions empty
     completed_projects: Выполненные проекты
     completed_tasks_title: TRACKS::Список выполненных действий проекта '%{project_name}'
     default_context: Контекст по-умолчанию для этого проекта %{context}
     default_context_removed: Удален контекст по-умолчанию
     default_context_set: Установить для проекта контекст %{default_context} по-умолчанию
     default_tags_removed_notice: Метки по-умолчанию удалены
+    deferred_actions: Deferred actions
+    deferred_actions_empty: Deferred actions empty
     delete_project: Удалить проект
     delete_project_confirmation: Уверены, что хотите удалить проект '%{name}'?
     delete_project_title: Удалить проект
@@ -587,6 +604,7 @@ ru:
     notes: Заметки
     notes_empty: Нет заметок к этому проекту
     page_title: 'TRACKS::Проект: %{project}'
+    project_destroyed_status: Deleted project '%{name}'
     project_saved_status: Проект сохранен
     project_state: Проект в состоянии %{state}.
     set_default_tags_notice: Установить метки %{default_tags} по-умолчанию для проекта
@@ -643,6 +661,7 @@ ru:
     completed: Выполнен
     completed_plural: Выполненные
     contexts:
+      ":": ":"
       active: Активных контекстов
       closed: Закрытых контекстов
       hidden: Скрытых контекстов
@@ -651,6 +670,7 @@ ru:
     hidden: Скрытый
     hidden_plural: Скрытые
     projects:
+      ":": ":"
       active: Активных проектов
       blocked: Заблокированные
       closed: Closed projects
@@ -834,6 +854,7 @@ ru:
     clear_due_date: Очистить дату 'Выполнить к'
     clear_show_from_date: Очистить дату 'Показывать с'
     completed: Выполнено
+    completed_actions: Completed actions
     completed_actions_with: Выполненные действия с меткой '%{tag_name}'
     completed_in_archive:
       few: "%{count} выполненных действия в архиве."
@@ -843,6 +864,7 @@ ru:
     completed_last_x_days: Выполнены за последние %{count} дней
     completed_recurrence_completed: Нет дальнейших действий, которые следуют за удаленной регулярной задачей. Повторение остановлено
     completed_recurring: Выполненные регулярные задачи
+    completed_recurring_actions_title: TRACKS::Completed recurring actions
     completed_rest_of_month: Выполнено за остаток месяца
     completed_rest_of_previous_month: Выполнено в конце предыдущего месяца
     completed_rest_of_week: Выполнено за остаток недели
@@ -945,8 +967,17 @@ ru:
       title: Действий не найдено
       without_project: На текущий момент нет действий без проекта
     no_actions_due_this_week: До конца недели нет действий
+    no_actions_found_title: No actions found title
+    no_actions_with: No actions with
+    no_completed_actions: No completed actions
+    no_completed_actions_with: No completed actions with
+    no_completed_recurring: No completed recurring
+    no_deferred_actions: No deferred actions
+    no_deferred_actions_with: No deferred actions with
     no_last_completed_actions: Не найдено выполненных действий
     no_project: "--Нет проекта--"
+    no_recurring_todos: No recurring todos
+    notes: Notes
     overdue: Просроченные
     pending: Ожидание
     recurrence:
@@ -1055,6 +1086,7 @@ ru:
     was_due_on_date: было запланировано к %{date}
   users:
     account_signup: регистрация пользователя
+    approve_tos: I approve the Terms of Service
     auth_change_submit: Сменить тип авторизации
     auth_type_update_error: 'Не удалось обновить ваш тип авторизации: %{error_messages}'
     auth_type_updated: Тип авторизации обновлен.
@@ -1070,6 +1102,7 @@ ru:
     destroy_error: Не удалось удалить пользователя %{login}
     destroy_successful: Пользователь %{login} удален
     destroy_user: Удалить пользователя
+    email_address: Email address
     failed_to_delete_user: Не удалось удалить пользователя %{username}
     first_user_heading: 'Добро пожаловать в TRACKS. Для начала, создайте учетную запись Администратора:'
     first_user_title: TRACKS::Войти как Администратор
@@ -1091,6 +1124,7 @@ ru:
     signup_new_user: Создать пользователя
     signup_successful: Вход пользователя %{username} выполнен.
     successfully_deleted_user: Пользователь %{username} удален
+    tos_link: read the Terms of Service
     total_actions: Всего действий
     total_contexts: Всего контекстов
     total_notes: Всего примечаний

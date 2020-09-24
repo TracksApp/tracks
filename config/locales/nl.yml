@@ -43,6 +43,7 @@ nl:
       user:
         auth_type: Auth type
         display_name: Schermnaam
+        email: Email address
         first_name: Voornaam
         last_name: Achternaam
         login: Login
@@ -175,6 +176,7 @@ nl:
     last_completed_in_context: in deze context (laatste %{number})
     new_context_post: "' zal ook gemaakt worden. Weet u dit zeker?"
     new_context_pre: Nieuwe context '
+    no_contexts_: 'No contexts '
     no_contexts_active: Momenteel zijn er geen actieve contexten
     no_contexts_closed: Momenteel zijn er geen gesloten contexten
     no_contexts_hidden: Momenteel zijn er geen verborgen contexten
@@ -190,6 +192,7 @@ nl:
     import_destination_invalid: Verkeerde bestemming voor import
     import_errors: Er hebben zich fouten voorgedaan bij de import
     import_successful: De import was succesvol
+    invalid_import_destination: Invalid import destination
   date:
     abbr_day_names:
     - Zo
@@ -354,6 +357,7 @@ nl:
     opensearch_description: Zoek in Tracks
   layouts:
     mobile_navigation:
+      calendar: Calendar
       contexts: Contexten
       feeds: Feeds
       full: Volledige site
@@ -379,6 +383,7 @@ nl:
       group_view_by_project: Groepeer op project
       group_view_by_title: Verander de groepering van de acties op deze pagina
       help: "?"
+      help_page: Help
       home: Start
       home_title: Start
       import: import
@@ -388,6 +393,7 @@ nl:
       manage_users_title: Toevoegen of verwijderen gebruikers
       mobile: Mobiele site
       notes_title: Toon alle notities
+      options: Options
       organize: Organiseer
       preferences: Voorkeuren
       preferences_title: Toon mijn voorkeuren
@@ -432,6 +438,7 @@ nl:
     session_will_expire: sessie zal verlopen na %{hours} u(u)r(en) van inactiviteit.
     session_will_not_expire: sessie zal niet verlopen.
     sign_in: Meld aan
+    signup_prompt: Want to create an account?
     successful: Succesvol aangemeld. Welkom terug!
     successful_with_session_info: 'Login succesvol:'
     unsuccessful: Login mislukt.
@@ -443,6 +450,9 @@ nl:
       due_styles:
       - Deadline over ____ dagen
       - Deadline op ____
+      themes:
+        black: Black
+        light_blue: Light blue
     project:
       feed_description: Een overzicht van alle projecten voor %{username}
       feed_title: Tracks Projecten
@@ -490,6 +500,7 @@ nl:
           quadrillion: Quadriljoen
           thousand: Duizend
           trillion: Triljoen
+          unit: "."
       format:
         delimiter: "."
         precision: 1
@@ -507,7 +518,11 @@ nl:
           tb: TB
     percentage:
       format:
+        delimiter: Delimiter
         format: "%n%"
+    precision:
+      format:
+        delimiter: Delimiter
   preferences:
     authentication_header: Uw authenticatie
     change_authentication_type: Verander uw authenticatietype
@@ -523,6 +538,7 @@ nl:
     page_title: 'TRACKS:: Voorkeuren'
     page_title_edit: 'TRACKS:: Voorkeuren bewerken'
     password_changed: Je wachtwoord is gewijzigd, meld je opnieuw aan.
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     show_number_completed: Toon %{number} voltooide items
     sms_context_none: Geen
     staleness_starts_after: Markeren openstaande acties begint na %{days} dagen
@@ -530,6 +546,7 @@ nl:
       authentication: Authenticatie
       date_and_time: Datum en tijd
       profile: Profiel
+      remove_account: Remove account
       tracks_behavior: Tracks gedrag
     title: Uw voorkeuren
     token_description: Token (voor feeds en API gebruik)
@@ -542,12 +559,16 @@ nl:
     add_note_submit: Notitie toevoegen
     add_project: Voeg project toe
     all_completed_tasks_title: TRACKS::Overzicht van all afgeronde acties in project '%{project_name}'
+    completed_actions: Completed actions
+    completed_actions_empty: Completed actions empty
     completed_projects: Voltooide projecten
     completed_tasks_title: TRACKS::Toon afgeronde acties in het project '%{project_name}'
     default_context: De standaard context voor dit project is %{context}
     default_context_removed: Standaard context verwijderd
     default_context_set: Stel project standaard context in op %{default_context}
     default_tags_removed_notice: De standaard tags zijn verwijderd
+    deferred_actions: Deferred actions
+    deferred_actions_empty: Deferred actions empty
     delete_project: Project verwijderen
     delete_project_confirmation: Weet u zeker dat u wilt het project '%{name} wilt verwijderen?
     delete_project_title: Verwijder het project
@@ -626,6 +647,7 @@ nl:
     completed: Afgerond
     completed_plural: Afgeronde
     contexts:
+      ":": ":"
       active: Actieve contexten
       closed: Gesloten contexten
       hidden: Verborgen contexten
@@ -634,6 +656,7 @@ nl:
     hidden: Verborgen
     hidden_plural: Verborgen
     projects:
+      ":": ":"
       active: Actieve projecten
       blocked: Geblokkeerd
       closed: Gesloten projecten
@@ -817,6 +840,7 @@ nl:
     clear_due_date: Maak deadline leeg
     clear_show_from_date: Maak de datum Tonen Vanaf leeg
     completed: Afgerond
+    completed_actions: Completed actions
     completed_actions_with: Afgeronde acties met de tag %{tag_name}
     completed_in_archive:
       one: Er is een voltooide actie in het archief.
@@ -825,6 +849,7 @@ nl:
     completed_last_x_days: Voltooid in de laatste %{count} dagen
     completed_recurrence_completed: Er is geen actie na de terugkerende actie die u new verwijderd heeft. De herhaling is voltooid
     completed_recurring: Afgesloten terugkerende todos
+    completed_recurring_actions_title: TRACKS::Completed recurring actions
     completed_rest_of_month: Afgerond in de rest van deze maand
     completed_rest_of_previous_month: Afgerond in de rest van de vorige maand
     completed_rest_of_week: Afgerond in de rest van deze week
@@ -925,8 +950,17 @@ nl:
       title: Geen acties gevonden
       without_project: Momenteel zijn er geen acties zonder project
     no_actions_due_this_week: Geen acties met deadline in rest van deze week
+    no_actions_found_title: No actions found title
+    no_actions_with: No actions with
+    no_completed_actions: No completed actions
+    no_completed_actions_with: No completed actions with
+    no_completed_recurring: No completed recurring
+    no_deferred_actions: No deferred actions
+    no_deferred_actions_with: No deferred actions with
     no_last_completed_actions: Geen afgeronde acties gevonden
     no_project: "-- Geen project --"
+    no_recurring_todos: No recurring todos
+    notes: Notes
     overdue: Achterstallig
     pending: Wachtend
     recurrence:
@@ -1034,6 +1068,7 @@ nl:
     was_due_on_date: had deadline op %{date}
   users:
     account_signup: Aanmelden voor een account
+    approve_tos: I approve the Terms of Service
     auth_change_submit: Wijzigen authenticatietype
     auth_type_update_error: 'Er was een probleem met het bijwerken van uw authenticatietype: %{error_messages}'
     auth_type_updated: Authenticatietype bijgewerkt.
@@ -1049,6 +1084,7 @@ nl:
     destroy_error: Er is een fout opgetreden bij het verwijderen van de gebruiker '%{login}'
     destroy_successful: Gebruiker %{login} met succes verwijderd
     destroy_user: Verwijder de gebruiker
+    email_address: Email address
     failed_to_delete_user: Mislukt de gebruiker %{username} te verwijderen
     first_user_heading: 'Welkom bij TRACKS. Om te beginnen, maak dan een admin account:'
     first_user_title: TRACKS::Aanmelden als de beheerder
@@ -1070,6 +1106,7 @@ nl:
     signup_new_user: Registreer nieuwe gebruiker
     signup_successful: Aanmelding succesvol voor gebruiker %{username}.
     successfully_deleted_user: Succesvol gebruiker %{username} verwijderd
+    tos_link: read the Terms of Service
     total_actions: Totaal aanal acties
     total_contexts: Totaal aantal contexten
     total_notes: Totaal aantal notities

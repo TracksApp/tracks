@@ -41,8 +41,14 @@ he:
         show_from: הצג מ
         tags: תגיות
       user:
+        auth_type: Auth type
+        display_name: Display name
+        email: Email address
         first_name: שם פרטי
         last_name: שם משפחה
+        login: Login
+        open_id_url: OpenID URL
+        password: Password
     errors:
       full_messages:
         format: "%{attribute} %{message}"
@@ -58,10 +64,14 @@ he:
         greater_than_or_equal_to: חייב להיות גודל או שווה ל %{count}
         inclusion: לא מוכל ברשימה
         invalid: לא יכול להכיל את תו (',') הפסיק
+        less_than: must be less than %{count}
         less_than_or_equal_to: חייב להיות קטן או שווה ל %{count}
         not_a_number: אינו מספר
         odd: חייב להיות אי זוגי
         record_invalid: אימות נכשל %{errors}
+        restrict_dependent_destroy:
+          many: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
         taken: כבר נמצא בשימוש
         too_long: ארוך מדי (לכל היותר %{count} תווים(
         too_short: קצר צדי (לכל הפחות %{count} תווים(
@@ -75,6 +85,9 @@ he:
               too_long: על שם הפרוייקט להכיל פחות מ-256 תווים
       template:
         body: 'בעיות בשדות הבאים:'
+        header:
+          one: 1 error prohibited this %{model} from being saved
+          other: "%{count} errors prohibited this %{model} from being saved"
   common:
     action: פעולה
     actions: פעולות
@@ -87,6 +100,7 @@ he:
     back: אחורה
     bugs: באגים
     cancel: בטל
+    collapse_expand: Collapse/expand
     context: הקשר
     contexts: הקשרים
     contribute: תרום
@@ -106,6 +120,7 @@ he:
     go_back: חזור
     last: אחרון
     logout: צא
+    mailing_list: Mailing List
     month: חודש
     months: חודשים
     next: הבא
@@ -150,6 +165,7 @@ he:
     context_deleted: נמחק הקשר '%{name}'
     context_hide: הסתרה מעמוד הבית?
     context_name: שם הקשר
+    context_state: Context state
     delete_context: מחק הקשר
     delete_context_confirmation: האם למחוק את ההקשר  '%{name}'? יש להזהר מפני שפעולה זו מתחוק את כל הפעולות המחזוריות בהקשר זה
     delete_context_title: מחיקת הקשר
@@ -160,7 +176,9 @@ he:
     last_completed_in_context: בהקשר זה  (אחרונות %{number})
     new_context_post: "' יווצרו בנוסף. האם להמשיך?"
     new_context_pre: הקשר חדש '
+    no_contexts_: 'No contexts '
     no_contexts_active: אין כרגע הקשרים פעילים
+    no_contexts_closed: Currently there are no closed contexts
     no_contexts_hidden: אין כרגע הקשרים מוסתרים
     save_status_message: הקשר נשמר
     show_form: יצירת הקשר חדש
@@ -171,14 +189,23 @@ he:
     update_status_message: שונה שם ההקשר
     visible_contexts: הקשרים גלויים
   data:
+    import_destination_invalid: Invalid import destination
     import_errors: שגיאות ביבוא
     import_successful: יבוא בוצע בהצלחה
+    invalid_import_destination: Invalid import destination
   date:
+    abbr_day_names: '["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]'
+    abbr_month_names: '[nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]'
+    day_names: '["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]'
     formats:
       default: "%Y-%m-%d"
       long: "%B %d, %Y"
       longer: "%A %B %d, %Y"
+      month_day: Month day
+      only_day: Only day
       short: "%b %d"
+    month_names: '[nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]'
+    order: "[:year, :month, :day]"
   datetime:
     distance_in_words:
       about_x_hours:
@@ -225,6 +252,30 @@ he:
       second: שניות
       year: שנה
   errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: должен быть подтвержден
+      blank: должна быть заполнена
+      confirmation: не соответствует %{attribute}
+      empty: не может быть пустым
+      equal_to: должно равняться %{count}
+      even: должно быть четным
+      exclusion: зарезервированно
+      greater_than: должно быть больше %{count}
+      greater_than_or_equal_to: должно быть больше или равно %{count}
+      inclusion: не входит в список
+      invalid: неверное
+      less_than: должно быть меньше %{count}
+      less_than_or_equal_to: должно быть меньше или равно %{count}
+      not_a_number: не является числом
+      not_an_integer: должно быть целым числом
+      odd: должно быть нечетным
+      other_than: должно отличаться от %{count}
+      present: должно быть пустым
+      taken: уже занято
+      too_long: 'слишком длинное (максимум: %{count} символов)'
+      too_short: 'слишком кроткое (минимум: %{count} символов)'
+      wrong_length: неверной длины (должно быть %{count} символов)
     user_unauthorized: '401 לא מאושר: רק משתמשים בדרגת מנהל רשאים להפעיל פעולה זו'
   feedlist:
     actions_completed_last_week: פעולות שהסתיימו בשבעת הימים האחרונים
@@ -252,12 +303,21 @@ he:
     select_feed_for_project: בחירת ההזנה עבור הפרוייקט
   footer:
     send_feedback: שליחת משוב על גירסא %{version}
+  helpers:
+    select:
+      prompt: Выберите
+    submit:
+      create: Создать %{model}
+      submit: Сохранить %{model}
+      update: Обновить %{model}
   integrations:
     opensearch_description: חיפוש במסלולים
   layouts:
     mobile_navigation:
+      calendar: Calendar
       contexts: 2-הקשרים
       feeds: הזנות
+      full: Full Site
       home: 1-בית
       logout: צא
       new_action: 0-פעולה חדשה
@@ -276,13 +336,21 @@ he:
       export_title: יבוא ויצוא נתונים
       feeds: הזנות
       feeds_title: צפיה ברשימת ההזנות הזמינה
+      group_view_by_context: Group by context
+      group_view_by_project: Group by project
+      group_view_by_title: Change the grouping of the actions on this page
       help: "?"
+      help_page: Help
       home: בית
       home_title: בית
+      import: Import
+      import_title: Import data
       integrations_: שילוב מסלולים
       manage_users: ניהול משתמשים
       manage_users_title: הוספה או הסרה של משתמשים
+      mobile: Mobile Site
       notes_title: הצגת כל הפתקיות
+      options: Options
       organize: ארגון
       preferences: העדפות
       preferences_title: הצגת העדפותי
@@ -291,6 +359,9 @@ he:
       recurring_todos_title: ניהול פעולות מחזוריות
       review_title: עריכצ ביקורת
       search: חיפוש כל הפריטים
+      show_empty_containers_context: Show empty contexts
+      show_empty_containers_project: Show empty projects
+      show_empty_containers_title: Show or hide the empty projects or contexts
       starred: מודגשים
       starred_title: הצגת פעולות מודגשות
       stats: סטטיסטיקה
@@ -324,6 +395,7 @@ he:
     session_will_expire: תוקף הגישה יפוג לאחר %{hours} שעה(ות) של חוסר פעילות.
     session_will_not_expire: הגישה ללא תפוגה.
     sign_in: כניסה
+    signup_prompt: Want to create an account?
     successful: כניסה בוצעה בהצלחה. ברוך שובך!
     successful_with_session_info: 'כניסה מוצלחת:'
     unsuccessful: כניסה נכשלה.
@@ -332,6 +404,10 @@ he:
     preference:
       due_in: תאריך יעד בעוד %{days} ימים
       due_on: "- יעד ב%{date}"
+      due_styles: '["Due in ___ days", "Due on _______"]'
+      themes:
+        black: Black
+        light_blue: Light blue
     project:
       feed_description: רשימת כל הפרוייקטים עבור %{username}
       feed_title: פרוייקטים במסלולים
@@ -352,18 +428,39 @@ he:
     note_header: פתקית %{id}
     note_link_title: הצגת פתקית %{id}
     note_location_link: 'בתוך:'
+    save_status_message: Note %{id} was saved
     show_note_title: הצגת פתקית
   number:
     currency:
       format:
         delimiter: ","
         format: "%u%n"
+        precision: '2'
         separator: "."
+        significant: Significant
+        strip_insignificant_zeros: Strip insignificant zeros
         unit: "₪"
     format:
       delimiter: ","
+      precision: '3'
       separator: "."
+      significant: Significant
+      strip_insignificant_zeros: Strip insignificant zeros
     human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Миллиард
+          million: Миллион
+          quadrillion: Квадрильон
+          thousand: Тысяча
+          trillion: Триллион
+          unit: "."
+      format:
+        delimiter: Delimiter
+        precision: '1'
+        significant: 'true'
+        strip_insignificant_zeros: 'true'
       storage_units:
         format: "%u%n"
         units:
@@ -374,6 +471,13 @@ he:
           kb: קילו בייט
           mb: מגה בייט
           tb: טרה בייט
+    percentage:
+      format:
+        delimiter: Delimiter
+        format: "%n%"
+    precision:
+      format:
+        delimiter: Delimiter
   preferences:
     authentication_header: הזיהוי שלי
     change_authentication_type: שינוי סוג הזדהות
@@ -389,6 +493,7 @@ he:
     page_title: מסלולים::העדפות
     page_title_edit: מסלולים::עריכת העדפות
     password_changed: הסיסמא שונתה, יש להיכנס שנית.
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     show_number_completed: הצג %{number} פריטים שהסתיימו
     sms_context_none: ללא
     staleness_starts_after: תפלות מתחילה לאחר %{days} ימים
@@ -396,6 +501,7 @@ he:
       authentication: אימות
       date_and_time: תאריך ושעה
       profile: פרופיל
+      remove_account: Remove account
       tracks_behavior: התנהגות מסלולים
     title: ההגדרות שלי
     token_description: אסימון (משמש להזנות ישימוש ממשק תכתנות)
@@ -408,12 +514,16 @@ he:
     add_note_submit: הוספת פתק
     add_project: הוספת פרוייקט
     all_completed_tasks_title: מסלולים::הצגת רשימת כל המשימות שהושלמו בפרוייקט  '%{project_name}'
+    completed_actions: Completed actions
+    completed_actions_empty: Completed actions empty
     completed_projects: פרוייקטים שהסתיימו
     completed_tasks_title: מסלולים::הצגת רשימת המשימות שהושלמו בפרוייקט  '%{project_name}'
     default_context: הקשר ברירת המחדש לפרוייקט זה %{context}
     default_context_removed: הקשר ברירת המחדל הוסר
     default_context_set: בחירת הקשר ברירת המחדל לפרוייקט ל-%{default_context}
     default_tags_removed_notice: תגיות ברירת המחדל הוסרו
+    deferred_actions: Deferred actions
+    deferred_actions_empty: Deferred actions empty
     delete_project: מחיקת פרוייקט
     delete_project_confirmation: האם למחוק את הפרוייקט  '%{name}'?
     delete_project_title: מחיקת הפרוייקט
@@ -423,6 +533,7 @@ he:
     hide_form: הסתרת טופס
     hide_form_title: הסתרת טופס פרוייקט חדש
     is_active: פעיל
+    last_completed_in_project: "(last %{number})"
     list_completed_projects: מסלולים::רשימת הפרוייקטים שהולשמו
     list_projects: מסלולים::רשימת פרוייקטים
     list_reviews: מסלולים::סקירה
@@ -434,6 +545,7 @@ he:
     notes: פתקיות
     notes_empty: אין פתקיות לפרוייקט זה
     page_title: 'מסלולים::פרוייקט: %{project}'
+    project_destroyed_status: Deleted project '%{name}'
     project_saved_status: פרוייקט נשמר
     project_state: הפרוייקט %{state}
     set_default_tags_notice: בחירת תגיות ברירת המחדל ל-%{default_tags}
@@ -485,12 +597,29 @@ he:
     active_plural: פעילים
     blocked: נחסם
     blocked_plural: חסומים
+    close: Closed
+    closed_plural: Closed
     completed: הסתיים
     completed_plural: הסתיימו
+    contexts:
+      ":": ":"
+      active: Active contexts
+      closed: Closed contexts
+      hidden: Hidden contexts
     current: עדכני
     current_plural: מעודכנים
     hidden: מוסתרים
     hidden_plural: מוסתרים
+    projects:
+      ":": ":"
+      active: Active projects
+      blocked: Blocked
+      closed: Closed projects
+      completed: Completed
+      current: Current
+      hidden: Hidden projects
+      review: Review
+      stalled: Stalled
     review: מתוארך
     review_plural: מתוארכים
     stalled: נעצר
@@ -616,6 +745,7 @@ he:
       month_day: "%B %d"
       short: "%d %b %H:%M"
       stats: "%a %d-%m"
+      time: Time
     pm: אחה"צ
   todos:
     action_deferred: הפעולה '%{description}' נדחתה
@@ -626,6 +756,19 @@ he:
     action_marked_complete_error: הפעולה <strong>'%{description}'</strong>־לא־ סומנה כ - <strong>%{completed} עקב שגיאת שרת</strong>
     action_saved: פעולה נשמרה
     action_saved_to_tickler: פעולה נשמרה למִזְכָּר
+    actions:
+      completed: Completed actions
+      context_completed: Completed actions in this context
+      context_deferred_pending: Deferred/pending actions in this context
+      context_without_project: Actions without project in %{param}
+      home_completed: Completed actions
+      home_without_project: Actions without project
+      project_completed: Completed actions in this project
+      project_deferred_pending: Deferred/pending actions in this project
+      project_project: Actions in this project
+      tag_completed: Completed actions tagged with '%{param}'
+      tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
+      tag_hidden: Hidden actions tagged with '%{param}'
     add_another_dependency: הוספת תלות נוספת
     add_new_recurring: הוספת פעולה מחזורית חדשה
     added_dependency: נוספה %{dependency} כתלות
@@ -641,6 +784,7 @@ he:
     archived_tasks_title: 'מסלולים: משימות שהסתיימו הועברו לארכיון'
     blocked_by: נחסם על ידי %{predecessors}
     calendar:
+      due_after_this_month: Due in %{next_month} and later
       due_next_week: לשבוע הבא
       due_this_month: תאריך יעד ליתרת חודש %{month}
       due_this_week: להמשך השבוע
@@ -651,6 +795,7 @@ he:
     clear_due_date: מחיקת תאריך יעד
     clear_show_from_date: נקה הצגה מתאריך
     completed: הסתיימו
+    completed_actions: Completed actions
     completed_actions_with: פעולות שהסתיימו עם התגית %{tag_name}
     completed_in_archive:
       one: קיימת בארכיון פעולה שהסתיימה.
@@ -659,11 +804,13 @@ he:
     completed_last_x_days: הסתיימו ב-%{count} הימים האחרונים
     completed_recurrence_completed: אין פעולת המשך לפעולה המחזורית שנמחקה. הפעולה המחזורית נמחקה.
     completed_recurring: הסתיימו משימות מחזוריות
+    completed_recurring_actions_title: TRACKS::Completed recurring actions
     completed_rest_of_month: הסתיימו ביתרת החודש הנוכחי
     completed_rest_of_previous_month: הסתיימו ביתרת החודש הקודם
     completed_rest_of_week: הסתיימו ביתרת שבוע זה
     completed_tagged_page_title: מסלולים::משימות שהסתיימו עם תגית '%{tag_name}'
     completed_tasks_title: מסלולים::משימות שהושלמו
+    completed_today: Completed today
     confirm_delete: האם למחוק את הפעילות '%{description}'?
     context_changed: הקשר שונה ל-%{name}
     convert_to_project: יצירת פרוייקט
@@ -688,6 +835,9 @@ he:
     edit_action: עריכת פעולה
     edit_action_with_description: עריכת הפעולה '%{description}'
     edit_recurring_todo: ערכית פעולות מחזוריות
+    error:
+      invalid_due_date: Invalid due date
+      invalid_show_from_date: Invalid show from date
     error_completing_todo: ארעה שגיעה בסיום / הפעלה של משימה %{description}
     error_deleting_item: ארעה שגיאה במחיקת הפריט %{description}
     error_deleting_recurring: ארעה שגיעה במחיקת המשימה המחזורית  '%{description}'
@@ -709,6 +859,7 @@ he:
     in_pending_state: במצב המתנה
     list_incomplete_next_actions: רשימת פעולות המשך שלא הסתיימו
     list_incomplete_next_actions_with_limit: רישמת %{count} פעולות ההמשך שלא הסתיימו
+    mark_complete: Mark complete
     mobile_todos_page_title: כל הפעולות
     new_related_todo_created: משימה חדשה הוספה למשימה מחזורית זו
     new_related_todo_created_short: יצירת משימה חדשה
@@ -730,9 +881,41 @@ he:
       completed: פעולות שהסתימו
       due_today: להיום
       due_within_a_week: תוך שבוע
+    no_actions:
+      completed: Currently there are no completed actions
+      completed_recurring: Currently there are no completed recurring todos
+      completed_rest_of_month: No actions were completed in the rest of this month
+      completed_rest_of_week: No actions were completed in the rest of this week
+      completed_today: No actions were completed today
+      context: Currently there are no incomplete actions in this context
+      deferred_pending: Currently there are no deferred or pending actions
+      due_after_this_month: No actions due after this month
+      due_next_week: No actions due in next week
+      due_this_month: No actions due in rest of this month
+      due_this_week: No actions due this week
+      due_today: No actions due today
+      hidden: Currently there are no hidden actions found
+      not_done: Currently there are no incomplete actions
+      not_done_context: Currently there are no incomplete actions in this context
+      not_done_project: Currently there are no incomplete actions in this project
+      not_done_with_tag: Currently there are no incomplete actions with the tag '%{param}'
+      project: Currently there are no incomplete actions in this project
+      recurring_todos: Currently there are no recurring todos
+      tag_hidden: Currently there are no hidden actions found
+      title: No actions found
+      without_project: Currently there are no actions without a project
     no_actions_due_this_week: אין פעולות המיועדות להמשך השבוע
+    no_actions_found_title: No actions found title
+    no_actions_with: No actions with
+    no_completed_actions: No completed actions
+    no_completed_actions_with: No completed actions with
+    no_completed_recurring: No completed recurring
+    no_deferred_actions: No deferred actions
+    no_deferred_actions_with: No deferred actions with
     no_last_completed_actions: לא נמצאו פעולות שהסתיימו
     no_project: "--אין פרוייקט--"
+    no_recurring_todos: No recurring todos
+    notes: Notes
     overdue: באיחור
     pending: ממתין
     recurrence:
@@ -749,16 +932,20 @@ he:
       monthly_options: הגדרות לפעולות בחזוריות חודשית
       no_end_date: אין תאריך סיום
       pattern:
+        day_names: '["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]'
         due: יעד
         every_day: כל יום
         every_month: כל חודש
         every_n: כל %{n}
+        every_n_days: every %{n} days
+        every_n_months: every %{n} months
         every_xth_day_of_every_n_months: כל %{x} %{day} בכל %{n_months}
         every_year_on: בכל שנה בתאריך %{date}
         first: ראשון
         fourth: רביעי
         from: מ
         last: אחרון
+        month_names: '[nil, "January", "February", "Match", "April", "May", "June", "July", "August", "September", "October", "November", "December"]'
         on_day_n: ביום %{n}
         on_work_days: בימי עבודה
         second: שני
@@ -768,6 +955,13 @@ he:
         times: כ-%{number} פעמים
         until: עד
         weekly: שבועי
+      recurrence_on:
+        due_date: set the actions due date
+        from_tickler: set the date the action should be shown (do not set a due date)
+        options: Use the calculated date to
+        show_always: always
+        show_days_before: not until %{days} days before the due date
+        show_options: Show the action
       starts_on: מתחיל ב
       weekly: שבועי
       weekly_every_number_week: חוזר כל %{number}  שבוע ב
@@ -809,6 +1003,7 @@ he:
     was_due_on_date: היה מיועד עד %{date}
   users:
     account_signup: רישום לחשבון
+    approve_tos: I approve the Terms of Service
     auth_change_submit: שינוי שיטת אימות
     auth_type_update_error: 'ארעה שגיאה בעידכון שיטת האימות: %{error_messages}'
     auth_type_updated: שיטת אימות עודכנה
@@ -824,8 +1019,10 @@ he:
     destroy_error: ארעה שגיאה במחיקת המשתמש %{login}
     destroy_successful: משתמש %{login} הושמד בהצלחה
     destroy_user: השמדת משתמש
+    email_address: Email address
     failed_to_delete_user: מחיקת המשתמש %{username} נכשלה
     first_user_heading: 'ברוכים הבאים אל מסלולים. כדי להתחיל, יש ליצור חשבון מנהל:'
+    first_user_title: TRACKS::Sign up as the admin user
     identity_url: כתובת זהות
     label_auth_type: שיטת אימות
     manage_users: ניהול משתמשים
@@ -844,6 +1041,7 @@ he:
     signup_new_user: רשום משתמש חדש
     signup_successful: רישום מוצלח עבור משתמש %{username}.
     successfully_deleted_user: משתמש  %{username} נמחק בהצלחה
+    tos_link: read the Terms of Service
     total_actions: סך פעולות
     total_contexts: סך הקשרים
     total_notes: כל הפתקיות

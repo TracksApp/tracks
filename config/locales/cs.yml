@@ -41,8 +41,14 @@ cs:
         show_from: Zobrazovat od
         tags: Tagy
       user:
+        auth_type: Auth type
+        display_name: Display name
+        email: Email address
         first_name: Příjmení
         last_name: Jméno
+        login: Login
+        open_id_url: OpenID URL
+        password: Password
     errors:
       full_messages:
         format: "%{attribute} %{message}"
@@ -63,6 +69,9 @@ cs:
         not_a_number: není číslo
         odd: must be odd
         record_invalid: 'Problém s daty: %{errors}'
+        restrict_dependent_destroy:
+          many: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
         taken: už bylo zabráno
         too_long: je příliš dlouhé (maximum je %{count} znaků)
         too_short: je příliš krátké (minimum je %{count} znaků)
@@ -91,6 +100,7 @@ cs:
     back: Zpět
     bugs: Chyby
     cancel: Zrušit
+    collapse_expand: Collapse/expand
     context: Kontext
     contexts: Kontexty
     contribute: Přispět
@@ -110,6 +120,7 @@ cs:
     go_back: Zpět
     last: Poslední
     logout: Odhlásit
+    mailing_list: Mailing List
     month: měsíc
     months: měsíce
     next: Další
@@ -154,6 +165,7 @@ cs:
     context_deleted: Kontext byl odstraněn '%{name}'
     context_hide: Schovat z úvodní stránky?
     context_name: Náev kontextu
+    context_state: Context state
     delete_context: Smazat kontext
     delete_context_confirmation: Opravdu chcete smazat kontext '%{name}'? Dojde ke smazání všech (opakovaných) úkolů z daného kontextu!
     delete_context_title: Smazat kontext
@@ -164,7 +176,9 @@ cs:
     last_completed_in_context: v tomto kontextu (posledních %{number})
     new_context_post: "' bude také vytvořen. Opravdu?"
     new_context_pre: Nový kontext '
+    no_contexts_: 'No contexts '
     no_contexts_active: Žádné aktivní kontexty
+    no_contexts_closed: Currently there are no closed contexts
     no_contexts_hidden: Žádné skryté kontexty
     save_status_message: Kontext uložen
     show_form: Nový kontext
@@ -175,8 +189,10 @@ cs:
     update_status_message: Název kontextu byl změněn
     visible_contexts: Viditelné kontexty
   data:
+    import_destination_invalid: Invalid import destination
     import_errors: Při importu došlo k chybám
     import_successful: Import byl úspěšný.
+    invalid_import_destination: Invalid import destination
   date:
     abbr_day_names:
     - Ne
@@ -212,6 +228,8 @@ cs:
       default: "%Y-%m-%d"
       long: "%B %d, %Y"
       longer: "%A %B %d, %Y"
+      month_day: Month day
+      only_day: Only day
       short: "%b %d"
     month_names:
     - 
@@ -277,6 +295,30 @@ cs:
       second: Sekunda
       year: Rok
   errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: должен быть подтвержден
+      blank: должна быть заполнена
+      confirmation: не соответствует %{attribute}
+      empty: не может быть пустым
+      equal_to: должно равняться %{count}
+      even: должно быть четным
+      exclusion: зарезервированно
+      greater_than: должно быть больше %{count}
+      greater_than_or_equal_to: должно быть больше или равно %{count}
+      inclusion: не входит в список
+      invalid: неверное
+      less_than: должно быть меньше %{count}
+      less_than_or_equal_to: должно быть меньше или равно %{count}
+      not_a_number: не является числом
+      not_an_integer: должно быть целым числом
+      odd: должно быть нечетным
+      other_than: должно отличаться от %{count}
+      present: должно быть пустым
+      taken: уже занято
+      too_long: 'слишком длинное (максимум: %{count} символов)'
+      too_short: 'слишком кроткое (минимум: %{count} символов)'
+      wrong_length: неверной длины (должно быть %{count} символов)
     user_unauthorized: '401 Neautorizováno: Jen administrátoři smí používat tuto funkci.'
   feedlist:
     actions_completed_last_week: Úkoly dokončené v posledních sedmi dnech
@@ -304,12 +346,21 @@ cs:
     select_feed_for_project: Vyberte feed pro tento projekt
   footer:
     send_feedback: Poslat zpětnou vazbu na %{version}
+  helpers:
+    select:
+      prompt: Выберите
+    submit:
+      create: Создать %{model}
+      submit: Сохранить %{model}
+      update: Обновить %{model}
   integrations:
     opensearch_description: Prohledat Tracks
   layouts:
     mobile_navigation:
+      calendar: Calendar
       contexts: 2-Kontexty
       feeds: Feedy
+      full: Full Site
       home: 1-Domů
       logout: Odhlásit
       new_action: 0-Nový úkol
@@ -328,13 +379,21 @@ cs:
       export_title: Import a export dat
       feeds: Feedy
       feeds_title: Seznam dostupných feedů
+      group_view_by_context: Group by context
+      group_view_by_project: Group by project
+      group_view_by_title: Change the grouping of the actions on this page
       help: "?"
+      help_page: Help
       home: Domů
       home_title: Domů
+      import: Import
+      import_title: Import data
       integrations_: Integrovat Tracks
       manage_users: Správa uživatelů
       manage_users_title: Přidat nebo smazat uživatele
+      mobile: Mobile Site
       notes_title: Zobrazit všechny poznámky
+      options: Options
       organize: Správa
       preferences: Nastavení
       preferences_title: Zobrazí možnosti nastavení
@@ -343,6 +402,9 @@ cs:
       recurring_todos_title: Správa opakovaných úkolů
       review_title: Provést revizi
       search: Hledat
+      show_empty_containers_context: Show empty contexts
+      show_empty_containers_project: Show empty projects
+      show_empty_containers_title: Show or hide the empty projects or contexts
       starred: S hvězdou
       starred_title: Zobrazí úkoly s hvězdičkou
       stats: Statistiky
@@ -376,6 +438,7 @@ cs:
     session_will_expire: sezen vyprší za %{hours} hodin neaktivity.
     session_will_not_expire: sezení bylo nastaveno jako trvalé.
     sign_in: Přihlásit se
+    signup_prompt: Want to create an account?
     successful: Přihlášení úspěšné. Vítejte zpět!
     successful_with_session_info: 'Přihlášení bylo úspěšné:'
     unsuccessful: Přihlášení bylo úspěšné.
@@ -387,6 +450,9 @@ cs:
       due_styles:
       - Plánováno za ___ dní
       - Plánováno na _______
+      themes:
+        black: Black
+        light_blue: Light blue
     project:
       feed_description: Všechny projekty uživatele %{username}
       feed_title: Projekty
@@ -407,6 +473,7 @@ cs:
     note_header: Poznámka %{id}
     note_link_title: Zobrazit poznámku %{id}
     note_location_link: 'V:'
+    save_status_message: Note %{id} was saved
     show_note_title: Zobrazit poznámku
   number:
     currency:
@@ -415,14 +482,30 @@ cs:
         format: "%u%n"
         precision: 2
         separator: "."
+        significant: Significant
+        strip_insignificant_zeros: Strip insignificant zeros
         unit: "$"
     format:
       delimiter: ","
       precision: 3
       separator: "."
+      significant: Significant
+      strip_insignificant_zeros: Strip insignificant zeros
     human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Миллиард
+          million: Миллион
+          quadrillion: Квадрильон
+          thousand: Тысяча
+          trillion: Триллион
+          unit: "."
       format:
+        delimiter: Delimiter
         precision: 1
+        significant: 'true'
+        strip_insignificant_zeros: 'true'
       storage_units:
         format: "%n %u"
         units:
@@ -433,6 +516,13 @@ cs:
           kb: KB
           mb: MB
           tb: TB
+    percentage:
+      format:
+        delimiter: Delimiter
+        format: "%n%"
+    precision:
+      format:
+        delimiter: Delimiter
   preferences:
     authentication_header: Vaše autentizace
     change_authentication_type: Změna typu autentizace
@@ -448,6 +538,7 @@ cs:
     page_title: TRACKS::Nastavení
     page_title_edit: TRACKS::Editace nastavení
     password_changed: Heslo bylo změněno. Prosím znovu se přihlašte.
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     show_number_completed: Zobrazit %{number} hotových položek
     sms_context_none: žádný
     staleness_starts_after: Zastarání nastává po %{days} dnech
@@ -455,6 +546,7 @@ cs:
       authentication: Autentizace
       date_and_time: Datum a čas
       profile: Profil
+      remove_account: Remove account
       tracks_behavior: Chování Tracks
     title: Vaše nastavení
     token_description: Pešek (feedy a použití API)
@@ -467,12 +559,16 @@ cs:
     add_note_submit: Nová poznámka
     add_project: Přidat projekt
     all_completed_tasks_title: TRACKS::Hotové úkoly projektu '%{project_name}'
+    completed_actions: Completed actions
+    completed_actions_empty: Completed actions empty
     completed_projects: Hotové projetky
     completed_tasks_title: TRACKS::Hotové úkoly projektu '%{project_name}'
     default_context: Výchozí kontext pro tento projekt je %{context}
     default_context_removed: Výchozí kontext byl odstraněn
     default_context_set: Výchozí kontext %{default_context} byl nastaven
     default_tags_removed_notice: Výchozí štítky byly odstraněny
+    deferred_actions: Deferred actions
+    deferred_actions_empty: Deferred actions empty
     delete_project: Smazat projekt
     delete_project_confirmation: Opravdu chcete smazat projekt '%{name}'?
     delete_project_title: Smaže projekt
@@ -482,6 +578,7 @@ cs:
     hide_form: Skrýt formulář
     hide_form_title: Schovat formulář založení projektu
     is_active: je aktivní
+    last_completed_in_project: "(last %{number})"
     list_completed_projects: TRACKS::Hotové projekty
     list_projects: TRACKS::Projekty
     list_reviews: TRACKS::Revize
@@ -493,6 +590,7 @@ cs:
     notes: Poznámky
     notes_empty: Žádné poznámky
     page_title: 'TRACKS::Projekt: %{project}'
+    project_destroyed_status: Deleted project '%{name}'
     project_saved_status: Projekt byl uložen
     project_state: Projekt je %{state}.
     set_default_tags_notice: Nastavit výchozí šítky úkolů v tomto projektu %{default_tags}
@@ -544,12 +642,29 @@ cs:
     active_plural: Aktivní
     blocked: Blokovaný
     blocked_plural: Blokované
+    close: Closed
+    closed_plural: Closed
     completed: Hotový
     completed_plural: Hotové
+    contexts:
+      ":": ":"
+      active: Active contexts
+      closed: Closed contexts
+      hidden: Hidden contexts
     current: Aktuální
     current_plural: Aktuální
     hidden: Skrytý
     hidden_plural: Skryté
+    projects:
+      ":": ":"
+      active: Active projects
+      blocked: Blocked
+      closed: Closed projects
+      completed: Completed
+      current: Current
+      hidden: Hidden projects
+      review: Review
+      stalled: Stalled
     review: Nerevidovaný
     review_plural: Nerevidované
     stalled: Opuštěný
@@ -675,6 +790,7 @@ cs:
       month_day: "%B %d"
       short: "%d %b %H:%M"
       stats: "%a %d-%m"
+      time: Time
     pm: pm
   todos:
     action_deferred: Úkol '%{description}' byl oldožen
@@ -685,6 +801,19 @@ cs:
     action_marked_complete_error: Úkol <strong>'%{description}'</strong> NEBYL označen jako <strong>%{completed} kvůli chybě na serveru.</strong>
     action_saved: Úkol uložen
     action_saved_to_tickler: Úkol byl uložen do Tickleru
+    actions:
+      completed: Completed actions
+      context_completed: Completed actions in this context
+      context_deferred_pending: Deferred/pending actions in this context
+      context_without_project: Actions without project in %{param}
+      home_completed: Completed actions
+      home_without_project: Actions without project
+      project_completed: Completed actions in this project
+      project_deferred_pending: Deferred/pending actions in this project
+      project_project: Actions in this project
+      tag_completed: Completed actions tagged with '%{param}'
+      tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
+      tag_hidden: Hidden actions tagged with '%{param}'
     add_another_dependency: Přidat další závislost
     add_new_recurring: Vytvořit opakovaný úkol
     added_dependency: Přidáno %{dependency} jako závislost.
@@ -700,6 +829,7 @@ cs:
     archived_tasks_title: TRACKS::Archiv hotových úkolů
     blocked_by: Čeká na %{predecessors}
     calendar:
+      due_after_this_month: Due in %{next_month} and later
       due_next_week: Plánované příští týden
       due_this_month: Plánováno na %{month}
       due_this_week: Plánované ve zbytku týdne
@@ -710,6 +840,7 @@ cs:
     clear_due_date: Smazat plánované datum úkolu
     clear_show_from_date: Odstranit datum zobrazení
     completed: Hotovo
+    completed_actions: Completed actions
     completed_actions_with: Hotové úkoly se štítkem '%{tag_name}'
     completed_in_archive:
       one: V archivu je hotový úkol.
@@ -718,6 +849,7 @@ cs:
     completed_last_x_days: Uzavřené za posledních %{count} dní
     completed_recurrence_completed: Bylo smazáno poslední opakování opakovaného úkolu. Opakování dokončeno
     completed_recurring: Hotové opakované úkoly
+    completed_recurring_actions_title: TRACKS::Completed recurring actions
     completed_rest_of_month: Ukončené ve zbytku tohoto měsíce
     completed_rest_of_previous_month: Uzavřeno ve zbytku minulého měsíce
     completed_rest_of_week: Dokončené ve zbytku týdne
@@ -748,6 +880,9 @@ cs:
     edit_action: Upravit úkol
     edit_action_with_description: Upravit úkol '%{description}'
     edit_recurring_todo: Upravit opakovaný úkol
+    error:
+      invalid_due_date: Invalid due date
+      invalid_show_from_date: Invalid show from date
     error_completing_todo: Nepodařilo se ukončit / aktivovat opakovaný úkol %{description}
     error_deleting_item: Nepodařilo se smazat položku %{description}
     error_deleting_recurring: Nepodařilo se smazat opakovaný úkol '%{description}'
@@ -769,6 +904,7 @@ cs:
     in_pending_state: ve stavu čekající
     list_incomplete_next_actions: Zabrazí nehotové úkoly
     list_incomplete_next_actions_with_limit: Zobrazuje posledních %{count} nedokončených úkolů
+    mark_complete: Mark complete
     mobile_todos_page_title: Všechny úkoly
     new_related_todo_created: Byl vytvořen nový úkol patřící do tohoto opakovaného úkolu
     new_related_todo_created_short: vytvořen nový úkol
@@ -790,9 +926,41 @@ cs:
       completed: hotové úkoly
       due_today: dnes
       due_within_a_week: během týdne
+    no_actions:
+      completed: Currently there are no completed actions
+      completed_recurring: Currently there are no completed recurring todos
+      completed_rest_of_month: No actions were completed in the rest of this month
+      completed_rest_of_week: No actions were completed in the rest of this week
+      completed_today: No actions were completed today
+      context: Currently there are no incomplete actions in this context
+      deferred_pending: Currently there are no deferred or pending actions
+      due_after_this_month: No actions due after this month
+      due_next_week: No actions due in next week
+      due_this_month: No actions due in rest of this month
+      due_this_week: No actions due this week
+      due_today: No actions due today
+      hidden: Currently there are no hidden actions found
+      not_done: Currently there are no incomplete actions
+      not_done_context: Currently there are no incomplete actions in this context
+      not_done_project: Currently there are no incomplete actions in this project
+      not_done_with_tag: Currently there are no incomplete actions with the tag '%{param}'
+      project: Currently there are no incomplete actions in this project
+      recurring_todos: Currently there are no recurring todos
+      tag_hidden: Currently there are no hidden actions found
+      title: No actions found
+      without_project: Currently there are no actions without a project
     no_actions_due_this_week: Žádné úkoly plánovány na tento týden
+    no_actions_found_title: No actions found title
+    no_actions_with: No actions with
+    no_completed_actions: No completed actions
+    no_completed_actions_with: No completed actions with
+    no_completed_recurring: No completed recurring
+    no_deferred_actions: No deferred actions
+    no_deferred_actions_with: No deferred actions with
     no_last_completed_actions: Žádné hotové úkoly
     no_project: "--Žádný projekt--"
+    no_recurring_todos: No recurring todos
+    notes: Notes
     overdue: Spožděné úkoly
     pending: Čekající
     recurrence:
@@ -821,6 +989,8 @@ cs:
         every_day: každý den
         every_month: každý měsíc
         every_n: každé %{n}
+        every_n_days: every %{n} days
+        every_n_months: every %{n} months
         every_xth_day_of_every_n_months: každý %{x} %{day} každých %{n_months}
         every_year_on: každý rok %{date}
         first: první
@@ -850,6 +1020,13 @@ cs:
         times: "(%{number} opakování)"
         until: do
         weekly: každý týden
+      recurrence_on:
+        due_date: set the actions due date
+        from_tickler: set the date the action should be shown (do not set a due date)
+        options: Use the calculated date to
+        show_always: always
+        show_days_before: not until %{days} days before the due date
+        show_options: Show the action
       starts_on: Začíná
       weekly: Týdně
       weekly_every_number_week: Každých %{number} týdnů
@@ -891,6 +1068,7 @@ cs:
     was_due_on_date: bylo plánováno na %{date}
   users:
     account_signup: Registrace uživatele
+    approve_tos: I approve the Terms of Service
     auth_change_submit: Změnit způsob přihlašování
     auth_type_update_error: 'Nepodařilo se změnit typ autentizace: %{error_messages}'
     auth_type_updated: Typ autentizace byl změněn.
@@ -906,8 +1084,10 @@ cs:
     destroy_error: Nepodařilo se smazat uživatele %{login}
     destroy_successful: Uživatel %{login} byl úspěšně zničen
     destroy_user: Zničit uživatele
+    email_address: Email address
     failed_to_delete_user: Nepodařilo se smazat uživatele %{username}
     first_user_heading: 'Vítejte v TRACKS. Nejdříve je  nutné vytvořit administrátorský účet:'
+    first_user_title: TRACKS::Sign up as the admin user
     identity_url: URL identity
     label_auth_type: Způsob autentizace
     manage_users: Správa uživatelů
@@ -926,6 +1106,7 @@ cs:
     signup_new_user: Registrace nového uživatele
     signup_successful: Registrace uživatele %{username} byla úspěšná.
     successfully_deleted_user: Uživatel %{username} byl úspěšně smazán
+    tos_link: read the Terms of Service
     total_actions: Úkolů celkem
     total_contexts: Kontextů celkem
     total_notes: Poznámek celkem

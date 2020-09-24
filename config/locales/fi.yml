@@ -43,6 +43,7 @@ fi:
       user:
         auth_type: Kirjautumistyyppi
         display_name: Näyttönimi
+        email: Email address
         first_name: Etunimi
         last_name: Sukunimi
         login: Login
@@ -68,6 +69,9 @@ fi:
         not_a_number: is not a number
         odd: must be odd
         record_invalid: 'Validation failed: %{errors}'
+        restrict_dependent_destroy:
+          many: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
         taken: has already been taken
         too_long: is too long (maximum is %{count} characters)
         too_short: is too short (minimum is %{count} characters)
@@ -172,6 +176,7 @@ fi:
     last_completed_in_context: "(last %{number})"
     new_context_post: "' will be also created. Are you sure?"
     new_context_pre: New context '
+    no_contexts_: 'No contexts '
     no_contexts_active: Currently there are no active contexts
     no_contexts_closed: Currently there are no closed contexts
     no_contexts_hidden: Currently there are no hidden contexts
@@ -187,6 +192,7 @@ fi:
     import_destination_invalid: Invalid import destination
     import_errors: Some errors occurred during import
     import_successful: Tuonti onnistui
+    invalid_import_destination: Invalid import destination
   date:
     abbr_day_names:
     - Su
@@ -289,6 +295,30 @@ fi:
       second: Seconds
       year: Year
   errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: должен быть подтвержден
+      blank: должна быть заполнена
+      confirmation: не соответствует %{attribute}
+      empty: не может быть пустым
+      equal_to: должно равняться %{count}
+      even: должно быть четным
+      exclusion: зарезервированно
+      greater_than: должно быть больше %{count}
+      greater_than_or_equal_to: должно быть больше или равно %{count}
+      inclusion: не входит в список
+      invalid: неверное
+      less_than: должно быть меньше %{count}
+      less_than_or_equal_to: должно быть меньше или равно %{count}
+      not_a_number: не является числом
+      not_an_integer: должно быть целым числом
+      odd: должно быть нечетным
+      other_than: должно отличаться от %{count}
+      present: должно быть пустым
+      taken: уже занято
+      too_long: 'слишком длинное (максимум: %{count} символов)'
+      too_short: 'слишком кроткое (минимум: %{count} символов)'
+      wrong_length: неверной длины (должно быть %{count} символов)
     user_unauthorized: '401 Pääsy kielletty: Vain ylläpitäjillä on pääsy tähän toiminnallisuuteen.'
   feedlist:
     actions_completed_last_week: Actions completed in the last 7 days
@@ -316,10 +346,18 @@ fi:
     select_feed_for_project: Select the feed for this project
   footer:
     send_feedback: Lähetä palautetta versiosta %{version}
+  helpers:
+    select:
+      prompt: Выберите
+    submit:
+      create: Создать %{model}
+      submit: Сохранить %{model}
+      update: Обновить %{model}
   integrations:
     opensearch_description: Search in Tracks
   layouts:
     mobile_navigation:
+      calendar: Calendar
       contexts: Asiayhteydet
       feeds: Syötteet
       full: Täysi sivusto
@@ -400,6 +438,7 @@ fi:
     session_will_expire: session will expire after %{hours} hour(s) of inactivity.
     session_will_not_expire: session will not expire.
     sign_in: Sign in
+    signup_prompt: Want to create an account?
     successful: Logged in successfully. Welcome back!
     successful_with_session_info: 'Login successful:'
     unsuccessful: Login unsuccessful.
@@ -411,6 +450,9 @@ fi:
       due_styles:
       - Due in ___ days
       - Due on _______
+      themes:
+        black: Black
+        light_blue: Light blue
     project:
       feed_description: Lists all the projects for %{username}
       feed_title: Tracks Projects
@@ -440,15 +482,30 @@ fi:
         format: "%u%n"
         precision: 2
         separator: ","
+        significant: Significant
+        strip_insignificant_zeros: Strip insignificant zeros
         unit: "€"
     format:
       delimiter: " "
       precision: 3
       separator: ","
+      significant: Significant
+      strip_insignificant_zeros: Strip insignificant zeros
     human:
+      decimal_units:
+        format: "%n %u"
+        units:
+          billion: Миллиард
+          million: Миллион
+          quadrillion: Квадрильон
+          thousand: Тысяча
+          trillion: Триллион
+          unit: "."
       format:
         delimiter: ''
         precision: 1
+        significant: 'true'
+        strip_insignificant_zeros: 'true'
       storage_units:
         format: "%n %u"
         units:
@@ -462,6 +519,7 @@ fi:
     percentage:
       format:
         delimiter: ''
+        format: "%n%"
     precision:
       format:
         delimiter: ''
@@ -480,6 +538,7 @@ fi:
     page_title: TRACKS::Asetukset
     page_title_edit: TRACKS::Muokkaa asetuksia
     password_changed: Salasanasi on muutettu, kirjaudu uudelleen sisään.
+    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
     show_number_completed: Näytä %{number} valmista toimenpidettä
     sms_context_none: Ei mikään
     staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
@@ -487,6 +546,7 @@ fi:
       authentication: Authentication
       date_and_time: Date and time
       profile: Profile
+      remove_account: Remove account
       tracks_behavior: Tracks behavior
     title: Asetuksesi
     token_description: Avainkoodi (syötteiden ja rajapinnan käyttämiseen)
@@ -499,12 +559,16 @@ fi:
     add_note_submit: Add note
     add_project: Add Project
     all_completed_tasks_title: TRACKS::List All Completed Actions in Project '%{project_name}'
+    completed_actions: Completed actions
+    completed_actions_empty: Completed actions empty
     completed_projects: Completed projects
     completed_tasks_title: TRACKS::List Completed Actions in Project '%{project_name}'
     default_context: The default context for this project is %{context}
     default_context_removed: Removed default context
     default_context_set: Set project's default context to %{default_context}
     default_tags_removed_notice: Removed the default tags
+    deferred_actions: Deferred actions
+    deferred_actions_empty: Deferred actions empty
     delete_project: Delete project
     delete_project_confirmation: Are you sure that you want to delete the project '%{name}'?
     delete_project_title: Delete the project
@@ -583,6 +647,7 @@ fi:
     completed: Valmis
     completed_plural: Valmis
     contexts:
+      ":": ":"
       active: Aktiiviset asiayhteydet
       closed: Suljetut asiayhteydet
       hidden: Piilotetut asiayhteydet
@@ -591,6 +656,7 @@ fi:
     hidden: Piilotettu
     hidden_plural: Piilotettu
     projects:
+      ":": ":"
       active: Aktiiviset projektit
       blocked: Estetyt
       closed: Suljetut projektit
@@ -774,6 +840,7 @@ fi:
     clear_due_date: Clear due date
     clear_show_from_date: Clear show from date
     completed: Completed
+    completed_actions: Completed actions
     completed_actions_with: Completed actions with the tag '%{tag_name}'
     completed_in_archive:
       one: There is a completed action in the archive.
@@ -883,8 +950,17 @@ fi:
       title: Toimenpiteitä ei löytynyt
       without_project: Currently there are no actions without a project
     no_actions_due_this_week: No actions due in rest of this week
+    no_actions_found_title: No actions found title
+    no_actions_with: No actions with
+    no_completed_actions: No completed actions
+    no_completed_actions_with: No completed actions with
+    no_completed_recurring: No completed recurring
+    no_deferred_actions: No deferred actions
+    no_deferred_actions_with: No deferred actions with
     no_last_completed_actions: No completed actions found
     no_project: "--No project--"
+    no_recurring_todos: No recurring todos
+    notes: Notes
     overdue: Overdue
     pending: Odottaa
     recurrence:
@@ -992,6 +1068,7 @@ fi:
     was_due_on_date: was due on %{date}
   users:
     account_signup: Account signup
+    approve_tos: I approve the Terms of Service
     auth_change_submit: Change authentication type
     auth_type_update_error: 'There was a problem updating your authentication type: %{error_messages}'
     auth_type_updated: Authentication type updated.
@@ -1007,6 +1084,7 @@ fi:
     destroy_error: There was an error deleting the user %{login}
     destroy_successful: User %{login} was successfully destroyed
     destroy_user: Destroy user
+    email_address: Email address
     failed_to_delete_user: Failed to delete user %{username}
     first_user_heading: 'Welcome to TRACKS. To get started, please create an admin account:'
     first_user_title: TRACKS::Sign up as the admin user
@@ -1028,6 +1106,7 @@ fi:
     signup_new_user: Sign up new user
     signup_successful: Signup successful for user %{username}.
     successfully_deleted_user: Successfully deleted user %{username}
+    tos_link: read the Terms of Service
     total_actions: Total actions
     total_contexts: Total contexts
     total_notes: Total notes
@@ -1035,3 +1114,18 @@ fi:
     total_users_count: You have a total of %{count} users
     user_created: User created.
     you_have_to_reset_your_password: You have to reset your password
+  will_paginate:
+    next_label: След &#8594;
+    page_entries_info:
+      multi_page: Отображено %{model} %{from} - %{to} из %{count}
+      multi_page_html: Отображено %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> из <b>%{count}</b>
+      single_page:
+        one: Отображен 1 %{model}
+        other: Отображены все %{count} %{model}
+        zero: "%{model} не найдено"
+      single_page_html:
+        one: Отображен <b>1</b> %{model}
+        other: Отображены <b>все&nbsp;%{count}</b> %{model}
+        zero: "%{model}  не найдено"
+    page_gap: "&hellip;"
+    previous_label: "&#8592; Пред"
