@@ -1,52 +1,44 @@
 ---
 fi:
-  number:
-    format:
-      separator: ","
-      precision: 3
-      delimiter: " "
-    human:
-      format:
-        precision: 1
-        delimiter: ""
-      storage_units:
-        format: "%n %u"
-        units:
-          kb: kt
-          tb: Tt
-          gb: Gt
-          byte:
-            one: Tavu
-            other: Tavua
-          mb: Mt
-    percentage:
-      format:
-        delimiter: ""
-    currency:
-      format:
-        format: "%u%n"
-        unit: €
-        separator: ","
-        precision: 2
-        delimiter: " "
-    precision:
-      format:
-        delimiter: ""
   activerecord:
     attributes:
+      note:
+        created_at: Luotu
+        updated_at: Päivitetty
+      preference:
+        date_format: Päivämäärämuoto
+        due_style: Due style
+        first_name: Etunimi
+        last_name: Sukunimi
+        locale: Kieli
+        mobile_todos_per_page: Toimenpidettä sivulla (mobiilisivustolla)
+        refresh: Refresh interval (in minutes)
+        review_period: Project review interval
+        show_completed_projects_in_sidebar: Show completed projects in sidebar
+        show_hidden_contexts_in_sidebar: Näytä piilotetut asiayhteydet sivupalkissa
+        show_hidden_projects_in_sidebar: Näytä piilotetut projektit sivupalkissa
+        show_number_completed: Show number of completed actions
+        show_project_on_todo_done: Go to project page on completing todo
+        sms_context: Sähköpostin oletusasiayhteys
+        sms_email: From email
+        staleness_starts: Vanhentumisen alkaminen
+        time_zone: Aikavyöhyke
+        title_date_format: Title date format
+        verbose_action_descriptors: Verbose action descriptors
+        week_starts: Week starts on
       project:
-        name: Nimi
-        default_tags: Oletustagit
         default_context_name: Oletuskonteksti
+        default_tags: Oletustagit
         description: Kuvaus
+        name: Nimi
       todo:
-        predecessors: Riippuu
-        show_from: Näytä alkaen
-        notes: Muistiinpanot
-        project: Projekti
         context: Konteksti
         description: Kuvaus
         due: Määräpäivä
+        notes: Muistiinpanot
+        predecessors: Riippuu
+        project: Projekti
+        show_from: Näytä alkaen
         tags: Tagit
       user:
         auth_type: Kirjautumistyyppi
@@ -56,151 +48,146 @@ fi:
         login: Login
         open_id_url: OpenID-URL
         password: Salasana
-      preference:
-        show_hidden_projects_in_sidebar: Näytä piilotetut projektit sivupalkissa
-        date_format: Päivämäärämuoto
-        show_hidden_contexts_in_sidebar: Näytä piilotetut asiayhteydet sivupalkissa
-        mobile_todos_per_page: Toimenpidettä sivulla (mobiilisivustolla)
-        verbose_action_descriptors: Verbose action descriptors
-        staleness_starts: Vanhentumisen alkaminen
-        review_period: Project review interval
-        sms_context: Sähköpostin oletusasiayhteys
-        title_date_format: Title date format
-        show_number_completed: Show number of completed actions
-        refresh: Refresh interval (in minutes)
-        week_starts: Week starts on
-        last_name: Sukunimi
-        locale: Kieli
-        due_style: Due style
-        time_zone: Aikavyöhyke
-        show_project_on_todo_done: Go to project page on completing todo
-        sms_email: From email
-        first_name: Etunimi
-        show_completed_projects_in_sidebar: Show completed projects in sidebar
-      note:
-        created_at: Luotu
-        updated_at: Päivitetty
     errors:
+      full_messages:
+        format: "%{attribute} %{message}"
       messages:
-        greater_than_or_equal_to: must be greater than or equal to %{count}
-        record_invalid: "Validation failed: %{errors}"
-        confirmation: doesn't match confirmation
-        less_than_or_equal_to: must be less than or equal to %{count}
-        blank: can't be blank
-        invalid: "cannot contain the comma (',') character"
-        exclusion: is reserved
-        odd: must be odd
-        even: must be even
-        too_short: is too short (minimum is %{count} characters)
-        empty: can't be empty
-        wrong_length: is the wrong length (should be %{count} characters)
-        less_than: must be less than %{count}
-        greater_than: must be greater than %{count}
-        equal_to: must be equal to %{count}
         accepted: must be accepted
-        too_long: is too long (maximum is %{count} characters)
-        taken: has already been taken
+        blank: can't be blank
+        confirmation: doesn't match confirmation
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
         inclusion: is not included in the list
+        invalid: cannot contain the comma (',') character
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
         not_a_number: is not a number
+        odd: must be odd
+        record_invalid: 'Validation failed: %{errors}'
+        taken: has already been taken
+        too_long: is too long (maximum is %{count} characters)
+        too_short: is too short (minimum is %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
       models:
         project:
           attributes:
             name:
               blank: project must have a name
-              too_long: project name must be less than 256 characters
               taken: already exists
-      full_messages:
-        format: "%{attribute} %{message}"
+              too_long: project name must be less than 256 characters
       template:
-        body: "There were problems with the following fields:"
+        body: 'There were problems with the following fields:'
         header:
           one: 1 error prohibited this %{model} from being saved
           other: "%{count} errors prohibited this %{model} from being saved"
-  models:
-    project:
-      feed_title: Tracks Projects
-      feed_description: Lists all the projects for %{username}
-    todo:
-      error_date_must_be_future: must be a date in the future
-    user:
-      error_context_not_associated: Context id %{context} not associated with user id %{user}.
-      error_project_not_associated: Project id %{project} not associated with user id %{user}.
-    preference:
-      due_on: Due on %{date}
-      due_in: Due in %{days} days
-      due_styles:
-      - Due in ___ days
-      - Due on _______
-  datetime:
-    prompts:
-      minute: Minute
-      second: Seconds
-      month: Month
-      hour: Hour
-      day: Day
-      year: Year
-    distance_in_words:
-      less_than_x_minutes:
-        one: less than a minute
-        other: less than %{count} minutes
-        zero: less than 1 minute
-      x_days:
-        one: 1 day
-        other: "%{count} days"
-      almost_x_years:
-        one: almost 1 year
-        other: almost %{count} years
-      x_seconds:
-        one: 1 second
-        other: "%{count} seconds"
-      about_x_hours:
-        one: about 1 hour
-        other: about %{count} hours
-      less_than_x_seconds:
-        one: less than 1 second
-        other: less than %{count} seconds
-        zero: less than 1 second
-      x_months:
-        one: 1 month
-        other: "%{count} months"
-      x_minutes:
-        one: 1 minute
-        other: "%{count} minutes"
-      about_x_years:
-        one: about 1 year
-        other: about %{count} years
-      about_x_months:
-        one: about 1 month
-        other: about %{count} months
-      over_x_years:
-        one: over 1 year
-        other: over %{count} years
-      half_a_minute: half a minute
-  time:
-    am: am
-    formats:
-      default: "%a, %d %b %Y %H:%M:%S %z"
-      time: ""
-      short: "%d %b %H:%M"
-      month_day: "%B %d"
-      long: "%B %d, %Y %H:%M"
-      stats: "%a %d-%m"
-    pm: pm
+  common:
+    action: Toimenpide
+    actions: Toimenpiteet
+    actions_midsentence:
+      one: toimenpide
+      other: toimenpidettä
+      zero: toimenpidettä
+    add: Lisää
+    ajaxError: Virhe noudettaessa palvelimelta
+    back: Takaisin
+    bugs: Ohjelmavirheet
+    cancel: Peruuta
+    collapse_expand: Sulje/avaa
+    context: Asiayhtyes
+    contexts: Asiayhteydet
+    contribute: Osallistu
+    create: Luo
+    days_midsentence:
+      one: päivä
+      other: päivää
+      zero: päivää
+    deferred: lykätty
+    description: Kuvaus
+    drag_handle: VEDÄ
+    email: Sähköposti
+    errors_with_fields: 'Seuraavien kenttien kanssa esiintyi ongelmia:'
+    first: Ensimmäinen
+    forth: Neljäs
+    fourth: Neljäs
+    go_back: Takaisin
+    last: Viimeinen
+    logout: Kirjaudu ulos
+    mailing_list: Postituslista
+    month: kuukausi
+    months: kuukautta
+    next: Seuraava
+    none: Ei
+    not_available_abbr: ei
+    note:
+      one: 1 muistiinpano
+      other: "%{count} muistiinpanoa"
+      zero: ei muistiinpanoja
+    notes: Muistiinpanot
+    numbered_step: Askel %{number}
+    ok: Ok
+    optional: valinnainen
+    previous: Edellinen
+    project: Projekti
+    projects: Projektit
+    recurring_todos: Toistuvat toimenpiteet
+    review: Käsittely
+    search: Haku
+    second: sekunti
+    server_error: Palvelimella tapahtui virhe.
+    show_all: Näytä kaikki
+    sort:
+      alphabetically: Aakkosjärjestyksessä
+      alphabetically_confirm: Haluatko varmasti lajitella nämä projektit aakkosjärjestykseen? Tämä korvaa nykyisen lajittelujärjestyksen.
+      alphabetically_title: Lajittele projektit aakkosjärjestykseen
+      by_task_count: Tehtävämäärän mukaan
+      by_task_count_title: Lajittele tehtävämäärän mukaan
+      by_task_count_title_confirm: Haluatko varmasti lajitella nämä projektit tehtävämäärän mukaan? Tämä korvaa nykyisen lajittelujärjestyksen.
+      sort: Lajittele
+    third: Kolmas
+    todo: tehtävä
+    update: Päivitä
+    website: Web-sivusto
+    week: viikko
+    weeks: viikkoa
+    wiki: Wiki
+  contexts:
+    add_context: Lisää asiayhteys
+    all_completed_tasks_title: TRACKS::All Completed actions in the context '%{context_name}'
+    completed_tasks_title: TRACKS::Completed actions in the context '%{context_name}'
+    context_deleted: Deleted context '%{name}'
+    context_hide: Piilota etusivulta?
+    context_name: Asiayhteyden nimi
+    context_state: Asiayhteyden tila
+    delete_context: Poista asiayhteys
+    delete_context_confirmation: Are you sure that you want to delete the context '%{name}'? Be aware that this will also delete all (recurring) actions in this context!
+    delete_context_title: Poista asiayhteys
+    edit_context: Muokkaa asiayhteyttä
+    hidden_contexts: Piilotetut asiayhteydet
+    hide_form: Piilota lomake
+    hide_form_title: Piilota asiayhteyden lisäyslomake
+    last_completed_in_context: "(last %{number})"
+    new_context_post: "' will be also created. Are you sure?"
+    new_context_pre: New context '
+    no_contexts_active: Currently there are no active contexts
+    no_contexts_closed: Currently there are no closed contexts
+    no_contexts_hidden: Currently there are no hidden contexts
+    save_status_message: Asiayhteys tallennettu
+    show_form: Luo uusi asiayhteys
+    show_form_title: Lisää asiayhteys
+    status_active: Context is active
+    status_hidden: Context is hidden
+    todos_append: in this context
+    update_status_message: Name of context was changed
+    visible_contexts: Näkyvät asiayhteydet
+  data:
+    import_destination_invalid: Invalid import destination
+    import_errors: Some errors occurred during import
+    import_successful: Tuonti onnistui
   date:
-    month_names:
-    -
-    - Tammikuu
-    - Helmikuu
-    - Maaliskuu
-    - Huhtikuu
-    - Toukokuu
-    - Kesäkuu
-    - Heinäkuu
-    - Elokuu
-    - Syyskuu
-    - Lokakuu
-    - Marraskuu
-    - Joulukuu
     abbr_day_names:
     - Su
     - Ma
@@ -209,27 +196,8 @@ fi:
     - To
     - Pe
     - La
-    order:
-    - :year
-    - :month
-    - :day
-    formats:
-      only_day: ""
-      default: "%d.%m.%Y"
-      short: "%b %d"
-      month_day: ""
-      long: "%B %d, %Y"
-      longer: "%A %B %d, %Y"
-    day_names:
-    - Sunnuntai
-    - Maanantai
-    - Tiistai
-    - Keskiviikko
-    - Torstai
-    - Perjantai
-    - Lauantai
     abbr_month_names:
-    -
+    - 
     - Tammi
     - Helmi
     - Maalis
@@ -242,106 +210,386 @@ fi:
     - Loka
     - Marras
     - Joulu
-  support:
-    array:
-      words_connector: ", "
-      last_word_connector: " ja "
-      two_words_connector: " ja "
-    select:
-      prompt: Valitse
+    day_names:
+    - Sunnuntai
+    - Maanantai
+    - Tiistai
+    - Keskiviikko
+    - Torstai
+    - Perjantai
+    - Lauantai
+    formats:
+      default: "%d.%m.%Y"
+      long: "%B %d, %Y"
+      longer: "%A %B %d, %Y"
+      month_day: ''
+      only_day: ''
+      short: "%b %d"
+    month_names:
+    - 
+    - Tammikuu
+    - Helmikuu
+    - Maaliskuu
+    - Huhtikuu
+    - Toukokuu
+    - Kesäkuu
+    - Heinäkuu
+    - Elokuu
+    - Syyskuu
+    - Lokakuu
+    - Marraskuu
+    - Joulukuu
+    order:
+    - :year
+    - :month
+    - :day
+  datetime:
+    distance_in_words:
+      about_x_hours:
+        one: about 1 hour
+        other: about %{count} hours
+      about_x_months:
+        one: about 1 month
+        other: about %{count} months
+      about_x_years:
+        one: about 1 year
+        other: about %{count} years
+      almost_x_years:
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
+      less_than_x_minutes:
+        one: less than a minute
+        other: less than %{count} minutes
+        zero: less than 1 minute
+      less_than_x_seconds:
+        one: less than 1 second
+        other: less than %{count} seconds
+        zero: less than 1 second
+      over_x_years:
+        one: over 1 year
+        other: over %{count} years
+      x_days:
+        one: 1 day
+        other: "%{count} days"
+      x_minutes:
+        one: 1 minute
+        other: "%{count} minutes"
+      x_months:
+        one: 1 month
+        other: "%{count} months"
+      x_seconds:
+        one: 1 second
+        other: "%{count} seconds"
+    prompts:
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
   errors:
-    user_unauthorized: "401 Pääsy kielletty: Vain ylläpitäjillä on pääsy tähän toiminnallisuuteen."
-  common:
-    back: Takaisin
-    third: Kolmas
-    recurring_todos: Toistuvat toimenpiteet
-    actions: Toimenpiteet
-    actions_midsentence:
-      zero: toimenpidettä
-      one: toimenpide
-      other: toimenpidettä
-    add: Lisää
-    previous: Edellinen
-    show_all: Näytä kaikki
-    logout: Kirjaudu ulos
-    go_back: Takaisin
-    optional: valinnainen
-    week: viikko
-    cancel: Peruuta
-    none: Ei
-    second: sekunti
-    month: kuukausi
-    server_error: Palvelimella tapahtui virhe.
-    notes: Muistiinpanot
-    review: Käsittely
-    last: Viimeinen
-    projects: Projektit
-    action: Toimenpide
-    project: Projekti
-    ok: Ok
-    contribute: Osallistu
-    website: Web-sivusto
-    first: Ensimmäinen
-    numbered_step: Askel %{number}
-    sort:
-      by_task_count_title: Lajittele tehtävämäärän mukaan
-      by_task_count_title_confirm: Haluatko varmasti lajitella nämä projektit tehtävämäärän mukaan? Tämä korvaa nykyisen lajittelujärjestyksen.
-      alphabetically: Aakkosjärjestyksessä
-      alphabetically_confirm: Haluatko varmasti lajitella nämä projektit aakkosjärjestykseen? Tämä korvaa nykyisen lajittelujärjestyksen.
-      alphabetically_title: Lajittele projektit aakkosjärjestykseen
-      sort: Lajittele
-      by_task_count: Tehtävämäärän mukaan
-    fourth: Neljäs
-    create: Luo
-    months: kuukautta
-    contexts: Asiayhteydet
-    errors_with_fields: "Seuraavien kenttien kanssa esiintyi ongelmia:"
-    next: Seuraava
-    todo: tehtävä
-    note:
-      zero: "ei muistiinpanoja"
-      one: "1 muistiinpano"
-      other: "%{count} muistiinpanoa"
-    context: Asiayhtyes
-    drag_handle: VEDÄ
-    description: Kuvaus
-    bugs: Ohjelmavirheet
-    update: Päivitä
-    forth: Neljäs
-    weeks: viikkoa
-    wiki: Wiki
-    email: Sähköposti
-    mailing_list: Postituslista
-    search: Haku
-    ajaxError: Virhe noudettaessa palvelimelta
-    days_midsentence:
-      zero: päivää
-      one: päivä
-      other: päivää
-    deferred: lykätty
-    not_available_abbr: "ei"
-    collapse_expand: Sulje/avaa
-  shared:
-    multiple_next_actions: Useita seuraavia toimenpiteitä (omilla riveillään)
+    user_unauthorized: '401 Pääsy kielletty: Vain ylläpitäjillä on pääsy tähän toiminnallisuuteen.'
+  feedlist:
+    actions_completed_last_week: Actions completed in the last 7 days
+    actions_due_next_week: Actions due in 7 days or earlier
+    actions_due_today: Actions due today or earlier
+    active_projects_wo_next: Active projects with no next actions
+    active_starred_actions: All starred, active actions
+    all_actions: All actions
+    all_contexts: All Contexts
+    all_projects: All Projects
+    choose_context: Choose the context you want a feed of
+    choose_project: Choose the project you want a feed of
+    context_centric_actions: Feeds for incomplete actions in a specific context
+    context_needed: There needs to be at least one context before you can request a feed
+    ical_feed: iCal feed
+    last_fixed_number: Last %{number} actions
+    legend: 'Legend:'
+    notice_incomplete_only: 'Note: All feeds show only actions that have not been marked as done, unless stated otherwise. These iCal feeds can be added to todo lists. If you want to show due todos in a calendar, use the iCal feed on the calendar page'
+    plain_text_feed: Plain Text Feed
+    project_centric: Feeds for incomplete actions in a specific project
+    project_needed: There needs to be at least one project before you can request a feed
+    projects_and_actions: Active projects with their actions
+    rss_feed: RSS Feed
+    select_feed_for_context: Select the feed for this context
+    select_feed_for_project: Select the feed for this project
+  footer:
+    send_feedback: Lähetä palautetta versiosta %{version}
+  integrations:
+    opensearch_description: Search in Tracks
+  layouts:
+    mobile_navigation:
+      contexts: Asiayhteydet
+      feeds: Syötteet
+      full: Täysi sivusto
+      home: Etusivu
+      logout: Kirjaudu ulos
+      new_action: Uusi
+      projects: Projektit
+      starred: Tähditetyt
+      tickler: Tulevat
+    navigation:
+      admin: Ylläpito
+      api_docs: REST-rajapintadokumentaatio
+      calendar: Kalenteri
+      calendar_title: Kalenteri määräpäivistä
+      completed_tasks: Valmis
+      completed_tasks_title: Valmiit
+      contexts_title: Asiayhteydet
+      export: Vie
+      export_title: Vie tietoja
+      feeds: Syötteet
+      feeds_title: Näytä lista syötteistä
+      group_view_by_context: Ryhmittele asiayhteyden mukaan
+      group_view_by_project: Ryhmittele projektin mukaan
+      group_view_by_title: Muuta sivun toimenpiteiden ryhmittelyä
+      help: "?"
+      help_page: Ohje
+      home: Etusivu
+      home_title: Etusivu
+      import: Tuo
+      import_title: Tuo tietoja
+      integrations_: Integroi Tracks
+      manage_users: Hallitse käyttäjiä
+      manage_users_title: Lisää tai poista käyttäjiä
+      mobile: Mobiilisivusto
+      notes_title: Näytä kaikki muistiinpanot
+      options: Asetukset
+      organize: Järjestele
+      preferences: Asetukset
+      preferences_title: Näytä asetukseni
+      projects_title: Projektit
+      recurring_todos: Toistuvat toimenpiteet
+      recurring_todos_title: Hallitse toistuvia toimenpiteitä
+      review_title: Make review
+      search: Hae kaikesta
+      show_empty_containers_context: Näytä tyhjät asiayhteydet
+      show_empty_containers_project: Näytä tyhjät projektit
+      show_empty_containers_title: Näytä tai piilota tyhjät asiayhteydet tai projektit
+      starred: Tähdellä merkityt
+      starred_title: Näytä tähdellä merkityt toimenpiteesi
+      stats: Tilastot
+      stats_title: Näytä tilastosi
+      tickler: Tulevat
+      tickler_title: Tulevat
+      view: Näytä
+    next_actions_rss_feed: RSS feed of next actions
+    toggle_contexts: Toggle collapsed contexts
+    toggle_contexts_title: Make collapsed contexts (in)visible
+    toggle_notes: Toggle notes
+    toggle_notes_title: Toggle all notes
+  login:
+    account_login: Account login
+    cas_create_account: If you like to request on please go here to %{signup_link}
+    cas_logged_in_greeting: Hello, %{username}! You are authenticated.
+    cas_login: CAS Login
+    cas_no_user_found: Hello, %{username}! You do not have an account on Tracks.
+    cas_signup_link: Request account
+    cas_username_not_found: Sorry, no user by that CAS username exists (%{username})
+    log_in_again: log in again.
+    logged_out: You have been logged out of Tracks.
+    login_cas: go to the CAS
+    login_standard: go back to the standard login
+    login_with_openid: login with an OpenID
+    mobile_use_openid: "…or login with an OpenID"
+    openid_identity_url_not_found: Sorry, no user by that identity URL exists (%{identity_url})
+    option_separator: or,
+    please_login: Please log in to use Tracks
+    session_time_out: Session has timed out. Please %{link}
+    session_will_expire: session will expire after %{hours} hour(s) of inactivity.
+    session_will_not_expire: session will not expire.
+    sign_in: Sign in
+    successful: Logged in successfully. Welcome back!
+    successful_with_session_info: 'Login successful:'
+    unsuccessful: Login unsuccessful.
+    user_no_expiry: Stay logged in
+  models:
+    preference:
+      due_in: Due in %{days} days
+      due_on: Due on %{date}
+      due_styles:
+      - Due in ___ days
+      - Due on _______
+    project:
+      feed_description: Lists all the projects for %{username}
+      feed_title: Tracks Projects
+    todo:
+      error_date_must_be_future: must be a date in the future
+    user:
+      error_context_not_associated: Context id %{context} not associated with user id %{user}.
+      error_project_not_associated: Project id %{project} not associated with user id %{user}.
+  notes:
+    delete_confirmation: Oletko varma, että haluat poistaa muistiinpanon '%{id}'?
+    delete_item_title: Poista
+    delete_note_confirm: Oletko varma että haluat poistaa muistiinpanon '%{id}'?
+    delete_note_title: Poista muistiinpano '%{id}'
+    deleted_note: Muistiinpano '%{id}' poistettu
+    edit_item_title: Muokkaa
+    in_project: 'Kuuluu: '
+    no_notes_available: Muistiinpanoja ei löytynyt. Voit lisätä niitä projekteihin projektisivulta.
+    note_header: Muistiinpano %{id}
+    note_link_title: Show note %{id}
+    note_location_link: 'Kuuluu:'
+    save_status_message: Muistiinpano %{id} tallennettu
+    show_note_title: Show note
+  number:
+    currency:
+      format:
+        delimiter: " "
+        format: "%u%n"
+        precision: 2
+        separator: ","
+        unit: "€"
+    format:
+      delimiter: " "
+      precision: 3
+      separator: ","
+    human:
+      format:
+        delimiter: ''
+        precision: 1
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one: Tavu
+            other: Tavua
+          gb: Gt
+          kb: kt
+          mb: Mt
+          tb: Tt
+    percentage:
+      format:
+        delimiter: ''
+    precision:
+      format:
+        delimiter: ''
+  preferences:
+    authentication_header: Your authentication
+    change_authentication_type: Change your authentication type
+    change_identity_url: Change Your Identity URL
+    change_password: Muuta salasanasi
+    current_authentication_type: Your authentication type is %{auth_type}
+    edit_preferences: Muokkaa asetuksia
+    generate_new_token: Luo uusi avainkoodi
+    generate_new_token_confirm: Are you sure? Generating a new token will replace the existing one and break any external usages of this token.
+    is_false: 'false'
+    is_true: 'true'
+    open_id_url: Your OpenID URL is
+    page_title: TRACKS::Asetukset
+    page_title_edit: TRACKS::Muokkaa asetuksia
+    password_changed: Salasanasi on muutettu, kirjaudu uudelleen sisään.
+    show_number_completed: Näytä %{number} valmista toimenpidettä
+    sms_context_none: Ei mikään
+    staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
+    tabs:
+      authentication: Authentication
+      date_and_time: Date and time
+      profile: Profile
+      tracks_behavior: Tracks behavior
+    title: Asetuksesi
+    token_description: Avainkoodi (syötteiden ja rajapinnan käyttämiseen)
+    token_header: Avainkoodisi
+    updated: Asetukset päivitetty
+  projects:
+    actions_in_project_title: Actions in this project
+    active_projects: Active projects
+    add_note: Add a note
+    add_note_submit: Add note
+    add_project: Add Project
+    all_completed_tasks_title: TRACKS::List All Completed Actions in Project '%{project_name}'
+    completed_projects: Completed projects
+    completed_tasks_title: TRACKS::List Completed Actions in Project '%{project_name}'
+    default_context: The default context for this project is %{context}
+    default_context_removed: Removed default context
+    default_context_set: Set project's default context to %{default_context}
+    default_tags_removed_notice: Removed the default tags
+    delete_project: Delete project
+    delete_project_confirmation: Are you sure that you want to delete the project '%{name}'?
+    delete_project_title: Delete the project
+    edit_project_settings: Muokkaa projektin asetuksia
+    edit_project_title: Edit project
+    hidden_projects: Hidden projects
     hide_form: Piilota lomake
-    toggle_single: Lisää seuraava toimenpide
+    hide_form_title: Hide new project form
+    is_active: is active
+    last_completed_in_project: "(last %{number})"
+    list_completed_projects: TRACKS::List Completed Projects
+    list_projects: TRACKS::List Projects
+    list_reviews: TRACKS::Review
+    no_default_context: This project does not have a default context
+    no_last_completed_projects: Valmiita projekteja ei löytynyt
+    no_last_completed_recurring_todos: Valmiita toistuvia toimenpiteitä ei löytynyt
+    no_notes_attached: Currently there are no notes attached to this project
+    no_projects: Currently there are no projects
+    notes: Notes
+    notes_empty: There are no notes for this project
+    page_title: 'TRACKS::Project: %{project}'
+    project_destroyed_status: Deleted project '%{name}'
+    project_saved_status: Project saved
+    project_state: Project is %{state}.
+    set_default_tags_notice: Set project's default tags to %{default_tags}
+    settings: Settings
+    show_form: Add a project
+    show_form_title: Create a new project
+    state: Tämä projekti on %{state}
+    status_project_name_changed: Name of project was changed
+    this_project: This project
+    to_new_project_page: Take me to the new project page
+    was_marked_complete: has been marked as completed
+    was_marked_hidden: has been marked as hidden
+    with_default_context: with a default context of '%{context_name}'
+    with_default_tags: and with '%{tags}' as the default tags
+    with_no_default_context: with no default context
+    with_no_default_tags: and with no default tags
+  search:
+    contexts_matching_query: Contexts matching query
+    no_results: Your search yielded no results.
+    notes_matching_query: Notes matching query
+    projects_matching_query: Projects matching query
+    tags_matching_query: Tags matching query
+    todos_matching_query: Todos matching query
+  shared:
     add_action: Lisää toimenpide
     add_actions: Lisää toimenpiteitä
     add_context: Lisää asiayhteys
-    tags_for_all_actions: Asiasanat kaikille toimenpiteille (pilkulla erotettuna)
-    toggle_single_title: Lisää uusi seuraava toimenpide
-    project_for_all_actions: Projekti kaikille toimenpiteille
     context_for_all_actions: Asiayhteys kaikille toimenpiteille
-    toggle_multi: Lisää useita
-    separate_tags_with_commas: erota pilkulla
-    toggle_multi_title: Toggle single/multi new action form
     hide_action_form_title: Piilota toimenpiteen lisäyslomake
+    hide_form: Piilota lomake
     make_actions_dependent: Määritä toimenpiteet riippuvaisiksi toisistaan
+    multiple_next_actions: Useita seuraavia toimenpiteitä (omilla riveillään)
+    project_for_all_actions: Projekti kaikille toimenpiteille
+    separate_tags_with_commas: erota pilkulla
+    tags_for_all_actions: Asiasanat kaikille toimenpiteille (pilkulla erotettuna)
+    toggle_multi: Lisää useita
+    toggle_multi_title: Toggle single/multi new action form
+    toggle_single: Lisää seuraava toimenpide
+    toggle_single_title: Lisää uusi seuraava toimenpide
+  sidebar:
+    list_empty: Ei
+    list_name_active_contexts: Aktiiviset asiayhteydet
+    list_name_active_projects: Aktiiviset projektit
+    list_name_completed_projects: Valmiit projektit
+    list_name_hidden_contexts: Piilotetut asiayhteydet
+    list_name_hidden_projects: Piilotetut projektit
   states:
+    active: Aktiivinen
+    active_plural: Aktiivinen
+    blocked: Estetty
+    blocked_plural: Estetty
+    close: Suljettu
+    closed_plural: Suljettu
+    completed: Valmis
+    completed_plural: Valmis
     contexts:
-      hidden: Piilotetut asiayhteydet
       active: Aktiiviset asiayhteydet
       closed: Suljetut asiayhteydet
+      hidden: Piilotetut asiayhteydet
+    current: Ajan tasalla
+    current_plural: Ajan tasalla
+    hidden: Piilotettu
+    hidden_plural: Piilotettu
     projects:
       active: Aktiiviset projektit
       blocked: Estetyt
@@ -351,276 +599,330 @@ fi:
       hidden: Piilotetut projektit
       review: Käsittele
       stalled: Stalled
-    hidden_plural: Piilotettu
-    completed: Valmis
-    completed_plural: Valmis
-    visible_plural: Näkyvä
-    visible: Näkyvä
-    close: Suljettu
-    closed_plural: Suljettu
-    active_plural: Aktiivinen
-    hidden: Piilotettu
-    active: Aktiivinen
-    review_plural: Päivätty
     review: Päivätty
-    stalled_plural: Stalled
+    review_plural: Päivätty
     stalled: Stalled
-    blocked_plural: Estetty
-    blocked: Estetty
-    current_plural: Ajan tasalla
-    current: Ajan tasalla
-  layouts:
-    toggle_notes: Toggle notes
-    toggle_contexts: "Toggle collapsed contexts"
-    toggle_contexts_title: "Make collapsed contexts (in)visible"
-    next_actions_rss_feed: RSS feed of next actions
-    toggle_notes_title: Toggle all notes
-    mobile_navigation:
-      new_action: Uusi
-      logout: Kirjaudu ulos
-      feeds: Syötteet
-      full: Täysi sivusto
-      starred: Tähditetyt
-      projects: Projektit
-      tickler: Tulevat
-      contexts: Asiayhteydet
-      home: Etusivu
-    navigation:
-      manage_users_title: Lisää tai poista käyttäjiä
-      recurring_todos: Toistuvat toimenpiteet
-      api_docs: REST-rajapintadokumentaatio
-      feeds: Syötteet
-      starred: Tähdellä merkityt
-      notes_title: Näytä kaikki muistiinpanot
-      review_title: Make review
-      stats: Tilastot
-      tickler_title: Tulevat
-      manage_users: Hallitse käyttäjiä
-      export_title: Vie tietoja
-      import_title: Tuo tietoja
-      preferences: Asetukset
-      integrations_: Integroi Tracks
-      feeds_title: Näytä lista syötteistä
-      calendar_title: Kalenteri määräpäivistä
-      completed_tasks: Valmis
-      stats_title: Näytä tilastosi
-      tickler: Tulevat
-      home_title: Etusivu
-      starred_title: Näytä tähdellä merkityt toimenpiteesi
-      recurring_todos_title: Hallitse toistuvia toimenpiteitä
-      view: Näytä
-      organize: Järjestele
-      completed_tasks_title: Valmiit
-      home: Etusivu
-      export: Vie
-      import: Tuo
-      contexts_title: Asiayhteydet
-      calendar: Kalenteri
-      projects_title: Projektit
-      search: Hae kaikesta
-      preferences_title: Näytä asetukseni
-      admin: Ylläpito
-      help: "?"
-      help_page: Ohje
-      mobile: Mobiilisivusto
-      group_view_by_context: "Ryhmittele asiayhteyden mukaan"
-      group_view_by_project: "Ryhmittele projektin mukaan"
-      group_view_by_title: "Muuta sivun toimenpiteiden ryhmittelyä"
-      show_empty_containers_project: "Näytä tyhjät projektit"
-      show_empty_containers_context: "Näytä tyhjät asiayhteydet"
-      show_empty_containers_title: "Näytä tai piilota tyhjät asiayhteydet tai projektit"
-      options: Asetukset
-  footer:
-    send_feedback: Lähetä palautetta versiosta %{version}
-  sidebar:
-    list_name_active_contexts: Aktiiviset asiayhteydet
-    list_name_active_projects: Aktiiviset projektit
-    list_empty: Ei
-    list_name_completed_projects: Valmiit projektit
-    list_name_hidden_projects: Piilotetut projektit
-    list_name_hidden_contexts: Piilotetut asiayhteydet
+    stalled_plural: Stalled
+    visible: Näkyvä
+    visible_plural: Näkyvä
+  stats:
+    action_completion_time_title: Completion time (all completed actions)
+    action_selection_title: TRACKS::Action selection
+    actions: Actions
+    actions_30days_title: Actions in the last 30 days
+    actions_actions_avg_created_30days: In the last 30 days you created on average %{count} actions
+    actions_avg_completed: and completed an average of %{count} actions per month.
+    actions_avg_completed_30days: and completed an average of %{count} actions per day.
+    actions_avg_completion_time: Of all your completed actions, the average time to complete is %{count} days.
+    actions_avg_created: In the last 12 months you created on average %{count} actions
+    actions_day_of_week_legend:
+      day_of_week: Day of the week
+      number_of_actions: Number of actions
+    actions_day_of_week_title: Day of week (all actions)
+    actions_dow_30days_legend:
+      day_of_week: Day of the week
+      number_of_actions: Number of actions
+    actions_dow_30days_title: Day of week (past 30 days)
+    actions_further: " and further"
+    actions_last_year: Actions in the last years
+    actions_last_year_legend:
+      months_ago: Months ago
+      number_of_actions: Number of actions
+    actions_lastyear_title: Actions in the last 12 months
+    actions_min_completion_time: The minimum time to complete is %{time}.
+    actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
+    actions_selected_from_week: 'Actions selected from week '
+    click_to_return: Click %{link} to return to the statistics page.
+    click_to_return_link: here
+    click_to_show_actions_from_week: Click %{link} to show the actions from week %{week} and further.
+    click_to_update_actions: Click on a bar in the chart to update the actions below.
+    contexts: Contexts
+    current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
+    index_title: TRACKS::Tilastot
+    labels:
+      avg_completed: Avg completed
+      avg_created: Avg created
+      completed: Completed
+      created: Created
+      month_avg_completed: "%{months} Month avg completed"
+      month_avg_created: "%{months} Month avg created"
+    legend:
+      actions: Actions
+      day_of_week: Day of week
+      months_ago: Months ago
+      number_of_actions: Number of actions
+      number_of_days: Number of days ago
+      percentage: Percentage
+      running_time: Running time of an action (weeks)
+    more_stats_will_appear: More statistics will appear here once you have added some actions.
+    no_actions_selected: There are no actions selected.
+    no_tags_available: no tags available
+    open_per_week: Active (visible and hidden) next actions per week
+    open_per_week_legend:
+      actions: Actions
+      weeks: Weeks ago
+    other_actions_label: "(others)"
+    projects: Projects
+    running_time_all: Current running time of all incomplete actions
+    running_time_all_legend:
+      actions: Actions
+      percentage: Percentage
+      running_time: Running time of an action (weeks). Click on a bar for more info
+    running_time_legend:
+      actions: Actions
+      percentage: Percentage
+      weeks: Running time of an action (weeks). Click on a bar for more info
+    spread_of_actions_for_all_context: Spread of actions for all contexts
+    spread_of_running_actions_for_visible_contexts: Spread of running actions for visible contexts
+    tag_cloud_90days_description: This tag cloud includes tags of actions that were created or completed in the past 90 days.
+    tag_cloud_90days_title: Tag cloud actions in past 90 days
+    tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
+    tag_cloud_title: Tag cloud for all actions
+    tags: Tags
+    time_of_day: Time of day (all actions)
+    time_of_day_legend:
+      number_of_actions: Number of actions
+      time_of_day: Time of day
+    tod30: Time of day (last 30 days)
+    tod30_legend:
+      number_of_actions: Number of actions
+      time_of_day: Time of day
+    top10_longrunning: Top 10 longest running projects
+    top10_projects: Top 10 projects
+    top10_projects_30days: Top 10 project in past 30 days
+    top5_contexts: Top 5 contexts
+    top5_visible_contexts_with_incomplete_actions: Top 5 visible contexts with incomplete actions
+    totals: Totals
+    totals_action_count: you have a total of %{count} actions
+    totals_actions_completed: "%{count} of these are completed."
+    totals_active_project_count: Of those %{count} are active projects
+    totals_blocked_actions: "%{count} are dependent on the completion of their actions."
+    totals_completed_project_count: and %{count} are completed projects.
+    totals_context_count: You have %{count} contexts.
+    totals_deferred_actions: of which %{count} are deferred actions in the tickler
+    totals_first_action: Since your first action on %{date}
+    totals_hidden_context_count: and %{count} are hidden contexts.
+    totals_hidden_project_count: "%{count} are hidden"
+    totals_incomplete_actions: You have %{count} incomplete actions
+    totals_project_count: You have %{count} projects.
+    totals_tag_count: You have %{count} tags placed on actions.
+    totals_unique_tags: Of those tags, %{count} are unique.
+    totals_visible_context_count: Of those %{count} are visible contexts
+    within_one: Within 1
+  support:
+    array:
+      last_word_connector: " ja "
+      two_words_connector: " ja "
+      words_connector: ", "
+    select:
+      prompt: Valitse
+  time:
+    am: am
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%B %d, %Y %H:%M"
+      month_day: "%B %d"
+      short: "%d %b %H:%M"
+      stats: "%a %d-%m"
+      time: ''
+    pm: pm
   todos:
-    no_actions:
-      hidden: Currently there are no hidden actions found
-      tag_hidden: Currently there are no hidden actions found
-      without_project: Currently there are no actions without a project
-      deferred_pending: "Currently there are no deferred or pending actions"
-      recurring_todos: Currently there are no recurring todos
-      completed: Currently there are no completed actions
-      title: Toimenpiteitä ei löytynyt
-      not_done_with_tag: "Tagilla '%{param}' merkittyjä keskeneräisiä toimenpiteitä ei löytynyt"
-      not_done_project: Tähän projektiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
-      not_done_context: Tähän kontekstiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
-      completed_recurring: Currently there are no completed recurring todos
-      not_done: Currently there are no incomplete actions
-      project: Currently there are no incomplete actions in this project
-      context: Currently there are no incomplete actions in this context
-      completed_today: No actions were completed today
-      completed_rest_of_week: No actions were completed in the rest of this week
-      completed_rest_of_month: No actions were completed in the rest of this month
-      due_today: No actions due today
-      due_this_week: No actions due this week
-      due_next_week: No actions due in next week
-      due_this_month: No actions due in rest of this month
-      due_after_this_month: No actions due after this month
+    action_deferred: The action '%{description}' was deferred
+    action_deleted_error: Failed to delete the action
+    action_deleted_success: Successfully deleted next action
+    action_due_on: "(määräaika %{date})"
+    action_marked_complete: The action <strong>'%{description}'</strong> was marked as <strong>%{completed}</strong>
+    action_marked_complete_error: The action <strong>'%{description}'</strong> was NOT marked as <strong>%{completed} due to an error on the server.</strong>
+    action_saved: Action saved
+    action_saved_to_tickler: Action saved to tickler
     actions:
       completed: Completed actions
-      home_completed: Completed actions
-      tag_completed: "Completed actions tagged with '%{param}'"
-      home_without_project: "Actions without project"
-      context_without_project: "Actions without project in %{param}"
-      project_project: "Actions in this project"
-      project_deferred_pending: Deferred/pending actions in this project
-      context_deferred_pending: Deferred/pending actions in this context
-      tag_deferred_pending: "Deferred/pending actions tagged with '%{param}'"
-      project_completed: Completed actions in this project
       context_completed: Completed actions in this context
-      tag_hidden: "Tagilla '%{param}' merkityt piilotetut toimenpiteet"
-    error:
-      invalid_due_date: "Invalid due date"
-      invalid_show_from_date: "Invalid show from date"
-    completed_today: Completed today
-    completed_rest_of_week: Completed in the rest of this week
-    completed_rest_of_month: Completed in the rest of this month
-    show_from: Show from
-    error_starring_recurring: "Could not toggle the star of recurring todo '%{description}'"
-    recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
-    completed_recurring: Completed recurring todos
-    added_new_next_action: Added new next action
-    completed_rest_of_previous_month: Completed in the rest of the previous month
-    blocked_by: Blocked by %{predecessors}
-    star_action: Merkitse toimenpide tähdellä
-    completed_recurrence_completed: There is no next action after the recurring action you just deleted. The recurrence is completed
-    defer_date_after_due_date: Defer date is after due date. Please edit and adjust due date before deferring.
-    unable_to_add_dependency: Unable to add dependency
-    done: Done?
-    star_action_with_description: "star the action '%{description}'"
-    tagged_with: "tagged with '%{tag_name}'"
-    completed: Completed
-    edit_action_with_description: "Edit the action '%{description}'"
-    action_due_on: (määräaika %{date})
-    remove_dependency: Remove dependency (does not delete the action)
-    archived_tasks_title: TRACKS::Archived completed tasks
-    list_incomplete_next_actions: Lists incomplete next actions
-    tags: Tags (separate with commas)
-    action_deleted_success: Successfully deleted next action
-    new_related_todo_created: A new todo was added which belongs to this recurring todo
-    context_changed: Context changed to %{name}
+      context_deferred_pending: Deferred/pending actions in this context
+      context_without_project: Actions without project in %{param}
+      home_completed: Completed actions
+      home_without_project: Actions without project
+      project_completed: Completed actions in this project
+      project_deferred_pending: Deferred/pending actions in this project
+      project_project: Actions in this project
+      tag_completed: Completed actions tagged with '%{param}'
+      tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
+      tag_hidden: Tagilla '%{param}' merkityt piilotetut toimenpiteet
     add_another_dependency: Add another dependency
-    mobile_todos_page_title: All actions
-    delete_recurring_action_title: Delete the recurring action
-    removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
-    recurring_actions_title: TRACKS::Recurring Actions
-    next_action_needed: You need to submit at least one next action
-    action_saved: Action saved
-    scheduled_overdue: Scheduled to show %{days} days ago
-    action_deleted_error: Failed to delete the action
-    edit_action: Edit action
+    add_new_recurring: Lisää uusi toistuva toimenpide
+    added_dependency: Added %{dependency} as dependency.
     added_new_context: Added new context
-    next_actions_description: "Filter:"
-    list_incomplete_next_actions_with_limit: Lists the last %{count} incomplete next actions
-    set_to_pending: "%{task} set to pending"
+    added_new_next_action: Added new next action
+    added_new_next_action_plural: Added new next actions
+    added_new_next_action_singular: Added new next action
     added_new_project: Added new project
+    all_completed: All completed actions
+    all_completed_here: here
+    all_completed_tagged_page_title: TRACKS::All completed tasks with tag %{tag_name}
+    append_in_this_project: in this project
+    archived_tasks_title: TRACKS::Archived completed tasks
+    blocked_by: Blocked by %{predecessors}
+    calendar:
+      due_after_this_month: Tehtävä %{next_month} ja myöhemmin
+      due_next_week: Tehtävä ensi viikolla
+      due_this_month: Tehtävä loppukuukauden %{month} aikana
+      due_this_week: Tehtävä loppuviikon aikana
+      due_today: Tehtävä tänään
+      get_in_ical_format: Get this calendar in iCal format
+    calendar_page_title: TRACKS::Kalenteri
+    cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!
+    clear_due_date: Clear due date
+    clear_show_from_date: Clear show from date
+    completed: Completed
+    completed_actions_with: Completed actions with the tag '%{tag_name}'
+    completed_in_archive:
+      one: There is a completed action in the archive.
+      other: There are %{count} completed actions in the archive.
+    completed_last_day: Completed in the last 24 hours
+    completed_last_x_days: Completed in the last %{count} days
+    completed_recurrence_completed: There is no next action after the recurring action you just deleted. The recurrence is completed
+    completed_recurring: Completed recurring todos
+    completed_recurring_actions_title: TRACKS::Completed recurring actions
+    completed_rest_of_month: Completed in the rest of this month
+    completed_rest_of_previous_month: Completed in the rest of the previous month
+    completed_rest_of_week: Completed in the rest of this week
+    completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
+    completed_tasks_title: TRACKS::Completed tasks
+    completed_today: Completed today
+    confirm_delete: Are you sure that you want to delete the action '%{description}'?
+    context_changed: Context changed to %{name}
+    convert_to_project: Make project
+    defer_date_after_due_date: Defer date is after due date. Please edit and adjust due date before deferring.
+    defer_x_days:
+      one: Defer 1 day
+      other: Defer %{count} days
+    deferred_actions_with: Deferred actions with the tag '%{tag_name}'
+    deferred_pending_actions: Deferred/pending actions
+    deferred_tasks_title: TRACKS::Tulevat
+    delete: Delete
+    delete_action: Delete action
+    delete_recurring_action_confirm: Are you sure that you want to delete the recurring action '%{description}'?
+    delete_recurring_action_title: Delete the recurring action
+    deleted_success: The action was deleted successfully.
+    depends_on: Depends on
+    depends_on_separate_with_commas: Depends on (separate with commas)
+    done: Done?
+    drag_action_title: Drag onto another action to mark that action as a dependency for this action.
+    due: Due
+    edit: Edit
+    edit_action: Edit action
+    edit_action_with_description: Edit the action '%{description}'
+    edit_recurring_todo: Muokkaa toistuvaa toimenpidettä
+    error:
+      invalid_due_date: Invalid due date
+      invalid_show_from_date: Invalid show from date
+    error_completing_todo: There was an error completing / activating the recurring todo %{description}
+    error_deleting_item: There was an error deleting the item %{description}
+    error_deleting_recurring: There was an error deleting the recurring todo '%{description}'
+    error_removing_dependency: There was an error removing the dependency
+    error_saving_recurring: There was an error saving the recurring todo '%{description}'
+    error_starring: Could not toggle the star of this todo '%{description}'
+    error_starring_recurring: Could not toggle the star of recurring todo '%{description}'
+    error_toggle_complete: Could not mark this todo complete
+    feed_title_in_context: in context '%{context}'
+    feed_title_in_project: in project '%{project}'
+    feeds:
+      completed: 'Completed: %{date}'
+      due: 'Due: %{date}'
+    has_x_pending:
+      one: Has one pending action
+      other: Has %{count} pending actions
+    hidden_actions: Hidden actions
+    in_hidden_state: in hidden state
+    in_pending_state: in pending state
+    list_incomplete_next_actions: Lists incomplete next actions
+    list_incomplete_next_actions_with_limit: Lists the last %{count} incomplete next actions
+    mark_complete: Merkitse valmiiksi
+    mobile_todos_page_title: All actions
+    new_related_todo_created: A new todo was added which belongs to this recurring todo
+    new_related_todo_created_short: created a new todo
+    new_related_todo_not_created_short: did not create todo
+    next_action_description: Next action description
+    next_action_needed: You need to submit at least one next action
+    next_actions_description: 'Filter:'
+    next_actions_description_additions:
+      completed: in the last %{count} days
+      due_date: with a due date %{due_date} or earlier
+    next_actions_due_date:
+      due_in_x_days: Määräaika %{days} päivän päästä
+      due_today: Tehtävä tänään
+      due_tomorrow: Tehtävä huomenna
+      overdue_by: Myöhässä %{days} päivää
+      overdue_by_plural: Myöhässä %{days} päivää
+    next_actions_title: Tracks - Next Actions
     next_actions_title_additions:
       completed: actions completed
       due_today: due today
       due_within_a_week: due within a week
-    append_in_this_project: in this project
-    error_deleting_item: There was an error deleting the item %{description}
-    task_list_title: TRACKS::List tasks
+    no_actions:
+      completed: Currently there are no completed actions
+      completed_recurring: Currently there are no completed recurring todos
+      completed_rest_of_month: No actions were completed in the rest of this month
+      completed_rest_of_week: No actions were completed in the rest of this week
+      completed_today: No actions were completed today
+      context: Currently there are no incomplete actions in this context
+      deferred_pending: Currently there are no deferred or pending actions
+      due_after_this_month: No actions due after this month
+      due_next_week: No actions due in next week
+      due_this_month: No actions due in rest of this month
+      due_this_week: No actions due this week
+      due_today: No actions due today
+      hidden: Currently there are no hidden actions found
+      not_done: Currently there are no incomplete actions
+      not_done_context: Tähän kontekstiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
+      not_done_project: Tähän projektiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
+      not_done_with_tag: Tagilla '%{param}' merkittyjä keskeneräisiä toimenpiteitä ei löytynyt
+      project: Currently there are no incomplete actions in this project
+      recurring_todos: Currently there are no recurring todos
+      tag_hidden: Currently there are no hidden actions found
+      title: Toimenpiteitä ei löytynyt
+      without_project: Currently there are no actions without a project
     no_actions_due_this_week: No actions due in rest of this week
-    error_completing_todo: There was an error completing / activating the recurring todo %{description}
-    recurring_pattern_removed: The recurrence pattern is removed from %{count}
-    convert_to_project: Make project
-    delete_recurring_action_confirm: "Are you sure that you want to delete the recurring action '%{description}'?"
-    completed_last_day: Completed in the last 24 hours
-    show_in_days: Näytetään %{days} päivän kuluttua
-    no_project: --No project--
-    error_saving_recurring: "There was an error saving the recurring todo '%{description}'"
-    new_related_todo_created_short: created a new todo
-    all_completed: All completed actions
-    feed_title_in_context: "in context '%{context}'"
-    completed_tagged_page_title: "TRACKS::Completed tasks with tag '%{tag_name}'"
-    edit: Edit
-    pending: Odottaa
-    completed_actions_with: "Completed actions with the tag '%{tag_name}'"
-    deleted_success: The action was deleted successfully.
-    completed_tasks_title: TRACKS::Completed tasks
-    feed_title_in_project: "in project '%{project}'"
-    clear_due_date: Clear due date
-    hidden_actions: Hidden actions
-    error_removing_dependency: There was an error removing the dependency
-    was_due_on_date: was due on %{date}
-    show_on_date: Show on %{date}
-    recurrence_period: Toistuvuusjakso
-    deferred_actions_with: "Deferred actions with the tag '%{tag_name}'"
-    recurring_deleted_success: The recurring action was deleted successfully.
-    confirm_delete: "Are you sure that you want to delete the action '%{description}'?"
-    deferred_tasks_title: TRACKS::Tulevat
-    next_actions_title: Tracks - Next Actions
-    next_action_description: Next action description
-    clear_show_from_date: Clear show from date
-    calendar_page_title: TRACKS::Kalenteri
-    unresolved_dependency: The value you entered in the dependency field did not resolve to an existing action. This value will not be saved with the rest of the action. Continue?
-    in_hidden_state: in hidden state
-    show_today: Show Today
-    next_actions_due_date:
-      overdue_by: Myöhässä %{days} päivää
-      due_today: Tehtävä tänään
-      due_in_x_days: Määräaika %{days} päivän päästä
-      overdue_by_plural: Myöhässä %{days} päivää
-      due_tomorrow: Tehtävä huomenna
-    completed_last_x_days: Completed in the last %{count} days
-    defer_x_days:
-      one: Defer 1 day
-      other: Defer %{count} days
-    added_new_next_action_singular: Added new next action
-    feeds:
-      completed: "Completed: %{date}"
-      due: "Due: %{date}"
-    deferred_pending_actions: Deferred/pending actions
-    has_x_pending:
-      one: Has one pending action
-      other: Has %{count} pending actions
-    delete_action: Delete action
-    error_deleting_recurring: "There was an error deleting the recurring todo '%{description}'"
-    recurring_todos: Toistuvat toimenpiteet
-    delete: Delete
-    cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!
-    drag_action_title: Drag onto another action to mark that action as a dependency for this action.
     no_last_completed_actions: No completed actions found
-    depends_on: Depends on
-    tickler_items_due:
-      one: One tickler item is now due - refresh the page to see it.
-      other: "%{count} tickler items are now due - refresh the page to see them."
-    action_marked_complete: "The action <strong>'%{description}'</strong> was marked as <strong>%{completed}</strong>"
-    added_new_next_action_plural: Added new next actions
-    new_related_todo_not_created_short: did not create todo
-    error_starring: "Could not toggle the star of this todo '%{description}'"
-    calendar:
-      get_in_ical_format: Get this calendar in iCal format
-      due_today: Tehtävä tänään
-      due_this_week: Tehtävä loppuviikon aikana
-      due_next_week: Tehtävä ensi viikolla
-      due_this_month: Tehtävä loppukuukauden %{month} aikana
-      due_after_this_month: Tehtävä %{next_month} ja myöhemmin
-    show_tomorrow: Show Tomorrow
-    tagged_page_title: "TRACKS::Tagged with '%{tag_name}'"
-    action_deferred: "The action '%{description}' was deferred"
-    mark_complete: Merkitse valmiiksi
+    no_project: "--No project--"
+    overdue: Overdue
+    pending: Odottaa
     recurrence:
-      ends_on_number_times: Päättyy %{number} toiston jälkeen
-      ends_on_date: Päättyy %{date}
-      every_work_day: Joka työpäivä
-      weekly_options: Asetukset viikottain toistuville toimenpiteille
-      weekly: Viikottain
-      monthly_options: Asetukset kuukausittain toistuville toimenpiteille
-      starts_on: Alkaa
+      daily: Päivittäin
+      daily_every_number_day: Joka %{number} päivä
       daily_options: Asetukset päivittäin toistuville toimenpiteille
+      day_x_on_every_x_month: Day %{day} on every %{month} month
+      ends_on: Päättyy
+      ends_on_date: Päättyy %{date}
+      ends_on_number_times: Päättyy %{number} toiston jälkeen
+      every_work_day: Joka työpäivä
       monthly: Kuukausittain
+      monthly_every_xth_day: The %{day} %{day_of_week} of every %{month} month
+      monthly_options: Asetukset kuukausittain toistuville toimenpiteille
+      no_end_date: Ei päättymispäivää
       pattern:
+        day_names:
+        - sunnuntai
+        - maanantai
+        - tiistai
+        - keskiviikko
+        - torstai
+        - perjantai
+        - lauantai
+        due: due
+        every_day: joka päivä
+        every_month: every month
+        every_n: joka %{n}
+        every_n_days: joka %{n} päivä
+        every_n_months: joka %{n} kuukausi
+        every_xth_day_of_every_n_months: every %{x} %{day} of every %{n_months}
+        every_year_on: every year on %{date}
+        first: ensimmäinen
+        fourth: fourth
+        from: from
+        last: last
         month_names:
-        -
+        - 
         - Tammikuu
         - Helmikuu
         - Maaliskuu
@@ -633,405 +935,103 @@ fi:
         - Lokakuu
         - Marraskuu
         - Joulukuu
-        third: kolmas
-        every_n: joka %{n}
-        every_n_days: joka %{n} päivä
-        every_n_months: joka %{n} kuukausi
-        every_day: joka päivä
         on_day_n: on day %{n}
-        second: sekunti
-        every_xth_day_of_every_n_months: every %{x} %{day} of every %{n_months}
-        from: from
-        weekly: viikottain
-        last: last
-        the_xth_day_of_month: the %{x} %{day} of %{month}
-        times: for %{number} times
         on_work_days: työpäivinä
-        first: ensimmäinen
-        every_year_on: every year on %{date}
-        day_names:
-        - sunnuntai
-        - maanantai
-        - tiistai
-        - keskiviikko
-        - torstai
-        - perjantai
-        - lauantai
+        second: sekunti
         show: show
-        fourth: fourth
-        due: due
+        the_xth_day_of_month: the %{x} %{day} of %{month}
+        third: kolmas
+        times: for %{number} times
         until: until
-        every_month: every month
-      daily: Päivittäin
-      yearly_every_x_day: Joka %{month} %{day}
+        weekly: viikottain
       recurrence_on:
-        options: Käytä laskettua päivää
         due_date: toimenpiteen määräpäivän asettamiseen
-        show_options: Näytä toimenpide
-        show_always: aina
-        show_days_before: "vasta %{days} päivä(ä) ennen määräpäivää"
         from_tickler: toimenpiteen näyttämispäivän asettamiseen (älä aseta määräpäivää)
-      daily_every_number_day: Joka %{number} päivä
+        options: Käytä laskettua päivää
+        show_always: aina
+        show_days_before: vasta %{days} päivä(ä) ennen määräpäivää
+        show_options: Näytä toimenpide
+      starts_on: Alkaa
+      weekly: Viikottain
       weekly_every_number_week: Returns every %{number} week on
-      ends_on: Päättyy
-      no_end_date: Ei päättymispäivää
-      day_x_on_every_x_month: Day %{day} on every %{month} month
-      yearly_options: Settings for yearly recurring actions
-      yearly_every_xth_day: The %{day} %{day_of_week} of %{month}
-      monthly_every_xth_day: The %{day} %{day_of_week} of every %{month} month
+      weekly_options: Asetukset viikottain toistuville toimenpiteille
       yearly: Vuosittain
-    added_dependency: Added %{dependency} as dependency.
-    all_completed_tagged_page_title: TRACKS::All completed tasks with tag %{tag_name}
+      yearly_every_x_day: Joka %{month} %{day}
+      yearly_every_xth_day: The %{day} %{day_of_week} of %{month}
+      yearly_options: Settings for yearly recurring actions
     recurrence_completed: There is no next action after the recurring action you just finished. The recurrence is completed
-    error_toggle_complete: Could not mark this todo complete
-    in_pending_state: in pending state
-    due: Due
-    action_marked_complete_error: "The action <strong>'%{description}'</strong> was NOT marked as <strong>%{completed} due to an error on the server.</strong>"
-    depends_on_separate_with_commas: Depends on (separate with commas)
-    action_saved_to_tickler: Action saved to tickler
+    recurrence_period: Toistuvuusjakso
+    recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
     recurring_action_saved: Recurring action saved
-    completed_in_archive:
-      one: There is a completed action in the archive.
-      other: There are %{count} completed actions in the archive.
-    to_tickler: to tickler
-    next_actions_description_additions:
-      completed: in the last %{count} days
-      due_date: with a due date %{due_date} or earlier
-    overdue: Overdue
-    add_new_recurring: Lisää uusi toistuva toimenpide
-    edit_recurring_todo: Muokkaa toistuvaa toimenpidettä
+    recurring_actions_title: TRACKS::Recurring Actions
+    recurring_deleted_success: The recurring action was deleted successfully.
+    recurring_pattern_removed: The recurrence pattern is removed from %{count}
+    recurring_todos: Toistuvat toimenpiteet
+    remove_dependency: Remove dependency (does not delete the action)
+    removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
+    scheduled_overdue: Scheduled to show %{days} days ago
     see_all_completed: You can see all completed actions %{link}
-    all_completed_here: here
-    completed_recurring_actions_title: 'TRACKS::Completed recurring actions'
-  contexts:
-    delete_context_title: Poista asiayhteys
-    all_completed_tasks_title: "TRACKS::All Completed actions in the context '%{context_name}'"
-    hide_form: Piilota lomake
-    show_form_title: Lisää asiayhteys
-    delete_context_confirmation: "Are you sure that you want to delete the context '%{name}'? Be aware that this will also delete all (recurring) actions in this context!"
-    delete_context: Poista asiayhteys
-    edit_context: Muokkaa asiayhteyttä
-    hide_form_title: Piilota asiayhteyden lisäyslomake
-    context_hide: Piilota etusivulta?
-    context_state: Asiayhteyden tila
-    hidden_contexts: Piilotetut asiayhteydet
-    no_contexts_active: Currently there are no active contexts
-    no_contexts_closed: Currently there are no closed contexts
-    show_form: Luo uusi asiayhteys
-    visible_contexts: Näkyvät asiayhteydet
-    save_status_message: Asiayhteys tallennettu
-    add_context: Lisää asiayhteys
-    context_name: Asiayhteyden nimi
-    update_status_message: Name of context was changed
-    completed_tasks_title: "TRACKS::Completed actions in the context '%{context_name}'"
-    new_context_post: "' will be also created. Are you sure?"
-    status_active: Context is active
-    last_completed_in_context: "(last %{number})"
-    context_deleted: "Deleted context '%{name}'"
-    no_contexts_hidden: Currently there are no hidden contexts
-    new_context_pre: New context '
-    status_hidden: Context is hidden
-    todos_append: in this context
-  projects:
-    was_marked_hidden: has been marked as hidden
-    edit_project_title: Edit project
-    default_tags_removed_notice: Removed the default tags
-    default_context_set: Set project's default context to %{default_context}
-    all_completed_tasks_title: "TRACKS::List All Completed Actions in Project '%{project_name}'"
-    hide_form: Piilota lomake
-    page_title: "TRACKS::Project: %{project}"
-    show_form_title: Create a new project
-    list_completed_projects: TRACKS::List Completed Projects
-    to_new_project_page: Take me to the new project page
-    no_notes_attached: Currently there are no notes attached to this project
-    this_project: This project
-    project_state: Project is %{state}.
-    last_completed_in_project: (last %{number})
-    no_last_completed_projects: Valmiita projekteja ei löytynyt
-    notes: Notes
-    no_last_completed_recurring_todos: Valmiita toistuvia toimenpiteitä ei löytynyt
-    notes_empty: There are no notes for this project
-    no_projects: Currently there are no projects
-    hide_form_title: Hide new project form
-    with_no_default_context: with no default context
-    delete_project: Delete project
-    show_form: Add a project
-    actions_in_project_title: Actions in this project
-    delete_project_confirmation: "Are you sure that you want to delete the project '%{name}'?"
-    with_default_context: "with a default context of '%{context_name}'"
-    set_default_tags_notice: Set project's default tags to %{default_tags}
-    is_active: is active
-    settings: Settings
-    completed_projects: Completed projects
-    with_default_tags: "and with '%{tags}' as the default tags"
-    list_projects: TRACKS::List Projects
-    list_reviews: TRACKS::Review
-    project_saved_status: Project saved
-    project_destroyed_status: "Deleted project '%{name}'"
-    add_project: Add Project
-    add_note: Add a note
-    completed_tasks_title: "TRACKS::List Completed Actions in Project '%{project_name}'"
-    delete_project_title: Delete the project
-    hidden_projects: Hidden projects
-    add_note_submit: Add note
-    was_marked_complete: has been marked as completed
-    default_context_removed: Removed default context
-    default_context: The default context for this project is %{context}
-    status_project_name_changed: Name of project was changed
-    active_projects: Active projects
-    no_default_context: This project does not have a default context
-    with_no_default_tags: and with no default tags
-    edit_project_settings: Muokkaa projektin asetuksia
-    state: Tämä projekti on %{state}
-  notes:
-    delete_confirmation: "Oletko varma, että haluat poistaa muistiinpanon '%{id}'?"
-    delete_item_title: Poista
-    delete_note_title: "Poista muistiinpano '%{id}'"
-    note_link_title: Show note %{id}
-    show_note_title: Show note
-    deleted_note: "Muistiinpano '%{id}' poistettu"
-    edit_item_title: Muokkaa
-    note_location_link: "Kuuluu:"
-    no_notes_available: "Muistiinpanoja ei löytynyt. Voit lisätä niitä projekteihin projektisivulta."
-    note_header: Muistiinpano %{id}
-    delete_note_confirm: "Oletko varma että haluat poistaa muistiinpanon '%{id}'?"
-    in_project: "Kuuluu: "
-    save_status_message: "Muistiinpano %{id} tallennettu"
-  integrations:
-    opensearch_description: Search in Tracks
-  preferences:
-    open_id_url: Your OpenID URL is
-    staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
-    change_identity_url: Change Your Identity URL
-    change_password: Muuta salasanasi
-    password_changed: Salasanasi on muutettu, kirjaudu uudelleen sisään.
-    updated: Asetukset päivitetty
-    page_title: TRACKS::Asetukset
-    title: Asetuksesi
-    token_description: Avainkoodi (syötteiden ja rajapinnan käyttämiseen)
-    is_false: "false"
-    show_number_completed: Näytä %{number} valmista toimenpidettä
-    page_title_edit: TRACKS::Muokkaa asetuksia
-    is_true: "true"
-    edit_preferences: Muokkaa asetuksia
-    sms_context_none: Ei mikään
-    generate_new_token: Luo uusi avainkoodi
-    token_header: Avainkoodisi
-    authentication_header: Your authentication
-    current_authentication_type: Your authentication type is %{auth_type}
-    change_authentication_type: Change your authentication type
-    tabs:
-      authentication: Authentication
-      tracks_behavior: Tracks behavior
-      profile: Profile
-      date_and_time: Date and time
-    generate_new_token_confirm: Are you sure? Generating a new token will replace the existing one and break any external usages of this token.
-  data:
-    import_successful: Tuonti onnistui
-    import_errors: Some errors occurred during import
-    import_destination_invalid: Invalid import destination
-  stats:
-    index_title: TRACKS::Tilastot
-    within_one: Within 1
-    tag_cloud_title: Tag cloud for all actions
-    tag_cloud_description: This tag cloud includes tags of all actions (completed, not completed, visible and/or hidden)
-    tag_cloud_90days_title: Tag cloud actions in past 90 days
-    actions: Actions
-    totals_active_project_count: Of those %{count} are active projects
-    actions_last_year_legend:
-      number_of_actions: Number of actions
-      months_ago: Months ago
-    totals_first_action: Since your first action on %{date}
-    actions_avg_completion_time: Of all your completed actions, the average time to complete is %{count} days.
-    top10_longrunning: Top 10 longest running projects
-    actions_dow_30days_title: Day of week (past 30 days)
-    legend:
-      actions: Actions
-      number_of_days: Number of days ago
-      number_of_actions: Number of actions
-      day_of_week: Day of week
-      percentage: Percentage
-      running_time: Running time of an action (weeks)
-      months_ago: Months ago
-    current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
-    open_per_week: Active (visible and hidden) next actions per week
-    open_per_week_legend:
-      actions: Actions
-      weeks: Weeks ago
-    totals_deferred_actions: "of which %{count} are deferred actions in the tickler"
-    running_time_legend:
-      actions: Actions
-      percentage: Percentage
-      weeks: Running time of an action (weeks). Click on a bar for more info
-    totals_action_count: you have a total of %{count} actions
-    totals_incomplete_actions: You have %{count} incomplete actions
-    totals_unique_tags: Of those tags, %{count} are unique.
-    actions_avg_completed_30days: and completed an average of %{count} actions per day.
-    top5_contexts: Top 5 contexts
-    actions_lastyear_title: Actions in the last 12 months
-    totals_actions_completed: "%{count} of these are completed."
-    totals_context_count: You have %{count} contexts.
-    totals_visible_context_count: Of those %{count} are visible contexts
-    totals_blocked_actions: "%{count} are dependent on the completion of their actions."
-    projects: Projects
-    action_completion_time_title: Completion time (all completed actions)
-    actions_last_year: Actions in the last years
-    actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
-    tags: Tags
-    actions_min_completion_time: The minimum time to complete is %{time}.
-    no_tags_available: no tags available
-    actions_day_of_week_title: Day of week (all actions)
-    totals_project_count: You have %{count} projects.
-    running_time_all: Current running time of all incomplete actions
-    actions_30days_title: Actions in the last 30 days
-    time_of_day: Time of day (all actions)
-    totals_hidden_project_count: "%{count} are hidden"
-    tod30: Time of day (last 30 days)
-    tag_cloud_90days_description: This tag cloud includes tags of actions that were created or completed in the past 90 days.
-    more_stats_will_appear: More statistics will appear here once you have added some actions.
-    top5_visible_contexts_with_incomplete_actions: Top 5 visible contexts with incomplete actions
-    actions_further: " and further"
-    totals_tag_count: You have %{count} tags placed on actions.
-    top10_projects_30days: Top 10 project in past 30 days
-    spread_of_running_actions_for_visible_contexts: Spread of running actions for visible contexts
-    actions_selected_from_week: "Actions selected from week "
-    spread_of_actions_for_all_context: Spread of actions for all contexts
-    click_to_show_actions_from_week: Click %{link} to show the actions from week %{week} and further.
-    other_actions_label: (others)
-    top10_projects: Top 10 projects
-    totals_completed_project_count: and %{count} are completed projects.
-    actions_avg_created: In the last 12 months you created on average %{count} actions
-    click_to_return: Click %{link} to return to the statistics page.
-    actions_avg_completed: and completed an average of %{count} actions per month.
-    totals: Totals
-    time_of_day_legend:
-      number_of_actions: Number of actions
-      time_of_day: Time of day
-    contexts: Contexts
-    click_to_return_link: here
-    totals_hidden_context_count: and %{count} are hidden contexts.
-    labels:
-      month_avg_completed: "%{months} Month avg completed"
-      completed: Completed
-      month_avg_created: "%{months} Month avg created"
-      avg_created: Avg created
-      avg_completed: Avg completed
-      created: Created
-    running_time_all_legend:
-      actions: Actions
-      percentage: Percentage
-      running_time: Running time of an action (weeks). Click on a bar for more info
-    click_to_update_actions: Click on a bar in the chart to update the actions below.
-    no_actions_selected: There are no actions selected.
-    actions_actions_avg_created_30days: In the last 30 days you created on average %{count} actions
-    actions_dow_30days_legend:
-      number_of_actions: Number of actions
-      day_of_week: Day of the week
-    actions_day_of_week_legend:
-      number_of_actions: Number of actions
-      day_of_week: Day of the week
-    tod30_legend:
-      number_of_actions: Number of actions
-      time_of_day: Time of day
-    action_selection_title: TRACKS::Action selection
+    set_to_pending: "%{task} set to pending"
+    show_from: Show from
+    show_in_days: Näytetään %{days} päivän kuluttua
+    show_on_date: Show on %{date}
+    show_today: Show Today
+    show_tomorrow: Show Tomorrow
+    star_action: Merkitse toimenpide tähdellä
+    star_action_with_description: star the action '%{description}'
+    tagged_page_title: TRACKS::Tagged with '%{tag_name}'
+    tagged_with: tagged with '%{tag_name}'
+    tags: Tags (separate with commas)
+    task_list_title: TRACKS::List tasks
+    tickler_items_due:
+      one: One tickler item is now due - refresh the page to see it.
+      other: "%{count} tickler items are now due - refresh the page to see them."
+    to_tickler: to tickler
+    unable_to_add_dependency: Unable to add dependency
+    unresolved_dependency: The value you entered in the dependency field did not resolve to an existing action. This value will not be saved with the rest of the action. Continue?
+    was_due_on_date: was due on %{date}
   users:
-    successfully_deleted_user: Successfully deleted user %{username}
-    failed_to_delete_user: Failed to delete user %{username}
-    total_contexts: Total contexts
-    first_user_heading: "Welcome to TRACKS. To get started, please create an admin account:"
-    openid_url_verified: You have successfully verified %{url} as your identity and set your authentication type to OpenID.
-    auth_type_update_error: "There was a problem updating your authentication type: %{error_messages}"
-    destroy_successful: User %{login} was successfully destroyed
-    new_token_generated: New token successfully generated
-    total_projects: Total projects
-    signup_successful: Signup successful for user %{username}.
-    change_password_submit: Change password
-    no_signups_title: TRACKS::Ei rekisteröitymisiä
-    user_created: User created.
-    manage_users: Manage users
     account_signup: Account signup
-    password_updated: Password updated.
-    desired_login: Desired login
-    signup: Signup
-    confirm_password: Confirm password
-    new_user_heading: "Sign up a new user:"
-    auth_type_updated: Authentication type updated.
-    total_actions: Total actions
-    change_password_title: TRACKS::Change password
-    change_auth_type_title: TRACKS::Change authentication type
-    change_password_prompt: Enter your new password in the fields below and click 'Change password' to replace your current password with your new one.
-    password_confirmation_label: Confirm password
-    destroy_error: There was an error deleting the user %{login}
-    choose_password: Choose password
-    register_with_cas: With your CAS username
-    label_auth_type: Authentication type
-    new_password_label: New password
-    you_have_to_reset_your_password: "You have to reset your password"
-    first_user_title: TRACKS::Sign up as the admin user
-    new_user_title: TRACKS::Sign up
-    destroy_user: Destroy user
-    total_users_count: You have a total of %{count} users
-    destroy_confirmation: "Warning: this will delete user '%{login}', all their actions, contexts, project and notes. Are you sure that you want to continue?"
-    signup_new_user: Sign up new user
-    openid_ok_pref_failed: You have successfully verified %{url} as your identity but there was a problem saving your authentication preferences.
-    identity_url: Identity URL
     auth_change_submit: Change authentication type
+    auth_type_update_error: 'There was a problem updating your authentication type: %{error_messages}'
+    auth_type_updated: Authentication type updated.
+    change_auth_type_title: TRACKS::Change authentication type
     change_authentication_type: Change authentication type
-    total_notes: Total notes
+    change_password_prompt: Enter your new password in the fields below and click 'Change password' to replace your current password with your new one.
+    change_password_submit: Change password
+    change_password_title: TRACKS::Change password
+    choose_password: Choose password
+    confirm_password: Confirm password
+    desired_login: Desired login
+    destroy_confirmation: 'Warning: this will delete user ''%{login}'', all their actions, contexts, project and notes. Are you sure that you want to continue?'
+    destroy_error: There was an error deleting the user %{login}
+    destroy_successful: User %{login} was successfully destroyed
+    destroy_user: Destroy user
+    failed_to_delete_user: Failed to delete user %{username}
+    first_user_heading: 'Welcome to TRACKS. To get started, please create an admin account:'
+    first_user_title: TRACKS::Sign up as the admin user
+    identity_url: Identity URL
+    label_auth_type: Authentication type
+    manage_users: Manage users
+    new_password_label: New password
+    new_token_generated: New token successfully generated
+    new_user_heading: 'Sign up a new user:'
+    new_user_title: TRACKS::Sign up
+    no_signups_title: TRACKS::Ei rekisteröitymisiä
+    openid_ok_pref_failed: You have successfully verified %{url} as your identity but there was a problem saving your authentication preferences.
+    openid_url_verified: You have successfully verified %{url} as your identity and set your authentication type to OpenID.
+    password_confirmation_label: Confirm password
+    password_updated: Password updated.
+    register_with_cas: With your CAS username
     select_authentication_type: Select your new authentication type and click 'Change authentication type' to replace your current settings.
-  feedlist:
-    choose_context: Choose the context you want a feed of
-    actions_due_today: Actions due today or earlier
-    rss_feed: RSS Feed
-    ical_feed: iCal feed
-    all_contexts: All Contexts
-    legend: "Legend:"
-    all_projects: All Projects
-    choose_project: Choose the project you want a feed of
-    select_feed_for_project: Select the feed for this project
-    active_projects_wo_next: Active projects with no next actions
-    project_needed: There needs to be at least one project before you can request a feed
-    active_starred_actions: All starred, active actions
-    select_feed_for_context: Select the feed for this context
-    projects_and_actions: Active projects with their actions
-    context_needed: There needs to be at least one context before you can request a feed
-    actions_due_next_week: Actions due in 7 days or earlier
-    notice_incomplete_only: "Note: All feeds show only actions that have not been marked as done, unless stated otherwise. These iCal feeds can be added to todo lists. If you want to show due todos in a calendar, use the iCal feed on the calendar page"
-    all_actions: All actions
-    actions_completed_last_week: Actions completed in the last 7 days
-    context_centric_actions: Feeds for incomplete actions in a specific context
-    plain_text_feed: Plain Text Feed
-    last_fixed_number: Last %{number} actions
-    project_centric: Feeds for incomplete actions in a specific project
-  login:
-    login_cas: go to the CAS
-    sign_in: Sign in
-    openid_identity_url_not_found: "Sorry, no user by that identity URL exists (%{identity_url})"
-    user_no_expiry: Stay logged in
-    cas_no_user_found: "Hello, %{username}! You do not have an account on Tracks."
-    cas_login: CAS Login
-    successful_with_session_info: "Login successful:"
-    please_login: Please log in to use Tracks
-    cas_logged_in_greeting: "Hello, %{username}! You are authenticated."
-    cas_username_not_found: "Sorry, no user by that CAS username exists (%{username})"
-    mobile_use_openid: "…or login with an OpenID"
-    cas_create_account: If you like to request on please go here to %{signup_link}
-    account_login: Account login
-    cas_signup_link: Request account
-    session_will_not_expire: session will not expire.
-    successful: Logged in successfully. Welcome back!
-    option_separator: or,
-    session_time_out: Session has timed out. Please %{link}
-    session_will_expire: "session will expire after %{hours} hour(s) of inactivity."
-    login_standard: go back to the standard login
-    logged_out: You have been logged out of Tracks.
-    login_with_openid: login with an OpenID
-    unsuccessful: Login unsuccessful.
-    log_in_again: log in again.
-  search:
-    contexts_matching_query: Contexts matching query
-    tags_matching_query: Tags matching query
-    notes_matching_query: Notes matching query
-    no_results: Your search yielded no results.
-    todos_matching_query: Todos matching query
-    projects_matching_query: Projects matching query
+    signup: Signup
+    signup_new_user: Sign up new user
+    signup_successful: Signup successful for user %{username}.
+    successfully_deleted_user: Successfully deleted user %{username}
+    total_actions: Total actions
+    total_contexts: Total contexts
+    total_notes: Total notes
+    total_projects: Total projects
+    total_users_count: You have a total of %{count} users
+    user_created: User created.
+    you_have_to_reset_your_password: You have to reset your password

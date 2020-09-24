@@ -59,6 +59,8 @@ group :development do
   gem "bullet"
   gem "rack-mini-profiler"
   gem "solargraph"
+
+  gem 'i18n-tasks', '~> 0.9.31'
 end
 
 group :development, :test do
