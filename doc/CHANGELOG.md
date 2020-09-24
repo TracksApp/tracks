@@ -1,6 +1,27 @@
-## Version 2.5.0
-
 See doc/upgrading.md for the upgrade documentation!
+
+## Version 2.5.1
+
+### Security issue disclosure
+
+Joe Thorpe from Secarma disclosed an XSS issue that was inadvertently
+fixed in 2.5.0 by another bug fix. Tracks previously rendered XSS content
+in the user's own data. The content is only shown to the user themself,
+which mitigates the vulnerability in the normal use case where a single
+user account is only used by one person. The CVSS rating for self-XSS is
+debatable and thus is not published for this issue.
+
+I want to thank Joe for reporting the issue and for the insightful discussion
+regarding the issue. Thanks to the disclosure there is now also a written
+security policy for the project.
+
+### Bug fixes
+
+* Editing a due date in the calendar view fixed
+* Adding actions in the context view fixed
+* Fixed the recurring todo UI
+
+## Version 2.5.0
 
 ### New features
 * Updated documentation both in the doc directory and online.
