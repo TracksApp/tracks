@@ -1,7 +1,7 @@
 module Stats
   class Projects
-
     attr_reader :user
+
     def initialize(user)
       @user = user
     end
@@ -24,6 +24,5 @@ module Stats
       projects = user.projects.order('created_at ASC')
       projects.sort_by{ |p| p.running_time }.reverse.take(10)
     end
-
   end
 end

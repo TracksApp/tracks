@@ -1,5 +1,4 @@
 class NotesController < ApplicationController
-
   before_action :set_source_view
 
   def index
@@ -9,7 +8,7 @@ class NotesController < ApplicationController
     @source_view = 'note_list'
     respond_to do |format|
       format.html
-      format.xml { render :xml => @all_notes.to_xml(:root => :notes, :except => :user_id )  }
+      format.xml { render :xml => @all_notes.to_xml(:root => :notes, :except => :user_id)  }
     end
   end
 
@@ -75,5 +74,4 @@ class NotesController < ApplicationController
   def note_params
     params.require(:note).permit(:project_id, :body)
   end
-
 end

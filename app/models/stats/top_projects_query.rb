@@ -3,8 +3,8 @@
 # or completed since that cutoff will be included.
 module Stats
   class TopProjectsQuery
-
     attr_reader :user, :cutoff
+
     def initialize(user, cutoff = nil)
       @user = user
       @cutoff = cutoff
@@ -34,6 +34,5 @@ module Stats
       query << "ORDER BY count DESC "
       query << "LIMIT 10"
     end
-
   end
 end

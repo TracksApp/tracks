@@ -15,8 +15,8 @@ module Todos
       end
 
       not_done_todos = not_done_todos.
-        reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")).
-        includes(Todo::DEFAULT_INCLUDES)
+        reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
+        .includes(Todo::DEFAULT_INCLUDES)
 
       not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]
 

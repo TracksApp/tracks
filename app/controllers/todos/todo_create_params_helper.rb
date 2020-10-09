@@ -1,6 +1,5 @@
 module Todos
   class TodoCreateParamsHelper
-
     attr_reader :new_project_created, :new_context_created, :attributes
 
     def initialize(params, user)
@@ -85,7 +84,7 @@ module Todos
     end
 
     def sequential?
-      return @params[:todos_sequential].present? && @params[:todos_sequential]=='true'
+      return @params[:todos_sequential].present? && @params[:todos_sequential] == 'true'
     end
 
     def specified_by_name?(group_type)
@@ -110,7 +109,7 @@ module Todos
     end
 
     def add_errors(model)
-      @errors.each {|e| model.errors.add(e[:attribute], e[:message]) }
+      @errors.each { |e| model.errors.add(e[:attribute], e[:message]) }
     end
 
     private
@@ -124,7 +123,7 @@ module Todos
 
       # accept empty :todo hash
       if params[:todo].empty?
-        params[:todo] = {:ignore => true}
+        params[:todo] = { :ignore => true }
       end
 
       filtered = params.require(:todo).permit(
@@ -136,7 +135,7 @@ module Todos
         :project => [:name])
 
       # add back :predecessor_dependencies
-      filtered[:predecessor_dependencies] = {:predecessor => deps } unless deps.nil?
+      filtered[:predecessor_dependencies] = { :predecessor => deps } unless deps.nil?
       filtered
     end
 
@@ -157,9 +156,8 @@ module Todos
       # be aware, this will replace the project_id/context_id (string) in @attributes with the new found id (int)
       @attributes["#{group_type}_id"] = set.find(id).id
       return false
-    rescue
-      @errors << { :attribute => group_type, :message => "unknown"}
+      rescue
+        @errors << { :attribute => group_type, :message => "unknown" }
     end
-
   end
 end

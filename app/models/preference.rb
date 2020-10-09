@@ -3,11 +3,11 @@ class Preference < ApplicationRecord
   belongs_to :sms_context, :class_name => 'Context'
 
   def self.themes
-    { :black => 'black', :light_blue => 'light_blue'}
+    { :black => 'black', :light_blue => 'light_blue' }
   end
 
   def self.due_styles
-    { :due_in_n_days => 0, :due_on => 1}
+    { :due_in_n_days => 0, :due_on => 1 }
   end
 
   def hide_completed_actions?
@@ -29,8 +29,7 @@ class Preference < ApplicationRecord
     date.in_time_zone(time_zone).beginning_of_day
   end
 
-  def format_date (date)
+  def format_date(date)
     return date ? date.in_time_zone(time_zone).strftime("#{date_format}") : ''
   end
-
 end

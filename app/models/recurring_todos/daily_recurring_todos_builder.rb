@@ -1,5 +1,4 @@
 module RecurringTodos
-
   class DailyRecurringTodosBuilder < AbstractRecurringTodosBuilder
     attr_reader :recurring_todo, :pattern
 
@@ -19,7 +18,7 @@ module RecurringTodos
 
     def only_work_days?(daily_selector)
       { 'daily_every_x_day' => false,
-        'daily_every_work_day' => true}[daily_selector]
+        'daily_every_work_day' => true }[daily_selector]
     end
 
     def selector_key
@@ -29,7 +28,5 @@ module RecurringTodos
     def valid_selector?(selector)
       %w{daily_every_x_day daily_every_work_day}.include?(selector)
     end
-
   end
-
 end

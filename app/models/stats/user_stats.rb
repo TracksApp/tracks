@@ -1,7 +1,7 @@
 module Stats
   class UserStats
-
     attr_reader :user
+
     def initialize(user)
       @user = user
     end
@@ -38,6 +38,5 @@ module Stats
       end
       @tag_cloud_90days
     end
-
   end
 end

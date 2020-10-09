@@ -72,5 +72,4 @@ class RichMessageExtractor
   def fix_date_string yymmdd
     "20#{yymmdd[0..1]}-#{yymmdd[2..3]}-#{yymmdd[4..5]} 00:00"
   end
-
 end

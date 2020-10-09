@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class DailyRecurrencePattern < AbstractRecurrencePattern
-
     def initialize(user)
       super user
     end
@@ -44,9 +42,8 @@ module RecurringTodos
       else
         # if there was no previous todo, do not add n: the first todo starts on
         # today or on start_from
-        return previous == nil ? start : start+every_x_days.day-1.day
+        return previous == nil ? start : start + every_x_days.day - 1.day
       end
     end
-
   end
 end

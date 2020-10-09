@@ -14,13 +14,13 @@ class CalendarController < ApplicationController
     respond_to do |format|
       format.html
       format.m {
-        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
       }
       format.ics   {
         render :action => 'show', :layout => false, :content_type => Mime[:ics]
       }
       format.xml {
-        render :xml => @due_all.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
+        render :xml => @due_all.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
       }
     end
   end

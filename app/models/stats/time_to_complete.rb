@@ -1,9 +1,9 @@
 module Stats
   class TimeToComplete
-
-    SECONDS_PER_DAY = 86400;
+    SECONDS_PER_DAY = 86_400
 
     attr_reader :actions
+
     def initialize(actions)
       @actions = actions
     end
@@ -52,12 +52,11 @@ module Stats
     end
 
     def sum
-      @sum ||= durations.inject(0) {|sum, d| sum + d}
+      @sum ||= durations.inject(0) { |sum, d| sum + d }
     end
 
     def arbitrary_day
       @arbitrary_day ||= Time.utc(2000, 1, 1, 0, 0)
     end
-
   end
 end

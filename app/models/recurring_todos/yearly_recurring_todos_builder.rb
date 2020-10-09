@@ -1,5 +1,4 @@
 module RecurringTodos
-
   class YearlyRecurringTodosBuilder < AbstractRecurringTodosBuilder
     attr_reader :recurring_todo
 
@@ -39,7 +38,5 @@ module RecurringTodos
     def get_every_other2
       { 0 => :yearly_month_of_year, 1 => :yearly_month_of_year2 }[get_recurrence_selector]
     end
-
   end
-
 end

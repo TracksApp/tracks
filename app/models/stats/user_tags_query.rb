@@ -1,7 +1,7 @@
 module Stats
   class UserTagsQuery
-
     attr_reader :user
+
     def initialize(user)
       @user = user
     end
@@ -21,6 +21,5 @@ module Stats
         AND todos.user_id = ?
       SQL
     end
-
   end
 end

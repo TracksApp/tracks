@@ -1,5 +1,4 @@
 class Tag < ApplicationRecord
-
   has_many :taggings
   has_many :taggable, :through => :taggings
 
@@ -29,5 +28,4 @@ class Tag < ApplicationRecord
   def to_s
     name
   end
-
 end

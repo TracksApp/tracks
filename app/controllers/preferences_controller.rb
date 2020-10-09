@@ -1,5 +1,4 @@
 class PreferencesController < ApplicationController
-
   def index
     @page_title = t('preferences.page_title')
     @prefs = current_user.prefs
@@ -31,7 +30,7 @@ class PreferencesController < ApplicationController
     render :body => l(Date.current, :format => format)
   end
 
-private
+  private
 
   def prefs_params
     params.require(:prefs).permit(
@@ -52,5 +51,4 @@ private
     notify :notice, t('preferences.updated')
     redirect_to :action => 'index'
   end
-
 end

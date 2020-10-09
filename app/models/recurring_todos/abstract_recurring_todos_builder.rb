@@ -1,20 +1,18 @@
 module RecurringTodos
-
   class AbstractRecurringTodosBuilder
-
     attr_reader :mapped_attributes, :pattern
 
     def initialize(user, attributes, pattern_class)
       @user  = user
       @saved = false
 
-      @attributes           = attributes
-      @selector             = get_selector(selector_key)
-      @filterred_attributes = filter_attributes(@attributes)
-      @mapped_attributes    = map_attributes(@filterred_attributes)
+      @attributes          = attributes
+      @selector            = get_selector(selector_key)
+      @filtered_attributes = filter_attributes(@attributes)
+      @mapped_attributes   = map_attributes(@filtered_attributes)
 
-      @pattern              = pattern_class.new(user)
-      @pattern.attributes   = @mapped_attributes
+      @pattern             = pattern_class.new(user)
+      @pattern.attributes  = @mapped_attributes
     end
 
     # build does not add tags. For tags, the recurring todos needs to be saved
@@ -60,36 +58,36 @@ module RecurringTodos
 
     def filter_attributes(attributes)
       # get pattern independend attributes
-      filterred_attributes = filter_generic_attributes(attributes)
+      filtered_attributes = filter_generic_attributes(attributes)
       # append pattern specific attributes
-      attributes_to_filter.each{|key| filterred_attributes[key]= attributes[key] if attributes.key?(key)}
+      attributes_to_filter.each{ |key| filtered_attributes[key]= attributes[key] if attributes.key?(key) }
 
-      filterred_attributes
+      filtered_attributes
     end
 
     def filter_generic_attributes(attributes)
       return Tracks::AttributeHandler.new(@user, {
-        recurring_period:     attributes[:recurring_period],
-        description:          attributes[:description],
-        notes:                attributes[:notes],
-        tag_list:             tag_list_or_empty_string(attributes),
-        start_from:           attributes[:start_from],
-        end_date:             attributes[:end_date],
-        ends_on:              attributes[:ends_on],
+        recurring_period: attributes[:recurring_period],
+        description: attributes[:description],
+        notes: attributes[:notes],
+        tag_list: tag_list_or_empty_string(attributes),
+        start_from: attributes[:start_from],
+        end_date: attributes[:end_date],
+        ends_on: attributes[:ends_on],
         number_of_occurrences: attributes[:number_of_occurrences],
-        project:              attributes[:project],
-        context:              attributes[:context],
-        project_id:           attributes[:project_id],
-        context_id:           attributes[:context_id],
-        target:               attributes[:recurring_target],
-        show_from_delta:      attributes[:recurring_show_days_before],
-        show_always:          attributes[:recurring_show_always]
+        project: attributes[:project],
+        context: attributes[:context],
+        project_id: attributes[:project_id],
+        context_id: attributes[:context_id],
+        target: attributes[:recurring_target],
+        show_from_delta: attributes[:recurring_show_days_before],
+        show_always: attributes[:recurring_show_always]
       })
     end
 
     def map_attributes
       # should be overwritten by subclasses to map attributes to activerecord model attributes
-      @filterred_attributes
+      @filtered_attributes
     end
 
     # helper method to be used in mapped_attributes in subclasses
@@ -129,7 +127,7 @@ module RecurringTodos
     end
 
     def save_tags
-      @recurring_todo.tag_with(@filterred_attributes[:tag_list]) if @filterred_attributes[:tag_list].present?
+      @recurring_todo.tag_with(@filtered_attributes[:tag_list]) if @filtered_attributes[:tag_list].present?
       @recurring_todo.reload
     end
 
@@ -145,7 +143,5 @@ module RecurringTodos
       # avoid nil
       attributes[:tag_list].blank? ? "" : attributes[:tag_list].strip
     end
-
   end
-
 end

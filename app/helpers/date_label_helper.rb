@@ -1,5 +1,4 @@
 module DateLabelHelper
-
   class GenericDateView
     include ActionView::Context
     include ActionView::Helpers
@@ -66,11 +65,9 @@ module DateLabelHelper
         yield
       }
     end
-
   end
 
   class DueDateView < GenericDateView
-
     def due_text
       case @days_sym
       when :overdue_by_one
@@ -100,11 +97,9 @@ module DateLabelHelper
     def due_date_mobile_html
       date_mobile_html_wrapper { @prefs.format_date(@due) }
     end
-
   end
 
   class ShowFromDateView < GenericDateView
-
     def show_from_text
       case @days_sym
       when :overdue_by_more_than_one, :overdue_by_one
@@ -127,7 +122,5 @@ module DateLabelHelper
     def show_from_date_html
       date_html_wrapper { show_from_text }
     end
-
   end
-
 end

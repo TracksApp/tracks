@@ -60,7 +60,6 @@ class ApplicationController < ActionController::Base
   # Returns a count of next actions in the given context or project The result
   # is count and a string descriptor, correctly pluralised if there are no
   # actions or multiple actions
-  #
   def count_undone_todos_phrase(todos_parent)
     count = count_undone_todos(todos_parent)
     deferred_count = count_deferred_todos(todos_parent)
@@ -83,13 +82,13 @@ class ApplicationController < ActionController::Base
       init_hidden_todo_counts(['context']) if !@context_hidden_todo_counts
       count = @context_hidden_todo_counts[todos_parent.id]
     else
-      count = eval "@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]"
+      count = eval("@#{todos_parent.class.to_s.downcase}_not_done_counts[#{todos_parent.id}]", binding, __FILE__, __LINE__)
     end
     count || 0
   end
 
   def count_deferred_todos(todos_parent)
-    return todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]") || 0
+    return todos_parent.nil? ? 0 : eval("@#{todos_parent.class.to_s.downcase}_deferred_counts[#{todos_parent.id}]", binding, __FILE__, __LINE__) || 0
   end
 
   # Convert a date object to the format specified in the user's preferences in
@@ -101,8 +100,8 @@ class ApplicationController < ActionController::Base
 
   def for_autocomplete(coll, substr)
     if substr # protect agains empty request
-      filtered = coll.find_all{|item| item.name.downcase.include? substr.downcase}
-      json_elems = Array[*filtered.map{ |e| {:id => e.id.to_s, :value => e.name} }].to_json
+      filtered = coll.find_all{ |item| item.name.downcase.include? substr.downcase }
+      json_elems = Array[*filtered.map{ |e| { :id => e.id.to_s, :value => e.name } }].to_json
       return json_elems
     else
       return ""
@@ -110,7 +109,7 @@ class ApplicationController < ActionController::Base
   end
 
   def format_dependencies_as_json_for_auto_complete(entries)
-    json_elems = Array[*entries.map{ |e| {:value => e.id.to_s, :label => e.specification} }].to_json
+    json_elems = Array[*entries.map{ |e| { :value => e.id.to_s, :label => e.specification } }].to_json
     return json_elems
   end
 
@@ -138,7 +137,7 @@ class ApplicationController < ActionController::Base
   end
 
   def handle_unverified_request
-    unless request.format=="application/xml"
+    unless request.format == "application/xml"
       super # handle xml http auth via our own login code
     end
   end
@@ -204,7 +203,7 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def parse_date_per_user_prefs( s )
+  def parse_date_per_user_prefs(s)
     prefs.parse_date(s)
   end
 
@@ -220,16 +219,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def init_not_done_counts(parents = ['project','context'])
+  def init_not_done_counts(parents=['project', 'context'])
     parents.each do |parent|
-      eval("@#{parent}_not_done_counts ||= current_user.todos.active.count_by_group('#{parent}_id')")
-      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.count_by_group('#{parent}_id')")
+      eval("@#{parent}_not_done_counts ||= current_user.todos.active.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
+      eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
     end
   end
 
-  def init_hidden_todo_counts(parents = ['project', 'context'])
+  def init_hidden_todo_counts(parents=['project', 'context'])
     parents.each do |parent|
-      eval("@#{parent}_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')")
+      eval("@#{parent}_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
     end
   end
 
@@ -252,9 +251,9 @@ class ApplicationController < ActionController::Base
 
   def todo_xml_params
     if params[:limit_fields] == 'index'
-      return [:only => [:id, :created_at, :updated_at, :completed_at] ]
+      return [:only => [:id, :created_at, :updated_at, :completed_at]]
     else
-      return [:except => :user_id, :include => [:tags, :predecessors, :successors] ]
+      return [:except => :user_id, :include => [:tags, :predecessors, :successors]]
     end
   end
 
@@ -263,8 +262,8 @@ class ApplicationController < ActionController::Base
     @source_view = "all_done"
     @page_title = t("#{object_name.pluralize}.all_completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
-    @done = object.todos.completed.reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES).
-      paginate(:page => params[:page], :per_page => 20)
+    @done = object.todos.completed.reorder('completed_at DESC').includes(Todo::DEFAULT_INCLUDES)
+      .paginate(:page => params[:page], :per_page => 20)
     @count = @done.size
     render :template => 'todos/all_done'
   end
@@ -284,5 +283,4 @@ class ApplicationController < ActionController::Base
   def set_group_view_by
     @group_view_by = params['_group_view_by'] || cookies['group_view_by'] || 'context'
   end
-
 end

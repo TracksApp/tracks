@@ -28,7 +28,7 @@ class LoginController < ApplicationController
     end
     respond_to do |format|
       format.html
-      format.m   { render :action => 'login', :layout => 'mobile' }
+      format.m { render :action => 'login', :layout => 'mobile' }
     end
   end
 
@@ -44,7 +44,7 @@ class LoginController < ApplicationController
         return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
         time_left = expiry_time - Time.now
-        @session_expired = ( time_left < (10*60) ) # Session will time out before the next check
+        @session_expired = ( time_left < (10 * 60) ) # Session will time out before the next check
       end
     end
     respond_to do |format|
@@ -54,25 +54,25 @@ class LoginController < ApplicationController
 
   private
 
-    def handle_post_success
-      session['user_id'] = @user.id
-      # If checkbox on login page checked, we don't expire the session after 1 hour
-      # of inactivity and we remember this user for future browser sessions
-      session['noexpiry'] = params['user_noexpiry']
-      msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
-      notify :notice, "Login successful: session #{msg}"
-      cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
-      unless should_expire_sessions?
-        @user.remember_me
-        cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
-      end
-      redirect_back_or_home
+  def handle_post_success
+    session['user_id'] = @user.id
+    # If checkbox on login page checked, we don't expire the session after 1 hour
+    # of inactivity and we remember this user for future browser sessions
+    session['noexpiry'] = params['user_noexpiry']
+    msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
+    notify :notice, "Login successful: session #{msg}"
+    cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
+    unless should_expire_sessions?
+      @user.remember_me
+      cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
     end
+    redirect_back_or_home
+  end
 
-    def handle_post_failure
-      @login = params['user_login']
-      notify :warning, t('login.unsuccessful')
-    end
+  def handle_post_failure
+    @login = params['user_login']
+    notify :warning, t('login.unsuccessful')
+  end
 
   def should_expire_sessions?
     session['noexpiry'] != "on"
@@ -82,5 +82,4 @@ class LoginController < ApplicationController
     return Time.now + 10 unless session['expiry_time']
     DateTime.strptime(session['expiry_time'], "%FT%T.%L%Z")
   end
-
 end

@@ -1,5 +1,4 @@
 module ContextsHelper
-
   def show_context_name(context)
     if source_view_is :context
       content_tag(:span, :id => "context_name"){context.name}
@@ -19,5 +18,4 @@ module ContextsHelper
   def context_summary(context, undone_todo_count)
     content_tag(:p, "#{undone_todo_count}. Context is #{context.hidden? ? 'Hidden' : 'Active'}.".html_safe)
   end
-
 end

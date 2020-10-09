@@ -1,5 +1,4 @@
 class TodoFromRichMessage
-
   attr_reader :user, :default_context_id, :description, :notes
 
   def initialize(user, default_context_id, description, notes)
@@ -21,8 +20,9 @@ class TodoFromRichMessage
 
     context_id = default_context_id
     if context.present?
-      found_context = user.contexts.active.where("name like ?", "%#{context}%").first
-      found_context = user.contexts.where("name like ?", "%#{context}%").first if !found_context
+      # TODO: Should this use ILIKE on Postgres?
+      found_context = user.contexts.active.where("name LIKE ?", "%#{context}%").first
+      found_context = user.contexts.where("name LIKE ?", "%#{context}%").first if !found_context
       context_id = found_context.id if found_context
     end
 

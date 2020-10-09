@@ -1,5 +1,4 @@
 module RecurringTodos
-
   class MonthlyRecurringTodosBuilder < AbstractRecurringTodosBuilder
     attr_reader :recurring_todo
 
@@ -26,7 +25,7 @@ module RecurringTodos
     end
 
     def get_recurrence_selector
-      @selector=='monthly_every_x_day' ? 0 : 1
+      @selector == 'monthly_every_x_day' ? 0 : 1
     end
 
     def get_every_other2
@@ -40,7 +39,5 @@ module RecurringTodos
     def valid_selector?(selector)
       %w{monthly_every_x_day monthly_every_xth_day}.include?(selector)
     end
-
   end
-
 end

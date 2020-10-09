@@ -1,9 +1,8 @@
 class UsersController < ApplicationController
-
-  before_action :admin_login_required, :only => [ :index, :show ]
-  before_action :admin_or_self_login_required, :only => [ :destroy ]
-  skip_before_action :login_required, :only => [ :new, :create ]
-  prepend_before_action :login_optional, :only => [ :new, :create ]
+  before_action :admin_login_required, :only => [:index, :show]
+  before_action :admin_or_self_login_required, :only => [:destroy]
+  skip_before_action :login_required, :only => [:new, :create]
+  prepend_before_action :login_optional, :only => [:new, :create]
 
   # GET /users GET /users.xml
   def index
@@ -17,8 +16,8 @@ class UsersController < ApplicationController
         store_location
       end
       format.xml do
-        @users  = User.order('login')
-        render :xml => @users.to_xml(:root => :users, :except => [ :password ])
+        @users = User.order('login')
+        render :xml => @users.to_xml(:root => :users, :except => [:password])
       end
     end
   end
@@ -26,16 +25,16 @@ class UsersController < ApplicationController
   # GET /users/id GET /users/id.xml
   def show
     @user = User.find(params[:id])
-    render :xml => @user.to_xml(:root => :user, :except => [ :password ])
+    render :xml => @user.to_xml(:root => :user, :except => [:password])
   end
 
   # GET /users/new
   def new
     @auth_types = []
     unless session[:cas_user]
-      Tracks::Config.auth_schemes.each {|auth| @auth_types << [auth,auth]}
+      Tracks::Config.auth_schemes.each { |auth| @auth_types << [auth, auth] }
     else
-      @auth_types << ['cas','cas']
+      @auth_types << ['cas', 'cas']
     end
 
     if User.no_users_yet?
@@ -223,5 +222,4 @@ class UsersController < ApplicationController
     return false if params[:user][:password].empty?
     return true
   end
-
 end

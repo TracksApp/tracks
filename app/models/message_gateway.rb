@@ -1,5 +1,4 @@
 class MessageGateway < ActionMailer::Base
-
   def receive(email)
     user = get_receiving_user_from_email_address(email)
     return false if user.nil?

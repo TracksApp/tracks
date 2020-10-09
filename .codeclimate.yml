@@ -1,6 +1,18 @@
 engines:
+  brakeman:
+    enabled: true
+  fixme:
+    enabled: true
+  flog:
+    enabled: true
+  reek:
+    enabled: true
   rubocop:
     enabled: true
     checks:
       Rubocop/Style/StringLiterals:
+        enabled: false
+      Rubocop/Style/TrailingCommaInLiteral:
+        enabled: false
+      Rubocop/Style/HashSyntax:
         enabled: false

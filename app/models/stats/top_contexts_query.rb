@@ -3,8 +3,8 @@
 # and visible contexts will be included.
 module Stats
   class TopContextsQuery
-
     attr_reader :user, :running, :limit
+
     def initialize(user, options = {})
       @user = user
       @running = options.fetch(:running) { false }

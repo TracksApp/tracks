@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class AbstractRecurrencePattern
-
     attr_accessor :attributes
 
     def initialize(user)
@@ -147,7 +145,7 @@ module RecurringTodos
 
     # checks if the next todos should be put in the tickler for recurrence_target == 'due_date'
     def put_in_tickler?
-      !( show_always? || show_from_delta.nil?)
+      !(show_always? || show_from_delta.nil?)
     end
 
     def get_next_date(previous)
@@ -207,14 +205,14 @@ module RecurringTodos
     end
 
     def find_xth_day_of_month(x, weekday, month, year)
-      start = Time.zone.local(year,month,1)
+      start = Time.zone.local(year, month, 1)
       n = x
       while n > 0
         while start.wday() != weekday
           start += 1.day
         end
         n -= 1
-        start += 1.day unless n==0
+        start += 1.day unless n == 0
       end
       start
     end

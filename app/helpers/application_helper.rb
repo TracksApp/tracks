@@ -10,7 +10,7 @@ module ApplicationHelper
       link_to(
         t("layouts.navigation.group_view_by_#{menu_name}"),
         '#',
-        {:id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by} )
+        { :id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by } )
     end
   end
 
@@ -18,7 +18,7 @@ module ApplicationHelper
     link_to(
       image_tag("blank.png", :alt => t('common.collapse_expand')),
       "#",
-      {:class => "container_toggle", :id => id} )
+      { :class => "container_toggle", :id => id })
   end
 
   # Check due date in comparison to today's date Flag up date appropriately with
@@ -54,28 +54,28 @@ module ApplicationHelper
   end
 
   def link_to_context(context, descriptor = sanitize(context.name))
-    link_to( descriptor, context, :title => "View context: #{context.name}" )
+    link_to(descriptor, context, :title => "View context: #{context.name}")
   end
 
   def link_to_project(project, descriptor = sanitize(project.name))
-    link_to( descriptor, project, :title => "View project: #{project.name}" )
+    link_to(descriptor, project, :title => "View project: #{project.name}")
   end
 
   def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
     link_to(descriptor, edit_note_path(note),
-      {:id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings"})
+      { :id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings" })
   end
 
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
-    link_to( descriptor, project_path(project, :format => 'm'), {:title => "View project: #{project.name}", :accesskey => accesskey} )
+    link_to(descriptor, project_path(project, :format => 'm'), { :title => "View project: #{project.name}", :accesskey => accesskey })
   end
 
   def item_link_to_context(item)
-    link_to_context( item.context, prefs.verbose_action_descriptors ? "[#{item.context.name}]" : "[C]" )
+    link_to_context(item.context, prefs.verbose_action_descriptors ? "[#{item.context.name}]" : "[C]")
   end
 
   def item_link_to_project(item)
-    link_to_project( item.project, prefs.verbose_action_descriptors ? "[#{item.project.name}]" : "[P]" )
+    link_to_project(item.project, prefs.verbose_action_descriptors ? "[#{item.project.name}]" : "[P]")
   end
 
   def render_flash
@@ -127,15 +127,15 @@ module ApplicationHelper
   end
 
   def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.size})")  + content_tag(:ul, sidebar_html_for_list(list))
+    return content_tag(:h3, title+" (#{list.size})") + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def link_to_sidebar_item(item)
-    item.is_a?(Project) ? link_to_project( item ) : link_to_context( item )
+    item.is_a?(Project) ? link_to_project(item) : link_to_context(item)
   end
 
   def sidebar_html_for_item(item)
-    content_tag(:li, link_to_sidebar_item(item) + " (" + count_undone_todos_phrase(item)+")")
+    content_tag(:li, link_to_sidebar_item(item) + " (" + count_undone_todos_phrase(item) + ")")
   end
 
   def sidebar_html_for_list(list)
@@ -175,12 +175,12 @@ module ApplicationHelper
   def done_path(controller_name, type)
     case controller_name
     when "contexts"
-      send("#{type}_todos_context_path",@context)
+      send("#{type}_todos_context_path", @context)
     when "projects"
       send("#{type}_todos_project_path", @project)
     when "todos"
       if @tag_name
-        send("#{type}_tag_path",@tag_name)
+        send("#{type}_tag_path", @tag_name)
       else
         send("#{type}_todos_path")
       end
@@ -199,7 +199,7 @@ module ApplicationHelper
 
   def get_list_of_error_messages_for(model)
     if model.errors.any?
-      content_tag(:div, {:id=>"errorExplanation"}) do
+      content_tag(:div, { :id => "errorExplanation" }) do
         content_tag(:ul) do
           model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
         end
@@ -207,10 +207,8 @@ module ApplicationHelper
     end
   end
 
-  def link_to_delete(type, object, descriptor = sanitize(object.name))
-    link_to(
-      descriptor,
-      self.send("#{type}_path", object, :format => 'js'),
+  def link_to_delete(type, object, descriptor=sanitize(object.name))
+    link_to(descriptor, self.send("#{type}_path", object, :format => 'js'),
       {
         :id => "delete_#{type}_#{object.id}",
         :class => "delete_#{type}_button icon",
@@ -239,7 +237,7 @@ module ApplicationHelper
     "#{name}_#{SecureRandom.hex(5)}"
   end
 
-  def js_render(partial, locals = {}, object=nil)
+  def js_render(partial, locals={}, object=nil)
     if object
       escape_javascript(render(partial: partial, locals: locals, object: object))
     else
@@ -250,5 +248,4 @@ module ApplicationHelper
   def js_error_messages_for(object)
     escape_javascript(get_list_of_error_messages_for(object))
   end
-
 end
