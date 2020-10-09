@@ -7,8 +7,8 @@ gem 'coffee-rails', '~> 5.0.0'
 #gem 'json'
 
 # todo: remove xml api
-gem "actionpack-xml_parser", "~> 2.0"
-gem "activemodel-serializers-xml", "~> 1.0.1"
+gem 'actionpack-xml_parser', '~> 2.0'
+gem 'activemodel-serializers-xml', '~> 1.0.1'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', group: :therubyracer
@@ -22,17 +22,17 @@ gem 'jquery-ui-rails' , '~>6.0.1'
 # This will prevent a native build of the driver. Building native drivers is not
 # always possible on all platforms
 # Alternatively use --without <group> arguments to bundler to not install that group
-gem "sqlite3", group: :sqlite
-gem "mysql2", "~> 0.5.3", group: :mysql
-gem "pg", "~> 1.2.3", group: :postgresql
+gem 'sqlite3', group: :sqlite
+gem 'mysql2', '~> 0.5.3', group: :mysql
+gem 'pg', '~> 1.2.3', group: :postgresql
 
-gem "RedCloth"
-gem "sanitize", "~> 5.2"
-gem "will_paginate"
-gem "acts_as_list"
-gem "aasm", '~> 5.1.1'
-gem "htmlentities"
-gem "rails_autolink"
+gem 'RedCloth'
+gem 'sanitize', '~> 5.2'
+gem 'will_paginate'
+gem 'acts_as_list'
+gem 'aasm', '~> 5.1.1'
+gem 'htmlentities'
+gem 'rails_autolink'
 gem 'puma', '~> 5.0'
 gem 'paperclip'
 
@@ -47,46 +47,48 @@ gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 1.2'
 
-gem "bootstrap-sass", "3.4.1"
-gem "font-awesome-sass", "~> 5.13.0"
+gem 'bootstrap-sass', '3.4.1'
+gem 'font-awesome-sass', '~> 5.13.0'
 
 group :development do
-  gem "spring"
-  gem "yard"
+  gem 'spring'
+  gem 'yard'
 
   gem 'tolk', '~> 4.0.0'
 
-  gem "bullet"
-  gem "rack-mini-profiler"
-  gem "solargraph"
+  gem 'bullet'
+  gem 'rack-mini-profiler'
+  gem 'solargraph'
+
+  gem 'i18n-tasks', '~> 0.9.31'
 end
 
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem "rubocop", "~> 0.93", require: false
+  gem 'rubocop', '~> 0.93', require: false
 end
 
 group :test do
   gem 'rails-controller-testing'
   gem 'rails-dom-testing', '~> 2.0.0'
 
-  gem "factory_bot_rails"
-  gem "rspec-expectations"
-  gem "database_cleaner"
-  gem "mocha", :require => false
-  gem "minitest-stub-const"
+  gem 'factory_bot_rails'
+  gem 'rspec-expectations'
+  gem 'database_cleaner'
+  gem 'mocha', :require => false
+  gem 'minitest-stub-const'
 
-  gem "selenium-webdriver", "~> 3.142"
+  gem 'selenium-webdriver', '~> 3.142'
 
   # uncomment to use the webkit option. This depends on Qt being installed
-  # gem "capybara-webkit"
+  # gem 'capybara-webkit'
 
   # uncomment to be able to make screenshots from scenarios
-  #gem "capybara-screenshot"
-  #gem "launchy"
+  #gem 'capybara-screenshot'
+  #gem 'launchy'
 
-  gem "simplecov"
+  gem 'simplecov'
   # get test coverage info on codeclimate
-  gem "codeclimate-test-reporter", "1.0.7", group: :test, require: nil
+  gem 'codeclimate-test-reporter', '1.0.7', group: :test, require: nil
 end

@@ -1,296 +1,299 @@
 ---
-es:
+fi:
   activerecord:
     attributes:
       note:
-        created_at: Creado el
-        updated_at: actualizado a las
+        created_at: Luotu
+        updated_at: Päivitetty
       preference:
-        date_format: Formato de fecha
-        due_style: Debido al estilo
-        first_name: Nombre
-        last_name: Apellido
-        locale: Lugar
-        mobile_todos_per_page: Tareas por página (Vista Móvil)
-        refresh: Intervalo de actualización (en minutos)
-        review_period: Intervalo de revisión del proyecto
+        date_format: Päivämäärämuoto
+        due_style: Due style
+        first_name: Etunimi
+        last_name: Sukunimi
+        locale: Kieli
+        mobile_todos_per_page: Toimenpidettä sivulla (mobiilisivustolla)
+        refresh: Refresh interval (in minutes)
+        review_period: Project review interval
         show_completed_projects_in_sidebar: Show completed projects in sidebar
-        show_hidden_contexts_in_sidebar: Mostrar los contextos ocultos en el lateral
-        show_hidden_projects_in_sidebar: Mostrar proyectos ocultos en el lateral
-        show_number_completed: Mostrar número de tareas completadas
-        show_project_on_todo_done: Ir a la página del proyecto al completar la tarea
-        sms_context: Contexto por defecto para el email
-        sms_email: Email origen
-        staleness_starts: Comienzo de estancamiento
-        time_zone: Zona horaria
-        title_date_format: Título del formato de fecha
-        verbose_action_descriptors: Descriptores detallado de acción
-        week_starts: La semana comienza
+        show_hidden_contexts_in_sidebar: Näytä piilotetut asiayhteydet sivupalkissa
+        show_hidden_projects_in_sidebar: Näytä piilotetut projektit sivupalkissa
+        show_number_completed: Show number of completed actions
+        show_project_on_todo_done: Go to project page on completing todo
+        sms_context: Sähköpostin oletusasiayhteys
+        sms_email: From email
+        staleness_starts: Vanhentumisen alkaminen
+        time_zone: Aikavyöhyke
+        title_date_format: Title date format
+        verbose_action_descriptors: Verbose action descriptors
+        week_starts: Week starts on
       project:
-        default_context_name: Default contexto
-        default_tags: Etiquetas estándar
-        description: Descripción
-        name: Nombre
+        default_context_name: Oletuskonteksti
+        default_tags: Oletustagit
+        description: Kuvaus
+        name: Nimi
       todo:
-        context: Contexto
-        description: Descripción
-        due: Fecha límite
-        notes: Notas
-        predecessors: Depende de la
-        project: Proyecto
-        show_from: Mostrar
-        tags: Etiquetas
+        context: Konteksti
+        description: Kuvaus
+        due: Määräpäivä
+        notes: Muistiinpanot
+        predecessors: Riippuu
+        project: Projekti
+        show_from: Näytä alkaen
+        tags: Tagit
       user:
-        auth_type: Auth type
-        display_name: Display name
+        auth_type: Kirjautumistyyppi
+        display_name: Näyttönimi
         email: Email address
-        first_name: Primer nombre
-        last_name: Apellido
+        first_name: Etunimi
+        last_name: Sukunimi
         login: Login
-        open_id_url: OpenID URL
-        password: Password
+        open_id_url: OpenID-URL
+        password: Salasana
     errors:
       full_messages:
         format: "%{attribute} %{message}"
       messages:
-        accepted: debe ser aceptada
-        blank: no puede estar en blanco
-        confirmation: no coincide con la confirmación
-        empty: no puede estar vacío
-        equal_to: debe ser igual a %{count}
-        even: debe ser aún
-        exclusion: está reservado
-        greater_than: debe ser mayor que %{count}
-        greater_than_or_equal_to: debe ser mayor que o igual a %{count}
-        inclusion: no está incluido en la lista
-        invalid: no puede contener el carácter de coma (',')
-        less_than: debe ser menor que %{count}
-        less_than_or_equal_to: debe ser menor o igual a %{count}
-        not_a_number: no es un número
-        odd: tiene que ser impar
+        accepted: must be accepted
+        blank: can't be blank
+        confirmation: doesn't match confirmation
+        empty: can't be empty
+        equal_to: must be equal to %{count}
+        even: must be even
+        exclusion: is reserved
+        greater_than: must be greater than %{count}
+        greater_than_or_equal_to: must be greater than or equal to %{count}
+        inclusion: is not included in the list
+        invalid: cannot contain the comma (',') character
+        less_than: must be less than %{count}
+        less_than_or_equal_to: must be less than or equal to %{count}
+        not_a_number: is not a number
+        odd: must be odd
         record_invalid: 'Validation failed: %{errors}'
         restrict_dependent_destroy:
           many: Невозможно удалить запись, так как есть %{record} зависящие от нее
           one: Невозможно удалить запись, так как есть %{record} зависящая от нее
-        taken: Ya se ha dado
-        too_long: es demasiado largo (el máximo es %{count} caracteres)
-        too_short: es demasiado corto (mínimo %{count} caracteres)
-        wrong_length: es la longitud del mal (debe ser %{count} caracteres)
+        taken: has already been taken
+        too_long: is too long (maximum is %{count} characters)
+        too_short: is too short (minimum is %{count} characters)
+        wrong_length: is the wrong length (should be %{count} characters)
       models:
         project:
           attributes:
             name:
-              blank: proyecto debe tener un nombre
-              taken: ya existe
-              too_long: El nombre del proyecto tiene que tener menos de 256 caracteres
+              blank: project must have a name
+              taken: already exists
+              too_long: project name must be less than 256 characters
       template:
-        body: 'Hubo problemas con los campos siguientes:'
+        body: 'There were problems with the following fields:'
         header:
-          one: Un error esta prohibido %{model} se guarden
-          other: "%{count} errores prohíbe este %{model} que se guarden"
+          one: 1 error prohibited this %{model} from being saved
+          other: "%{count} errors prohibited this %{model} from being saved"
   common:
-    action: Tarea
-    actions: Tareas
+    action: Toimenpide
+    actions: Toimenpiteet
     actions_midsentence:
-      one: tarea
-      other: tareas
-      zero: tareas
-    add: Añadir
-    ajaxError: Hubo un error al recuperar desde el servidor
-    back: Atrás
-    bugs: Errores
-    cancel: Cancelar
-    collapse_expand: Collapse/expand
-    context: Contexto
-    contexts: Contextos
-    contribute: Contribuir
-    create: Crear
+      one: toimenpide
+      other: toimenpidettä
+      zero: toimenpidettä
+    add: Lisää
+    ajaxError: Virhe noudettaessa palvelimelta
+    back: Takaisin
+    bugs: Ohjelmavirheet
+    cancel: Peruuta
+    collapse_expand: Sulje/avaa
+    context: Asiayhtyes
+    contexts: Asiayhteydet
+    contribute: Osallistu
+    create: Luo
     days_midsentence:
-      one: día
-      other: días
-      zero: días
-    deferred: pospuestas
-    description: Descripción
-    drag_handle: ARRASTRAR
-    email: Email
-    errors_with_fields: 'Ha habido problemas con los siguientes campos:'
-    first: Primero
-    forth: Siguiente
-    fourth: Cuarto
-    go_back: Volver atrás
-    last: Último
-    logout: Salir
-    mailing_list: Mailing List
-    month: mes
-    months: meses
-    next: Próximo
-    none: Ninguno
-    not_available_abbr: n/e
+      one: päivä
+      other: päivää
+      zero: päivää
+    deferred: lykätty
+    description: Kuvaus
+    drag_handle: VEDÄ
+    email: Sähköposti
+    errors_with_fields: 'Seuraavien kenttien kanssa esiintyi ongelmia:'
+    first: Ensimmäinen
+    forth: Neljäs
+    fourth: Neljäs
+    go_back: Takaisin
+    last: Viimeinen
+    logout: Kirjaudu ulos
+    mailing_list: Postituslista
+    month: kuukausi
+    months: kuukautta
+    next: Seuraava
+    none: Ei
+    not_available_abbr: ei
     note:
-      one: 1 nota
-      other: "%{count} notas"
-      zero: 0 notas
-    notes: Notas
-    numbered_step: Paso %{number}
+      one: 1 muistiinpano
+      other: "%{count} muistiinpanoa"
+      zero: ei muistiinpanoja
+    notes: Muistiinpanot
+    numbered_step: Askel %{number}
     ok: Ok
-    optional: opcional
-    previous: Anterior
-    project: Proyecto
-    projects: Proyectos
-    recurring_todos: Repetición de acciones
-    review: Revisión
-    search: Buscar
-    second: Segundo
-    server_error: Ha ocurrido un error en el servidor.
-    show_all: Mostrar todo
+    optional: valinnainen
+    previous: Edellinen
+    project: Projekti
+    projects: Projektit
+    recurring_todos: Toistuvat toimenpiteet
+    review: Käsittely
+    search: Haku
+    second: sekunti
+    server_error: Palvelimella tapahtui virhe.
+    show_all: Näytä kaikki
     sort:
-      alphabetically: Alfabéticamente
-      alphabetically_confirm: "¿Está seguro que desea ordenar los proyectos por orden alfabético? Esto reemplazará el orden existente."
-      alphabetically_title: Proyectos de ordenar alfabéticamente
-      by_task_count: Por número de tareas
-      by_task_count_title: Ordenar por número de tareas
-      by_task_count_title_confirm: "¿Está seguro que desea ordenar los proyectos por el número de tareas? Esto reemplazará el orden existente."
-      sort: Ordenar
-    third: Tercero
-    todo: Todo
-    update: Actualizar
-    website: Website
-    week: semana
-    weeks: semanas
+      alphabetically: Aakkosjärjestyksessä
+      alphabetically_confirm: Haluatko varmasti lajitella nämä projektit aakkosjärjestykseen? Tämä korvaa nykyisen lajittelujärjestyksen.
+      alphabetically_title: Lajittele projektit aakkosjärjestykseen
+      by_task_count: Tehtävämäärän mukaan
+      by_task_count_title: Lajittele tehtävämäärän mukaan
+      by_task_count_title_confirm: Haluatko varmasti lajitella nämä projektit tehtävämäärän mukaan? Tämä korvaa nykyisen lajittelujärjestyksen.
+      sort: Lajittele
+    third: Kolmas
+    todo: tehtävä
+    update: Päivitä
+    website: Web-sivusto
+    week: viikko
+    weeks: viikkoa
     wiki: Wiki
   contexts:
-    add_context: Añadir contexto
-    all_completed_tasks_title: 'TRACKS:: Todas las acciones completadas en ''%{context_name}'' contexto'
-    completed_tasks_title: 'TRACKS:: Las acciones completadas en ''%{context_name}'' el contexto'
-    context_deleted: Contexto eliminado '%{name}'
-    context_hide: "¿Esconder de la página principal?"
-    context_name: Nombre del contexto
-    context_state: Context state
-    delete_context: Eliminar contexto
-    delete_context_confirmation: "¿Está seguro que desea eliminar '%{name}' el contexto? Tenga en cuenta que esto también se eliminarán todas las acciones (la repetición) en este contexto!"
-    delete_context_title: Eliminar contexto
-    edit_context: Editar contexto
-    hidden_contexts: Contextos ocultos
-    hide_form: Esconder formulario
-    hide_form_title: Ocultar el formulario nuevo contexto
-    last_completed_in_context: en este contexto (últimos %{number})
-    new_context_post: "' También se ha creado. ¿Está seguro?"
-    new_context_pre: Nuevo contexto '
+    add_context: Lisää asiayhteys
+    all_completed_tasks_title: TRACKS::All Completed actions in the context '%{context_name}'
+    completed_tasks_title: TRACKS::Completed actions in the context '%{context_name}'
+    context_deleted: Deleted context '%{name}'
+    context_hide: Piilota etusivulta?
+    context_name: Asiayhteyden nimi
+    context_state: Asiayhteyden tila
+    delete_context: Poista asiayhteys
+    delete_context_confirmation: Are you sure that you want to delete the context '%{name}'? Be aware that this will also delete all (recurring) actions in this context!
+    delete_context_title: Poista asiayhteys
+    edit_context: Muokkaa asiayhteyttä
+    hidden_contexts: Piilotetut asiayhteydet
+    hide_form: Piilota lomake
+    hide_form_title: Piilota asiayhteyden lisäyslomake
+    last_completed_in_context: "(last %{number})"
+    new_context_post: "' will be also created. Are you sure?"
+    new_context_pre: New context '
     no_contexts_: 'No contexts '
-    no_contexts_active: Actualmente no hay contextos activos
+    no_contexts_active: Currently there are no active contexts
     no_contexts_closed: Currently there are no closed contexts
-    no_contexts_hidden: Actualmente no hay contextos ocultos
-    save_status_message: Contexto guardado
-    show_form: Crear un nuevo contexto
-    show_form_title: Añadir un contexto
-    status_active: El contexto está activo
-    status_hidden: Contexto se oculta
-    todos_append: en este contexto
-    update_status_message: Nombre de contexto ha cambiado
-    visible_contexts: Contextos visible
+    no_contexts_hidden: Currently there are no hidden contexts
+    save_status_message: Asiayhteys tallennettu
+    show_form: Luo uusi asiayhteys
+    show_form_title: Lisää asiayhteys
+    status_active: Context is active
+    status_hidden: Context is hidden
+    todos_append: in this context
+    update_status_message: Name of context was changed
+    visible_contexts: Näkyvät asiayhteydet
   data:
     import_destination_invalid: Invalid import destination
-    import_errors: Han ocurrido algunos errores durante la importación
-    import_successful: Importación se realizó correctamente.
+    import_errors: Some errors occurred during import
+    import_successful: Tuonti onnistui
     invalid_import_destination: Invalid import destination
   date:
     abbr_day_names:
-    - Dom
-    - Lun
-    - Mar
-    - Mie
-    - Jue
-    - Vie
-    - Sab
+    - Su
+    - Ma
+    - Ti
+    - Ke
+    - To
+    - Pe
+    - La
     abbr_month_names:
     - 
-    - Ene
-    - Feb
-    - Mar
-    - Abr
-    - May
-    - Jun
-    - Jul
-    - Ago
-    - Sep
-    - Oct
-    - Nov
-    - Dic
+    - Tammi
+    - Helmi
+    - Maalis
+    - Huhti
+    - Touko
+    - Kesä
+    - Heinä
+    - Elo
+    - Syys
+    - Loka
+    - Marras
+    - Joulu
     day_names:
-    - Domingo
-    - Lunes
-    - Martes
-    - Miércoles
-    - Jueves
-    - Viernes
-    - Sábado
+    - Sunnuntai
+    - Maanantai
+    - Tiistai
+    - Keskiviikko
+    - Torstai
+    - Perjantai
+    - Lauantai
     formats:
-      default: "%Y-%m-%d"
+      default: "%d.%m.%Y"
       long: "%B %d, %Y"
-      longer: "%A, %d %b %Y"
-      month_day: Month day
-      only_day: Only day
+      longer: "%A %B %d, %Y"
+      month_day: ''
+      only_day: ''
       short: "%b %d"
     month_names:
     - 
-    - Enero
-    - Febrero
-    - Marzo
-    - Abril
-    - Mayo
-    - Junio
-    - Julio
-    - Agosto
-    - Septiembre
-    - Octubre
-    - Noviembre
-    - Diciembre
-    order: "[:year, :month, :day]"
+    - Tammikuu
+    - Helmikuu
+    - Maaliskuu
+    - Huhtikuu
+    - Toukokuu
+    - Kesäkuu
+    - Heinäkuu
+    - Elokuu
+    - Syyskuu
+    - Lokakuu
+    - Marraskuu
+    - Joulukuu
+    order:
+    - :year
+    - :month
+    - :day
   datetime:
     distance_in_words:
       about_x_hours:
-        one: alrededor de 1 hora
-        other: Acerca de %{count} horas
+        one: about 1 hour
+        other: about %{count} hours
       about_x_months:
-        one: alrededor de 1 mes
-        other: Acerca de %{count} meses
+        one: about 1 month
+        other: about %{count} months
       about_x_years:
-        one: alrededor de 1 año
-        other: Acerca de %{count} años
+        one: about 1 year
+        other: about %{count} years
       almost_x_years:
-        one: casi 1 año
-        other: Casi %{count} años
-      half_a_minute: medio minuto
+        one: almost 1 year
+        other: almost %{count} years
+      half_a_minute: half a minute
       less_than_x_minutes:
-        one: menos de un minuto
-        other: menos de %{count} minutos
-        zero: menos de 1 minuto
+        one: less than a minute
+        other: less than %{count} minutes
+        zero: less than 1 minute
       less_than_x_seconds:
-        one: menos de 1 segundo
-        other: menos de %{count} segundos
-        zero: menos de 1 segundo
+        one: less than 1 second
+        other: less than %{count} seconds
+        zero: less than 1 second
       over_x_years:
-        one: más de 1 año
-        other: en %{count} años
+        one: over 1 year
+        other: over %{count} years
       x_days:
-        one: 1 día
-        other: "%{count} días"
+        one: 1 day
+        other: "%{count} days"
       x_minutes:
-        one: 1 minuto
-        other: "%{count} minutos"
+        one: 1 minute
+        other: "%{count} minutes"
       x_months:
-        one: 1 mes
-        other: "%{count} meses"
+        one: 1 month
+        other: "%{count} months"
       x_seconds:
-        one: Un segundo
-        other: "%{count} segundos"
+        one: 1 second
+        other: "%{count} seconds"
     prompts:
-      day: Día
-      hour: Hora
-      minute: Minuto
-      month: Mes
-      second: Segundos
-      year: Año
+      day: Day
+      hour: Hour
+      minute: Minute
+      month: Month
+      second: Seconds
+      year: Year
   errors:
     format: "%{attribute} %{message}"
     messages:
@@ -316,33 +319,33 @@ es:
       too_long: 'слишком длинное (максимум: %{count} символов)'
       too_short: 'слишком кроткое (минимум: %{count} символов)'
       wrong_length: неверной длины (должно быть %{count} символов)
-    user_unauthorized: '401 No autorizado: Solo los usuarios administrativos pueden acceder a esta función.'
+    user_unauthorized: '401 Pääsy kielletty: Vain ylläpitäjillä on pääsy tähän toiminnallisuuteen.'
   feedlist:
-    actions_completed_last_week: Tareas completadas en los últimos 7 días
-    actions_due_next_week: Tareas pendientes en 7 días o menos
-    actions_due_today: Acciones pendientes hoy o antes
-    active_projects_wo_next: Proyectos activos, sin las próximas acciones
-    active_starred_actions: Todas las acciones que protagonizó, activa
-    all_actions: Todas las tareas
-    all_contexts: Todos los contextos
-    all_projects: Todos los proyectos
-    choose_context: Elija el contexto en el que desea un canal de
-    choose_project: Elegir el proyecto que quiere un canal de
-    context_centric_actions: Feeds de acciones incompletas en un contexto específico
-    context_needed: Es necesario que haya al menos un contexto antes de poder solicitar un feed
-    ical_feed: iCal alimentación
-    last_fixed_number: Última/s %{number} accion/es
-    legend: 'Leyenda:'
-    notice_incomplete_only: 'Nota: Todos los alimentos muestran sólo las acciones que no han sido marcadas como realizadas, a menos que se indique lo contrario.'
-    plain_text_feed: Canal Texto sin formato
-    project_centric: Feeds de acciones incompletas en un proyecto específico
-    project_needed: Es necesario que haya al menos un proyecto antes de poder solicitar un feed
-    projects_and_actions: Proyectos activos con sus acciones
+    actions_completed_last_week: Actions completed in the last 7 days
+    actions_due_next_week: Actions due in 7 days or earlier
+    actions_due_today: Actions due today or earlier
+    active_projects_wo_next: Active projects with no next actions
+    active_starred_actions: All starred, active actions
+    all_actions: All actions
+    all_contexts: All Contexts
+    all_projects: All Projects
+    choose_context: Choose the context you want a feed of
+    choose_project: Choose the project you want a feed of
+    context_centric_actions: Feeds for incomplete actions in a specific context
+    context_needed: There needs to be at least one context before you can request a feed
+    ical_feed: iCal feed
+    last_fixed_number: Last %{number} actions
+    legend: 'Legend:'
+    notice_incomplete_only: 'Note: All feeds show only actions that have not been marked as done, unless stated otherwise. These iCal feeds can be added to todo lists. If you want to show due todos in a calendar, use the iCal feed on the calendar page'
+    plain_text_feed: Plain Text Feed
+    project_centric: Feeds for incomplete actions in a specific project
+    project_needed: There needs to be at least one project before you can request a feed
+    projects_and_actions: Active projects with their actions
     rss_feed: RSS Feed
-    select_feed_for_context: Seleccione la alimentación de este contexto
-    select_feed_for_project: Seleccione la fuente para este proyecto
+    select_feed_for_context: Select the feed for this context
+    select_feed_for_project: Select the feed for this project
   footer:
-    send_feedback: Envía comentarios sobre el %{version}
+    send_feedback: Lähetä palautetta versiosta %{version}
   helpers:
     select:
       prompt: Выберите
@@ -351,71 +354,71 @@ es:
       submit: Сохранить %{model}
       update: Обновить %{model}
   integrations:
-    opensearch_description: Buscar en las Tracks
+    opensearch_description: Search in Tracks
   layouts:
     mobile_navigation:
       calendar: Calendar
-      contexts: Contextos
-      feeds: Feeds
-      full: Full Site
-      home: Inicio
-      logout: Cerrar sesión
-      new_action: Nueva tarea
-      projects: Proyectos
-      starred: avoritos
-      tickler: Recordatorio
+      contexts: Asiayhteydet
+      feeds: Syötteet
+      full: Täysi sivusto
+      home: Etusivu
+      logout: Kirjaudu ulos
+      new_action: Uusi
+      projects: Projektit
+      starred: Tähditetyt
+      tickler: Tulevat
     navigation:
-      admin: Admin
-      api_docs: REST API Docs
-      calendar: Calendario
-      calendar_title: Calendario de las acciones por
-      completed_tasks: Hecho
-      completed_tasks_title: Completed
-      contexts_title: Contexts
-      export: Exportar
-      export_title: Importar y exportar datos
-      feeds: Feeds
-      feeds_title: See a list of available feeds
-      group_view_by_context: Group by context
-      group_view_by_project: Group by project
-      group_view_by_title: Change the grouping of the actions on this page
+      admin: Ylläpito
+      api_docs: REST-rajapintadokumentaatio
+      calendar: Kalenteri
+      calendar_title: Kalenteri määräpäivistä
+      completed_tasks: Valmis
+      completed_tasks_title: Valmiit
+      contexts_title: Asiayhteydet
+      export: Vie
+      export_title: Vie tietoja
+      feeds: Syötteet
+      feeds_title: Näytä lista syötteistä
+      group_view_by_context: Ryhmittele asiayhteyden mukaan
+      group_view_by_project: Ryhmittele projektin mukaan
+      group_view_by_title: Muuta sivun toimenpiteiden ryhmittelyä
       help: "?"
-      help_page: Help
-      home: Inicio
-      home_title: Inicio
-      import: Import
-      import_title: Import data
-      integrations_: Integrar Tracks
-      manage_users: Administrar usuarios
-      manage_users_title: Añadir o eliminar usuarios
-      mobile: Mobile Site
-      notes_title: Mostrar todas las notas
-      options: Options
-      organize: Organizar
-      preferences: Preferencias
-      preferences_title: Mostrar mis preferencias
-      projects_title: Proyectos
-      recurring_todos: Tareas repetitivas
-      recurring_todos_title: Manage recurring actions
-      review_title: Posibilidad de una revisión
-      search: Search All Items
-      show_empty_containers_context: Show empty contexts
-      show_empty_containers_project: Show empty projects
-      show_empty_containers_title: Show or hide the empty projects or contexts
-      starred: Estrellas
-      starred_title: See your starred actions
-      stats: Estadísticas
-      stats_title: See your statistics
-      tickler: Recordatorio
-      tickler_title: Recordatorio
-      view: Ver
+      help_page: Ohje
+      home: Etusivu
+      home_title: Etusivu
+      import: Tuo
+      import_title: Tuo tietoja
+      integrations_: Integroi Tracks
+      manage_users: Hallitse käyttäjiä
+      manage_users_title: Lisää tai poista käyttäjiä
+      mobile: Mobiilisivusto
+      notes_title: Näytä kaikki muistiinpanot
+      options: Asetukset
+      organize: Järjestele
+      preferences: Asetukset
+      preferences_title: Näytä asetukseni
+      projects_title: Projektit
+      recurring_todos: Toistuvat toimenpiteet
+      recurring_todos_title: Hallitse toistuvia toimenpiteitä
+      review_title: Make review
+      search: Hae kaikesta
+      show_empty_containers_context: Näytä tyhjät asiayhteydet
+      show_empty_containers_project: Näytä tyhjät projektit
+      show_empty_containers_title: Näytä tai piilota tyhjät asiayhteydet tai projektit
+      starred: Tähdellä merkityt
+      starred_title: Näytä tähdellä merkityt toimenpiteesi
+      stats: Tilastot
+      stats_title: Näytä tilastosi
+      tickler: Tulevat
+      tickler_title: Tulevat
+      view: Näytä
     next_actions_rss_feed: RSS feed of next actions
-    toggle_contexts: Expandir/contraer los contextos
-    toggle_contexts_title: Hacer que los contextos contraídos sea (in)visibles
-    toggle_notes: Activar/Desactivar notas
-    toggle_notes_title: Activar/Desactivar todas las notas
+    toggle_contexts: Toggle collapsed contexts
+    toggle_contexts_title: Make collapsed contexts (in)visible
+    toggle_notes: Toggle notes
+    toggle_notes_title: Toggle all notes
   login:
-    account_login: Acceso a la cuenta
+    account_login: Account login
     cas_create_account: If you like to request on please go here to %{signup_link}
     cas_logged_in_greeting: Hello, %{username}! You are authenticated.
     cas_login: CAS Login
@@ -434,9 +437,9 @@ es:
     session_time_out: Session has timed out. Please %{link}
     session_will_expire: session will expire after %{hours} hour(s) of inactivity.
     session_will_not_expire: session will not expire.
-    sign_in: Entrar
+    sign_in: Sign in
     signup_prompt: Want to create an account?
-    successful: Has entrado con éxito. Bienvenido!
+    successful: Logged in successfully. Welcome back!
     successful_with_session_info: 'Login successful:'
     unsuccessful: Login unsuccessful.
     user_no_expiry: Stay logged in
@@ -459,33 +462,33 @@ es:
       error_context_not_associated: Context id %{context} not associated with user id %{user}.
       error_project_not_associated: Project id %{project} not associated with user id %{user}.
   notes:
-    delete_confirmation: Are you sure that you want to delete the note '%{id}'?
-    delete_item_title: Delete item
-    delete_note_confirm: Are you sure that you want to delete the note '%{id}'?
-    delete_note_title: Delete the note '%{id}'
-    deleted_note: Deleted note '%{id}'
-    edit_item_title: Edit item
-    in_project: 'En:'
-    no_notes_available: 'Currently there are no notes: add notes to projects from individual project pages.'
-    note_header: Note %{id}
+    delete_confirmation: Oletko varma, että haluat poistaa muistiinpanon '%{id}'?
+    delete_item_title: Poista
+    delete_note_confirm: Oletko varma että haluat poistaa muistiinpanon '%{id}'?
+    delete_note_title: Poista muistiinpano '%{id}'
+    deleted_note: Muistiinpano '%{id}' poistettu
+    edit_item_title: Muokkaa
+    in_project: 'Kuuluu: '
+    no_notes_available: Muistiinpanoja ei löytynyt. Voit lisätä niitä projekteihin projektisivulta.
+    note_header: Muistiinpano %{id}
     note_link_title: Show note %{id}
-    note_location_link: 'In:'
-    save_status_message: Note %{id} was saved
+    note_location_link: 'Kuuluu:'
+    save_status_message: Muistiinpano %{id} tallennettu
     show_note_title: Show note
   number:
     currency:
       format:
-        delimiter: ","
+        delimiter: " "
         format: "%u%n"
-        precision: '2'
-        separator: "."
+        precision: 2
+        separator: ","
         significant: Significant
         strip_insignificant_zeros: Strip insignificant zeros
         unit: "€"
     format:
-      delimiter: ","
-      precision: '3'
-      separator: "."
+      delimiter: " "
+      precision: 3
+      separator: ","
       significant: Significant
       strip_insignificant_zeros: Strip insignificant zeros
     human:
@@ -499,69 +502,69 @@ es:
           trillion: Триллион
           unit: "."
       format:
-        delimiter: Delimiter
-        precision: '1'
+        delimiter: ''
+        precision: 1
         significant: 'true'
         strip_insignificant_zeros: 'true'
       storage_units:
         format: "%n %u"
         units:
           byte:
-            one: Byte
-            other: Bytes
-          gb: GB
-          kb: KB
-          mb: MB
-          tb: Tuberculosis
+            one: Tavu
+            other: Tavua
+          gb: Gt
+          kb: kt
+          mb: Mt
+          tb: Tt
     percentage:
       format:
-        delimiter: Delimiter
+        delimiter: ''
         format: "%n%"
     precision:
       format:
-        delimiter: Delimiter
+        delimiter: ''
   preferences:
     authentication_header: Your authentication
     change_authentication_type: Change your authentication type
     change_identity_url: Change Your Identity URL
-    change_password: Change your password
+    change_password: Muuta salasanasi
     current_authentication_type: Your authentication type is %{auth_type}
-    edit_preferences: Edit preferences
-    generate_new_token: Generate a new token
+    edit_preferences: Muokkaa asetuksia
+    generate_new_token: Luo uusi avainkoodi
     generate_new_token_confirm: Are you sure? Generating a new token will replace the existing one and break any external usages of this token.
     is_false: 'false'
     is_true: 'true'
     open_id_url: Your OpenID URL is
-    page_title: TRACKS::Preferences
-    page_title_edit: TRACKS::Edit Preferences
-    password_changed: Que ha cambiado la contraseña, por favor vuelve a iniciar sesión.
+    page_title: TRACKS::Asetukset
+    page_title_edit: TRACKS::Muokkaa asetuksia
+    password_changed: Salasanasi on muutettu, kirjaudu uudelleen sisään.
     remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
-    show_number_completed: Show %{number} completed items
-    sms_context_none: None
-    staleness_starts_after: Staleness starts after %{days} days
+    show_number_completed: Näytä %{number} valmista toimenpidettä
+    sms_context_none: Ei mikään
+    staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
     tabs:
-      authentication: Autenticación
-      date_and_time: Fecha y hora
-      profile: Perfil
+      authentication: Authentication
+      date_and_time: Date and time
+      profile: Profile
       remove_account: Remove account
-      tracks_behavior: Rastrea el comportamiento de
-    title: Your preferences
-    token_description: Token (for feeds and API use)
-    token_header: Your token
-    updated: Las preferencias de actualización
+      tracks_behavior: Tracks behavior
+    title: Asetuksesi
+    token_description: Avainkoodi (syötteiden ja rajapinnan käyttämiseen)
+    token_header: Avainkoodisi
+    updated: Asetukset päivitetty
   projects:
-    actions_in_project_title: Acciones en este proyecto
-    active_projects: Proyectos Activos
-    add_note: Añadir una nota
-    add_note_submit: Añadir nota
-    add_project: Añadir Proyecto
-    all_completed_tasks_title: 'TRACKS:: Lista de todas las acciones terminado en ''%{project_name}'' Proyecto'
+    actions_in_project_title: Actions in this project
+    active_projects: Active projects
+    add_note: Add a note
+    add_note_submit: Add note
+    add_project: Add Project
+    all_completed_tasks_title: TRACKS::List All Completed Actions in Project '%{project_name}'
     completed_actions: Completed actions
     completed_actions_empty: Completed actions empty
-    completed_projects: Proyectos completados
-    completed_tasks_title: 'TRACKS:: Lista de Acciones completadas en ''%{project_name}'' Proyecto'
-    default_context: El contexto por defecto para este proyecto es %{context}
-    default_context_removed: Eliminado el contexto por defecto
+    completed_projects: Completed projects
+    completed_tasks_title: TRACKS::List Completed Actions in Project '%{project_name}'
+    default_context: The default context for this project is %{context}
+    default_context_removed: Removed default context
     default_context_set: Set project's default context to %{default_context}
     default_tags_removed_notice: Removed the default tags
     deferred_actions: Deferred actions
@@ -569,23 +572,23 @@ es:
     delete_project: Delete project
     delete_project_confirmation: Are you sure that you want to delete the project '%{name}'?
     delete_project_title: Delete the project
-    edit_project_settings: Edit Project Settings
-    edit_project_title: Editar proyecto
-    hidden_projects: Proyectos ocultos
-    hide_form: Esconder formulario
+    edit_project_settings: Muokkaa projektin asetuksia
+    edit_project_title: Edit project
+    hidden_projects: Hidden projects
+    hide_form: Piilota lomake
     hide_form_title: Hide new project form
-    is_active: está activo
+    is_active: is active
     last_completed_in_project: "(last %{number})"
-    list_completed_projects: 'TRACKS:: Lista de Proyectos Realizados'
-    list_projects: TRACKS::Lista de Proyectos
-    list_reviews: TRACKS::Revisión
-    no_default_context: Este proyecto no tiene un contexto por defecto
-    no_last_completed_projects: No hay proyectos terminados encontrado
-    no_last_completed_recurring_todos: No se ha completado las acciones repetitivas que se encuentran
-    no_notes_attached: Actualmente no hay notas adjuntas a este proyectos
+    list_completed_projects: TRACKS::List Completed Projects
+    list_projects: TRACKS::List Projects
+    list_reviews: TRACKS::Review
+    no_default_context: This project does not have a default context
+    no_last_completed_projects: Valmiita projekteja ei löytynyt
+    no_last_completed_recurring_todos: Valmiita toistuvia toimenpiteitä ei löytynyt
+    no_notes_attached: Currently there are no notes attached to this project
     no_projects: Currently there are no projects
     notes: Notes
-    notes_empty: No hay notas para este proyecto
+    notes_empty: There are no notes for this project
     page_title: 'TRACKS::Project: %{project}'
     project_destroyed_status: Deleted project '%{name}'
     project_saved_status: Project saved
@@ -594,9 +597,9 @@ es:
     settings: Settings
     show_form: Add a project
     show_form_title: Create a new project
-    state: Este proyecto está %{state}
+    state: Tämä projekti on %{state}
     status_project_name_changed: Name of project was changed
-    this_project: Este proyecto
+    this_project: This project
     to_new_project_page: Take me to the new project page
     was_marked_complete: has been marked as completed
     was_marked_hidden: has been marked as hidden
@@ -612,81 +615,81 @@ es:
     tags_matching_query: Tags matching query
     todos_matching_query: Todos matching query
   shared:
-    add_action: Añadir tarea
-    add_actions: Añadir tareas
-    add_context: Agregue contexto
-    context_for_all_actions: Context for all actions
-    hide_action_form_title: Hide new action form
-    hide_form: Esconder formulario
-    make_actions_dependent: Asegúrese que las acciones dependen unos de otros
-    multiple_next_actions: Multiple next actions (one on each line)
-    project_for_all_actions: Project for all actions
-    separate_tags_with_commas: separar con comas
-    tags_for_all_actions: Tags for all actions (sep. with commas)
-    toggle_multi: Add multiple next actions
+    add_action: Lisää toimenpide
+    add_actions: Lisää toimenpiteitä
+    add_context: Lisää asiayhteys
+    context_for_all_actions: Asiayhteys kaikille toimenpiteille
+    hide_action_form_title: Piilota toimenpiteen lisäyslomake
+    hide_form: Piilota lomake
+    make_actions_dependent: Määritä toimenpiteet riippuvaisiksi toisistaan
+    multiple_next_actions: Useita seuraavia toimenpiteitä (omilla riveillään)
+    project_for_all_actions: Projekti kaikille toimenpiteille
+    separate_tags_with_commas: erota pilkulla
+    tags_for_all_actions: Asiasanat kaikille toimenpiteille (pilkulla erotettuna)
+    toggle_multi: Lisää useita
     toggle_multi_title: Toggle single/multi new action form
-    toggle_single: Add a next action
-    toggle_single_title: Add a new next action
+    toggle_single: Lisää seuraava toimenpide
+    toggle_single_title: Lisää uusi seuraava toimenpide
   sidebar:
-    list_empty: None
-    list_name_active_contexts: Contextos activos
-    list_name_active_projects: Proyectos activos
-    list_name_completed_projects: Proyectos completados
-    list_name_hidden_contexts: Contextos ocultos
-    list_name_hidden_projects: Proyectos ocultos
+    list_empty: Ei
+    list_name_active_contexts: Aktiiviset asiayhteydet
+    list_name_active_projects: Aktiiviset projektit
+    list_name_completed_projects: Valmiit projektit
+    list_name_hidden_contexts: Piilotetut asiayhteydet
+    list_name_hidden_projects: Piilotetut projektit
   states:
-    active: Active
-    active_plural: Active
-    blocked: Bloqueado
-    blocked_plural: Bloqueado
-    close: Closed
-    closed_plural: Closed
-    completed: Completed
-    completed_plural: Completed
+    active: Aktiivinen
+    active_plural: Aktiivinen
+    blocked: Estetty
+    blocked_plural: Estetty
+    close: Suljettu
+    closed_plural: Suljettu
+    completed: Valmis
+    completed_plural: Valmis
     contexts:
       ":": ":"
-      active: Active contexts
-      closed: Closed contexts
-      hidden: Hidden contexts
-    current: Hasta al día
-    current_plural: Hasta al día
-    hidden: Hidden
-    hidden_plural: Hidden
+      active: Aktiiviset asiayhteydet
+      closed: Suljetut asiayhteydet
+      hidden: Piilotetut asiayhteydet
+    current: Ajan tasalla
+    current_plural: Ajan tasalla
+    hidden: Piilotettu
+    hidden_plural: Piilotettu
     projects:
       ":": ":"
-      active: Active projects
-      blocked: Blocked
-      closed: Closed projects
-      completed: Completed
-      current: Current
-      hidden: Hidden projects
-      review: Review
+      active: Aktiiviset projektit
+      blocked: Estetyt
+      closed: Suljetut projektit
+      completed: Valmiit
+      current: Nykyinen
+      hidden: Piilotetut projektit
+      review: Käsittele
       stalled: Stalled
-    review: Fechado
-    review_plural: Fechado
-    stalled: Estancado
-    stalled_plural: Estancado
-    visible: Visible
-    visible_plural: Visible
+    review: Päivätty
+    review_plural: Päivätty
+    stalled: Stalled
+    stalled_plural: Stalled
+    visible: Näkyvä
+    visible_plural: Näkyvä
   stats:
-    action_completion_time_title: Tiempo de finalización (todas las acciones completadas)
-    action_selection_title: TRACKS::Selección de Acción
-    actions: Acciones
-    actions_30days_title: Acciones en los últimos 30 días
+    action_completion_time_title: Completion time (all completed actions)
+    action_selection_title: TRACKS::Action selection
+    actions: Actions
+    actions_30days_title: Actions in the last 30 days
     actions_actions_avg_created_30days: In the last 30 days you created on average %{count} actions
     actions_avg_completed: and completed an average of %{count} actions per month.
     actions_avg_completed_30days: and completed an average of %{count} actions per day.
     actions_avg_completion_time: Of all your completed actions, the average time to complete is %{count} days.
     actions_avg_created: In the last 12 months you created on average %{count} actions
     actions_day_of_week_legend:
-      day_of_week: Día de la semana
-      number_of_actions: Número de acciones
+      day_of_week: Day of the week
+      number_of_actions: Number of actions
     actions_day_of_week_title: Day of week (all actions)
     actions_dow_30days_legend:
-      day_of_week: Día de la semana
-      number_of_actions: Número de acciones
+      day_of_week: Day of the week
+      number_of_actions: Number of actions
     actions_dow_30days_title: Day of week (past 30 days)
-    actions_further: and further
+    actions_further: " and further"
     actions_last_year: Actions in the last years
     actions_last_year_legend:
       months_ago: Months ago
@@ -694,14 +697,14 @@ es:
     actions_lastyear_title: Actions in the last 12 months
     actions_min_completion_time: The minimum time to complete is %{time}.
     actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
-    actions_selected_from_week: Actions selected from week
+    actions_selected_from_week: 'Actions selected from week '
     click_to_return: Click %{link} to return to the statistics page.
     click_to_return_link: here
     click_to_show_actions_from_week: Click %{link} to show the actions from week %{week} and further.
     click_to_update_actions: Click on a bar in the chart to update the actions below.
     contexts: Contexts
     current_running_time_of_incomplete_visible_actions: Current running time of incomplete visible actions
-    index_title: TRACKS::Estadística
+    index_title: TRACKS::Tilastot
     labels:
       avg_completed: Avg completed
       avg_created: Avg created
@@ -710,32 +713,32 @@ es:
       month_avg_completed: "%{months} Month avg completed"
       month_avg_created: "%{months} Month avg created"
     legend:
-      actions: Tareas
+      actions: Actions
       day_of_week: Day of week
       months_ago: Months ago
-      number_of_actions: Número de tareas
+      number_of_actions: Number of actions
       number_of_days: Number of days ago
       percentage: Percentage
       running_time: Running time of an action (weeks)
     more_stats_will_appear: More statistics will appear here once you have added some actions.
-    no_actions_selected: No hay tareas seleccionadas.
+    no_actions_selected: There are no actions selected.
     no_tags_available: no tags available
-    open_per_week: Próximas acciones activas (visibles y ocultas) a la semana
+    open_per_week: Active (visible and hidden) next actions per week
     open_per_week_legend:
-      actions: Acciones
-      weeks: Semanas atrás
-    other_actions_label: "(otros)"
+      actions: Actions
+      weeks: Weeks ago
+    other_actions_label: "(others)"
     projects: Projects
     running_time_all: Current running time of all incomplete actions
     running_time_all_legend:
-      actions: Tareas
+      actions: Actions
       percentage: Percentage
       running_time: Running time of an action (weeks). Click on a bar for more info
     running_time_legend:
-      actions: Tareas
+      actions: Actions
       percentage: Percentage
       weeks: Running time of an action (weeks). Click on a bar for more info
-    spread_of_actions_for_all_context: Spread of actions for all context
+    spread_of_actions_for_all_context: Spread of actions for all contexts
     spread_of_running_actions_for_visible_contexts: Spread of running actions for visible contexts
     tag_cloud_90days_description: This tag cloud includes tags of actions that were created or completed in the past 90 days.
     tag_cloud_90days_title: Tag cloud actions in past 90 days
@@ -744,11 +747,11 @@ es:
     tags: Tags
     time_of_day: Time of day (all actions)
     time_of_day_legend:
-      number_of_actions: Número de tareas
+      number_of_actions: Number of actions
       time_of_day: Time of day
     tod30: Time of day (last 30 days)
     tod30_legend:
-      number_of_actions: Número de tareas
+      number_of_actions: Number of actions
       time_of_day: Time of day
     top10_longrunning: Top 10 longest running projects
     top10_projects: Top 10 projects
@@ -762,7 +765,7 @@ es:
     totals_blocked_actions: "%{count} are dependent on the completion of their actions."
     totals_completed_project_count: and %{count} are completed projects.
     totals_context_count: You have %{count} contexts.
-    totals_deferred_actions: de los cuales %{count} son acciones aplazadas en el recordatorio
+    totals_deferred_actions: of which %{count} are deferred actions in the tickler
     totals_first_action: Since your first action on %{date}
     totals_hidden_context_count: and %{count} are hidden contexts.
     totals_hidden_project_count: "%{count} are hidden"
@@ -771,33 +774,33 @@ es:
     totals_tag_count: You have %{count} tags placed on actions.
     totals_unique_tags: Of those tags, %{count} are unique.
     totals_visible_context_count: Of those %{count} are visible contexts
-    within_one: Dentro de un
+    within_one: Within 1
   support:
     array:
-      last_word_connector: ", y"
-      two_words_connector: y
-      words_connector: ","
+      last_word_connector: " ja "
+      two_words_connector: " ja "
+      words_connector: ", "
     select:
-      prompt: Por favor seleccione
+      prompt: Valitse
   time:
-    am: soy
+    am: am
     formats:
       default: "%a, %d %b %Y %H:%M:%S %z"
       long: "%B %d, %Y %H:%M"
       month_day: "%B %d"
       short: "%d %b %H:%M"
       stats: "%a %d-%m"
-      time: Time
+      time: ''
     pm: pm
   todos:
-    action_deferred: La acción '%{description}' se aplazó
+    action_deferred: The action '%{description}' was deferred
     action_deleted_error: Failed to delete the action
     action_deleted_success: Successfully deleted next action
-    action_due_on: "(action due on %{date})"
+    action_due_on: "(määräaika %{date})"
     action_marked_complete: The action <strong>'%{description}'</strong> was marked as <strong>%{completed}</strong>
     action_marked_complete_error: The action <strong>'%{description}'</strong> was NOT marked as <strong>%{completed} due to an error on the server.</strong>
     action_saved: Action saved
-    action_saved_to_tickler: Acción guardada en el recordatorio.
+    action_saved_to_tickler: Action saved to tickler
     actions:
       completed: Completed actions
       context_completed: Completed actions in this context
@@ -810,73 +813,73 @@ es:
       project_project: Actions in this project
       tag_completed: Completed actions tagged with '%{param}'
       tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
-      tag_hidden: Hidden actions tagged with '%{param}'
+      tag_hidden: Tagilla '%{param}' merkityt piilotetut toimenpiteet
     add_another_dependency: Add another dependency
-    add_new_recurring: Add a new recurring action
+    add_new_recurring: Lisää uusi toistuva toimenpide
     added_dependency: Added %{dependency} as dependency.
     added_new_context: Added new context
     added_new_next_action: Added new next action
     added_new_next_action_plural: Added new next actions
     added_new_next_action_singular: Added new next action
     added_new_project: Added new project
-    all_completed: Todas las acciones realizadas
-    all_completed_here: aquí
-    all_completed_tagged_page_title: 'TRACKS:: Todas las tareas realizadas con etiqueta %{tag_name}'
-    append_in_this_project: en este proyecto
+    all_completed: All completed actions
+    all_completed_here: here
+    all_completed_tagged_page_title: TRACKS::All completed tasks with tag %{tag_name}
+    append_in_this_project: in this project
     archived_tasks_title: TRACKS::Archived completed tasks
     blocked_by: Blocked by %{predecessors}
     calendar:
-      due_after_this_month: Due in %{next_month} and later
-      due_next_week: Due next week
-      due_this_month: Due in rest of %{month}
-      due_this_week: Due in rest of this week
-      due_today: Due today
+      due_after_this_month: Tehtävä %{next_month} ja myöhemmin
+      due_next_week: Tehtävä ensi viikolla
+      due_this_month: Tehtävä loppukuukauden %{month} aikana
+      due_this_week: Tehtävä loppuviikon aikana
+      due_today: Tehtävä tänään
       get_in_ical_format: Get this calendar in iCal format
-    calendar_page_title: TRACKS::Calendar
+    calendar_page_title: TRACKS::Kalenteri
     cannot_add_dependency_to_completed_todo: Cannot add this action as a dependency to a completed action!
     clear_due_date: Clear due date
     clear_show_from_date: Clear show from date
     completed: Completed
     completed_actions: Completed actions
-    completed_actions_with: Acciones completadas with the tag %{tag_name}
+    completed_actions_with: Completed actions with the tag '%{tag_name}'
     completed_in_archive:
-      one: There is one completed action in the archive.
+      one: There is a completed action in the archive.
       other: There are %{count} completed actions in the archive.
     completed_last_day: Completed in the last 24 hours
-    completed_last_x_days: Completed in last %{count} days
+    completed_last_x_days: Completed in the last %{count} days
     completed_recurrence_completed: There is no next action after the recurring action you just deleted. The recurrence is completed
     completed_recurring: Completed recurring todos
     completed_recurring_actions_title: TRACKS::Completed recurring actions
-    completed_rest_of_month: Completado en el resto de este mes
-    completed_rest_of_previous_month: Completado en el resto del mes anterior
-    completed_rest_of_week: Completado en el resto de esta semana
-    completed_tagged_page_title: 'TRACKS:: Las tareas completadas con etiqueta %{tag_name}'
+    completed_rest_of_month: Completed in the rest of this month
+    completed_rest_of_previous_month: Completed in the rest of the previous month
+    completed_rest_of_week: Completed in the rest of this week
+    completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
     completed_tasks_title: TRACKS::Completed tasks
-    completed_today: Completed Today
+    completed_today: Completed today
     confirm_delete: Are you sure that you want to delete the action '%{description}'?
     context_changed: Context changed to %{name}
     convert_to_project: Make project
     defer_date_after_due_date: Defer date is after due date. Please edit and adjust due date before deferring.
     defer_x_days:
-      one: Defer one day
+      one: Defer 1 day
       other: Defer %{count} days
     deferred_actions_with: Deferred actions with the tag '%{tag_name}'
     deferred_pending_actions: Deferred/pending actions
-    deferred_tasks_title: TRACKS::Recordatorio
+    deferred_tasks_title: TRACKS::Tulevat
     delete: Delete
     delete_action: Delete action
     delete_recurring_action_confirm: Are you sure that you want to delete the recurring action '%{description}'?
     delete_recurring_action_title: Delete the recurring action
     deleted_success: The action was deleted successfully.
     depends_on: Depends on
-    depends_on_separate_with_commas: Depende de (separar con comas)
+    depends_on_separate_with_commas: Depends on (separate with commas)
     done: Done?
-    drag_action_title: Drag onto another action to make it depend on that action
-    due: Fecha límite
+    drag_action_title: Drag onto another action to mark that action as a dependency for this action.
+    due: Due
     edit: Edit
     edit_action: Edit action
     edit_action_with_description: Edit the action '%{description}'
-    edit_recurring_todo: Editar la acción de repetición
+    edit_recurring_todo: Muokkaa toistuvaa toimenpidettä
     error:
       invalid_due_date: Invalid due date
       invalid_show_from_date: Invalid show from date
@@ -894,37 +897,37 @@ es:
       completed: 'Completed: %{date}'
       due: 'Due: %{date}'
     has_x_pending:
-      one: Tiene una tarea pendiente
-      other: Tiene %{count} tareas pendientes
-    hidden_actions: Tareas ocultas
-    in_hidden_state: en estado oculto
-    in_pending_state: en estado pendiente
-    list_incomplete_next_actions: Lista las siguientes tareas incompletas
+      one: Has one pending action
+      other: Has %{count} pending actions
+    hidden_actions: Hidden actions
+    in_hidden_state: in hidden state
+    in_pending_state: in pending state
+    list_incomplete_next_actions: Lists incomplete next actions
     list_incomplete_next_actions_with_limit: Lists the last %{count} incomplete next actions
-    mark_complete: Mark complete
-    mobile_todos_page_title: Todas las tareas
-    new_related_todo_created: Una nueva tarea fue añadida y que pertenece a esta tarea recurrente
-    new_related_todo_created_short: creada una nueva tarea
-    new_related_todo_not_created_short: no se creó la tarea
-    next_action_description: Descripción de la nueva tarea
+    mark_complete: Merkitse valmiiksi
+    mobile_todos_page_title: All actions
+    new_related_todo_created: A new todo was added which belongs to this recurring todo
+    new_related_todo_created_short: created a new todo
+    new_related_todo_not_created_short: did not create todo
+    next_action_description: Next action description
     next_action_needed: You need to submit at least one next action
     next_actions_description: 'Filter:'
     next_actions_description_additions:
       completed: in the last %{count} days
       due_date: with a due date %{due_date} or earlier
     next_actions_due_date:
-      due_in_x_days: Vence en %{days} días
-      due_today: Vence hoy
-      due_tomorrow: Vence mañana
-      overdue_by: Overdue by %{days} day
-      overdue_by_plural: Overdue by %{days} days
+      due_in_x_days: Määräaika %{days} päivän päästä
+      due_today: Tehtävä tänään
+      due_tomorrow: Tehtävä huomenna
+      overdue_by: Myöhässä %{days} päivää
+      overdue_by_plural: Myöhässä %{days} päivää
     next_actions_title: Tracks - Next Actions
     next_actions_title_additions:
       completed: actions completed
       due_today: due today
       due_within_a_week: due within a week
     no_actions:
-      completed: Actualmente no hay acciones completadas.
+      completed: Currently there are no completed actions
       completed_recurring: Currently there are no completed recurring todos
       completed_rest_of_month: No actions were completed in the rest of this month
       completed_rest_of_week: No actions were completed in the rest of this week
@@ -938,13 +941,13 @@ es:
       due_today: No actions due today
       hidden: Currently there are no hidden actions found
       not_done: Currently there are no incomplete actions
-      not_done_context: Currently there are no incomplete actions in this context
-      not_done_project: Currently there are no incomplete actions in this project
-      not_done_with_tag: Currently there are no incomplete actions with the tag '%{param}'
+      not_done_context: Tähän kontekstiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
+      not_done_project: Tähän projektiin kuuluvia keskeneräisiä toimenpiteitä ei löytynyt
+      not_done_with_tag: Tagilla '%{param}' merkittyjä keskeneräisiä toimenpiteitä ei löytynyt
       project: Currently there are no incomplete actions in this project
       recurring_todos: Currently there are no recurring todos
       tag_hidden: Currently there are no hidden actions found
-      title: No actions found
+      title: Toimenpiteitä ei löytynyt
       without_project: Currently there are no actions without a project
     no_actions_due_this_week: No actions due in rest of this week
     no_actions_found_title: No actions found title
@@ -954,112 +957,112 @@ es:
     no_completed_recurring: No completed recurring
     no_deferred_actions: No deferred actions
     no_deferred_actions_with: No deferred actions with
-    no_last_completed_actions: No encontró las acciones realizadas
+    no_last_completed_actions: No completed actions found
     no_project: "--No project--"
     no_recurring_todos: No recurring todos
     notes: Notes
     overdue: Overdue
-    pending: Pending
+    pending: Odottaa
     recurrence:
-      daily: Daily
-      daily_every_number_day: Every %{number} day(s)
-      daily_options: Settings for daily recurring actions
+      daily: Päivittäin
+      daily_every_number_day: Joka %{number} päivä
+      daily_options: Asetukset päivittäin toistuville toimenpiteille
       day_x_on_every_x_month: Day %{day} on every %{month} month
-      ends_on: Ends on
-      ends_on_date: Ends on %{date}
-      ends_on_number_times: Ends after %{number} times
-      every_work_day: Every work day
-      monthly: Monthly
+      ends_on: Päättyy
+      ends_on_date: Päättyy %{date}
+      ends_on_number_times: Päättyy %{number} toiston jälkeen
+      every_work_day: Joka työpäivä
+      monthly: Kuukausittain
       monthly_every_xth_day: The %{day} %{day_of_week} of every %{month} month
-      monthly_options: Settings for monthly recurring actions
-      no_end_date: No end date
+      monthly_options: Asetukset kuukausittain toistuville toimenpiteille
+      no_end_date: Ei päättymispäivää
       pattern:
         day_names:
-        - sunday
-        - monday
-        - tuesday
-        - wednesday
-        - thursday
-        - friday
-        - saturday
+        - sunnuntai
+        - maanantai
+        - tiistai
+        - keskiviikko
+        - torstai
+        - perjantai
+        - lauantai
         due: due
-        every_day: every day
+        every_day: joka päivä
         every_month: every month
-        every_n: every %{n}
-        every_n_days: every %{n} days
-        every_n_months: every %{n} months
+        every_n: joka %{n}
+        every_n_days: joka %{n} päivä
+        every_n_months: joka %{n} kuukausi
         every_xth_day_of_every_n_months: every %{x} %{day} of every %{n_months}
         every_year_on: every year on %{date}
-        first: first
+        first: ensimmäinen
         fourth: fourth
         from: from
         last: last
         month_names:
         - 
-        - January
-        - February
-        - Match
-        - April
-        - May
-        - June
-        - July
-        - August
-        - September
-        - October
-        - November
-        - December
-        on_day_n: on day  %{n}
-        on_work_days: on work days
-        second: second
+        - Tammikuu
+        - Helmikuu
+        - Maaliskuu
+        - Huhtikuu
+        - Toukokuu
+        - Kesäkuu
+        - Heinäkuu
+        - Elokuu
+        - Syyskuu
+        - Lokakuu
+        - Marraskuu
+        - Joulukuu
+        on_day_n: on day %{n}
+        on_work_days: työpäivinä
+        second: sekunti
         show: show
         the_xth_day_of_month: the %{x} %{day} of %{month}
-        third: third
+        third: kolmas
         times: for %{number} times
         until: until
-        weekly: weekly
+        weekly: viikottain
       recurrence_on:
-        due_date: set the actions due date
-        from_tickler: set the date the action should be shown (do not set a due date)
-        options: Use the calculated date to
-        show_always: always
-        show_days_before: not until %{days} days before the due date
-        show_options: Show the action
-      starts_on: Starts on
-      weekly: Weekly
+        due_date: toimenpiteen määräpäivän asettamiseen
+        from_tickler: toimenpiteen näyttämispäivän asettamiseen (älä aseta määräpäivää)
+        options: Käytä laskettua päivää
+        show_always: aina
+        show_days_before: vasta %{days} päivä(ä) ennen määräpäivää
+        show_options: Näytä toimenpide
+      starts_on: Alkaa
+      weekly: Viikottain
       weekly_every_number_week: Returns every %{number} week on
-      weekly_options: Settings for weekly recurring actions
-      yearly: Yearly
-      yearly_every_x_day: Every %{month} %{day}
+      weekly_options: Asetukset viikottain toistuville toimenpiteille
+      yearly: Vuosittain
+      yearly_every_x_day: Joka %{month} %{day}
       yearly_every_xth_day: The %{day} %{day_of_week} of %{month}
       yearly_options: Settings for yearly recurring actions
     recurrence_completed: There is no next action after the recurring action you just finished. The recurrence is completed
-    recurrence_period: Recurrence period
+    recurrence_period: Toistuvuusjakso
     recurring_action_deleted: Action was deleted. Because this action is recurring, a new action was added
     recurring_action_saved: Recurring action saved
     recurring_actions_title: TRACKS::Recurring Actions
     recurring_deleted_success: The recurring action was deleted successfully.
-    recurring_pattern_removed: El patrón de repetición se retira de %{count}
-    recurring_todos: Recurring todos
+    recurring_pattern_removed: The recurrence pattern is removed from %{count}
+    recurring_todos: Toistuvat toimenpiteet
     remove_dependency: Remove dependency (does not delete the action)
     removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
     scheduled_overdue: Scheduled to show %{days} days ago
-    see_all_completed: Usted puede ver todas las acciones realizadas %{link}
+    see_all_completed: You can see all completed actions %{link}
     set_to_pending: "%{task} set to pending"
     show_from: Show from
-    show_in_days: Show in %{days} days
+    show_in_days: Näytetään %{days} päivän kuluttua
     show_on_date: Show on %{date}
     show_today: Show Today
     show_tomorrow: Show Tomorrow
-    star_action: Star this action
+    star_action: Merkitse toimenpide tähdellä
     star_action_with_description: star the action '%{description}'
     tagged_page_title: TRACKS::Tagged with '%{tag_name}'
-    tagged_with: tagged with &lsquo;%{tag_name}&rsquo;
+    tagged_with: tagged with '%{tag_name}'
     tags: Tags (separate with commas)
     task_list_title: TRACKS::List tasks
     tickler_items_due:
       one: One tickler item is now due - refresh the page to see it.
       other: "%{count} tickler items are now due - refresh the page to see them."
-    to_tickler: al recordatorio
+    to_tickler: to tickler
     unable_to_add_dependency: Unable to add dependency
     unresolved_dependency: The value you entered in the dependency field did not resolve to an existing action. This value will not be saved with the rest of the action. Continue?
     was_due_on_date: was due on %{date}
@@ -1091,8 +1094,8 @@ es:
     new_password_label: New password
     new_token_generated: New token successfully generated
     new_user_heading: 'Sign up a new user:'
-    new_user_title: TRACKS::Sign up as the admin user
-    no_signups_title: TRACKS::No signups
+    new_user_title: TRACKS::Sign up
+    no_signups_title: TRACKS::Ei rekisteröitymisiä
     openid_ok_pref_failed: You have successfully verified %{url} as your identity but there was a problem saving your authentication preferences.
     openid_url_verified: You have successfully verified %{url} as your identity and set your authentication type to OpenID.
     password_confirmation_label: Confirm password
@@ -1110,19 +1113,19 @@ es:
     total_projects: Total projects
     total_users_count: You have a total of %{count} users
     user_created: User created.
-    you_have_to_reset_your_password: Usted tiene que restablecer su contraseña
+    you_have_to_reset_your_password: You have to reset your password
   will_paginate:
-    next_label: Siguiente »
+    next_label: След &#8594;
     page_entries_info:
       multi_page: Отображено %{model} %{from} - %{to} из %{count}
-      multi_page_html: Viendo %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de %{count}</b> en el total de
+      multi_page_html: Отображено %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> из <b>%{count}</b>
       single_page:
-        one: Viendo del 1 %{model}
-        other: Viendo todos los %{count} %{model}
-        zero: No %{model} encontrado
+        one: Отображен 1 %{model}
+        other: Отображены все %{count} %{model}
+        zero: "%{model} не найдено"
       single_page_html:
-        one: Viendo del <b>1</b> %{model}
-        other: Viendo <b>todos los %{count}</b> %{model}
-        zero: No %{model} encontrado
-    page_gap: "..."
-    previous_label: "« Anterior"
+        one: Отображен <b>1</b> %{model}
+        other: Отображены <b>все&nbsp;%{count}</b> %{model}
+        zero: "%{model}  не найдено"
+    page_gap: "&hellip;"
+    previous_label: "&#8592; Пред"
