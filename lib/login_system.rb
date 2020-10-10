@@ -1,7 +1,6 @@
 require_dependency "user"
 
 module LoginSystem
-
   def current_user
     get_current_user
   end
@@ -97,7 +96,6 @@ module LoginSystem
   #   def authorize?(user)
   #
   def login_required
-
     if not protect?(action_name)
       return true
     end
@@ -125,7 +123,6 @@ module LoginSystem
   end
 
   def login_optional
-
     login_from_cookie
 
     if session['user_id'] and authorize?(get_current_user)
@@ -189,7 +186,6 @@ module LoginSystem
 
   # HTTP Basic auth code adapted from Coda Hale's simple_http_auth plugin. Thanks, Coda!
   def get_basic_auth_data
-
     auth_locations = ['REDIRECT_REDIRECT_X_HTTP_AUTHORIZATION',
                       'REDIRECT_X_HTTP_AUTHORIZATION',
                       'X-HTTP_AUTHORIZATION', 'HTTP_AUTHORIZATION']
@@ -216,7 +212,7 @@ module LoginSystem
       render :body => t('login.unsuccessful'), :status => 401
   end
 
-private
+  private
 
   # Redirect the user to the login page.
   def redirect_to_login
@@ -226,5 +222,4 @@ private
       format.m { redirect_to login_path(:format => 'm') }
     end
   end
-
 end

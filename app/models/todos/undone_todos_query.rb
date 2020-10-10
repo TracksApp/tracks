@@ -14,8 +14,8 @@ module Todos
         not_done_todos = current_user.todos.active.not_hidden
       end
 
-      not_done_todos = not_done_todos.
-        reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
+      not_done_todos = not_done_todos
+        .reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
         .includes(Todo::DEFAULT_INCLUDES)
 
       not_done_todos = not_done_todos.limit(sanitize(params[:limit])) if params[:limit]

@@ -61,7 +61,7 @@ module ApplicationHelper
     link_to(descriptor, project, :title => "View project: #{project.name}")
   end
 
-  def link_to_edit_note (note, descriptor = sanitize(note.id.to_s))
+  def link_to_edit_note(note, descriptor = sanitize(note.id.to_s))
     link_to(descriptor, edit_note_path(note),
       { :id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings" })
   end
@@ -207,7 +207,7 @@ module ApplicationHelper
     end
   end
 
-  def link_to_delete(type, object, descriptor=sanitize(object.name))
+  def link_to_delete(type, object, descriptor = sanitize(object.name))
     link_to(descriptor, self.send("#{type}_path", object, :format => 'js'),
       {
         :id => "delete_#{type}_#{object.id}",
@@ -228,7 +228,7 @@ module ApplicationHelper
 
   def source_view_key
     # uses @project.id or @context.id depending on source_view
-    source_view_is_one_of(:project, :context) ? "#{@source_view}-#{eval("@#{@source_view}.id")}" : @source_view
+    source_view_is_one_of(:project, :context) ? "#{@source_view}-#{eval("@#{@source_view}.id", binding, __FILE__, __LINE__)}" : @source_view
   end
 
   # create a unique object name which can be used in ajax calls returning js
@@ -237,7 +237,7 @@ module ApplicationHelper
     "#{name}_#{SecureRandom.hex(5)}"
   end
 
-  def js_render(partial, locals={}, object=nil)
+  def js_render(partial, locals = {}, object = nil)
     if object
       escape_javascript(render(partial: partial, locals: locals, object: object))
     else

@@ -758,7 +758,7 @@ class TodosController < ApplicationController
     end
   end
 
-  def get_not_completed_for_predecessor(relation, todo_id=nil)
+  def get_not_completed_for_predecessor(relation, todo_id = nil)
     items = relation.todos.not_completed
       .where('(LOWER(todos.description) ' + Common.like_operator + '?)', "%#{params[:term].downcase}%")
     items = items.where("AND NOT(todos.id=?)", todo_id) unless todo_id.nil?
@@ -984,7 +984,7 @@ end
     return todos_in_container, todos_in_target_container
   end
 
-  def determine_remaining_in_container_count(todo=@todo)
+  def determine_remaining_in_container_count(todo = @todo)
     source_view do |from|
       from.deferred {
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
@@ -1282,22 +1282,22 @@ end
   end
 
   # all completed todos [today@00:00, today@now]
-  def get_done_today(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
+  def get_done_today(completed_todos, includes = { :include => Todo::DEFAULT_INCLUDES })
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
-  def get_done_in_period(completed_todos, before, after, includes={ :include => Todo::DEFAULT_INCLUDES })
+  def get_done_in_period(completed_todos, before, after, includes = { :include => Todo::DEFAULT_INCLUDES })
     completed_todos.completed_before(before).completed_after(after).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
-  def get_done_rest_of_week(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
+  def get_done_rest_of_week(completed_todos, includes = { :include => Todo::DEFAULT_INCLUDES })
     get_done_in_period(completed_todos, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
-  def get_done_rest_of_month(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
+  def get_done_rest_of_month(completed_todos, includes = { :include => Todo::DEFAULT_INCLUDES })
     get_done_in_period(completed_todos, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
   end
 

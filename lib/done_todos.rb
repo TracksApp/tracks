@@ -1,26 +1,24 @@
 class DoneTodos
-
-
   def self.done_todos_for_container(todos)
     completed_todos = todos.completed
     return done_today(completed_todos), done_rest_of_week(completed_todos), done_rest_of_month(completed_todos)
   end
 
-  def self.done_today(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def self.done_today(todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     # TODO: refactor to remove outer hash from includes param
     todos.completed_after(beginning_of_day).includes(includes[:include])
   end
 
-  def self.done_rest_of_week(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def self.done_rest_of_week(todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     done_between(todos, includes, beginning_of_day, beginning_of_week)
   end
 
-  def self.done_rest_of_month(todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def self.done_rest_of_month(todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     done_between(todos, includes, beginning_of_week, beginning_of_month)
   end
 
   def self.completed_period(date)
-    return nil if date.nil? 
+    return nil if date.nil?
 
     return "today"         if date >= end_of_day  # treat todos with completed_at in future as done today (happens in tests)
     return "today"         if date.between?(beginning_of_day, end_of_day)
@@ -57,5 +55,4 @@ class DoneTodos
   def self.beginning_of_month
     Time.zone.now.beginning_of_month
   end
-
 end

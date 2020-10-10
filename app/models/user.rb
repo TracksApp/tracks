@@ -13,60 +13,69 @@ class User < ApplicationRecord
              def find_by_params(params)
                find(params['id'] || params['context_id']) || nil
              end
+
              def update_positions(context_ids)
-                context_ids.each_with_index {|id, position|
-                  context = self.detect { |c| c.id == id.to_i }
-                  raise I18n.t('models.user.error_context_not_associated', :context => id, :user => @user.id) if context.nil?
-                  context.update_attribute(:position, position + 1)
-                }
-              end
+               context_ids.each_with_index { |id, position|
+                 context = self.detect { |c| c.id == id.to_i }
+                 raise I18n.t('models.user.error_context_not_associated', :context => id, :user => @user.id) if context.nil?
+                 context.update_attribute(:position, position + 1)
+               }
+             end
            end
 
   has_many(:projects, -> { order 'projects.position ASC' }, dependent: :delete_all) do
               def find_by_params(params)
                 find(params['id'] || params['project_id'])
               end
+
               def update_positions(project_ids)
-                project_ids.each_with_index {|id, position|
+                project_ids.each_with_index { |id, position|
                   project = self.find_by(id: id.to_i)
                   raise I18n.t('models.user.error_project_not_associated', :project => id, :user => @user.id) if project.nil?
                   project.update_attribute(:position, position + 1)
                 }
               end
+
               def projects_in_state_by_position(state)
-                self.select{ |p| p.state == state }.sort_by{ |p| p.position }
+                self.select { |p| p.state == state }.sort_by { |p| p.position }
               end
+
               def next_from(project)
                 self.offset_from(project, 1)
               end
+
               def previous_from(project)
                 self.offset_from(project, -1)
               end
+
               def offset_from(project, offset)
                 projects = self.projects_in_state_by_position(project.state)
                 position = projects.index(project)
                 return nil if position == 0 && offset < 0
                 projects.at(position + offset)
               end
+
               def cache_note_counts
                 project_note_counts = Note.group(:project_id).count
                 self.each do |project|
                   project.cached_note_count = project_note_counts[project.id] || 0
                 end
               end
+
               def alphabetize(scope_conditions = {})
                 projects = where(scope_conditions)
                 projects = projects.sort_by { |project| project.name.downcase }
-                self.update_positions(projects.map{ |p| p.id })
+                self.update_positions(projects.map(&:id))
                 return projects
               end
+
               def actionize(scope_conditions = {})
                 todos_in_project = where(scope_conditions).includes(:todos)
                 todos_in_project = todos_in_project.sort_by { |x| [-x.todos.active.count, -x.id] }
-                todos_in_project.reject{ |p| p.todos.active.count > 0 }
-                sorted_project_ids = todos_in_project.map { |p| p.id }
+                todos_in_project.reject { |p| p.todos.active.count > 0 }
+                sorted_project_ids = todos_in_project.map(&:id)
 
-                all_project_ids = self.map { |p| p.id }
+                all_project_ids = self.map(&:id)
                 other_project_ids = all_project_ids - sorted_project_ids
 
                 update_positions(sorted_project_ids + other_project_ids)
@@ -76,9 +85,9 @@ class User < ApplicationRecord
             end
 
   has_many(:todos, -> { order 'todos.completed_at DESC, todos.created_at DESC' }, dependent: :delete_all) do
-              def count_by_group(g)
-                except(:order).group(g).count
-              end
+             def count_by_group(g)
+               except(:order).group(g).count
+             end
            end
 
   has_many :recurring_todos,
@@ -89,9 +98,9 @@ class User < ApplicationRecord
            -> { where('state = ?', 'deferred')
                 .order('show_from ASC, todos.created_at DESC') },
            :class_name => 'Todo') do
-              def find_and_activate_ready
-                where('show_from <= ?', Time.current).collect { |t| t.activate! }
-              end
+             def find_and_activate_ready
+               where('show_from <= ?', Time.current).collect { |t| t.activate! }
+             end
            end
 
   has_many :tags, dependent: :delete_all
@@ -157,7 +166,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def change_password(pass,pass_confirm)
+  def change_password(pass, pass_confirm)
     self.password = pass
     self.password_confirmation = pass_confirm
     save!
