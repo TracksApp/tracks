@@ -89,7 +89,7 @@ module Stats
       created_count_array = Array.new(30) { |i| @actions_created_last30days.size / 30.0 }
       done_count_array    = Array.new(30) { |i| @actions_done_last30days.size / 30.0 }
       # TODO: make the strftime i18n proof
-      time_labels         = Array.new(30) { |i| I18n.l(Time.zone.now-i.days, :format => :stats)  }
+      time_labels         = Array.new(30) { |i| I18n.l(Time.zone.now - i.days, :format => :stats) }
 
       return {
         datasets: [
@@ -103,11 +103,11 @@ module Stats
     end
 
     def completion_time_data
-      @actions_completion_time = @user.todos.completed.select("completed_at, created_at").reorder("completed_at DESC" )
+      @actions_completion_time = @user.todos.completed.select("completed_at, created_at").reorder("completed_at DESC")
 
       # convert to array and fill in non-existing weeks with 0
       @max_weeks = @actions_completion_time.last ? difference_in_weeks(@today, @actions_completion_time.last.completed_at) : 1
-      @actions_completed_per_week_array = convert_to_weeks_running_array(@actions_completion_time, @max_weeks+1)
+      @actions_completed_per_week_array = convert_to_weeks_running_array(@actions_completion_time, @max_weeks + 1)
 
       # stop the chart after 10 weeks
       @count = [10, @max_weeks].min
@@ -119,7 +119,7 @@ module Stats
       # get percentage done cumulative
       @cum_percent_done = convert_to_cumulative_array(@actions_completion_time_array, @actions_completion_time.count(:all))
 
-      time_labels         = Array.new(@count) { |i| "#{i}-#{i+1}" }
+      time_labels         = Array.new(@count) { |i| "#{i}-#{i + 1}" }
       time_labels[0]      = I18n.t('stats.within_one')
       time_labels[@count] = "> #{@count}"
 
@@ -137,7 +137,7 @@ module Stats
 
       # convert to array and fill in non-existing weeks with 0
       @max_weeks = difference_in_weeks(@today, @actions_running_time.last.created_at)
-      @actions_running_per_week_array = convert_to_weeks_from_today_array(@actions_running_time, @max_weeks+1, :created_at)
+      @actions_running_per_week_array = convert_to_weeks_from_today_array(@actions_running_time, @max_weeks + 1, :created_at)
 
       # cut off chart at 52 weeks = one year
       @count = [52, @max_weeks].min
@@ -147,9 +147,9 @@ module Stats
       @max_actions = @actions_running_time_array.max
 
       # get percentage done cumulative
-      @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
+      @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count)
 
-      time_labels = Array.new(@count) { |i| "#{i}-#{i+1}" }
+      time_labels = Array.new(@count) { |i| "#{i}-#{i + 1}" }
       time_labels[0] = "< 1"
       time_labels[@count] = "> #{@count}"
 
@@ -186,9 +186,9 @@ module Stats
       @max_actions = @actions_running_time_array.max
 
       # get percentage done cumulative
-      @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count )
+      @cum_percent_done = convert_to_cumulative_array(@actions_running_time_array, @actions_running_time.count)
 
-      time_labels = Array.new(@count) { |i| "#{i}-#{i+1}" }
+      time_labels = Array.new(@count) { |i| "#{i}-#{i + 1}" }
       time_labels[0] = "< 1"
       time_labels[@count] = "> #{@count}"
 
@@ -211,10 +211,10 @@ module Stats
       # cut off chart at 52 weeks = one year
       @count = [52, @max_weeks].min
 
-      @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks+1)
+      @actions_open_per_week_array = convert_to_weeks_running_from_today_array(@actions_started, @max_weeks + 1)
       @actions_open_per_week_array = cut_off_array(@actions_open_per_week_array, @count)
 
-      time_labels = Array.new(@count+1) { |i| "#{i}-#{i+1}" }
+      time_labels = Array.new(@count + 1) { |i| "#{i}-#{i + 1}" }
       time_labels[0] = "< 1"
 
       return {
@@ -252,7 +252,7 @@ module Stats
       @actions_completion_day = @user.todos.completed_after(@cut_off_month).select("completed_at")
 
       # convert to hash to be able to fill in non-existing days
-      @max=0
+      @max = 0
       @actions_creation_day_array = Array.new(7) { |i| 0 }
       @actions_creation_day.each { |r| @actions_creation_day_array[r.created_at.wday] += 1 }
 
@@ -275,11 +275,11 @@ module Stats
 
       # convert to hash to be able to fill in non-existing days
       @actions_creation_hour_array = Array.new(24) { |i| 0 }
-      @actions_creation_hour.each{|r| @actions_creation_hour_array[r.created_at.hour] += 1 }
+      @actions_creation_hour.each { |r| @actions_creation_hour_array[r.created_at.hour] += 1 }
 
       # convert to hash to be able to fill in non-existing days
       @actions_completion_hour_array = Array.new(24) { |i| 0 }
-      @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
+      @actions_completion_hour.each { |r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
 
       return {
         datasets: [
@@ -296,11 +296,11 @@ module Stats
 
       # convert to hash to be able to fill in non-existing days
       @actions_creation_hour_array = Array.new(24) { |i| 0 }
-      @actions_creation_hour.each{|r| @actions_creation_hour_array[r.created_at.hour] += 1 }
+      @actions_creation_hour.each { |r| @actions_creation_hour_array[r.created_at.hour] += 1 }
 
       # convert to hash to be able to fill in non-existing days
       @actions_completion_hour_array = Array.new(24) { |i| 0 }
-      @actions_completion_hour.each{|r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
+      @actions_completion_hour.each { |r| @actions_completion_hour_array[r.completed_at.hour] += 1 }
 
       return {
         datasets: [
@@ -393,7 +393,7 @@ module Stats
       # calculate fractions
       a = Array.new(array.size) {|i| array[i] * 100.0 / max}
       # make cumulative
-      1.upto(array.size-1) { |i| a[i] += a[i - 1] }
+      1.upto(array.size - 1) { |i| a[i] += a[i - 1] }
       return a
     end
 
@@ -412,7 +412,7 @@ module Stats
     end
 
     def three_month_avg(set, i)
-      (set.fetch(i) { 0 } + set.fetch(i+1) { 0 } + set.fetch(i + 2) { 0 }) / 3.0
+      (set.fetch(i) { 0 } + set.fetch(i + 1) { 0 } + set.fetch(i + 2) { 0 }) / 3.0
     end
 
     def set_three_month_avg(set, upper_bound)
@@ -421,14 +421,14 @@ module Stats
 
     def compute_running_avg_array(set, upper_bound)
       result = set_three_month_avg(set, upper_bound)
-      result[upper_bound - 1] = result[upper_bound-1] * 3 if upper_bound == set.length
-      result[upper_bound - 2] = result[upper_bound-2] * 3 / 2 if upper_bound > 1 and upper_bound == set.length
+      result[upper_bound - 1] = result[upper_bound - 1] * 3 if upper_bound == set.length
+      result[upper_bound - 2] = result[upper_bound - 2] * 3 / 2 if upper_bound > 1 and upper_bound == set.length
       result[0] = "null"
       result
     end # unsolved, not triggered, edge case for set.length == upper_bound + 1
 
     def month_label(i)
-      I18n.t('date.month_names')[(Time.zone.now.mon - i -1 ) % 12 + 1]
+      I18n.t('date.month_names')[(Time.zone.now.mon - i - 1) % 12 + 1]
     end
 
     def array_of_month_labels(count)

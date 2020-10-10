@@ -2,7 +2,7 @@ require 'staleness'
 
 module TodosHelper
   # === helpers for rendering container
-  def empty_message_holder(container_name, show, title_param=nil)
+  def empty_message_holder(container_name, show, title_param = nil)
     content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
       content_tag(:h2) { t("todos.no_actions.title", :param=>title_param) } +
       content_tag(:div, :class => "message") do
@@ -41,7 +41,7 @@ module TodosHelper
     }
   end
 
-  def show_done_todos(done_todos, settings={})
+  def show_done_todos(done_todos, settings = {})
     settings[:container_name] = "completed"
     settings[:link_in_header] = link_to(t('common.show_all'), determine_done_path)
 
@@ -63,7 +63,7 @@ module TodosHelper
       :locals => { :settings => settings }
   end
 
-  def show_hidden_todos(hidden_todos, settings={})
+  def show_hidden_todos(hidden_todos, settings = {})
     settings[:container_name] = "hidden"
 
     render :partial => 'todos/collection',
@@ -71,7 +71,7 @@ module TodosHelper
       :locals => { :settings => settings.reverse_merge!(default_collection_settings) }
   end
 
-  def show_deferred_pending_todos(deferred_todos, pending_todos, settings={})
+  def show_deferred_pending_todos(deferred_todos, pending_todos, settings = {})
     settings[:pending] = pending_todos
     settings[:container_name]="deferred_pending"
 
@@ -91,7 +91,7 @@ module TodosHelper
       }
   end
 
-  def todos_container(settings={})
+  def todos_container(settings = {})
     settings.reverse_merge!({
       :id => "#{settings[:container_name]}_container",
       :class => "container #{settings[:container_name]}",
@@ -109,7 +109,7 @@ module TodosHelper
     end
   end
 
-  def todos_container_header(settings={})
+  def todos_container_header(settings = {})
     settings.reverse_merge!({
         :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
       })
@@ -122,7 +122,7 @@ module TodosHelper
     header.html_safe
   end
 
-  def todos_container_items(collection, settings={})
+  def todos_container_items(collection, settings = {})
     settings.reverse_merge!({:id => "#{settings[:container_name]}"})
     # do not pass :class to partial locals
     settings.delete(:class)
@@ -146,13 +146,13 @@ module TodosHelper
 
   # === helpers for rendering a todo
 
-  def remote_star_icon(todo=@todo)
+  def remote_star_icon(todo = @todo)
     link_to(image_tag_for_star(todo),
       toggle_star_todo_path(todo),
       :class => "icon star_item", :title => t('todos.star_action_with_description', :description => todo.description))
   end
 
-  def remote_edit_button(todo=@todo)
+  def remote_edit_button(todo = @todo)
     link_to(
       image_tag("blank.png", :alt => t('todos.edit'), :align => "absmiddle", :id => dom_id(todo, "edit_icon"), :class => 'edit_item'),
       edit_todo_path(todo),
@@ -244,18 +244,18 @@ module TodosHelper
     image_tag("blank.png", :title => t('todos.star_action'), :class => "todo_star" + (todo.starred? ? " starred" : ""), :id => "star_img_" + todo.id.to_s)
   end
 
-  def remote_toggle_checkbox(todo=@todo)
+  def remote_toggle_checkbox(todo = @todo)
     check_box_tag("mark_complete_#{todo.id}", toggle_check_todo_path(todo), todo.completed?, :class => 'item-checkbox',
       :title => todo.pending? ? t('todos.blocked_by', :predecessors => todo.uncompleted_predecessors.to_a.map(&:description).join(', ')) : "", :readonly => todo.pending?)
   end
 
-  def remote_mobile_checkbox(todo=@todo)
+  def remote_mobile_checkbox(todo = @todo)
     form_tag toggle_check_todo_path(@todo, :format => 'm'), :method => :put, :class => "mobile-done", :name => "mobile_complete_#{@todo.id}" do
       check_box_tag('_source_view', 'todo', @todo && @todo.completed?, "onClick" => "document.mobile_complete_#{@todo.id}.submit()")
     end
   end
 
-  def date_span(todo=@todo)
+  def date_span(todo = @todo)
     if todo.completed?
       content_tag(:span, { :class => :grey }) { format_date( todo.completed_at ) }
     elsif todo.pending?
@@ -268,7 +268,7 @@ module TodosHelper
     end
   end
 
-  def successors_span(todo=@todo)
+  def successors_span(todo = @todo)
     unless todo.pending_successors.empty?
       pending_count = todo.pending_successors.count
       title = "#{t('todos.has_x_pending', :count => pending_count)}: #{todo.pending_successors.to_a.map(&:description).join(', ')}"
@@ -276,7 +276,7 @@ module TodosHelper
     end
   end
 
-  def grip_span(todo=@todo)
+  def grip_span(todo = @todo)
     unless todo.completed?
       image_tag('grip.png', :width => '7', :height => '16', :border => '0',
         :title => t('todos.drag_action_title'),
@@ -284,23 +284,23 @@ module TodosHelper
     end
   end
 
-  def tag_list_text(todo=@todo)
+  def tag_list_text(todo = @todo)
     todo.tags.to_a.join(', ')
   end
 
-  def tag_span(tag, mobile=false)
+  def tag_span(tag, mobile = false)
     content_tag(:span, :class => "tag #{tag.label}") { link_to(tag.name, tag_path(tag.name, :format => mobile ? :m : nil)) }
   end
 
-  def tag_list(todo=@todo, mobile=false)
+  def tag_list(todo=@todo, mobile = false)
     content_tag(:span, :class => 'tags') { todo.tags.all_except_starred.collect{ |tag| tag_span(tag, mobile) }.join('').html_safe }
   end
 
-  def tag_list_mobile(todo=@todo)
+  def tag_list_mobile(todo = @todo)
     todo.tags.all_except_starred.empty? ? "" : tag_list(todo, true)
   end
 
-  def deferred_due_date(todo=@todo)
+  def deferred_due_date(todo = @todo)
     t('todos.action_due_on', :date => format_date(todo.due)) if todo.deferred? && todo.due
   end
 
@@ -417,7 +417,7 @@ module TodosHelper
   # animation steps.
   # if the animation needs to be run inside the namespace of an object, set the
   # object_name to the name of the object and this name will be prepended to each step
-  def render_animation(animation, object_name=nil)
+  def render_animation(animation, object_name = nil)
     object_name += "." unless object_name.nil?  # add dot if object_name is given
 
     # concatenate all steps into functions that call functions

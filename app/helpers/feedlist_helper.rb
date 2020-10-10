@@ -13,7 +13,7 @@ module FeedlistHelper
   end
 
   def ical_formatted_link(options = {})
-    link_to(content_tag(:span, 'iCal', { :class=>"feed", :title => "iCal feed" }), linkoptions('ics', options))
+    link_to(content_tag(:span, 'iCal', { :class => "feed", :title => "iCal feed" }), linkoptions('ics', options))
   end
 
   def feed_links(feeds, link_options, title)

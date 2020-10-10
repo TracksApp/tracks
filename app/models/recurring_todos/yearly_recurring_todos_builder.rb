@@ -32,7 +32,7 @@ module RecurringTodos
     end
 
     def get_recurrence_selector
-      @selector=='yearly_every_x_day' ? 0 : 1
+      @selector == 'yearly_every_x_day' ? 0 : 1
     end
 
     def get_every_other2

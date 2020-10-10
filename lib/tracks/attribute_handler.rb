@@ -1,5 +1,4 @@
 module Tracks
-
   class AttributeHandler
     attr_reader :attributes
 
@@ -10,7 +9,7 @@ module Tracks
     end
 
     def get(attribute)
-      @attributes[attribute.to_sym] 
+      @attributes[attribute.to_sym]
     end
 
     def [](attribute)
@@ -37,7 +36,7 @@ module Tracks
       @attributes.key?(key.to_sym)
     end
 
-    def selector_key_present?(key)      
+    def selector_key_present?(key)
       key?(key)
     end
 
@@ -78,9 +77,9 @@ module Tracks
         object = relation.build(:name => name)
         new_object_created = true
       end
-      
+
       return object, new_object_created
-    end      
+    end
 
     def specified_by_name?(object_type)
       self.send("#{object_type}_specified_by_name?")
@@ -115,25 +114,23 @@ module Tracks
       ActionController::Parameters.new(attributes).permit(
       :context, :project,
       # model attributes
-      :context_id, :project_id, :description, :notes, :state, :start_from, 
+      :context_id, :project_id, :description, :notes, :state, :start_from,
       :ends_on, :end_date, :number_of_occurrences, :occurrences_count, :target,
-      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1, 
-      :every_other2, :every_other3, :every_day, :only_work_days, :every_count, 
+      :show_from_delta, :recurring_period, :recurrence_selector, :every_other1,
+      :every_other2, :every_other3, :every_day, :only_work_days, :every_count,
       :weekday, :show_always, :context_name, :project_name, :tag_list,
       # form attributes
-      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector, 
-      :recurring_target, :daily_every_x_days, :monthly_day_of_week, 
-      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month, 
-      :monthly_every_xth_day, :recurring_show_days_before, 
+      :recurring_period, :daily_selector, :monthly_selector, :yearly_selector,
+      :recurring_target, :daily_every_x_days, :monthly_day_of_week,
+      :monthly_every_x_day, :monthly_every_x_month2, :monthly_every_x_month,
+      :monthly_every_xth_day, :recurring_show_days_before,
       :recurring_show_always, :weekly_every_x_week, :weekly_return_monday,
-      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day, 
+      :yearly_day_of_week, :yearly_every_x_day, :yearly_every_xth_day,
       :yearly_month_of_year2, :yearly_month_of_year,
       # derived attributes
-      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday, 
+      :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday,
       :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
-      )    
+      )
     end
-
   end
-
 end

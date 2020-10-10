@@ -49,7 +49,7 @@ class Project < ApplicationRecord
   end
 
   def set_last_reviewed_now
-    self.last_reviewed = Time.now
+    self.last_reviewed = Time.zone.now
   end
 
   def set_completed_at_date
@@ -105,7 +105,7 @@ class Project < ApplicationRecord
     return !self.todos.deferred_or_blocked.exists? && !self.todos.active.exists?
   end
 
-  def shortened_name(length=40)
+  def shortened_name(length = 40)
     name.truncate(length, :omission => "...").html_safe
   end
 

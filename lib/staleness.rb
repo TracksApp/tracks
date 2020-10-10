@@ -2,7 +2,7 @@ require 'active_support/all'
 require 'user_time'
 
 class Staleness
-  SECONDS_PER_DAY = 86400
+  SECONDS_PER_DAY = 86_400
 
   def self.days_stale(item, current_user)
     return 0 if cannot_be_stale(item, current_user)
@@ -15,4 +15,3 @@ class Staleness
     false
   end
 end
-

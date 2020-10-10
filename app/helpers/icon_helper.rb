@@ -1,7 +1,7 @@
 module IconHelper
   include FontAwesome::Sass::Rails::ViewHelpers
 
-  def icon_fw(style, name, text=nil, html_options={})
+  def icon_fw(style, name, text = nil, html_options = {})
     text, html_options = nil, text if text.is_a?(Hash)
 
     if html_options.key?(:class)

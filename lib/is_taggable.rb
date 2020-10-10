@@ -1,18 +1,16 @@
 # These methods are adapted from has_many_polymorphs' tagging_extensions
-
 module IsTaggable
-
   def self.included(klass)
     klass.class_eval do
-
       # Add tags associations
       has_many :taggings, :as => :taggable
       has_many :tags, :through => :taggings do
         def to_s
           self.to_a.map(&:name).sort.join(Tag::JOIN_DELIMITER)
         end
+
         def all_except_starred
-          self.to_a.reject{|tag| tag.name == Todo::STARRED_TAG_NAME}
+          self.to_a.reject { |tag| tag.name == Todo::STARRED_TAG_NAME }
         end
       end
 

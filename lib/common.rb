@@ -8,7 +8,7 @@ module Common
   end
 
   def self.like_operator
-    # This is something of a hack to use the correct operator for Pg
+    # HACK: This is something of a hack to use the correct operator for Pg
     if ActiveRecord::Base.connection.adapter_name.downcase.to_sym == :postgresql
       like = 'ILIKE'
     else

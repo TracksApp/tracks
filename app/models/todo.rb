@@ -64,8 +64,8 @@ class Todo < ApplicationRecord
     where('todos.due > ? AND todos.due <= ?', start_date, end_date)
   end
 
-  STARRED_TAG_NAME = "starred"
-  DEFAULT_INCLUDES = [:project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo]
+  STARRED_TAG_NAME = "starred".freeze
+  DEFAULT_INCLUDES = [:project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo].freeze
 
   # state machine
   include AASM
@@ -149,7 +149,7 @@ class Todo < ApplicationRecord
   end
 
   def save_predecessors
-    unless @predecessor_array.nil?  # Only save predecessors if they changed
+    unless @predecessor_array.nil? # Only save predecessors if they changed
       current_array = self.predecessors
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
@@ -245,7 +245,7 @@ class Todo < ApplicationRecord
   end
 
   def toggle_star!
-    self.starred= !starred?
+    self.starred = !starred?
   end
 
   def starred=(starred)
@@ -313,7 +313,7 @@ class Todo < ApplicationRecord
   alias_method :original_context=, :context=
   def context=(value)
     if value.is_a? Context
-      self.original_context=(value)
+      self.original_context = (value)
     else
       c = Context.where(:name => value[:name]).first
       c = Context.create(value) if c.nil?

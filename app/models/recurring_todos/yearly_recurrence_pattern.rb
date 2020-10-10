@@ -81,7 +81,7 @@ module RecurringTodos
       if start.month > month || (start.month == month && start.day >= every_x_day)
         # if there is no next month n and day m in this year, search in next
         # year
-        start = Time.zone.local(start.year+1, month, 1)
+        start = Time.zone.local(start.year + 1, month, 1)
       else
         # if there is a next month n, stay in this year
         start = Time.zone.local(start.year, month, 1)
@@ -91,14 +91,14 @@ module RecurringTodos
 
     def get_relative_weekday_of_month(start, month)
       # if there is no next month n in this year, search in next year
-      the_next = start.month > month ? Time.zone.local(start.year+1, month, 1) : start
+      the_next = start.month > month ? Time.zone.local(start.year + 1, month, 1) : start
 
       # get the xth day of the month
       the_next = get_xth_day_of_month(self.every_xth_day, day_of_week, month, the_next.year)
 
       # if the_next is before previous, we went back into the past, so try next
       # year
-      the_next = get_xth_day_of_month(self.every_xth_day, day_of_week, month, start.year+1) if the_next <= start
+      the_next = get_xth_day_of_month(self.every_xth_day, day_of_week, month, start.year + 1) if the_next <= start
 
       the_next
     end

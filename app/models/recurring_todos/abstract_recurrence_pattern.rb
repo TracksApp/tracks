@@ -44,9 +44,13 @@ module RecurringTodos
 
     def xth(x)
       xth_day = [
-        I18n.t('todos.recurrence.pattern.first'),I18n.t('todos.recurrence.pattern.second'),I18n.t('todos.recurrence.pattern.third'),
-        I18n.t('todos.recurrence.pattern.fourth'),I18n.t('todos.recurrence.pattern.last')]
-      x.nil? ? '??' : xth_day[x-1]
+        I18n.t('todos.recurrence.pattern.first'),
+        I18n.t('todos.recurrence.pattern.second'),
+        I18n.t('todos.recurrence.pattern.third'),
+        I18n.t('todos.recurrence.pattern.fourth'),
+        I18n.t('todos.recurrence.pattern.last'),
+      ]
+      x.nil? ? '??' : xth_day[x - 1]
     end
 
     def day_of_week_as_text(day)
@@ -170,7 +174,7 @@ module RecurringTodos
     # takes start_from and previous into account.
     # offset needs to be 1.day for daily patterns or the start will be the
     # same day as the previous
-    def determine_start(previous, offset=0.day)
+    def determine_start(previous, offset = 0.day)
       start = self.start_from || NullTime.new
       if previous
         # check if the start_from date is later than previous. If so, use

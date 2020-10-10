@@ -26,7 +26,7 @@ class MessageGateway < ActionMailer::Base
     attachment = todo.attachments.build
 
     # create temp file
-    tmp = Tempfile.new(['attachment', '.eml'], {universal_newline: true})
+    tmp = Tempfile.new(['attachment', '.eml'], { universal_newline: true })
     tmp.write email.raw_source.gsub(/\r/, "")
 
     # add temp file to attachment. paperclip will copy the file to the right location
@@ -74,13 +74,13 @@ class MessageGateway < ActionMailer::Base
   end
 
   def get_receiving_user_from_mail_header(email)
-    user = get_receiving_user_from_sms_email( get_address(email) )
+    user = get_receiving_user_from_sms_email(get_address(email))
     Rails.logger.info(user.nil? ? "User unknown": "Email belongs to #{user.login}")
     return user
   end
 
   def get_address(email)
-    return SITE_CONFIG['email_dispatch'] == 'to' ?  email.to[0] :  email.from[0]
+    return SITE_CONFIG['email_dispatch'] == 'to' ? email.to[0] : email.from[0]
   end
 
   def get_receiving_user_from_sms_email(address)
@@ -91,7 +91,7 @@ class MessageGateway < ActionMailer::Base
   end
 
   def check_sender_is_in_mailmap(user, email)
-    if user.present? and !sender_is_in_mailmap?(user,email)
+    if user.present? && !sender_is_in_mailmap?(user, email)
       Rails.logger.warn "#{email.from[0]} not found in mailmap for #{user.login}"
       return false
     end
@@ -122,7 +122,7 @@ class MessageGateway < ActionMailer::Base
     parts = get_all_parts(email.parts)
 
     # remove all parts that are not text/plain
-    parts.reject{|part| !part.content_type.start_with?("text/plain") }
+    parts.reject { |part| !part.content_type.start_with?("text/plain") }
 
     return parts.count > 0 ? parts[0].decoded.strip : ""
   end

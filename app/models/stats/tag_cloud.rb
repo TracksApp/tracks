@@ -32,7 +32,7 @@ module Stats
     end
 
     def counts
-      @counts ||= tags.map { |t| t.count }
+      @counts ||= tags.map(&:count)
     end
   end
 end

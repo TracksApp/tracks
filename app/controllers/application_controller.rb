@@ -219,14 +219,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def init_not_done_counts(parents=['project', 'context'])
+  def init_not_done_counts(parents = ['project', 'context'])
     parents.each do |parent|
       eval("@#{parent}_not_done_counts ||= current_user.todos.active.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
       eval("@#{parent}_deferred_counts ||= current_user.todos.deferred.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
     end
   end
 
-  def init_hidden_todo_counts(parents=['project', 'context'])
+  def init_hidden_todo_counts(parents = ['project', 'context'])
     parents.each do |parent|
       eval("@#{parent}_hidden_todo_counts ||= current_user.todos.active_or_hidden.count_by_group('#{parent}_id')", binding, __FILE__, __LINE__)
     end
