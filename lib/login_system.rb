@@ -152,6 +152,7 @@ module LoginSystem
 
   def set_current_user(user)
     @user = user
+    User.update(@user.id, last_login_at: Time.zone.now)
   end
 
   # overwrite if you want to have special behavior in case the user is not authorized

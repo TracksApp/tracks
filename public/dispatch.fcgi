@@ -21,4 +21,3 @@ class Rack::PathInfoRewriter
 end
 
 Rack::Handler::FastCGI.run Rack::PathInfoRewriter.new(Tracksapp::Application)
-
