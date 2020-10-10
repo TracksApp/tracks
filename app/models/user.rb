@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   #for will_paginate plugin
   cattr_accessor :per_page
-  @@per_page = 10
+  @@per_page = 25
 
   has_many(:contexts, -> { order 'position ASC' }, dependent: :delete_all) do
              def find_by_params(params)
