@@ -1,5 +1,4 @@
 class DataController < ApplicationController
-
   require 'csv'
 
   def index
@@ -7,7 +6,6 @@ class DataController < ApplicationController
   end
 
   def import
-
   end
 
   def csv_map
@@ -147,8 +145,7 @@ class DataController < ApplicationController
   def csv_notes
     content_type = 'text/csv'
     CSV.generate(result = "") do |csv|
-      csv << ["id", "User ID", "Project", "Note",
-        "Created at", "Updated at"]
+      csv << ["id", "User ID", "Project", "Note", "Created at", "Updated at"]
       # had to remove project include because it's association order is leaking
       # through and causing an ambiguous column ref even with_exclusive_scope
       # didn't seem to help -JamesKebinger
@@ -198,7 +195,7 @@ class DataController < ApplicationController
 
   # adjusts time to utc
   def adjust_time(timestring)
-    if (timestring=='') or ( timestring == nil)
+    if (timestring == '') or (timestring == nil)
       return nil
     else
       return Time.parse(timestring + 'UTC')
@@ -210,8 +207,8 @@ class DataController < ApplicationController
   end
 
   private
+
   def sanitize_filename(filename)
     filename.gsub(/[^0-9A-z.\-]/, '_')
   end
-
 end

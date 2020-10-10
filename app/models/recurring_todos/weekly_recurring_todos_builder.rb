@@ -1,5 +1,4 @@
 module RecurringTodos
-
   class WeeklyRecurringTodosBuilder < AbstractRecurringTodosBuilder
     attr_reader :recurring_todo
 
@@ -8,7 +7,7 @@ module RecurringTodos
     end
 
     def attributes_to_filter
-      %w{weekly_selector weekly_every_x_week} + %w{monday tuesday wednesday thursday friday saturday sunday}.map{|day| "weekly_return_#{day}" }
+      %w{ weekly_selector weekly_every_x_week } + %w{ monday tuesday wednesday thursday friday saturday sunday }.map{ |day| "weekly_return_#{day}" }
     end
 
     def map_attributes(mapping)
@@ -26,7 +25,7 @@ module RecurringTodos
       mapping.set_if_nil(key, '       ')  # avoid nil
       mapping.set_if_nil(source_key, ' ') # avoid nil
 
-      mapping.set(key, mapping.get(key)[0, index] + mapping.get(source_key) + mapping.get(key)[index+1, mapping.get(key).length])
+      mapping.set(key, mapping.get(key)[0, index] + mapping.get(source_key) + mapping.get(key)[index + 1, mapping.get(key).length])
       mapping.except(source_key)
     end
 
@@ -37,7 +36,5 @@ module RecurringTodos
     def valid_selector?(key)
       true
     end
-
   end
-
 end

@@ -2,8 +2,8 @@
 #  http://www.juixe.com/techknow/index.php/2006/07/15/acts-as-taggable-tag-cloud/
 module Stats
   class TagCloud
-
     attr_reader :levels, :tags
+
     def initialize(tags)
       @levels = 10
       @tags = tags.sort_by { |tag| tag.name.downcase }
@@ -32,7 +32,7 @@ module Stats
     end
 
     def counts
-      @counts ||= tags.map {|t| t.count}
+      @counts ||= tags.map { |t| t.count }
     end
   end
 end

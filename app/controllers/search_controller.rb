@@ -1,5 +1,4 @@
 class SearchController < ApplicationController
-
   helper :todos, :application, :notes, :projects, :contexts
 
   def results

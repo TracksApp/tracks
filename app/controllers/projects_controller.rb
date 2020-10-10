@@ -1,5 +1,4 @@
 class ProjectsController < ApplicationController
-
   helper :application, :todos, :notes
   before_action :set_source_view
   before_action :set_project_from_params, :only => [:update, :destroy, :show, :edit, :set_reviewed]
@@ -16,14 +15,14 @@ class ProjectsController < ApplicationController
       init_not_done_counts(['project'])
       init_hidden_todo_counts(['project'])
       if params[:only_active_with_no_next_actions]
-        @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0  }
+        @projects = current_user.projects.active.select { |p| count_undone_todos(p) == 0 }
       else
         @projects = current_user.projects
       end
       @active_projects = current_user.projects.active
       @hidden_projects = current_user.projects.hidden
       respond_to do |format|
-        format.html  do
+        format.html do
           @page_title = t('projects.list_projects')
           @count = current_user.projects.count
           @completed_projects = current_user.projects.completed.limit(10)
@@ -32,7 +31,7 @@ class ProjectsController < ApplicationController
           current_user.projects.cache_note_counts
           @new_project = current_user.projects.build
         end
-        format.m     do
+        format.m do
           @completed_projects = current_user.projects.completed
           @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
           cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
@@ -58,9 +57,9 @@ class ProjectsController < ApplicationController
     @source_view = params['_source_view'] || 'review'
     @page_title = t('projects.list_reviews')
     projects = current_user.projects
-    @projects_to_review = projects.select  {|p| p.needs_review?(current_user)}
-    @stalled_projects = projects.select  {|p| p.stalled?}
-    @blocked_projects = projects.select  {|p| p.blocked?}
+    @projects_to_review = projects.select { |p| p.needs_review?(current_user) }
+    @stalled_projects = projects.select { |p| p.stalled? }
+    @blocked_projects = projects.select { |p| p.blocked? }
     @current_projects = projects.uncompleted.select { |p| not (p.needs_review?(current_user)) }.sort_by { |p| p.last_reviewed || Time.zone.at(0) }
 
     init_not_done_counts(['project'])
@@ -85,7 +84,7 @@ class ProjectsController < ApplicationController
     @total = current_user.projects.completed.count
     @no_projects = @projects.empty?
 
-    @range_low = (page.to_i-1) * items_per_page + 1
+    @range_low = (page.to_i - 1) * items_per_page + 1
     @range_high = @range_low + @projects.size - 1
 
     @range_low = 0 if @total == 0
@@ -115,7 +114,7 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.text  {
         # somehow passing Mime[:text] using content_type to render does not work
-        headers['Content-Type']=Mime[:text].to_s
+        headers['Content-Type'] = Mime[:text].to_s
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime[:text]
       }
     end
@@ -133,13 +132,13 @@ class ProjectsController < ApplicationController
     @projects_to_show = [@project]
 
     @done = {}
-    @done = @project.todos.completed.
-      reorder("todos.completed_at DESC").
-      limit(current_user.prefs.show_number_completed).
-      includes(Todo::DEFAULT_INCLUDES) unless @max_completed == 0
+    @done = @project.todos.completed
+      .reorder("todos.completed_at DESC")
+      .limit(current_user.prefs.show_number_completed)
+      .includes(Todo::DEFAULT_INCLUDES) unless @max_completed == 0
 
     @down_count = @not_done_todos.size + @deferred_todos.size + @pending_todos.size
-    @count=@down_count
+    @count = @down_count
     @next_project = current_user.projects.next_from(@project)
     @previous_project = current_user.projects.previous_from(@project)
     @default_tags = @project.default_tags
@@ -148,16 +147,16 @@ class ProjectsController < ApplicationController
     @contexts = current_user.contexts
     respond_to do |format|
       format.html
-      format.m     do
+      format.m do
         if @project.default_context.nil?
           @project_default_context = t('projects.no_default_context')
         else
           @project_default_context = t('projects.default_context', :context => @project.default_context.name)
         end
-        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
         @mobile_from_project = @project.id
       end
-      format.xml   do
+      format.xml do
         render :xml => @project.to_xml(:root => :project, :except => :user_id) { |xml|
           xml.not_done { @not_done_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
           xml.deferred { @deferred_todos.each { |child| child.to_xml(:builder => xml, :skip_instruct => true) } }
@@ -192,12 +191,11 @@ class ProjectsController < ApplicationController
           head :created, :location => project_url(@project), :text => @project.id
         end
       end
-      format.html {redirect_to :action => 'index'}
+      format.html { redirect_to :action => 'index' }
     end
   end
 
   # Edit the details of the project
-  #
   def update
     template = ""
 
@@ -252,7 +250,7 @@ class ProjectsController < ApplicationController
         if @saved
           render :xml => @project.to_xml( :except => :user_id )
         else
-          render :body => "Error on update: #{@project.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
+          render :body => "Error on update: #{@project.errors.full_messages.inject("") { |v, e| v + e + " " }}", :status => 409
         end
       }
     end
@@ -280,7 +278,7 @@ class ProjectsController < ApplicationController
 
   def order
     project_ids = params["container_project"]
-    @projects = current_user.projects.update_positions( project_ids )
+    @projects = current_user.projects.update_positions(project_ids)
     head :ok
   rescue
     notify :error, $!
@@ -350,5 +348,4 @@ class ProjectsController < ApplicationController
   def project_params
     params.require(:project).permit(:name, :position, :user_id, :description, :state, :default_context_id, :default_tags)
   end
-
 end

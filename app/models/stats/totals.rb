@@ -1,7 +1,7 @@
 module Stats
   class Totals
-
     attr_reader :user
+
     def initialize(user)
       @user = user
     end
@@ -83,6 +83,5 @@ module Stats
     def tag_ids
       @tag_ids ||= Stats::UserTagsQuery.new(user).result.map(&:id)
     end
-
   end
 end

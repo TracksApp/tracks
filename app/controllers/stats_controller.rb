@@ -1,6 +1,5 @@
 class StatsController < ApplicationController
-
-  SECONDS_PER_DAY = 86400;
+  SECONDS_PER_DAY = 86_400;
 
   helper :todos, :projects, :recurring_todos
   append_before_action :init, :except => :index
@@ -31,15 +30,15 @@ class StatsController < ApplicationController
     @max = (@actions_done_last_months_array + @actions_created_last_months_array).max
 
     # set running avg
-    @actions_done_avg_last_months_array = compute_running_avg_array(@actions_done_last_months_array,month_count+1)
-    @actions_created_avg_last_months_array = compute_running_avg_array(@actions_created_last_months_array,month_count+1)
+    @actions_done_avg_last_months_array = compute_running_avg_array(@actions_done_last_months_array,month_count + 1)
+    @actions_created_avg_last_months_array = compute_running_avg_array(@actions_created_last_months_array,month_count + 1)
 
     # interpolate avg for this month.
     @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last_months_array)
     @interpolated_actions_done_this_month = interpolate_avg_for_current_month(@actions_done_last_months_array)
 
-    @created_count_array = Array.new(month_count+1, actions_last_months.select { |x| x.created_at }.size/month_count)
-    @done_count_array    = Array.new(month_count+1, actions_last_months.select { |x| x.completed_at }.size/month_count)
+    @created_count_array = Array.new(month_count + 1, actions_last_months.select { |x| x.created_at }.size / month_count)
+    @done_count_array    = Array.new(month_count + 1, actions_last_months.select { |x| x.completed_at }.size / month_count)
 
     render :layout => false
   end
@@ -52,7 +51,6 @@ class StatsController < ApplicationController
 
     case params['id']
     when 'avrt', 'avrt_end' # actions_visible_running_time
-
       # HACK: because open flash chart uses & to denote the end of a parameter,
       # we cannot use URLs with multiple parameters (that would use &). So we
       # revert to using two id's for the same selection. avtr_end means that the
@@ -72,11 +70,11 @@ class StatsController < ApplicationController
       end
 
       # get all running actions that are visible
-      @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked.
-        select("todos.id, todos.created_at").
-        reorder("todos.created_at DESC")
+      @actions_running_time = current_user.todos.not_completed.not_hidden.not_deferred_or_blocked
+        .select("todos.id, todos.created_at")
+        .reorder("todos.created_at DESC")
 
-      selected_todo_ids = get_ids_from(@actions_running_time, week_from, week_to, params['id']== 'avrt_end')
+      selected_todo_ids = get_ids_from(@actions_running_time, week_from, week_to, params['id'] == 'avrt_end')
       @selected_actions = selected_todo_ids.size == 0 ? [] : current_user.todos.where("id in (" + selected_todo_ids.join(",") + ")")
       @count = @selected_actions.size
 
@@ -84,7 +82,7 @@ class StatsController < ApplicationController
 
     when 'art', 'art_end'
       week_from = params['index'].to_i
-      week_to = week_from+1
+      week_to = week_from + 1
 
       @chart = Stats::Chart.new('actions_running_time_data')
       @page_title = "Actions selected from week "
@@ -99,7 +97,7 @@ class StatsController < ApplicationController
       # get all running actions
       @actions_running_time = current_user.todos.not_completed.select("id, created_at")
 
-      selected_todo_ids = get_ids_from(@actions_running_time, week_from, week_to, params['id']=='art_end')
+      selected_todo_ids = get_ids_from(@actions_running_time, week_from, week_to, params['id'] == 'art_end')
       @selected_actions = selected_todo_ids.size == 0 ? [] : current_user.todos.where("id in (#{selected_todo_ids.join(",")})")
       @count = @selected_actions.size
 
@@ -145,7 +143,7 @@ class StatsController < ApplicationController
       if at_end
         selected_todo_ids << r.id.to_s if weeks >= week_from
       else
-        selected_todo_ids << r.id.to_s if weeks.between?(week_from, week_to-1)
+        selected_todo_ids << r.id.to_s if weeks.between?(week_from, week_to - 1)
       end
     end
 
@@ -161,12 +159,12 @@ class StatsController < ApplicationController
   end
 
   def put_events_into_month_buckets(records, array_size, date_method_on_todo)
-    convert_to_array(records.select { |x| x.send(date_method_on_todo) }, array_size) { |r| [difference_in_months(@today, r.send(date_method_on_todo))]}
+    convert_to_array(records.select { |x| x.send(date_method_on_todo) }, array_size) { |r| [difference_in_months(@today, r.send(date_method_on_todo))] }
   end
 
   # assumes date1 > date2
   def difference_in_days(date1, date2)
-    return ((date1.utc.at_midnight-date2.utc.at_midnight)/SECONDS_PER_DAY).to_i
+    return ((date1.utc.at_midnight - date2.utc.at_midnight) / SECONDS_PER_DAY).to_i
   end
 
   # assumes date1 > date2

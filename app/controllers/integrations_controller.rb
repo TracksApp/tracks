@@ -59,6 +59,4 @@ class IntegrationsController < ApplicationController
 
     return result
   end
-
 end
-

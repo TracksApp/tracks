@@ -29,7 +29,7 @@ module RenderingHelper
     # add onenote and message protocols, allow a target
     a_href_config = relaxed_config[:protocols]['a']['href'] + %w(onenote message)
     a_attributes = relaxed_config[:attributes]['a'] + ['target']
-    config = Sanitize::Config.merge(config, protocols: {'a' => {'href' => a_href_config}}, :attributes => {'a' => a_attributes})
+    config = Sanitize::Config.merge(config, protocols: { 'a' => { 'href' => a_href_config } }, :attributes => { 'a' => a_attributes })
 
     rendered = Sanitize.fragment(rendered, config)
     return rendered.html_safe

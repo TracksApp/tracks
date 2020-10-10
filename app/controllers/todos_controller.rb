@@ -1,5 +1,4 @@
 class TodosController < ApplicationController
-
   skip_before_action :login_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
   prepend_before_action :login_or_feed_token_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
   append_before_action :find_and_activate_ready, :only => [:index, :list_deferred]
@@ -35,29 +34,29 @@ class TodosController < ApplicationController
     @done = current_user.todos.completed.limit(max_completed).includes(Todo::DEFAULT_INCLUDES) unless max_completed == 0
 
     respond_to do |format|
-      format.html  do
+      format.html do
         @page_title = t('todos.task_list_title')
         # Set count badge to number of not-done, not hidden context items
         @count = current_user.todos.active.not_hidden.count(:all)
-        @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
+        @todos_without_project = @not_done_todos.select{ |t| t.project.nil? }
       end
       format.m do
         @page_title = t('todos.mobile_todos_page_title')
         @home = true
 
-        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url] = { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
         determine_down_count
 
         render :action => 'index'.freeze
       end
       format.text  do
         # somehow passing Mime[:text] using content_type to render does not work
-        headers['Content-Type'.freeze]=Mime[:text].to_s
+        headers['Content-Type'.freeze] = Mime[:text].to_s
         render :content_type => Mime[:text]
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
-        render :xml => @xml_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
+        render :xml => @xml_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
       end
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Actions'.freeze
@@ -73,7 +72,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.m {
         @new_mobile = true
-        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+        @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         @mobile_from_context = current_user.contexts.find(params[:from_context]) if params[:from_context]
         @mobile_from_project = current_user.projects.find(params[:from_project]) if params[:from_project]
         if params[:from_project] && !params[:from_context]
@@ -123,7 +122,7 @@ class TodosController < ApplicationController
           redirect_to :action => "index"
         end
         format.m do
-          @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+          @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
           if @saved
             onsite_redirect_to @return_path
           else
@@ -176,7 +175,7 @@ class TodosController < ApplicationController
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
       if line.present? #ignore blank lines
-        @todo = current_user.todos.build({:description => line, :context_id => p.context_id, :project_id => p.project_id})
+        @todo = current_user.todos.build({ :description => line, :context_id => p.context_id, :project_id => p.project_id })
         validates &&= @todo.valid?
 
         @build_todos << @todo
@@ -250,7 +249,7 @@ class TodosController < ApplicationController
         @projects = current_user.projects.active
         @contexts = current_user.contexts
         @edit_mobile = true
-        @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+        @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
       }
     end
   end
@@ -259,7 +258,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m { render :action => 'show' }
-      format.xml { render :xml => @todo.to_xml( *[todo_xml_params[0].merge({:root => :todo})] ) }
+      format.xml { render :xml => @todo.to_xml( *[todo_xml_params[0].merge({ :root => :todo })] ) }
     end
   end
 
@@ -363,7 +362,7 @@ class TodosController < ApplicationController
         if @saved
           if cookies[:mobile_url]
             old_path = cookies[:mobile_url]
-            cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+            cookies[:mobile_url] = { :value => nil, :secure => SITE_CONFIG['secure_cookies'] }
             notify(:notice, t("todos.action_marked_complete", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'))
             onsite_redirect_to old_path
           else
@@ -384,11 +383,11 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.js
       format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
-      format.html { redirect_to request.referrer}
+      format.html { redirect_to request.referrer }
       format.m {
         if cookies[:mobile_url]
           old_path = cookies[:mobile_url]
-          cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+          cookies[:mobile_url] = { :value => nil, :secure => SITE_CONFIG['secure_cookies'] }
           notify(:notice, "Star toggled")
           onsite_redirect_to old_path
         else
@@ -456,7 +455,7 @@ class TodosController < ApplicationController
     end
 
     determine_changes_by_this_update
-    determine_remaining_in_container_count( (@context_changed || @project_changed) ? @original_item : @todo)
+    determine_remaining_in_container_count((@context_changed || @project_changed) ? @original_item : @todo)
     determine_down_count
     determine_deferred_tag_count(sanitize(params['_tag_name'])) if source_view_is(:tag)
 
@@ -519,7 +518,6 @@ class TodosController < ApplicationController
     @new_recurring_todo = check_for_next_todo(@todo) if @saved
 
     respond_to do |format|
-
       format.html do
         if @saved
           message = t('todos.action_deleted_success')
@@ -533,7 +531,6 @@ class TodosController < ApplicationController
           redirect_to :action => 'index'
         end
       end
-
       format.js do
         if @saved
           determine_down_count
@@ -546,9 +543,7 @@ class TodosController < ApplicationController
         end
         render
       end
-
       format.xml { render :body => '200 OK. Action deleted.', :status => 200 }
-
     end
   end
 
@@ -563,7 +558,7 @@ class TodosController < ApplicationController
       format.html
       format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
+        render :xml => completed_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
       end
     end
   end
@@ -583,7 +578,7 @@ class TodosController < ApplicationController
     @contexts_to_show = @contexts = current_user.contexts
     @projects_to_show = @projects = current_user.projects
 
-    includes = params[:format]=='xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
+    includes = params[:format] == 'xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
 
     @not_done_todos = current_user.todos.deferred.includes(includes).reorder('show_from') + current_user.todos.pending.includes(includes)
     @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
@@ -596,7 +591,7 @@ class TodosController < ApplicationController
         init_data_for_sidebar unless mobile?
       end
       format.m
-      format.xml { render :xml => @not_done_todos.to_xml( *[todo_xml_params[0].merge({:root => :todos})] ) }
+      format.xml { render :xml => @not_done_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] ) }
     end
   end
 
@@ -646,14 +641,14 @@ class TodosController < ApplicationController
       blocked.
       reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
       includes(Todo::DEFAULT_INCLUDES)
-    @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
+    @todos_without_project = @not_done_todos.select{ |t| t.project.nil? }
 
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
-    @done = todos_with_tag_ids.completed.
-      limit(current_user.prefs.show_number_completed).
-      reorder('todos.completed_at DESC').
-      includes(Todo::DEFAULT_INCLUDES)
+    @done = todos_with_tag_ids.completed
+      .limit(current_user.prefs.show_number_completed)
+      .reorder('todos.completed_at DESC')
+      .includes(Todo::DEFAULT_INCLUDES)
 
     @projects = current_user.projects
     @contexts = current_user.contexts
@@ -670,7 +665,7 @@ class TodosController < ApplicationController
     respond_to do |format|
       format.html
       format.m {
-        cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
       }
       format.text {
         render :action => 'index', :layout => false, :content_type => Mime[:text]
@@ -704,7 +699,6 @@ class TodosController < ApplicationController
     @page_title = t('todos.all_completed_tagged_page_title', :tag_name => @tag_name)
     @tag = Tag.where(:name => @tag_name).first_or_create
   end
-
 
   def tags
     tags_beginning = current_user.tags.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
@@ -747,7 +741,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to :back }
-      format.js {render :action => 'update'}
+      format.js { render :action => 'update' }
       format.m {
         notify(:notice, t("todos.action_deferred", :description => @todo.description))
         do_mobile_todo_redirection
@@ -759,20 +753,20 @@ class TodosController < ApplicationController
     @hidden = current_user.todos.hidden
     respond_to do |format|
       format.xml {
-        render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({:root => :todos})] )
+        render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
       }
     end
   end
 
   def get_not_completed_for_predecessor(relation, todo_id=nil)
-    items = relation.todos.not_completed.
-      where('(LOWER(todos.description) ' + Common.like_operator + '?)', "%#{params[:term].downcase}%")
+    items = relation.todos.not_completed
+      .where('(LOWER(todos.description) ' + Common.like_operator + '?)', "%#{params[:term].downcase}%")
     items = items.where("AND NOT(todos.id=?)", todo_id) unless todo_id.nil?
 
-    items.
-      includes(:context, :project).
-      reorder('description ASC').
-      limit(10)
+    items
+      .includes(:context, :project)
+      .reorder('description ASC')
+      .limit(10)
   end
 
   def auto_complete_for_predecessor
@@ -805,12 +799,12 @@ class TodosController < ApplicationController
 
   def show_notes
     @todo = current_user.todos.find(params['id'])
-    @return_path=cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
+    @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
     respond_to do |format|
       format.html {
         redirect_to home_path, "Viewing note of todo is not implemented"
       }
-      format.m   {
+      format.m {
         render :action => "show_notes"
       }
     end
@@ -839,7 +833,7 @@ class TodosController < ApplicationController
   def do_mobile_todo_redirection
     if cookies[:mobile_url]
       old_path = cookies[:mobile_url]
-      cookies[:mobile_url] = {:value => nil, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url] = { :value => nil, :secure => SITE_CONFIG['secure_cookies'] }
       onsite_redirect_to old_path
     else
       onsite_redirect_to todos_path(:format => 'm')
@@ -990,7 +984,7 @@ end
     return todos_in_container, todos_in_target_container
   end
 
-  def determine_remaining_in_container_count(todo = @todo)
+  def determine_remaining_in_container_count(todo=@todo)
     source_view do |from|
       from.deferred {
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
@@ -1060,7 +1054,7 @@ end
   end
 
   def determine_completed_count
-    todos=nil
+    todos = nil
 
     source_view do |from|
       from.todo    { todos = current_user.todos.not_hidden.completed }
@@ -1096,7 +1090,6 @@ end
         date_to_check ||= Time.zone.now
 
         if recurring_todo.active? && recurring_todo.continues_recurring?(date_to_check)
-
           # shift the reference date to yesterday if date_to_check is furher in
           # the past. This is to make sure we do not get older todos for overdue
           # todos. I.e. checking a daily todo that is overdue with 5 days will
@@ -1104,7 +1097,7 @@ end
           # date. Discard the time part in the compare. We pick yesterday so
           # that new todos due for today will be created instead of new todos
           # for tomorrow.
-          date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now-1.day
+          date = date_to_check.at_midnight >= Time.zone.now.at_midnight ? date_to_check : Time.zone.now - 1.day
 
           new_recurring_todo = TodoFromRecurringTodo.new(current_user, recurring_todo).create(date)
         end
@@ -1179,7 +1172,6 @@ end
     end
   end
 
-
   def update_context
     @context_changed = false
     if params['todo']['context_id'].blank? && params['context_name'].present?
@@ -1218,7 +1210,7 @@ end
   end
 
   def update_due_and_show_from_dates
-    %w{ due show_from }.each {|date| update_date_for_update(date) }
+    %w{ due show_from }.each { |date| update_date_for_update(date) }
   end
 
   def update_completed_state
@@ -1290,22 +1282,22 @@ end
   end
 
   # all completed todos [today@00:00, today@now]
-  def get_done_today(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_today(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     start_of_this_day = Time.zone.now.beginning_of_day
     completed_todos.completed_after(start_of_this_day).includes(includes[:include])
   end
 
-  def get_done_in_period(completed_todos, before, after, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_in_period(completed_todos, before, after, includes={ :include => Todo::DEFAULT_INCLUDES })
     completed_todos.completed_before(before).completed_after(after).includes(includes[:include])
   end
 
   # all completed todos [begin_of_week, start_of_today]
-  def get_done_rest_of_week(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_rest_of_week(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     get_done_in_period(completed_todos, Time.zone.now.beginning_of_day, Time.zone.now.beginning_of_week)
   end
 
   # all completed todos [begin_of_month, begin_of_week]
-  def get_done_rest_of_month(completed_todos, includes = {:include => Todo::DEFAULT_INCLUDES})
+  def get_done_rest_of_month(completed_todos, includes={ :include => Todo::DEFAULT_INCLUDES })
     get_done_in_period(completed_todos, Time.zone.now.beginning_of_week, Time.zone.now.beginning_of_month)
   end
 
@@ -1322,5 +1314,4 @@ end
       redirect_to(uri.path)
     end
   end
-
 end

@@ -5,8 +5,8 @@ class RecurringTodo < ApplicationRecord
 
   has_many :todos
 
-  scope :active,    -> { where state: 'active'}
-  scope :completed, -> { where state: 'completed'}
+  scope :active,    -> { where state: 'active' }
+  scope :completed, -> { where state: 'completed' }
 
   include IsTaggable
 
@@ -27,7 +27,7 @@ class RecurringTodo < ApplicationRecord
   validates_presence_of :description, :recurring_period, :target, :ends_on, :context
 
   validates_length_of :description, :maximum => 100
-  validates_length_of :notes, :maximum => 60000, :allow_nil => true
+  validates_length_of :notes, :maximum => 60_000, :allow_nil => true
 
   validate :period_validation
   validate :pattern_specific_validations
@@ -72,7 +72,7 @@ class RecurringTodo < ApplicationRecord
 
   def pattern
     if valid_period?
-      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RecurrencePattern.new(user)")
+      @pattern = eval("RecurringTodos::#{recurring_period.capitalize}RecurrencePattern.new(user)", binding, __FILE__, __LINE__)
       @pattern.build_from_recurring_todo(self)
     end
     @pattern
@@ -138,5 +138,4 @@ class RecurringTodo < ApplicationRecord
   def continues_recurring?(previous)
     pattern.continues_recurring?(previous)
   end
-
 end

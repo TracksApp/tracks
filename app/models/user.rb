@@ -22,7 +22,7 @@ class User < ApplicationRecord
               end
            end
 
-  has_many(:projects, -> {order 'projects.position ASC'}, dependent: :delete_all) do
+  has_many(:projects, -> { order 'projects.position ASC' }, dependent: :delete_all) do
               def find_by_params(params)
                 find(params['id'] || params['project_id'])
               end
@@ -46,7 +46,7 @@ class User < ApplicationRecord
                 projects = self.projects_in_state_by_position(project.state)
                 position = projects.index(project)
                 return nil if position == 0 && offset < 0
-                projects.at( position + offset)
+                projects.at(position + offset)
               end
               def cache_note_counts
                 project_note_counts = Note.group(:project_id).count
@@ -64,9 +64,9 @@ class User < ApplicationRecord
                 todos_in_project = where(scope_conditions).includes(:todos)
                 todos_in_project = todos_in_project.sort_by { |x| [-x.todos.active.count, -x.id] }
                 todos_in_project.reject{ |p| p.todos.active.count > 0 }
-                sorted_project_ids = todos_in_project.map {|p| p.id}
+                sorted_project_ids = todos_in_project.map { |p| p.id }
 
-                all_project_ids = self.map {|p| p.id}
+                all_project_ids = self.map { |p| p.id }
                 other_project_ids = all_project_ids - sorted_project_ids
 
                 update_positions(sorted_project_ids + other_project_ids)
@@ -82,12 +82,12 @@ class User < ApplicationRecord
            end
 
   has_many :recurring_todos,
-           -> {order 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC'},
+           -> { order 'recurring_todos.completed_at DESC, recurring_todos.created_at DESC' },
            dependent: :delete_all
 
   has_many(:deferred_todos,
-           -> { where('state = ?', 'deferred').
-                order('show_from ASC, todos.created_at DESC')},
+           -> { where('state = ?', 'deferred')
+                .order('show_from ASC, todos.created_at DESC') },
            :class_name => 'Todo') do
               def find_and_activate_ready
                 where('show_from <= ?', Time.current).collect { |t| t.activate! }
@@ -196,7 +196,7 @@ class User < ApplicationRecord
     BCrypt::Password.create(s)
   end
 
-protected
+  protected
 
   def crypt_password
     return if password.blank?
@@ -218,5 +218,4 @@ protected
     taggings = Tagging.where(taggable_id: ids).pluck(:id)
     Tagging.where(id: taggings).delete_all
   end
-
 end

@@ -1,7 +1,6 @@
 class Todo < ApplicationRecord
-
   MAX_DESCRIPTION_LENGTH = 300
-  MAX_NOTES_LENGTH = 60000
+  MAX_NOTES_LENGTH = 60_000
 
   after_save :save_predecessors
 
@@ -19,9 +18,9 @@ class Todo < ApplicationRecord
   has_many :successor_dependencies,   :foreign_key => 'successor_id',   :class_name => 'Dependency', :dependent => :destroy
   has_many :predecessors, :through => :successor_dependencies
   has_many :successors,   :through => :predecessor_dependencies
-  has_many :uncompleted_predecessors, -> {where('NOT (todos.state = ?)', 'completed')}, :through => :successor_dependencies,
+  has_many :uncompleted_predecessors, -> { where('NOT (todos.state = ?)', 'completed') }, :through => :successor_dependencies,
     :source => :predecessor
-  has_many :pending_successors, -> {where('todos.state = ?', 'pending')}, :through => :predecessor_dependencies,
+  has_many :pending_successors, -> { where('todos.state = ?', 'pending') }, :through => :predecessor_dependencies,
     :source => :successor
   has_many :attachments, dependent: :destroy
 
@@ -32,14 +31,14 @@ class Todo < ApplicationRecord
   scope :project_hidden, -> { joins('LEFT OUTER JOIN projects p ON p.id = todos.project_id').where('p.state = ?', 'hidden') }
   scope :completed, -> { where 'todos.state = ?', 'completed' }
   scope :deferred, -> { where 'todos.state = ?', 'deferred' }
-  scope :blocked, -> {where 'todos.state = ?', 'pending' }
-  scope :pending, -> {where 'todos.state = ?', 'pending' }
+  scope :blocked, -> { where 'todos.state = ?', 'pending' }
+  scope :pending, -> { where 'todos.state = ?', 'pending' }
   scope :deferred_or_blocked, -> { where '(todos.state = ?) OR (todos.state = ?)', 'deferred', 'pending' }
   scope :hidden, -> {
-    joins('INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id').
-    joins('LEFT OUTER JOIN projects p_hidden ON p_hidden.id = todos.project_id').
-    where('(c_hidden.state = ? OR p_hidden.state = ?)', 'hidden', 'hidden').
-    where('NOT todos.state = ?', 'completed') }
+    joins('INNER JOIN contexts c_hidden ON c_hidden.id = todos.context_id')
+    .joins('LEFT OUTER JOIN projects p_hidden ON p_hidden.id = todos.project_id')
+    .where('(c_hidden.state = ? OR p_hidden.state = ?)', 'hidden', 'hidden')
+    .where('NOT todos.state = ?', 'completed') }
   scope :not_hidden, -> { not_context_hidden.not_project_hidden }
   scope :not_deferred_or_blocked, -> { where '(NOT todos.state=?) AND (NOT todos.state = ?)', 'deferred', 'pending' }
   scope :not_project_hidden, -> { joins('LEFT OUTER JOIN projects p ON p.id = todos.project_id').where('p.id IS NULL OR NOT(p.state = ?)', 'hidden') }
@@ -50,12 +49,12 @@ class Todo < ApplicationRecord
   scope :are_due,           -> { where 'NOT (todos.due IS NULL)' }
   scope :due_today,         -> { where("todos.due <= ?", Time.zone.now) }
   scope :with_tag,          lambda { |tag_id| joins("INNER JOIN taggings ON todos.id = taggings.taggable_id").where("taggings.tag_id = ? AND taggings.taggable_type='Todo'", tag_id) }
-  scope :with_tags,         lambda { |tag_ids| where("EXISTS(SELECT * from taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
+  scope :with_tags,         lambda { |tag_ids| where("EXISTS(SELECT * FROM taggings t WHERE t.tag_id IN (?) AND t.taggable_id=todos.id AND t.taggable_type='Todo')", tag_ids) }
   scope :completed_after,   lambda { |date| where("todos.completed_at > ?", date) }
   scope :completed_before,  lambda { |date| where("todos.completed_at < ?", date) }
   scope :created_after,     lambda { |date| where("todos.created_at > ?", date) }
   scope :created_before,    lambda { |date| where("todos.created_at < ?", date) }
-  scope :created_or_completed_after,  lambda { |date| where("todos.created_at > ? or todos.completed_at > ?", date, date) }
+  scope :created_or_completed_after, lambda { |date| where("todos.created_at > ? OR todos.completed_at > ?", date, date) }
 
   def self.due_after(date)
     where('todos.due > ?', date)
@@ -66,16 +65,15 @@ class Todo < ApplicationRecord
   end
 
   STARRED_TAG_NAME = "starred"
-  DEFAULT_INCLUDES = [ :project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo ]
+  DEFAULT_INCLUDES = [:project, :context, :tags, :taggings, :pending_successors, :uncompleted_predecessors, :recurring_todo]
 
   # state machine
   include AASM
-  aasm_initial_state = Proc.new { (self.show_from && self.user && (self.show_from > self.user.date)) ? :deferred : :active}
+  aasm_initial_state = Proc.new { (self.show_from && self.user && (self.show_from > self.user.date)) ? :deferred : :active }
 
   aasm :column => :state do
-
     state :active
-    state :completed, :before_enter => Proc.new { self.completed_at = Time.zone.now }, :before_exit => Proc.new { self.completed_at = nil}
+    state :completed, :before_enter => Proc.new { self.completed_at = Time.zone.now }, :before_exit => Proc.new { self.completed_at = nil }
     state :deferred,  :before_exit => Proc.new { self[:show_from] = nil }
     state :pending
 
@@ -124,7 +122,7 @@ class Todo < ApplicationRecord
   end
 
   def no_uncompleted_predecessors_or_deferral?
-    no_deferral = show_from.blank? or Time.zone.now > show_from
+    no_deferral = show_from.blank? || Time.zone.now > show_from
     return (no_deferral && no_uncompleted_predecessors?)
   end
 
@@ -141,7 +139,7 @@ class Todo < ApplicationRecord
   end
 
   def not_part_of_hidden_container?
-    !( (self.project && self.project.hidden?) || self.context.hidden? )
+    !((self.project && self.project.hidden?) || self.context.hidden?)
   end
 
   # Returns a string with description <context, project>
@@ -266,9 +264,9 @@ class Todo < ApplicationRecord
   def add_predecessor_list(predecessor_list)
     return unless predecessor_list.kind_of? String
 
-    @predecessor_array=predecessor_list.split(",").inject([]) do |list, todo_id|
-      predecessor = self.user.todos.find( todo_id.to_i ) if todo_id.present?
-      list <<  predecessor unless predecessor.nil?
+    @predecessor_array = predecessor_list.split(",").inject([]) do |list, todo_id|
+      predecessor = self.user.todos.find(todo_id.to_i) if todo_id.present?
+      list << predecessor unless predecessor.nil?
       list
     end
 
@@ -284,15 +282,15 @@ class Todo < ApplicationRecord
 
   # activate todos that should be activated if the current todo is completed
   def activate_pending_todos
-    pending_todos = successors.select { |t| t.uncompleted_predecessors.empty? and !t.completed? }
-    pending_todos.each {|t| t.activate! }
+    pending_todos = successors.select { |t| t.uncompleted_predecessors.empty? && !t.completed? }
+    pending_todos.each { |t| t.activate! }
     return pending_todos
   end
 
   # Return todos that should be blocked if the current todo is undone
   def block_successors
-    active_successors = successors.select {|t| t.active? or t.deferred?}
-    active_successors.each {|t| t.block!}
+    active_successors = successors.select { |t| t.active? || t.deferred? }
+    active_successors.each { |t| t.block! }
     return active_successors
   end
 
@@ -319,7 +317,7 @@ class Todo < ApplicationRecord
     else
       c = Context.where(:name => value[:name]).first
       c = Context.create(value) if c.nil?
-      self.original_context=(c)
+      self.original_context = (c)
     end
   end
 
@@ -331,13 +329,13 @@ class Todo < ApplicationRecord
   alias_method :original_project=, :project=
   def project=(value)
     if value.is_a? Project
-      self.original_project=(value)
+      self.original_project = (value)
     elsif !(value.nil? || value.is_a?(NullProject))
       p = Project.where(:name => value[:name]).first
       p = Project.create(value) if p.nil?
-      self.original_project=(p)
+      self.original_project = (p)
     else
-      self.original_project=value
+      self.original_project = value
     end
   end
 
@@ -387,5 +385,4 @@ class Todo < ApplicationRecord
 
     super
   end
-
 end

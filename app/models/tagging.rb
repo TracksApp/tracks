@@ -1,8 +1,5 @@
-
 # The Tagging join model.
-
 class Tagging < ApplicationRecord
-
   belongs_to :tag
   belongs_to :taggable, :polymorphic => true, :touch => true
 
@@ -13,5 +10,4 @@ class Tagging < ApplicationRecord
   def delete_orphaned_tag
     tag.destroy if tag and tag.taggings.count == 0
   end
-
 end

@@ -1,18 +1,16 @@
 module RecurringTodos
-
   class FormHelper
-
     def initialize(recurring_todo)
       @recurring_todo = recurring_todo
 
       @method_map = {
         # delegate daily_xxx to daily_pattern.xxx
-        "daily"   => {prefix: "",    method: daily_pattern},
-        "weekly"  => {prefix: "",    method: weekly_pattern},
-        "monthly" => {prefix: "",    method: monthly_pattern},
-        "yearly"  => {prefix: "",    method: yearly_pattern},
+        "daily"   => { prefix: "",    method: daily_pattern },
+        "weekly"  => { prefix: "",    method: weekly_pattern },
+        "monthly" => { prefix: "",    method: monthly_pattern },
+        "yearly"  => { prefix: "",    method: yearly_pattern },
         # delegate on_xxx to weekly_pattern.on_xxx
-        "on"      => {prefix: "on_", method: weekly_pattern}
+        "on"      => { prefix: "on_", method: weekly_pattern }
       }
     end
 
@@ -47,7 +45,5 @@ module RecurringTodos
       # no match, let @recurring_todo handle it, or fail
       @recurring_todo.send(method, *args)
     end
-
   end
-
 end

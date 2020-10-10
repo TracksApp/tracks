@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class RecurringTodosBuilder
-
     attr_reader :builder, :project, :context, :tag_list, :user
 
     def initialize (user, attributes)
@@ -17,7 +15,7 @@ module RecurringTodos
 
     def create_builder(selector)
       raise "Unknown recurrence selector in :recurring_period (#{selector})" unless valid_selector? selector
-      eval("RecurringTodos::#{selector.capitalize}RecurringTodosBuilder.new(@user, @attributes)")
+      eval("RecurringTodos::#{selector.capitalize}RecurringTodosBuilder.new(@user, @attributes)", binding, __FILE__, __LINE__)
     end
 
     def build
@@ -72,7 +70,5 @@ module RecurringTodos
     def parse_context
       @context, @new_context_created = @attributes.parse_collection(:context, @user.contexts)
     end
-
   end
-
 end

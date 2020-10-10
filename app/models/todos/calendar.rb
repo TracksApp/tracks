@@ -1,6 +1,5 @@
 module Todos
   class Calendar
-
     attr_reader :user, :included_tables
 
     def initialize(user)
@@ -48,11 +47,10 @@ module Todos
       @end_of_the_month ||= today.end_of_month
     end
 
-  private
+    private
 
     def actions
       user.todos.not_completed.includes(included_tables).reorder("due")
     end
-
   end
 end

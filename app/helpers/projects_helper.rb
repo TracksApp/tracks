@@ -1,5 +1,4 @@
 module ProjectsHelper
-
   def show_project_name(project)
     if source_view_is :project
       content_tag(:span, :id => "project_name"){project.name}
@@ -9,7 +8,7 @@ module ProjectsHelper
   end
 
   def show_project_settings(project)
-    content_tag(:div, :id => dom_id(project, "container"), :class=>"list") do
+    content_tag(:div, :id => dom_id(project, "container"), :class => "list") do
       render :partial => "projects/project_settings", :object => project
     end
   end
@@ -27,9 +26,9 @@ module ProjectsHelper
   def project_next_prev_mobile
     prev_project = ""
     next_project = ""
-    prev_project = content_tag(:li, link_to_project_mobile(@previous_project, "5", @previous_project.shortened_name), :class=>"prev") if @previous_project
-    next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", @next_project.shortened_name), :class=>"next") if @next_project
-    return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class=>"next-prev-project")
+    prev_project = content_tag(:li, link_to_project_mobile(@previous_project, "5", @previous_project.shortened_name), :class => "prev") if @previous_project
+    next_project = content_tag(:li, link_to_project_mobile(@next_project, "6", @next_project.shortened_name), :class => "next") if @next_project
+    return content_tag(:ul, "#{prev_project}#{next_project}".html_safe, :class => "next-prev-project")
   end
 
   def project_summary(project)
@@ -52,5 +51,4 @@ module ProjectsHelper
   def link_to_edit_project (project, descriptor = sanitize(project.name))
     link_to_edit(:project, project, descriptor)
   end
-
 end

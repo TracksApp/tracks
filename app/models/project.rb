@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
-  has_many :todos, -> {order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))}, dependent: :delete_all
-  has_many :notes, -> {order "created_at DESC"}, dependent: :delete_all
+  has_many :todos, -> { order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")) }, dependent: :delete_all
+  has_many :notes, -> { order "created_at DESC" }, dependent: :delete_all
   has_many :recurring_todos
 
   belongs_to :default_context, :class_name => "Context", :foreign_key => "default_context_id"
@@ -25,7 +25,6 @@ class Project < ApplicationRecord
   include AASM
 
   aasm :column => :state do
-
     state :active, :initial => true
     state :hidden
     state :completed, :enter => :set_completed_at_date, :exit => :clear_completed_at_date
@@ -145,11 +144,9 @@ class Project < ApplicationRecord
     end
     count
   end
-
 end
 
 class NullProject
-
   def hidden?
     false
   end
@@ -169,5 +166,4 @@ class NullProject
   def persisted?
     false
   end
-
 end

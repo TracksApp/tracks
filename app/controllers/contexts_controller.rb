@@ -1,5 +1,4 @@
 class ContextsController < ApplicationController
-
   helper :todos
 
   before_action :init, :except => [:index, :create, :destroy, :order]
@@ -19,15 +18,15 @@ class ContextsController < ApplicationController
 
     respond_to do |format|
       format.html &render_contexts_html
-      format.m    &render_contexts_mobile
-      format.xml  { render :xml => @all_contexts.to_xml(:root => :contexts, :except => :user_id) }
+      format.m &render_contexts_mobile
+      format.xml { render :xml => @all_contexts.to_xml(:root => :contexts, :except => :user_id) }
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Contexts'
         @feed_description = "Lists all the contexts for #{current_user.display_name}"
       end
       format.text do
         # somehow passing Mime[:text] using content_type to render does not work
-        headers['Content-Type']=Mime[:text].to_s
+        headers['Content-Type'] = Mime[:text].to_s
         render :action => 'index', :layout => false, :content_type => Mime[:text]
       end
       format.autocomplete &render_autocomplete
@@ -41,7 +40,7 @@ class ContextsController < ApplicationController
       @max_completed = current_user.prefs.show_number_completed
       @done = @context.todos.completed.limit(@max_completed).reorder(Arel.sql("todos.completed_at DESC, todos.created_at DESC")).includes(Todo::DEFAULT_INCLUDES)
       @not_done_todos = @context.todos.active_or_hidden.not_project_hidden.reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).includes(Todo::DEFAULT_INCLUDES)
-      @todos_without_project = @not_done_todos.select{|t| t.project.nil?}
+      @todos_without_project = @not_done_todos.select{ |t| t.project.nil? }
 
       @deferred_todos = @context.todos.deferred.includes(Todo::DEFAULT_INCLUDES)
       @pending_todos = @context.todos.pending.includes(Todo::DEFAULT_INCLUDES)
@@ -93,7 +92,6 @@ class ContextsController < ApplicationController
   end
 
   # Edit the details of the context
-  #
   def update
     process_params_for_update
 
@@ -113,12 +111,12 @@ class ContextsController < ApplicationController
     respond_to do |format|
       format.js
       format.xml {
-          if @saved
-            render :xml => @context.to_xml( :except => :user_id )
-          else
-            render :body => "Error on update: #{@context.errors.full_messages.inject("") {|v, e| v + e + " " }}", :status => 409
-          end
-        }
+        if @saved
+          render :xml => @context.to_xml(:except => :user_id)
+        else
+          render :body => "Error on update: #{@context.errors.full_messages.inject("") { |v, e| v + e + " " }}", :status => 409
+        end
+      }
     end
   end
 
@@ -204,7 +202,7 @@ class ContextsController < ApplicationController
       @active_contexts = current_user.contexts.active
       @hidden_contexts = current_user.contexts.hidden
       @down_count = @active_contexts.size + @hidden_contexts.size
-      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
       render
     end
   end
@@ -214,7 +212,7 @@ class ContextsController < ApplicationController
       @page_title = "TRACKS::List actions in "+@context.name
       @not_done = @not_done_todos.select {|t| t.context_id == @context.id }
       @down_count = @not_done.size
-      cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+      cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
       @mobile_from_context = @context.id
       render
     end
@@ -270,5 +268,4 @@ class ContextsController < ApplicationController
       return false
     end
   end
-
 end

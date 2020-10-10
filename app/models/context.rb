@@ -1,5 +1,4 @@
 class Context < ApplicationRecord
-
   has_many :todos, -> { order(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC")).includes(:project) }, :dependent => :delete_all
   has_many :recurring_todos, :dependent => :delete_all
   belongs_to :user
@@ -15,7 +14,6 @@ class Context < ApplicationRecord
   include AASM
 
   aasm :column => :state do
-
     state :active, :initial => true
     state :closed
     state :hidden
@@ -48,11 +46,9 @@ class Context < ApplicationRecord
   def no_active_todos?
     return todos.active.count == 0
   end
-
 end
 
 class NullContext
-
   def nil?
     true
   end
@@ -64,5 +60,4 @@ class NullContext
   def name
     ''
   end
-
 end

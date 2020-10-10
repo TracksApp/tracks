@@ -1,7 +1,5 @@
 module RecurringTodos
-
   class YearlyRecurrencePattern < AbstractRecurrencePattern
-
     def initialize(user)
       super user
     end
@@ -104,6 +102,5 @@ module RecurringTodos
 
       the_next
     end
-
   end
 end

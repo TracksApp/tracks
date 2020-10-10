@@ -1,5 +1,4 @@
 class RecurringTodosController < ApplicationController
-
   helper :todos, :recurring_todos
 
   append_before_action :init, :only => [:index, :new, :edit, :create]
@@ -34,7 +33,7 @@ class RecurringTodosController < ApplicationController
     @completed_recurring_todos = current_user.recurring_todos.completed.paginate :page => page, :per_page => items_per_page
     @total = @count = current_user.recurring_todos.completed.count
 
-    @range_low = (page.to_i-1) * items_per_page + 1
+    @range_low = (page.to_i - 1) * items_per_page + 1
     @range_high = @range_low + @completed_recurring_todos.size - 1
 
     @range_low = 0 if @total == 0
@@ -98,7 +97,6 @@ class RecurringTodosController < ApplicationController
     @completed_remaining = current_user.recurring_todos.completed.count
 
     respond_to do |format|
-
       format.html do
         if @saved
           notify :notice, t('todos.recurring_deleted_success')
@@ -107,7 +105,6 @@ class RecurringTodosController < ApplicationController
         end
         redirect_to :action => 'index'
       end
-
       format.js do
         render
       end
@@ -165,7 +162,7 @@ class RecurringTodosController < ApplicationController
       # derived attributes
       :weekly_return_monday, :weekly_return_tuesday, :weekly_return_wednesday,
       :weekly_return_thursday, :weekly_return_friday, :weekly_return_saturday, :weekly_return_sunday
-      )
+    )
   end
 
   def all_recurring_todo_params
@@ -230,5 +227,4 @@ class RecurringTodosController < ApplicationController
       where("fai_todos.id IS NULL").
       each { |rt| current_user.recurring_todos.find(rt.id).toggle_completion! }
   end
-
 end
