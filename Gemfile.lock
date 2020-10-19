@@ -114,7 +114,7 @@ GEM
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     ffi (1.13.1)
-    font-awesome-sass (5.13.0)
+    font-awesome-sass (5.15.1)
       sassc (>= 1.11)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
@@ -334,7 +334,7 @@ DEPENDENCIES
   coffee-rails (~> 5.0.0)
   database_cleaner
   factory_bot_rails
-  font-awesome-sass (~> 5.13.0)
+  font-awesome-sass (~> 5.15.1)
   htmlentities
   i18n-tasks (~> 0.9.31)
   jquery-rails (~> 4.4)
