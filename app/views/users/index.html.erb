@@ -4,24 +4,24 @@
 
 <table class="users_table">
   <tr>
-    <th><%= User.human_attribute_name('login') %></th>
-    <th><%= User.human_attribute_name('display_name') %></th>
-    <th><%= User.human_attribute_name('email') %></th>
-    <th><%= User.human_attribute_name('auth_type') %></th>
-    <th><%= User.human_attribute_name('open_id_url') %></th>
+    <th><%= link_to User.human_attribute_name('login'), url_for(:order => 'login') %></th>
+    <th><%= h User.human_attribute_name('display_name') %></th>
+    <th><%= link_to User.human_attribute_name('email'), url_for(:order => 'email') %></th>
+    <th><%= link_to User.human_attribute_name('auth_type'), url_for(:order => 'auth_type') %></th>
+    <th><%= link_to User.human_attribute_name('open_id_url'), url_for(:order => 'open_id_url') %></th>
     <th><%= t('users.total_actions') %></th>
     <th><%= t('users.total_contexts') %></th>
     <th><%= t('users.total_projects') %></th>
     <th><%= t('users.total_notes') %></th>
-    <th><%= User.human_attribute_name('created_at') %></th>
-    <th><%= User.human_attribute_name('last_login_at') %></th>
+    <th><%= link_to User.human_attribute_name('created_at'), url_for(:order => 'created_at') %></th>
+    <th><%= link_to User.human_attribute_name('last_login_at'), url_for(:order => 'last_login_at') %></th>
     <th>&nbsp;</th>
   </tr>
   <% for user in @users %>
     <tr <%= "class=\"highlight\"" if user.is_admin? %> id="user-<%= user.id %>">
-      <td><%=h user.login %></td>
-      <td><%=h user.display_name %></td>
-      <td><%=h user.email %></td>
+      <td><%= h user.login %></td>
+      <td><%= h user.display_name %></td>
+      <td><%= h user.email %></td>
       <td><%= h user.auth_type %></td>
       <td><%= h user.open_id_url || '-' %></td>
       <td><%= h user.todos.size %></td>

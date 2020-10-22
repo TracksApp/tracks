@@ -1091,6 +1091,7 @@ en:
     identity_url: Identity URL
     label_auth_type: Authentication type
     manage_users: Manage users
+    manage_users_title: TRACKS::Manage Users
     new_password_label: New password
     new_token_generated: New token successfully generated
     new_user_heading: 'Sign up a new user:'

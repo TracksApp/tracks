@@ -7,16 +7,20 @@ class UsersController < ApplicationController
   # GET /users GET /users.xml
   def index
     respond_to do |format|
+      order_by = 'login'
+      if params[:order] && User.column_names.include?(params[:order])
+        order_by = params[:order]
+      end
       format.html do
-        @page_title = "TRACKS::Manage Users"
-        @users = User.order('login ASC').paginate :page => params[:page]
+        @page_title = t('users.manage_users_title')
+        @users = User.order(order_by + ' ASC').paginate :page => params[:page]
         @total_users = User.count
         # When we call users/signup from the admin page we store the URL so that
         # we get returned here when signup is successful
         store_location
       end
       format.xml do
-        @users = User.order('login')
+        @users = User.order(order_by)
         render :xml => @users.to_xml(:root => :users, :except => [:password])
       end
     end
