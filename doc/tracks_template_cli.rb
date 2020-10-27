@@ -33,12 +33,12 @@
 # Simple test file. Remove the '# ' string at the beginning.
 # token [A]
 # token [BB]
-# 
+#
 # to [A] after [BB]
 # .task 1 in [A], [BB]|computer|starred,blue|my notes here
 # ^task 1.1 dependent on [A]|||only a note
 # .task 2
-# 
+#
 # project 2 with [A]
 # .task in project 2
 
@@ -73,18 +73,17 @@ require 'readline'
 require File.expand_path(File.dirname(__FILE__) + '/tracks_cli/tracks_api')
 
 class TemplateParser
-
   def initialize
     @keywords = {}
   end
 
   def parse_keyword(token)
-    print "Input required for "+token+": "
-    @keywords[token]=gets.chomp
+    print "Input required for " + token + ": "
+    @keywords[token] = gets.chomp
   end
 
   def replace_tokens_in(line)
-    @keywords.each{ |key,val| line=line.sub(key,val) }
+    @keywords.each { |key, val| line = line.sub(key, val) }
     line
   end
 
@@ -92,27 +91,27 @@ class TemplateParser
     options = {}
 
     # first char is . or ^ the latter meaning this todo is dependent on the previous one
-    options[:depend]= line[0].chr == "^" ? true : false;
+    options[:depend] = line[0].chr == "^"
     line = line[1..line.length] # remove first char
 
-    tmp= line.split("|")
+    tmp = line.split("|")
     if tmp.length > 5
       puts "Formatting error: found too many |"
       exit 1
     end
 
     tmp[0].chomp!
-    options[:description]=tmp[0]
+    options[:description] = tmp[0]
 
-    tmp.each_with_index do |t,idx| 
-      t=t.strip.chomp
-      t=nil if t.empty?
-      tmp[idx]=t
+    tmp.each_with_index do |t, idx|
+      t = t.strip.chomp
+      t = nil if t.empty?
+      tmp[idx] = t
     end
 
-    options[:context]=tmp[1]
-    options[:taglist]=tmp[2]
-    options[:notes]  =tmp[3]
+    options[:context] = tmp[1]
+    options[:taglist] = tmp[2]
+    options[:notes] = tmp[3]
     options
   end
 
@@ -124,8 +123,8 @@ class TemplateParser
       next if (line.empty? || line[0].chr == "#")
 
       # check if line defines a token
-      if (line.split(' ')[0] == "token") 
-        parse_keyword line.split(' ')[1] 
+      if (line.split(' ')[0] == "token")
+        parse_keyword line.split(' ')[1]
         next
       end
 
@@ -136,18 +135,16 @@ class TemplateParser
       if (line[0].chr == "." ) || (line[0].chr == "^")
         if @last_project_id.nil?
           puts "Warning: no project specified for task \"#{line}\". Using default project."
-        end  
+        end
         poster.postTodo(parse_todo(line), @last_project_id)
       else
         @last_project_id = poster.postProject(line)
       end
     end
   end
-
 end
 
 class TemplatePoster
-
   def initialize(options)
     @options = options
     @tracks = TracksCli::TracksAPI.new({
@@ -163,10 +160,10 @@ class TemplatePoster
 
   def postTodo(parsed_todo, project_id)
     resp = @tracks.post_todo(
-      description:  CGI.escapeHTML(parsed_todo[:description]), 
-      context_name: parsed_todo[:context], 
-      context_id:   @context_id, 
-      project_id:   project_id || @project_id, 
+      description:  CGI.escapeHTML(parsed_todo[:description]),
+      context_name: parsed_todo[:context],
+      context_id:   @context_id,
+      project_id:   project_id || @project_id,
       show_from:    parsed_todo[:show_from],
       notes:        parsed_todo[:notes],
       is_dependend: parsed_todo[:depend],
@@ -174,7 +171,7 @@ class TemplatePoster
 
     if resp.code == '302' || resp.code == '201'
       puts resp['location'] if @options[:verbose]
-      
+
       # return the todo id
       @last_posted_todo_id = resp['location'].split("/").last
       return @last_posted_todo_id
@@ -209,11 +206,13 @@ class TemplatePoster
 
     return resp.code == '200'
   end
-
 end
 
-class Error < StandardError; end
-class InvalidParser < StandardError; end
+class Error < StandardError
+end
+
+class InvalidParser < StandardError
+end
 
 class ConsoleOptionsForTemplate
   attr_reader :parser, :options, :keywords
@@ -275,14 +274,14 @@ class ConsoleOptionsForTemplate
       puts "ERROR: no GTD_LOGIN environment variable set"
       exit 1
     end
-    
+
     if ENV['GTD_PASSWORD'] == nil
       puts "ERROR: no GTD_PASSWORD environment variable set"
       exit 1
     end
-    
+
     file = @filename.nil? ? STDIN : File.open(@filename)
-    
+
     ## check for existence of the context
     if @options[:context_id].nil?
       puts "ERROR: need to specify a context_id with -c option."

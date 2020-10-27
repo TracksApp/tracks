@@ -1,54 +1,40 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0.3'
-gem 'sassc-rails', '~> 2.1.2'
-gem 'coffee-rails', '~> 5.0.0'
-
-#gem 'json'
-
-# todo: remove xml api
 gem 'actionpack-xml_parser', '~> 2.0'
 gem 'activemodel-serializers-xml', '~> 1.0.1'
+
+gem 'coffee-rails', '~> 5.0.0'
+
+gem 'jquery-rails', '~> 4.4'
+gem 'jquery-ui-rails', '~>6.0.1'
+
+gem 'rails', '~> 6.0.3'
+gem 'sassc-rails', '~> 2.1.2'
+
+gem 'bootstrap-sass', '3.4.1'
+gem 'font-awesome-sass', '~> 5.15.1'
+
+gem 'uglifier', '>=1.3.0'
+
+gem 'aasm', '~> 5.1.1'
+gem 'acts_as_list'
+gem 'bcrypt', '~> 3.1.16'
+gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
+gem 'htmlentities'
+gem 'paperclip'
+gem 'puma', '~> 5.0'
+gem 'rails_autolink'
+gem 'RedCloth'
+gem 'sanitize', '~> 5.2'
+gem 'will_paginate'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', group: :therubyracer
 
-gem 'uglifier', '>=1.3.0'
-
-gem 'jquery-rails' , '~> 4.4'
-gem 'jquery-ui-rails' , '~>6.0.1'
-
-# you may comment out the database driver(s) you will not be using.
-# This will prevent a native build of the driver. Building native drivers is not
-# always possible on all platforms
-# Alternatively use --without <group> arguments to bundler to not install that group
+# Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
 gem 'mysql2', '~> 0.5.3', group: :mysql
 gem 'pg', '~> 1.2.3', group: :postgresql
-
-gem 'RedCloth'
-gem 'sanitize', '~> 5.2'
-gem 'will_paginate'
-gem 'acts_as_list'
-gem 'aasm', '~> 5.1.1'
-gem 'htmlentities'
-gem 'rails_autolink'
-gem 'puma', '~> 5.0'
-gem 'paperclip'
-
-# To use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.16'
-
-gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
-
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-# gem 'turbolinks'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 1.2'
-
-gem 'bootstrap-sass', '3.4.1'
-gem 'font-awesome-sass', '~> 5.15.1'
 
 group :development do
   gem 'spring'
@@ -78,15 +64,6 @@ group :test do
   gem 'database_cleaner'
   gem 'mocha', :require => false
   gem 'minitest-stub-const'
-
-  gem 'selenium-webdriver', '~> 3.142'
-
-  # uncomment to use the webkit option. This depends on Qt being installed
-  # gem 'capybara-webkit'
-
-  # uncomment to be able to make screenshots from scenarios
-  #gem 'capybara-screenshot'
-  #gem 'launchy'
 
   gem 'simplecov'
   # get test coverage info on codeclimate

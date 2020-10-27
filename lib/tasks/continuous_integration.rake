@@ -1,7 +1,7 @@
 namespace :ci do
   desc 'Continuous integration tests, without features'
   task :lite do
-    ENV['RAILS_ENV']  ||= "test"
+    ENV['RAILS_ENV'] ||= "test"
 
     puts 'Running "lite" test suite'
 

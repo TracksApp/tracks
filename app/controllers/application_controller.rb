@@ -24,8 +24,8 @@ class ApplicationController < ActionController::Base
 
   def set_locale
     locale = params[:locale] # specifying a locale in the request takes precedence
-    locale = locale || prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
-    locale = locale || request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
+    locale ||= prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
+    locale ||= request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
 
     if locale && I18n::available_locales.map(&:to_s).include?(locale.to_s)
       I18n.locale = locale
@@ -43,13 +43,14 @@ class ApplicationController < ActionController::Base
 
     # Get expiry time (allow ten seconds window for the case where we have
     # none)
-    expiry_time = session['expiry_time'] || Time.now + 10
-    if expiry_time < Time.now
+    now = Time.zone.now
+    expiry_time = session['expiry_time'] || now + 10
+    if expiry_time < now
       # Too late, matey...  bang goes your session!
       reset_session
     else
       # Okay, you get another hour
-      session['expiry_time'] = Time.now + (60*60)
+      session['expiry_time'] = now + (60*60)
     end
   end
 
@@ -109,7 +110,7 @@ class ApplicationController < ActionController::Base
   end
 
   def format_dependencies_as_json_for_auto_complete(entries)
-    json_elems = Array[*entries.map{ |e| { :value => e.id.to_s, :label => e.specification } }].to_json
+    json_elems = Array[*entries.map { |e| { :value => e.id.to_s, :label => e.specification } }].to_json
     return json_elems
   end
 

@@ -97,7 +97,7 @@ class UsersController < ApplicationController
         user.is_admin = true if first_user_signing_up
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
-          @user.create_preference({:locale => I18n.locale})
+          @user.create_preference({ :locale => I18n.locale })
           @user.save
           session['user_id'] = @user.id unless signup_by_admin
           notify :notice, t('users.signup_successful', :username => @user.login)
