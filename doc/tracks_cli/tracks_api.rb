@@ -2,16 +2,16 @@ require 'net/https'
 require File.expand_path(File.dirname(__FILE__) + '/tracks_xml_builder')
 
 module TracksCli
-
   class TracksAPI
     def initialize(options)
-      @options  = options
+      @options = options
     end
 
     def get_http(uri)
       http = Net::HTTP.new(uri.host, uri.port)
 
-      if uri.scheme == "https"  # enable SSL/TLS
+      # Enable SSL/TLS
+      if uri.scheme == "https"
         http.use_ssl = true
         http.ca_path = "/etc/ssl/certs/" # Debian based path
         http.verify_mode = OpenSSL::SSL::VERIFY_PEER
@@ -57,7 +57,5 @@ module TracksCli
     def get_context(context_id)
       get(context_uri_for(context_id))
     end
-
   end
-
 end

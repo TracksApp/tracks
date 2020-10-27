@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
   include Common
   helper_method :current_user, :prefs, :format_date
 
-  layout proc{ |controller| controller.mobile? ? "mobile" : "application" }
+  layout proc { |controller| controller.mobile? ? "mobile" : "application" }
   # exempt_from_layout /\.js\.erb$/
 
   before_action :set_session_expiration
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     locale ||= prefs.locale unless current_user.nil? # otherwise, the locale of the currently logged in user takes over
     locale ||= request.env['HTTP_ACCEPT_LANGUAGE'].scan(/^[a-z]{2}/).first if request.env['HTTP_ACCEPT_LANGUAGE']
 
-    if locale && I18n::available_locales.map(&:to_s).include?(locale.to_s)
+    if locale && I18n.available_locales.map(&:to_s).include?(locale.to_s)
       I18n.locale = locale
     else
       I18n.locale = I18n.default_locale
@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     # If the method is called by the feed controller (which we don't have
     # under session control) or if we checked the box to keep logged in on
     # login don't set the session expiry time.
-    return if session.nil? || self.controller_name == 'feed' || session['noexpiry'] == "on"
+    return if session.nil? || controller_name == 'feed' || session['noexpiry'] == "on"
 
     # Get expiry time (allow ten seconds window for the case where we have
     # none)
@@ -50,11 +50,11 @@ class ApplicationController < ActionController::Base
       reset_session
     else
       # Okay, you get another hour
-      session['expiry_time'] = now + (60*60)
+      session['expiry_time'] = now + (60 * 60)
     end
   end
 
-  def render_failure message, status = 404
+  def render_failure(message, status = 404)
     render :body => message, :status => status
   end
 
@@ -101,8 +101,8 @@ class ApplicationController < ActionController::Base
 
   def for_autocomplete(coll, substr)
     if substr # protect agains empty request
-      filtered = coll.find_all{ |item| item.name.downcase.include? substr.downcase }
-      json_elems = Array[*filtered.map{ |e| { :id => e.id.to_s, :value => e.name } }].to_json
+      filtered = coll.find_all { |item| item.name.downcase.include? substr.downcase }
+      json_elems = Array[*filtered.map { |e| { :id => e.id.to_s, :value => e.name } }].to_json
       return json_elems
     else
       return ""
@@ -272,7 +272,7 @@ class ApplicationController < ActionController::Base
   def done_todos_for(object)
     object_name = object.class.name.downcase # context or project
     @source_view = "done"
-    eval("@#{object_name} = object")
+    eval("@#{object_name} = object", binding, __FILE__, __LINE__)
     @page_title = t("#{object_name.pluralize}.completed_tasks_title", "#{object_name}_name".to_sym => object.name)
 
     @done_today, @done_rest_of_week, @done_rest_of_month = DoneTodos.done_todos_for_container(object.todos)

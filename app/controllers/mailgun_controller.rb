@@ -14,7 +14,7 @@ class MailgunController < ApplicationController
 
     todo = MessageGateway.receive(params['body-mime'])
     if todo
-      render :xml => todo.to_xml( *todo_xml_params )
+      render :xml => todo.to_xml(*todo_xml_params)
     else
       render_failure "Todo not saved", 406
     end

@@ -19,33 +19,33 @@ module Search
     end
 
     def number_of_finds
-      results[:todos].size  + results[:projects].size + results[:notes].size + results[:contexts].size + results[:tags].size
+      results[:todos].size + results[:projects].size + results[:notes].size + results[:contexts].size + results[:tags].size
     end
 
     private
 
     def incomplete_todos(terms)
-      @user.todos.
-        where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND todos.completed_at IS NULL", terms, terms)
+      @user.todos
+        .where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND todos.completed_at IS NULL", terms, terms)
         .includes(Todo::DEFAULT_INCLUDES)
         .reorder(Arel.sql("todos.due IS NULL, todos.due ASC, todos.created_at ASC"))
     end
 
     def complete_todos(terms)
-      @user.todos.
-        where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND NOT (todos.completed_at IS NULL)", terms, terms)
+      @user.todos
+        .where("(todos.description " + Common.like_operator + " ? OR todos.notes " + Common.like_operator + " ?) AND NOT (todos.completed_at IS NULL)", terms, terms)
         .includes(Todo::DEFAULT_INCLUDES)
         .reorder("todos.completed_at DESC")
     end
 
     def todo_tags_by_name(terms)
-      Tagging.find_by_sql([
-        "SELECT DISTINCT tags.name as name " +
-        "FROM tags " +
-        "LEFT JOIN taggings ON tags.id = taggings.tag_id " +
-        "LEFT JOIN todos ON taggings.taggable_id = todos.id " +
-        "WHERE todos.user_id=? " +
-        "AND tags.name " + Common.like_operator + " ? ", @user.id, terms])
+      Tagging.find_by_sql(["
+        SELECT DISTINCT tags.name as name
+        FROM tags
+        LEFT JOIN taggings ON tags.id = taggings.tag_id
+        LEFT JOIN todos ON taggings.taggable_id = todos.id
+        WHERE todos.user_id = ?
+        AND tags.name " + Common.like_operator + " ? ", @user.id, terms])
     end
   end
 end

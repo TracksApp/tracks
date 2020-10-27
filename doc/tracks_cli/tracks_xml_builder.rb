@@ -1,9 +1,7 @@
 require 'active_support/time_with_zone'
 
 module TracksCli
-
   class TracksXmlBuilder
-
     def xml_for_description(description)
       "<description>#{description}</description>"
     end
@@ -23,8 +21,8 @@ module TracksCli
     def xml_for_taglist(taglist)
       unless taglist.nil?
         tags = taglist.split(",")
-        if tags.length() > 0
-          tags = tags.collect { |tag| "<tag><name>#{tag.strip}</name></tag>" unless tag.strip.empty?}.join('')
+        if tags.length > 0
+          tags = tags.collect { |tag| "<tag><name>#{tag.strip}</name></tag>" unless tag.strip.empty? }.join('')
           return "<tags>#{tags}</tags>"
         end
       else
@@ -61,6 +59,5 @@ module TracksCli
     def build_project_xml(project)
       "<project><name>#{project[:description]}</name><default-context-id>#{project[:default_context_id]}</default-context-id></project>"
     end
-
   end
 end

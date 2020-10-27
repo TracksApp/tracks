@@ -5,16 +5,15 @@ module BootstrapFlashHelper
     :error => :danger,
     :info => :info,
     :warning => :warning
-  } unless const_defined?(:ALERT_MAPPING)
+  }.freeze unless const_defined?(:ALERT_MAPPING)
 
-  def bootstrap_flash(options = {:close_button => true})
+  def bootstrap_flash(options = { :close_button => true })
     flash_messages = []
     flash.each do |type, message|
       # Skip empty messages, e.g. for devise messages set to nothing in a locale file.
       next if message.blank?
       type = type.to_sym
       next unless ALERT_MAPPING.keys.include?(type)
-
 
       tag_class = options.extract!(:class)[:class]
       tag_options = {

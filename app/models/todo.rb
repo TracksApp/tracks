@@ -69,7 +69,7 @@ class Todo < ApplicationRecord
 
   # state machine
   include AASM
-  aasm_initial_state = Proc.new { (self.show_from && self.user && (self.show_from > self.user.date)) ? :deferred : :active }
+  aasm_initial_state = Proc.new { (show_from && user && (show_from > user.date)) ? :deferred : :active }
 
   aasm :column => :state do
     state :active
@@ -100,11 +100,11 @@ class Todo < ApplicationRecord
 
   # Description field can't be empty, and must be < 100 bytes Notes must be <
   # 60,000 bytes (65,000 actually, but I'm being cautious)
-  validates_presence_of :description
-  validates_length_of :description, :maximum => MAX_DESCRIPTION_LENGTH
-  validates_length_of :notes, :maximum => MAX_NOTES_LENGTH, :allow_nil => true
-  validates_presence_of :show_from, :if => :deferred?
-  validates_presence_of :context
+  validates :description, presence: true, length: { maximum: MAX_DESCRIPTION_LENGTH }
+  validates :notes, length: { maximum: MAX_NOTES_LENGTH, allow_nil: true }
+  validates :show_from, presence: true, if: :deferred?
+  validates :context, presence: true
+
   validate :check_show_from_in_future
 
   def check_show_from_in_future
@@ -139,18 +139,18 @@ class Todo < ApplicationRecord
   end
 
   def not_part_of_hidden_container?
-    !((self.project && self.project.hidden?) || self.context.hidden?)
+    !((project && project.hidden?) || context.hidden?)
   end
 
   # Returns a string with description <context, project>
   def specification
-    project_name = self.project.is_a?(NullProject) ? "(none)" : self.project.name
-    return "\'#{self.description}\' <\'#{self.context.title}\'; \'#{project_name}\'>"
+    project_name = project.is_a?(NullProject) ? "(none)" : project.name
+    return "\'#{description}\' <\'#{context.title}\'; \'#{project_name}\'>"
   end
 
   def save_predecessors
     unless @predecessor_array.nil? # Only save predecessors if they changed
-      current_array = self.predecessors
+      current_array = predecessors
       remove_array = current_array - @predecessor_array
       add_array = @predecessor_array - current_array
 
@@ -158,13 +158,13 @@ class Todo < ApplicationRecord
       remove_array.each do |todo|
         unless todo.nil?
           @removed_predecessors << todo
-          self.predecessors.delete(todo)
+          predecessors.delete(todo)
         end
       end
 
       add_array.each do |todo|
         unless todo.nil?
-          self.predecessors << todo unless self.predecessors.include?(todo)
+          predecessors << todo unless predecessors.include?(todo)
         else
           logger.error "Could not find #{todo.description}" # Unexpected since validation passed
         end
@@ -173,7 +173,7 @@ class Todo < ApplicationRecord
   end
 
   def touch_predecessors
-    self.touch
+    touch
     predecessors.each(&:touch_predecessors)
   end
 
@@ -183,10 +183,10 @@ class Todo < ApplicationRecord
 
   # remove predecessor and activate myself if it was the last predecessor
   def remove_predecessor(predecessor)
-    self.predecessors.delete(predecessor)
-    if self.predecessors.empty?
-      self.reload  # reload predecessors
-      self.activate!
+    predecessors.delete(predecessor)
+    if predecessors.empty?
+      reload # reload predecessors
+      activate!
     else
       save!
     end
@@ -196,10 +196,10 @@ class Todo < ApplicationRecord
   def is_successor?(todo)
     if self == todo
       return true
-    elsif self.successors.empty?
+    elsif successors.empty?
       return false
     else
-      self.successors.each do |item|
+      successors.each do |item|
         if item.is_successor?(todo)
           return true
         end
@@ -213,7 +213,7 @@ class Todo < ApplicationRecord
   end
 
   def hidden?
-    self.project.hidden? || self.context.hidden?
+    project.hidden? || context.hidden?
   end
 
   def toggle_completion!
@@ -229,7 +229,7 @@ class Todo < ApplicationRecord
       activate
     else
       # parse Date objects into the proper timezone
-      date = date.in_time_zone.beginning_of_day if (date.is_a? Date)
+      date = date.in_time_zone.beginning_of_day if date.is_a? Date
 
       # show_from needs to be set before state_change because of "bug" in aasm.
       # If show_from is not set, the todo will not validate and thus aasm will not save
@@ -258,14 +258,14 @@ class Todo < ApplicationRecord
   end
 
   def from_recurring_todo?
-    return self.recurring_todo_id != nil
+    return recurring_todo_id != nil
   end
 
   def add_predecessor_list(predecessor_list)
-    return unless predecessor_list.kind_of? String
+    return unless predecessor_list.is_a? String
 
     @predecessor_array = predecessor_list.split(",").inject([]) do |list, todo_id|
-      predecessor = self.user.todos.find(todo_id.to_i) if todo_id.present?
+      predecessor = user.todos.find(todo_id.to_i) if todo_id.present?
       list << predecessor unless predecessor.nil?
       list
     end
@@ -307,7 +307,7 @@ class Todo < ApplicationRecord
     # value will be a string. In that case convert to array
     deps = [deps] unless deps.class == Array
 
-    deps.each { |dep| self.add_predecessor(self.user.todos.find(dep.to_i)) if dep.present? }
+    deps.each { |dep| add_predecessor(user.todos.find(dep.to_i)) if dep.present? }
   end
 
   alias_method :original_context=, :context=
@@ -376,7 +376,7 @@ class Todo < ApplicationRecord
 
   def destroy
     # activate successors if they only depend on this action
-    self.pending_successors.each do |successor|
+    pending_successors.each do |successor|
       successor.uncompleted_predecessors.delete(self)
       if successor.uncompleted_predecessors.empty?
         successor.activate!

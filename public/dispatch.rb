@@ -8,4 +8,3 @@ require "dispatcher"
 
 ADDITIONAL_LOAD_PATHS.reverse.each { |dir| $:.unshift(dir) if File.directory?(dir) } if defined?(Apache::RubyRun)
 Dispatcher.dispatch
-

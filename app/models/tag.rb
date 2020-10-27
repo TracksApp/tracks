@@ -9,8 +9,7 @@ class Tag < ApplicationRecord
 
   # If database speed becomes an issue, you could remove these validations and
   # rescue the ActiveRecord database constraint errors instead.
-  validates_presence_of :name
-  validates_uniqueness_of :name, :scope => "user_id", :case_sensitive => false
+  validates :name, presence: true, uniqueness: { :scope => "user_id", :case_sensitive => false }
 
   before_create :before_create
 

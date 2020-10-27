@@ -10,7 +10,7 @@ module ApplicationHelper
       link_to(
         t("layouts.navigation.group_view_by_#{menu_name}"),
         '#',
-        { :id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by } )
+        { :id => "group_view_by_link", :accesskey => "g", :title => t('layouts.navigation.group_view_by_title'), :x_current_group_by => @group_view_by })
     end
   end
 
@@ -44,7 +44,7 @@ module ApplicationHelper
   end
 
   def count_undone_todos_phrase_text(todos_parent)
-    count_undone_todos_phrase(todos_parent).gsub("&nbsp;"," ").html_safe
+    count_undone_todos_phrase(todos_parent).gsub("&nbsp;", " ").html_safe
   end
 
   def count_undone_todos_and_notes_phrase(project)
@@ -113,7 +113,7 @@ module ApplicationHelper
     recurring_target + recurrence_pattern + recurrence_time_span
   end
 
-  def date_format_for_date_picker()
+  def date_format_for_date_picker
     [
       ['%m', 'mm'],
       ['%b', 'M'],
@@ -126,8 +126,8 @@ module ApplicationHelper
     ].inject(current_user.prefs.date_format) { |str, translation| str.gsub(*translation) }
   end
 
-  def sidebar_html_for_titled_list (list, title)
-    return content_tag(:h3, title+" (#{list.size})") + content_tag(:ul, sidebar_html_for_list(list))
+  def sidebar_html_for_titled_list(list, title)
+    return content_tag(:h3, title + " (#{list.size})") + content_tag(:ul, sidebar_html_for_list(list))
   end
 
   def link_to_sidebar_item(item)
@@ -159,7 +159,7 @@ module ApplicationHelper
     common.update             common.create
     common.ajaxError          todos.unresolved_dependency
     }.each do |s|
-      js << "i18n['#{s}'] = '#{ t(s).gsub(/'/, "\\\\'") }';\n"
+      js << "i18n['#{s}'] = '#{t(s).gsub(/'/, "\\\\'")}';\n"
     end
     return js.html_safe
   end
@@ -219,7 +219,7 @@ module ApplicationHelper
   end
 
   def link_to_edit(type, object, descriptor)
-    link_to(descriptor, self.send("edit_#{type}_path", object),
+    link_to(descriptor, send("edit_#{type}_path", object),
       {
         :id => "link_edit_#{dom_id(object)}",
         :class => "#{type}_edit_settings icon"

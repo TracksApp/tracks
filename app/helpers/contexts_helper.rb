@@ -1,9 +1,9 @@
 module ContextsHelper
   def show_context_name(context)
     if source_view_is :context
-      content_tag(:span, :id => "context_name"){context.name}
+      content_tag(:span, :id => "context_name"){ context.name }
     else
-      link_to_context( context )
+      link_to_context(context)
     end
   end
 
@@ -11,7 +11,7 @@ module ContextsHelper
     link_to_delete(:context, context, descriptor)
   end
 
-  def link_to_edit_context (context, descriptor = sanitize(context.name))
+  def link_to_edit_context(context, descriptor = sanitize(context.name))
     link_to_edit(:context, context, descriptor)
   end
 

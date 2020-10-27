@@ -24,10 +24,12 @@ class RecurringTodo < ApplicationRecord
     end
   end
 
-  validates_presence_of :description, :recurring_period, :target, :ends_on, :context
-
-  validates_length_of :description, :maximum => 100
-  validates_length_of :notes, :maximum => 60_000, :allow_nil => true
+  validates :description, presence: true, length: { maximum: 100 }
+  validates :notes, length: { maximum: 60_000, allow_nil: true }
+  validates :recurring_period, presence: true
+  validates :target, presence: true
+  validates :ends_on, presence: true
+  validates :context, presence: true
 
   validate :period_validation
   validate :pattern_specific_validations
@@ -118,12 +120,12 @@ class RecurringTodo < ApplicationRecord
 
   def remove_from_project!
     self.project = nil
-    self.save
+    save
   end
 
   def clear_todos_association
     unless todos.nil?
-      self.todos.each do |t|
+      todos.each do |t|
         t.recurring_todo = nil
         t.save
       end
@@ -132,7 +134,7 @@ class RecurringTodo < ApplicationRecord
 
   def increment_occurrences
     self.occurrences_count += 1
-    self.save
+    save
   end
 
   def continues_recurring?(previous)

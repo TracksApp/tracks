@@ -15,8 +15,8 @@ class LoginController < ApplicationController
     cookies[:preferred_auth] = prefered_auth? unless cookies[:preferred_auth]
     case request.method
     when 'POST'
-      if @user = User.authenticate(params['user_login'], params['user_password'])
-        @user.update_attribute(:last_login_at, Time.now)
+      if (@user = User.authenticate(params['user_login'], params['user_password']))
+        @user.update_attribute(:last_login_at, Time.zone.now)
         return handle_post_success
       else
         handle_post_failure
@@ -43,8 +43,8 @@ class LoginController < ApplicationController
       if session
         return unless should_expire_sessions?
         # Get expiry time (allow ten seconds window for the case where we have none)
-        time_left = expiry_time - Time.now
-        @session_expired = ( time_left < (10 * 60) ) # Session will time out before the next check
+        time_left = expiry_time - Time.zone.now
+        @session_expired = (time_left < (10 * 60)) # Session will time out before the next check
       end
     end
     respond_to do |format|
@@ -61,10 +61,10 @@ class LoginController < ApplicationController
     session['noexpiry'] = params['user_noexpiry']
     msg = (should_expire_sessions?) ? "will expire after 1 hour of inactivity." : "will not expire."
     notify :notice, "Login successful: session #{msg}"
-    cookies[:tracks_login] = { :value => @user.login, :expires => Time.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
+    cookies[:tracks_login] = { :value => @user.login, :expires => Time.zone.now + 1.year, :secure => SITE_CONFIG['secure_cookies'] }
     unless should_expire_sessions?
       @user.remember_me
-      cookies[:auth_token] = { :value => @user.remember_token , :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
+      cookies[:auth_token] = { :value => @user.remember_token, :expires => @user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
     end
     redirect_back_or_home
   end
@@ -79,7 +79,7 @@ class LoginController < ApplicationController
   end
 
   def expiry_time
-    return Time.now + 10 unless session['expiry_time']
+    return Time.zone.now + 10 unless session['expiry_time']
     DateTime.strptime(session['expiry_time'], "%FT%T.%L%Z")
   end
 end

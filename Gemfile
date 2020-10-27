@@ -56,16 +56,15 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rails-controller-testing'
-  gem 'rails-dom-testing', '~> 2.0.0'
 
-  gem 'factory_bot_rails'
-  gem 'rspec-expectations'
-  gem 'database_cleaner'
-  gem 'mocha', :require => false
-  gem 'minitest-stub-const'
-
-  gem 'simplecov'
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.7', group: :test, require: nil
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'mocha', :require => false
+  gem 'minitest-stub-const'
+  gem 'rails-controller-testing'
+  gem 'rails-dom-testing', '~> 2.0.0'
+  gem 'rspec-expectations'
+  gem 'simplecov'
 end

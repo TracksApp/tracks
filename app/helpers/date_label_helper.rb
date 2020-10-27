@@ -10,7 +10,7 @@ module DateLabelHelper
       :tomorrow                 => :amber,
       :this_week                => :orange,
       :more_than_a_week         => :green
-    }
+    }.freeze
 
     def initialize(date, prefs)
       @date = date
@@ -51,19 +51,15 @@ module DateLabelHelper
     def date_html_wrapper
       return "" if @date.nil?
 
-      return content_tag(:a, {:title => @prefs.format_date(@date)}) {
-              content_tag(:span, {:class => get_color}) {
-                yield
-              }
+      return content_tag(:a, { :title => @prefs.format_date(@date) }) {
+              content_tag(:span, { :class => get_color }) { yield }
             }
     end
 
     def date_mobile_html_wrapper
       return "" if @date.nil?
 
-      return content_tag(:span, {:class => get_color}) {
-        yield
-      }
+      return content_tag(:span, { :class => get_color }) { yield }
     end
   end
 

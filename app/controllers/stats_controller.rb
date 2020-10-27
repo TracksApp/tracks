@@ -1,5 +1,5 @@
 class StatsController < ApplicationController
-  SECONDS_PER_DAY = 86_400;
+  SECONDS_PER_DAY = 86_400
 
   helper :todos, :projects, :recurring_todos
   append_before_action :init, :except => :index
@@ -23,15 +23,15 @@ class StatsController < ApplicationController
     # less than the minimum completed_at, so no reason to check minimum completed_at
 
     # convert to array and fill in non-existing months
-    @actions_done_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :completed_at)
-    @actions_created_last_months_array = put_events_into_month_buckets(actions_last_months, month_count+1, :created_at)
+    @actions_done_last_months_array = put_events_into_month_buckets(actions_last_months, month_count + 1, :completed_at)
+    @actions_created_last_months_array = put_events_into_month_buckets(actions_last_months, month_count + 1, :created_at)
 
     # find max for graph in both hashes
     @max = (@actions_done_last_months_array + @actions_created_last_months_array).max
 
     # set running avg
-    @actions_done_avg_last_months_array = compute_running_avg_array(@actions_done_last_months_array,month_count + 1)
-    @actions_created_avg_last_months_array = compute_running_avg_array(@actions_created_last_months_array,month_count + 1)
+    @actions_done_avg_last_months_array = compute_running_avg_array(@actions_done_last_months_array, month_count + 1)
+    @actions_created_avg_last_months_array = compute_running_avg_array(@actions_created_last_months_array, month_count + 1)
 
     # interpolate avg for this month.
     @interpolated_actions_created_this_month = interpolate_avg_for_current_month(@actions_created_last_months_array)
@@ -57,7 +57,7 @@ class StatsController < ApplicationController
       # last bar of the chart is selected. avtr is used for all other bars
 
       week_from = params['index'].to_i
-      week_to = week_from+1
+      week_to = week_from + 1
 
       @chart = Stats::Chart.new('actions_visible_running_time_data')
       @page_title = t('stats.actions_selected_from_week')
@@ -117,7 +117,7 @@ class StatsController < ApplicationController
     @last_completed_projects = current_user.projects.completed.limit(10).reorder('completed_at DESC').includes(:todos, :notes)
     @last_completed_contexts = []
     @last_completed_recurring_todos = current_user.recurring_todos.completed.limit(10).reorder('completed_at DESC').includes(:tags, :taggings)
-    #TODO: @last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
+    # TODO: @last_completed_contexts = current_user.contexts.completed.all(:limit => 10, :order => 'completed_at DESC')
   end
 
   private
@@ -135,7 +135,7 @@ class StatsController < ApplicationController
     @cut_off_30days = 30.days.ago.beginning_of_day
   end
 
-  def get_ids_from (actions, week_from, week_to, at_end)
+  def get_ids_from(actions, week_from, week_to, at_end)
     selected_todo_ids = []
 
     actions.each do |r|

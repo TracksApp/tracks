@@ -63,7 +63,7 @@
     </div>
 
     <%= source_view_tag( @source_view ) %>
-    <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/,'_') if source_view_is :tag %>
+    <%= hidden_field_tag :_tag_name, @tag_name.underscore.gsub(/\s+/, '_') if source_view_is :tag %>
 
     <button type="submit" class="btn btn-success" id="todo_new_action_submit">
       <%= t('shared.add_action') %>
