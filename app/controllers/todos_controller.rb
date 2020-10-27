@@ -703,7 +703,7 @@ class TodosController < ApplicationController
   def tags
     tags_beginning = current_user.tags.where(Tag.arel_table[:name].matches("#{params[:term]}%"))
     tags_all = current_user.tags.where(Tag.arel_table[:name].matches("%#{params[:term]}%"))
-    tags_all = tags_all - tags_beginning
+    tags_all -= tags_beginning
 
     respond_to do |format|
       format.autocomplete { render :body => for_autocomplete(tags_beginning+tags_all, params[:term]) }
@@ -731,30 +731,26 @@ class TodosController < ApplicationController
     determine_down_count
     determine_remaining_in_container_count(@todo)
     source_view do |page|
-      page.project {
+      page.project do
         @remaining_undone_in_project = current_user.projects.find(@todo.project_id).todos.not_completed.count
-      }
-      page.tag {
-        determine_deferred_tag_count(params['_tag_name'])
-      }
+      end
+      page.tag { determine_deferred_tag_count(params['_tag_name']) }
     end
 
     respond_to do |format|
       format.html { redirect_to :back }
       format.js { render :action => 'update' }
-      format.m {
+      format.m do
         notify(:notice, t("todos.action_deferred", :description => @todo.description))
         do_mobile_todo_redirection
-      }
+      end
     end
   end
 
   def list_hidden
     @hidden = current_user.todos.hidden
     respond_to do |format|
-      format.xml {
-        render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
-      }
+      format.xml { render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] ) }
     end
   end
 
@@ -801,12 +797,8 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
     respond_to do |format|
-      format.html {
-        redirect_to home_path, "Viewing note of todo is not implemented"
-      }
-      format.m {
-        render :action => "show_notes"
-      }
+      format.html { redirect_to home_path, "Viewing note of todo is not implemented" }
+      format.m { render :action => "show_notes" }
     end
   end
 
@@ -866,9 +858,9 @@ class TodosController < ApplicationController
     # Additional tag condition(s) handled as AND.
     @tag_expr << params[:and].split(',') if params[:and]
     i = 1
-    while params['and'+i.to_s]
-      @tag_expr << params['and'+i.to_s].split(',')
-      i=i+1
+    while params['and' + i.to_s]
+      @tag_expr << params['and' + i.to_s].split(',')
+      i += 1
     end
 
     @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
@@ -986,17 +978,17 @@ end
 
   def determine_remaining_in_container_count(todo = @todo)
     source_view do |from|
-      from.deferred {
+      from.deferred do
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
         @remaining_in_context = todos_in_container.deferred_or_blocked.count
         @target_context_count = todos_in_target_container.deferred_or_blocked.count
-      }
-      from.todo {
+      end
+      from.todo do
         todos_in_container, todos_in_target_container = find_todos_in_container_and_target_container(todo, @todo)
         @remaining_in_context = todos_in_container.active.not_hidden.count
         @target_context_count = todos_in_target_container.active.not_hidden.count
-      }
-      from.tag {
+      end
+      from.tag do
         tag = Tag.where(:name => params['_tag_name']).first
         tag = Tag.new(:name => params['tag']) if tag.nil?
 
@@ -1006,8 +998,8 @@ end
         @target_context_count = todos_in_target_container.active.not_hidden.with_tag(tag.id).count
         @remaining_hidden_count = current_user.todos.hidden.with_tag(tag.id).count
         @remaining_deferred_or_pending_count = current_user.todos.with_tag(tag.id).deferred_or_blocked.count
-      }
-      from.project {
+      end
+      from.project do
         project_id = @project_changed ? @original_item.project_id : @todo.project_id
         @remaining_deferred_or_pending_count = current_user.projects.find(project_id).todos.deferred_or_blocked.count
 
@@ -1018,11 +1010,11 @@ end
         end
 
         @target_context_count = current_user.projects.find(project_id).todos.active.count
-      }
-      from.calendar {
+      end
+      from.calendar do
         @target_context_count = @new_due_id.blank? ? 0 : count_old_due_empty(@new_due_id)
-      }
-      from.context {
+      end
+      from.context do
         context = current_user.contexts.find(todo.context_id)
         @remaining_deferred_or_pending_count = context.todos.deferred_or_blocked.count
 
@@ -1037,13 +1029,11 @@ end
           actions_in_target = @todo.context.todos.deferred_or_blocked
         end
         @target_context_count = actions_in_target.count
-      }
-      from.done {
+      end
+      from.done do
         @remaining_in_context = DoneTodos.remaining_in_container(current_user.todos, @original_completed_period)
-      }
-      from.all_done {
-        @remaining_in_context = current_user.todos.completed.count
-      }
+      end
+      from.all_done { @remaining_in_context = current_user.todos.completed.count }
     end
   end
 

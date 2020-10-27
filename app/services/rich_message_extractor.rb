@@ -3,12 +3,12 @@ class RichMessageExtractor
   include ActionView::Helpers::SanitizeHelper
   extend ActionView::Helpers::SanitizeHelper::ClassMethods
 
-  PROJECT_MARKER = '~'
-  CONTEXT_MARKER = '@'
-  TICKLER_MARKER = '>'
-  DUE_MARKER = '<'
-  TAG_MARKER = '#'
-  STAR_MARKER = '*'
+  PROJECT_MARKER = '~'.freeze
+  CONTEXT_MARKER = '@'.freeze
+  TICKLER_MARKER = '>'.freeze
+  DUE_MARKER = '<'.freeze
+  TAG_MARKER = '#'.freeze
+  STAR_MARKER = '*'.freeze
 
   ALL_MARKERS = [
     PROJECT_MARKER,

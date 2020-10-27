@@ -34,7 +34,7 @@ class ProjectsController < ApplicationController
         format.m do
           @completed_projects = current_user.projects.completed
           @down_count = @active_projects.size + @hidden_projects.size + @completed_projects.size
-          cookies[:mobile_url]= {:value => request.fullpath, :secure => SITE_CONFIG['secure_cookies']}
+          cookies[:mobile_url] = { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
         end
         format.xml { render :xml => @projects.to_xml(:root => :projects, :except => :user_id) }
         format.any(:rss, :atom) do
@@ -43,7 +43,7 @@ class ProjectsController < ApplicationController
         end
         format.text do
           # somehow passing Mime[:text] using content_type to render does not work
-          headers['Content-Type']=Mime[:text].to_s
+          headers['Content-Type'] = Mime[:text].to_s
         end
         format.autocomplete do
           projects = current_user.projects.active + current_user.projects.hidden
@@ -60,7 +60,7 @@ class ProjectsController < ApplicationController
     @projects_to_review = projects.select { |p| p.needs_review?(current_user) }
     @stalled_projects = projects.select { |p| p.stalled? }
     @blocked_projects = projects.select { |p| p.blocked? }
-    @current_projects = projects.uncompleted.select { |p| not (p.needs_review?(current_user)) }.sort_by { |p| p.last_reviewed || Time.zone.at(0) }
+    @current_projects = projects.uncompleted.select { |p| not p.needs_review?(current_user) }.sort_by { |p| p.last_reviewed || Time.zone.at(0) }
 
     init_not_done_counts(['project'])
     init_hidden_todo_counts(['project'])
@@ -112,11 +112,11 @@ class ProjectsController < ApplicationController
   def projects_and_actions
     @projects = current_user.projects.active
     respond_to do |format|
-      format.text  {
+      format.text do
         # somehow passing Mime[:text] using content_type to render does not work
         headers['Content-Type'] = Mime[:text].to_s
         render :action => 'index_text_projects_and_actions', :layout => false, :content_type => Mime[:text]
-      }
+      end
     end
   end
 
@@ -246,15 +246,14 @@ class ProjectsController < ApplicationController
     respond_to do |format|
       format.js { render :template => template }
       format.html { redirect_to :action => 'index'}
-      format.xml {
+      format.xml do
         if @saved
-          render :xml => @project.to_xml( :except => :user_id )
+          render :xml => @project.to_xml(:except => :user_id)
         else
           render :body => "Error on update: #{@project.errors.full_messages.inject("") { |v, e| v + e + " " }}", :status => 409
         end
-      }
+      end
     end
-
   end
 
   def edit
@@ -268,10 +267,10 @@ class ProjectsController < ApplicationController
     @project.destroy
 
     respond_to do |format|
-      format.js {
+      format.js do
         @down_count = current_user.projects.size
         update_state_counts
-      }
+      end
       format.xml { render :body => "Deleted project #{@project.name}" }
     end
   end

@@ -89,7 +89,6 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (11.1.3)
-    childprocess (3.0.0)
     climate_control (0.2.0)
     codeclimate-test-reporter (1.0.7)
       simplecov
@@ -245,7 +244,6 @@ GEM
     rubocop-ast (0.8.0)
       parser (>= 2.7.1.5)
     ruby-progressbar (1.10.1)
-    rubyzip (2.3.0)
     safe_yaml (1.0.5)
     sanitize (5.2.1)
       crass (~> 1.0.2)
@@ -259,9 +257,6 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (3.142.7)
-      childprocess (>= 0.5, < 4.0)
-      rubyzip (>= 1.2.2)
     simplecov (0.19.1)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -355,7 +350,6 @@ DEPENDENCIES
   rubocop (~> 0.93)
   sanitize (~> 5.2)
   sassc-rails (~> 2.1.2)
-  selenium-webdriver (~> 3.142)
   simplecov
   solargraph
   spring

@@ -3,7 +3,7 @@ module Tracks
   module SourceViewSwitching
     class Responder
       def initialize(source_view)
-        @source_view = source_view.underscore.gsub(/\s+/,'_').to_sym rescue nil
+        @source_view = source_view.underscore.gsub(/\s+/, '_').to_sym rescue nil
       end
 
       def nil?
@@ -41,7 +41,7 @@ module Tracks
 
     module Helper
       def source_view_tag(name)
-        hidden_field_tag :_source_view, name.underscore.gsub(/\s+/,'_')
+        hidden_field_tag :_source_view, name.underscore.gsub(/\s+/, '_')
       end
 
       def source_view_is(s)
