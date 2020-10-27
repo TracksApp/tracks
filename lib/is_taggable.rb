@@ -38,7 +38,7 @@ module IsTaggable
       end
 
       def has_tag?(tag_name)
-        return tags.any? {|tag| tag.name == tag_name}
+        return tags.any? { |tag| tag.name == tag_name }
       end
 
       # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
@@ -62,7 +62,7 @@ module IsTaggable
       # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       def _remove_tags(outgoing)
         outgoing = tag_cast_to_string(outgoing)
-        tags.destroy(*(self.user.tags.select{|tag| outgoing.include? tag.name}))
+        tags.destroy(*(self.user.tags.select { |tag| outgoing.include? tag.name }))
       end
 
       def get_tag_name_from_item(item)
