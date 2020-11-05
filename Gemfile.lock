@@ -294,7 +294,7 @@ GEM
     thor (1.0.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    tolk (4.0.0)
+    tolk (4.0.1)
       rails (>= 5.0)
       safe_yaml (>= 0.8.6)
       sassc
@@ -309,7 +309,7 @@ GEM
     websocket-extensions (0.1.5)
     will_paginate (3.3.0)
     yard (0.9.25)
-    zeitwerk (2.4.0)
+    zeitwerk (2.4.1)
 
 PLATFORMS
   ruby
@@ -355,7 +355,7 @@ DEPENDENCIES
   spring
   sqlite3
   therubyracer
-  tolk (~> 4.0.0)
+  tolk (~> 4.0.1)
   uglifier (>= 1.3.0)
   will_paginate
   yard
