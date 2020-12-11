@@ -907,7 +907,7 @@ end
   def find_todos_with_tag_expr(tag_expr)
     # optimize for the common case: selecting only one tag
     if @single_tag
-      tag = Tag.where(:name => @tag_name).first
+      tag = current_user.tags.where(:name => @tag_name).first
       tag_id = tag.nil? ? -1 : tag.id
       return current_user.todos.with_tag(tag_id)
     end
