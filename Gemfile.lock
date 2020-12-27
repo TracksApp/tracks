@@ -121,7 +121,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (0.9.31)
+    i18n-tasks (0.9.33)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -219,7 +219,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.20.3, < 2.0)
     rainbow (3.0.0)
-    rake (13.0.1)
+    rake (13.0.3)
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
@@ -228,10 +228,10 @@ GEM
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
-    rspec-expectations (3.10.0)
+    rspec-expectations (3.10.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
-    rspec-support (3.10.0)
+    rspec-support (3.10.1)
     rubocop (0.93.1)
       parallel (~> 1.10)
       parser (>= 2.7.1.5)
@@ -300,7 +300,7 @@ GEM
       rails (>= 5.0)
       safe_yaml (>= 0.8.6)
       sassc
-    tzinfo (1.2.8)
+    tzinfo (1.2.9)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
@@ -333,7 +333,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 5.15.1)
   htmlentities
-  i18n-tasks (~> 0.9.31)
+  i18n-tasks (~> 0.9.33)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   listen
