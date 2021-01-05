@@ -455,8 +455,8 @@ class TodosControllerTest < ActionController::TestCase
     # called by dragging a todo to another context container
     login_as(:admin_user)
 
-    todo = users(:admin_user).todos.active.first
-    context = users(:admin_user).contexts.first
+    todo = Todo.find(1)
+    context = Context.find(2)
 
     refute_equal todo.context.id, context.id
 
