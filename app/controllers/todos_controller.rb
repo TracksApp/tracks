@@ -1121,18 +1121,19 @@ end
   end
 
   def count_old_due_empty(id)
+    due_today_date = Time.zone.now
+    due_this_week_date = Time.zone.now.end_of_week
+    due_next_week_date = due_this_week_date + 7.days
+    due_this_month_date = Time.zone.now.end_of_month
+
     case id
     when "due_today"
-      due_today_date = Time.zone.now
       return current_user.todos.not_completed.where('todos.due <= ?', due_today_date).count
     when "due_this_week"
-      due_this_week_date = Time.zone.now.end_of_week
       return current_user.todos.not_completed.where('todos.due > ? AND todos.due <= ?', due_today_date, due_this_week_date).count
     when "due_next_week"
-      due_next_week_date = due_this_week_date + 7.days
       return current_user.todos.not_completed.where('todos.due > ? AND todos.due <= ?', due_this_week_date, due_next_week_date).count
     when "due_this_month"
-      due_this_month_date = Time.zone.now.end_of_month
       return current_user.todos.not_completed.where('todos.due > ? AND todos.due <= ?', due_next_week_date, due_this_month_date).count
     when "due_after_this_month"
       return current_user.todos.not_completed.where('todos.due > ?', due_this_month_date).count
