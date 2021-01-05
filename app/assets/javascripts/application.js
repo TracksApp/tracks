@@ -20,6 +20,14 @@
 //= require jquery-ui/widgets/droppable
 //= require jquery-ui/effects/effect-highlight
 //= require jquery-ui/widgets/sortable
+//= require jquery-ui/i18n/datepicker-cs
+//= require jquery-ui/i18n/datepicker-de
+//= require jquery-ui/i18n/datepicker-es
+//= require jquery-ui/i18n/datepicker-fi
+//= require jquery-ui/i18n/datepicker-fr
+//= require jquery-ui/i18n/datepicker-he
+//= require jquery-ui/i18n/datepicker-nl
+//= require jquery-ui/i18n/datepicker-ru
 
 // Stuff in app/assets
 //= require tracks

@@ -6,15 +6,15 @@ class TodosControllerTest < ActionController::TestCase
     assert_redirected_to login_url
   end
 
-  ############################
-  # not done / deferred counts
-  ############################
-
   def test_locale_index
     login_as(:other_user_email)
     get :index
-    asser_response 200
+    assert_response 200
   end
+
+  ############################
+  # not done / deferred counts
+  ############################
 
   def test_not_done_counts
     login_as(:admin_user)
