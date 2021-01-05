@@ -24,6 +24,16 @@ You can easily run Tracks using Docker Compose. This option mounts the repositor
 ```
 6. You should now be able to access Tracks in http://localhost:3000
 
+Note: If you've previously used the Tracks docker-compose installation with a
+directory of the same name, the old database might still exist which prevents
+it from being re-initialised. If you want to start from scratch, check out the
+volume list and remove the volume in question with the following commands:
+
+```
+$ docker volume list
+$ docker volume rm tracks_db-data
+```
+
 ## Docker installation using a separate container
 
 You can also install Tracks without Docker Compose. This allows you to use the official Docker containers and you can use your existing database server instead of having a separate one for Tracks.
