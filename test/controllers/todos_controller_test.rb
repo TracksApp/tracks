@@ -10,6 +10,12 @@ class TodosControllerTest < ActionController::TestCase
   # not done / deferred counts
   ############################
 
+  def test_locale_index
+    login_as(:other_user_email)
+    get :index
+    asser_response 200
+  end
+
   def test_not_done_counts
     login_as(:admin_user)
     get :index
