@@ -51,3 +51,21 @@ sms_user_prefs:
   show_project_on_todo_done: true
   sms_email: 5555555555@tmomail.net
   sms_context_id: 13
+
+other_user_email_prefs:
+  id: 4
+  user_id: 6
+  staleness_starts: 7
+  locale: fi
+  date_format: "%d/%m/%Y"
+  title_date_format: "%A, %d %B %Y"
+  show_number_completed: 5
+  show_completed_projects_in_sidebar: true
+  show_hidden_contexts_in_sidebar: true
+  show_hidden_projects_in_sidebar: true
+  week_starts: 1
+  due_style: 0
+  refresh: 0
+  time_zone: "London"
+  verbose_action_descriptors: false
+  show_project_on_todo_done: true
