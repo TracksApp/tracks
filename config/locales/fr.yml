@@ -72,8 +72,8 @@ fr:
         odd: doit être impair
         record_invalid: 'La validation a échoué : %{errors}'
         restrict_dependent_destroy:
-          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
-          other: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          has_one: Cannot delete record because a dependent %{record} exists
+          has_many: Cannot delete record because dependent %{record} exist
         taken: est déjà pris
         too_long: est trop long (maximum de %{count} caractères)
         too_short: est trop court (minimum de %{count} charactères)
@@ -94,8 +94,8 @@ fr:
     action: Action
     actions: Actions
     actions_midsentence:
-      one: actions
-      other: action
+      one: action
+      other: actions
     add: Ajouter
     ajaxError: Une erreur s'est produite en accédant un serveur
     back: Retour
@@ -107,8 +107,8 @@ fr:
     contribute: Contribuer
     create: Créer
     days_midsentence:
-      one: jours
-      other: jour
+      one: jour
+      other: jours
     deferred: reportées
     description: Description
     drag_handle: DRAG
@@ -127,8 +127,9 @@ fr:
     none: Aucun
     not_available_abbr: n/a
     note:
-      one: non notes
-      other: 1 note
+      one: 1 note
+      other: "%{count} notes"
+      zero: non notes
     notes: Notes
     numbered_step: Étape %{number}
     ok: OK
@@ -268,10 +269,12 @@ fr:
       half_a_minute: 30 secondes
       less_than_x_minutes:
         one: moins d'1 minute
-        other: moins d'une minute
+        other: moins de %{count} minutes
+        zero: moins d'1 minute
       less_than_x_seconds:
         one: moins d'1 seconde
-        other: moins d'1 seconde
+        other: moins de %{count} secondes
+        zero: moins d'1 seconde
       over_x_years:
         one: plus d'1 an
         other: plus de %{count} ans
@@ -1178,10 +1181,12 @@ fr:
       multi_page_html: Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b>
         au total
       single_page:
-        one: Aucun %{model} trouvés
-        other: Voir de 1 %{model}
+        one: Voir de 1 %{model}
+        other: Afficher tous les %{count} %{model}
+        zero: Aucun %{model} trouvés
       single_page_html:
-        one: Aucun %{model} trouvés
-        other: Voir de <b>1</b> %{model}
+        one: Voir de <b>1</b> %{model}
+        other: Afficher <b>tous les %{count}</b> %{model}
+        zero: Aucun %{model} trouvés
     page_gap: "&hellip;"
     previous_label: "«Précédent"

@@ -69,8 +69,8 @@ fi:
         odd: täytyy olla pariton
         record_invalid: 'Validointi epäonnistui: %{errors}'
         restrict_dependent_destroy:
-          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
-          other: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          has_one: Cannot delete record because a dependent %{record} exists
+          has_many: Cannot delete record because dependent %{record} exist
         taken: has already been taken
         too_long: is too long (maximum is %{count} characters)
         too_short: is too short (minimum is %{count} characters)
@@ -91,8 +91,8 @@ fi:
     action: Toimenpide
     actions: Toimenpiteet
     actions_midsentence:
-      one: toimenpidettä
-      other: toimenpide
+      one: toimenpide
+      other: toimenpidettä
     add: Lisää
     ajaxError: Virhe noudettaessa palvelimelta
     back: Takaisin
@@ -104,8 +104,8 @@ fi:
     contribute: Osallistu
     create: Luo
     days_midsentence:
-      one: päivää
-      other: päivä
+      one: päivä
+      other: päivää
     deferred: lykätty
     description: Kuvaus
     drag_handle: VEDÄ
@@ -124,8 +124,9 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: ei muistiinpanoja
-      other: 1 muistiinpano
+      one: 1 muistiinpano
+      other: "%{count} muistiinpanoa"
+      zero: ei muistiinpanoja
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -266,11 +267,13 @@ fi:
         other: almost %{count} years
       half_a_minute: half a minute
       less_than_x_minutes:
-        one: less than 1 minute
-        other: less than a minute
+        one: less than a minute
+        other: less than %{count} minutes
+        zero: less than 1 minute
       less_than_x_seconds:
         one: less than 1 second
-        other: less than 1 second
+        other: less than %{count} seconds
+        zero: less than 1 second
       over_x_years:
         one: over 1 year
         other: over %{count} years
@@ -1166,8 +1169,9 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: '%{model} ei löytynyt'
-        other: Näytetään 1 %{model}
+        one: Näytetään 1 %{model}
+        other: Näytetään kaikki %{count} %{model}
+        zero: '%{model} ei löytynyt'
       single_page_html:
         none: Näytetään <b>1</b> %{model}
         other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}

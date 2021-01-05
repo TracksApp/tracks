@@ -69,8 +69,8 @@ de:
         odd: muss ungerade sein
         record_invalid: 'Validation failed: %{errors}'
         restrict_dependent_destroy:
-          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
-          other: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          has_one: Cannot delete record because a dependent %{record} exists
+          has_many: Cannot delete record because dependent %{record} exist
         taken: ist bereits vergeben
         too_long: ist zu lang (nicht mehr als %{count} Zeichen)
         too_short: ist zu kurz (nicht weniger als %{count} Zeichen)
@@ -93,6 +93,7 @@ de:
     actions_midsentence:
       one: Aufgaben
       other: Aufgabe
+      zero: Aufgabe
     add: Hinzufügen
     ajaxError: Fehler beim Empfangen vom Server
     back: Zurück
@@ -104,8 +105,9 @@ de:
     contribute: Mitwirken
     create: Erstellen
     days_midsentence:
-      one: Tagen
-      other: Tag
+      one: Tag
+      other: Tagen
+      zero: Tagen
     deferred: aufgeschobene
     description: Beschreibung
     drag_handle: Verschieben
@@ -124,8 +126,9 @@ de:
     none: Keine
     not_available_abbr: n/b
     note:
-      one: keine Notizen
-      other: 1 Notiz
+      one: 1 Notiz
+      other: "%{count} Notizen"
+      zero: keine Notizen
     notes: Notizen
     numbered_step: Schritt %{number}
     ok: Ok
@@ -264,11 +267,13 @@ de:
         other: fast %{count} Jahre
       half_a_minute: eine halbe Minute
       less_than_x_minutes:
-        one: weniger als 1 Minute
-        other: weniger als eine Minute
+        one: weniger als eine Minute
+        other: weniger als %{count} Minuten
+        zero: weniger als 1 Minute
       less_than_x_seconds:
         one: weniger als 1 Sekunde
-        other: weniger als 1 Sekunde
+        other: weniger als %{count} Sekunden
+        zero: weniger als 1 Sekunde
       over_x_years:
         one: mehr als 1 Jahr
         other: mehr als %{count} Jahre
@@ -1173,10 +1178,12 @@ de:
       multi_page_html: Angezeigte %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> von <b>%{count}</b>
         insgesamt
       single_page:
-        one: Kein %{model} gefunden
-        other: Angezeigte 1 %{model}
+        one: Angezeigte 1 %{model}
+        other: Anzeige aller %{count} %{model}
+        zero: Kein %{model} gefunden
       single_page_html:
-        one: Kein %{model} gefunden
-        other: Angezeigte <b>1</b> %{model}
+        one: Angezeigte <b>1</b> %{model}
+        other: Anzeige <b>aller&nbsp;%{count}</b> %{model}
+        zero: Kein %{model} gefunden
     page_gap: "..."
     previous_label: "« Zurück"
