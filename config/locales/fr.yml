@@ -723,8 +723,8 @@ fr:
       incomplètes visibles
     index_title: TRACKS::Statistiques
     labels:
-      avg_completed: Moy. Réalisé
-      avg_created: Moy. Créé
+      avg_completed: Moy. réalisé
+      avg_created: Moy. créé
       completed: Complété
       created: Créé
       month_avg_completed: "%{months} Month avg completed"
@@ -752,7 +752,7 @@ fr:
       actions: Actions
       percentage: Pourcentage
       running_time: Temps en cours d'une action (en semaines). Cliquer sur une barre
-        pour plus d'info
+        pour plus d'infos
     running_time_legend:
       actions: Actions
       percentage: Pourcentage
@@ -817,7 +817,7 @@ fr:
       time: "%H:%M"
     pm: pm
   todos:
-    action_deferred: L'action «?%{description}?» a été reportée
+    action_deferred: L'action « %{description} » a été reportée
     action_deleted_error: La suppression de l'action a échoué
     action_deleted_success: L'action suivante à été supprimée avec succès
     action_due_on: "(action à terminer avant le %{date})"
@@ -837,7 +837,7 @@ fr:
       project_completed: Completed actions in this project
       project_deferred_pending: Deferred/pending actions in this project
       project_project: Actions in this project
-      tag_completed: Completed actions tagged with '%{param}'
+      tag_completed: Actions terminées marquées avec « %{param} »
       tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
       tag_hidden: Hidden actions tagged with '%{param}'
     add_another_dependency: Ajouter une autre dépendance
