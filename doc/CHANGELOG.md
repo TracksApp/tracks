@@ -1,5 +1,23 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.5.2
+
+### New features
+
+* New Finnish locale by the maintainer Jyri-Petteri ”ZeiP” Paloposki.
+* Update last login field when validating an existing login.
+* Show more users in the user list and allow changing the order criteria.
+
+### Bug fixes
+
+* Fix tag-specific task lists to work in a multi-user environment.
+* Fix setting the due date in the calendar view.
+* Fix a bug causing 500 errors for users with different locales.
+* Lots of dependencies have been upgraded.
+* Better CI tests.
+* Code style fixes.
+* Small style issues.
+
 ## Version 2.5.1
 
 ### Security issue disclosure
