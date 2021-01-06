@@ -178,6 +178,7 @@ en:
     hide_form: Hide form
     hide_form_title: Hide new context form
     last_completed_in_context: "(last %{number})"
+    letter_abbreviation: C
     new_context_post: "' will be also created. Are you sure?"
     new_context_pre: New context '
     no_contexts_: 'No contexts '
@@ -191,6 +192,7 @@ en:
     status_hidden: Context is hidden
     todos_append: in this context
     update_status_message: Name of context was changed
+    view_link: 'View context: %{name}'
     visible_contexts: Visible contexts
   data:
     import_destination_invalid: Invalid import destination
@@ -365,6 +367,18 @@ en:
       update: Update %{model}
   integrations:
     opensearch_description: Search in Tracks
+  help:
+    title: Help
+    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    manual_link_text: User manual
+    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    issue_link_text: issue queue
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute_link_text: project website
+    mailing_list_link_text: Mailing list
+    irc_bullet: '%{irc_link} (also available in %{matrix_link})'
+    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    matrix_link_text: Matrix
   layouts:
     mobile_navigation:
       calendar: Calendar
@@ -596,6 +610,7 @@ en:
     hide_form_title: Hide new project form
     is_active: is active
     last_completed_in_project: "(last %{number})"
+    letter_abbreviation: P
     list_completed_projects: TRACKS::List Completed Projects
     list_projects: TRACKS::List Projects
     list_reviews: TRACKS::Review
@@ -618,6 +633,7 @@ en:
     status_project_name_changed: Name of project was changed
     this_project: This project
     to_new_project_page: Take me to the new project page
+    view_link: 'View project: %{name}'
     was_marked_complete: has been marked as completed
     was_marked_hidden: has been marked as hidden
     with_default_context: with a default context of '%{context_name}'

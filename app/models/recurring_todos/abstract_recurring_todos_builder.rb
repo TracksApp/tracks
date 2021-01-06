@@ -60,7 +60,7 @@ module RecurringTodos
       # get pattern independend attributes
       filtered_attributes = filter_generic_attributes(attributes)
       # append pattern specific attributes
-      attributes_to_filter.each{ |key| filtered_attributes[key]= attributes[key] if attributes.key?(key) }
+      attributes_to_filter.each { |key| filtered_attributes[key] = attributes[key] if attributes.key?(key) }
 
       filtered_attributes
     end

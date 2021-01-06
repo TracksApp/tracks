@@ -1,9 +1,9 @@
 module ProjectsHelper
   def show_project_name(project)
     if source_view_is :project
-      content_tag(:span, :id => "project_name"){project.name}
+      content_tag(:span, :id => "project_name") { project.name }
     else
-      link_to_project( project )
+      link_to_project(project)
     end
   end
 
@@ -14,7 +14,7 @@ module ProjectsHelper
   end
 
   def project_next_prev
-    content_tag(:div, :id=>"project-next-prev") do
+    content_tag(:div, :id => "project-next-prev") do
       html = ""
       html << link_to_project(@previous_project, "&laquo; #{@previous_project.shortened_name}".html_safe) if @previous_project
       html << " | " if @previous_project && @next_project
@@ -33,14 +33,13 @@ module ProjectsHelper
 
   def project_summary(project)
     project_description = ''
-    project_description += render_text( project.description ) if project.description.present?
+    project_description += render_text(project.description) if project.description.present?
     project_description += content_tag(:p,
-      "#{count_undone_todos_phrase(p)}. #{t('projects.project_state', :state => project.state)}".html_safe
-      )
+      "#{count_undone_todos_phrase(p)}. #{t('projects.project_state', :state => project.state)}".html_safe)
   end
 
   def needsreview_class(item)
-    raise "item must be a Project " unless item.kind_of? Project
+    raise "item must be a Project " unless item.is_a? Project
     return item.needs_review?(current_user) ? "needsreview" : "needsnoreview"
   end
 
@@ -48,7 +47,7 @@ module ProjectsHelper
     link_to_delete(:project, project, descriptor)
   end
 
-  def link_to_edit_project (project, descriptor = sanitize(project.name))
+  def link_to_edit_project(project, descriptor = sanitize(project.name))
     link_to_edit(:project, project, descriptor)
   end
 end

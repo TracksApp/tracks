@@ -8,7 +8,7 @@ class NotesController < ApplicationController
     @source_view = 'note_list'
     respond_to do |format|
       format.html
-      format.xml { render :xml => @all_notes.to_xml(:root => :notes, :except => :user_id)  }
+      format.xml { render :xml => @all_notes.to_xml(:root => :notes, :except => :user_id) }
     end
   end
 

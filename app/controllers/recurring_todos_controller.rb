@@ -18,11 +18,9 @@ class RecurringTodosController < ApplicationController
     @new_recurring_todo = RecurringTodo.new
   end
 
-  def new
-  end
+  def new; end
 
-  def show
-  end
+  def show; end
 
   def done
     @source_view = params['_source_view'] || 'recurring_todo'
@@ -171,7 +169,7 @@ class RecurringTodosController < ApplicationController
       context_name: :context_name,
       project_name: :project_name,
       tag_list:     :tag_list
-    }.each do |target,source|
+    }.each do |target, source|
       move_into_recurring_todo_param(params, target, source)
     end
     recurring_todo_params
@@ -189,14 +187,14 @@ class RecurringTodosController < ApplicationController
       tag_list:     :edit_recurring_todo_tag_list,
       end_date:     :recurring_todo_edit_end_date,
       start_from:   :recurring_todo_edit_start_from
-    }.each do |target,source|
+    }.each do |target, source|
       move_into_recurring_todo_param(params, target, source)
     end
 
     # make sure that we set weekly_return_xxx to empty (space) when they are
     # not checked (and thus not present in params["recurring_todo"])
     %w{monday tuesday wednesday thursday friday saturday sunday}.each do |day|
-      params["recurring_todo"]["weekly_return_#{day}"]=' ' if params["recurring_todo"]["weekly_return_#{day}"].nil?
+      params["recurring_todo"]["weekly_return_#{day}"] = ' ' if params["recurring_todo"]["weekly_return_#{day}"].nil?
     end
 
     recurring_todo_params
@@ -207,9 +205,15 @@ class RecurringTodosController < ApplicationController
   end
 
   def init
-    @days_of_week   = (0..6).map{|i| [t('date.day_names')[i], i] }
-    @months_of_year = (1..12).map{|i| [t('date.month_names')[i], i] }
-    @xth_day = [[t('common.first'),1],[t('common.second'),2],[t('common.third'),3],[t('common.fourth'),4],[t('common.last'),5]]
+    @days_of_week = (0..6).map { |i| [t('date.day_names')[i], i] }
+    @months_of_year = (1..12).map { |i| [t('date.month_names')[i], i] }
+    @xth_day = [
+      [t('common.first'), 1],
+      [t('common.second'), 2],
+      [t('common.third'), 3],
+      [t('common.fourth'), 4],
+      [t('common.last'),5]
+    ]
     @projects = current_user.projects.includes(:default_context)
     @contexts = current_user.contexts
   end
@@ -221,10 +225,10 @@ class RecurringTodosController < ApplicationController
   def find_and_inactivate
     # find active recurring todos without active todos and inactivate them
 
-    current_user.recurring_todos.active.
-      select("recurring_todos.id, recurring_todos.state").
-      joins("LEFT JOIN todos fai_todos ON (recurring_todos.id = fai_todos.recurring_todo_id) AND (NOT fai_todos.state='completed')").
-      where("fai_todos.id IS NULL").
-      each { |rt| current_user.recurring_todos.find(rt.id).toggle_completion! }
+    current_user.recurring_todos.active
+      .select("recurring_todos.id, recurring_todos.state")
+      .joins("LEFT JOIN todos fai_todos ON (recurring_todos.id = fai_todos.recurring_todo_id) AND (NOT fai_todos.state='completed')")
+      .where("fai_todos.id IS NULL")
+      .each { |rt| current_user.recurring_todos.find(rt.id).toggle_completion! }
   end
 end

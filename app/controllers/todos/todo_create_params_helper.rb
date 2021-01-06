@@ -25,7 +25,8 @@ module Todos
       elsif params[:todo]
         @attributes = todo_params(params)
       end
-      @attributes = {} if @attributes.nil?  # make sure there is at least an empty hash
+      # Make sure there is at least an empty hash
+      @attributes = {} if @attributes.nil?
     end
 
     def filter_tags
@@ -41,7 +42,7 @@ module Todos
 
     def filter_starred
       if @params[:new_todo_starred]
-        @attributes["starred"] = (@params[:new_todo_starred]||"").include? "true"
+        @attributes["starred"] = (@params[:new_todo_starred] || "").include? "true"
       end
     end
 
@@ -77,7 +78,7 @@ module Todos
       @params['predecessor_list']
     end
 
-    def parse_dates()
+    def parse_dates
       @attributes['show_from'] = @user.prefs.parse_date(show_from)
       @attributes['due'] = @user.prefs.parse_date(due)
       @attributes['due'] ||= ''

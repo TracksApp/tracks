@@ -39,7 +39,7 @@ module RecurringTodos
     def method_missing(method, *args)
       # delegate daily_xxx to daily_pattern, weekly_xxx to weekly_pattern, etc.
       if method.to_s =~ /^([^_]+)_(.+)$/
-        return @method_map[$1][:method].send(@method_map[$1][:prefix]+$2, *args) unless @method_map[$1].nil?
+        return @method_map[$1][:method].send(@method_map[$1][:prefix] + $2, *args) unless @method_map[$1].nil?
       end
 
       # no match, let @recurring_todo handle it, or fail

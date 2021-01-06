@@ -17,8 +17,8 @@ class IntegrationsController < ApplicationController
   end
 
   def search_plugin
-    @icon_data = [File.open(File.join(Rails.root, 'app', 'assets', 'images', 'done.png')).read].
-      pack('m').gsub(/\n/, '')
+    @icon_data = [File.open(File.join(Rails.root, 'app', 'assets', 'images', 'done.png')).read]
+      .pack('m').gsub(/\n/, '')
   end
 
   def cloudmailin
@@ -37,18 +37,18 @@ class IntegrationsController < ApplicationController
   private
 
   def process_message(message)
-    MessageGateway::receive(Mail.new(message))
+    MessageGateway.receive(Mail.new(message))
   end
 
   def verify_cloudmailin_signature
     provided = request.request_parameters.delete(:signature)
-    signature = Digest::MD5.hexdigest(flatten_params(request.request_parameters).sort.map{|k,v| v}.join + SITE_CONFIG['cloudmailin'])
+    signature = Digest::MD5.hexdigest(flatten_params(request.request_parameters).sort.map { |k, v| v }.join + SITE_CONFIG['cloudmailin'])
     return provided == signature
   end
 
   def flatten_params(params, title = nil, result = {})
     params.each do |key, value|
-      if value.kind_of?(Hash)
+      if value.is_a? Hash
         key_name = title ? "#{title}[#{key}]" : key
         flatten_params(value, key_name, result)
       else

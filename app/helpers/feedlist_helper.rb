@@ -1,6 +1,6 @@
 module FeedlistHelper
   def linkoptions(format, options)
-    merge_hashes( { :format => format }, options, user_token_hash)
+    merge_hashes({ :format => format }, options, user_token_hash)
   end
 
   def rss_formatted_link(options = {})
@@ -41,7 +41,7 @@ module FeedlistHelper
   protected
 
   def merge_hashes(*hashes)
-    hashes.inject(Hash.new){ |result, h| result.merge(h) }
+    hashes.inject({}) { |result, h| result.merge(h) }
   end
 
   def user_token_hash

@@ -177,6 +177,7 @@ ru:
     hide_form: Скрыть форму
     hide_form_title: Скрыть форму нового контекста
     last_completed_in_context: "(осталось %{number})"
+    letter_abbreviation: C
     new_context_post: "' будет также создан. Вы уверены?"
     new_context_pre: Новый контекст '
     no_contexts_: 'No contexts '
@@ -190,6 +191,7 @@ ru:
     status_hidden: Контекст скрыт
     todos_append: в этом контексте
     update_status_message: Имя контекста было изменено
+    view_link: 'View context: %{name}'
     visible_contexts: Видимые контексты
   data:
     import_destination_invalid: Неверный путь назначения для импорта
@@ -369,6 +371,18 @@ ru:
       update: Обновить %{model}
   integrations:
     opensearch_description: Искать в Tracks
+  help:
+    title: Help
+    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    manual_link_text: User manual
+    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    issue_link_text: issue queue
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute_link_text: project website
+    mailing_list_link_text: Mailing list
+    irc_bullet: '%{irc_link} (also available in %{matrix_link})'
+    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    matrix_link_text: Matrix
   layouts:
     mobile_navigation:
       calendar: Calendar
@@ -593,6 +607,7 @@ ru:
     hide_form_title: Скрыть форму нового проекта
     is_active: активен
     last_completed_in_project: "(последние %{number})"
+    letter_abbreviation: P
     list_completed_projects: TRACKS::Список выполненных проектов
     list_projects: TRACKS::Список проектов
     list_reviews: TRACKS::Обзор
@@ -615,6 +630,7 @@ ru:
     status_project_name_changed: Имя проекта изменено
     this_project: Этот проект
     to_new_project_page: Перейти на страницу нового проекта
+    view_link: 'View project: %{name}'
     was_marked_complete: помечен как выполненный
     was_marked_hidden: помечен как скрытый
     with_default_context: с контекстом по-умолчанию '%{context_name}'

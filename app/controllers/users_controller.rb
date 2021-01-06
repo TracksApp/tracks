@@ -92,12 +92,12 @@ class UsersController < ApplicationController
           return
         end
 
-        signup_by_admin = true if (@user && @user.is_admin?)
+        signup_by_admin = true if @user && @user.is_admin?
         first_user_signing_up = User.no_users_yet?
         user.is_admin = true if first_user_signing_up
         if user.save
           @user = User.authenticate(user.login, params['user']['password'])
-          @user.create_preference({ :locale => I18n.locale })
+          @user.create_preference(:locale => I18n.locale)
           @user.save
           session['user_id'] = @user.id unless signup_by_admin
           notify :notice, t('users.signup_successful', :username => @user.login)
@@ -219,10 +219,10 @@ class UsersController < ApplicationController
   end
 
   def check_create_user_params
-    return false unless params.has_key?(:user)
-    return false unless params[:user].has_key?(:login)
+    return false unless params.key?(:user)
+    return false unless params[:user].key?(:login)
     return false if params[:user][:login].empty?
-    return false unless params[:user].has_key?(:password)
+    return false unless params[:user].key?(:password)
     return false if params[:user][:password].empty?
     return true
   end

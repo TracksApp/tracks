@@ -174,6 +174,7 @@ es:
     hide_form: Esconder formulario
     hide_form_title: Ocultar el formulario nuevo contexto
     last_completed_in_context: en este contexto (últimos %{number})
+    letter_abbreviation: C
     new_context_post: "' También se ha creado. ¿Está seguro?"
     new_context_pre: Nuevo contexto '
     no_contexts_: 'No contexts '
@@ -187,6 +188,7 @@ es:
     status_hidden: Contexto se oculta
     todos_append: en este contexto
     update_status_message: Nombre de contexto ha cambiado
+    view_link: 'View context: %{name}'
     visible_contexts: Contextos visible
   data:
     import_destination_invalid: Invalid import destination
@@ -352,6 +354,18 @@ es:
       update: Обновить %{model}
   integrations:
     opensearch_description: Buscar en las Tracks
+  help:
+    title: Help
+    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    manual_link_text: User manual
+    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    issue_link_text: issue queue
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute_link_text: project website
+    mailing_list_link_text: Mailing list
+    irc_bullet: '%{irc_link} (also available in %{matrix_link})'
+    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    matrix_link_text: Matrix
   layouts:
     mobile_navigation:
       calendar: Calendar
@@ -576,6 +590,7 @@ es:
     hide_form_title: Hide new project form
     is_active: está activo
     last_completed_in_project: "(last %{number})"
+    letter_abbreviation: P
     list_completed_projects: 'TRACKS:: Lista de Proyectos Realizados'
     list_projects: TRACKS::Lista de Proyectos
     list_reviews: TRACKS::Revisión
@@ -598,6 +613,7 @@ es:
     status_project_name_changed: Name of project was changed
     this_project: Este proyecto
     to_new_project_page: Take me to the new project page
+    view_link: 'View project: %{name}'
     was_marked_complete: has been marked as completed
     was_marked_hidden: has been marked as hidden
     with_default_context: with a default context of '%{context_name}'

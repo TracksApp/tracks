@@ -11,7 +11,7 @@
       text_area_tag( "recurring_todo[notes]", @form_helper.notes, {:cols => 29, :rows => 6}) -%>
 
       <label for="edit_recurring_todo_project_name"><%= Todo.human_attribute_name('project') %></label>
-      <input id="edit_recurring_todo_project_name" name="project_name" autocomplete="off" size="30" type="text" value="<%= @form_helper.project.nil? ? '' : @form_helper.project.name.gsub(/"/,"&quot;") %>" />
+      <input id="edit_recurring_todo_project_name" name="project_name" autocomplete="off" size="30" type="text" value="<%= @form_helper.project.nil? ? '' : @form_helper.project.name.gsub(/"/, "&quot;") %>" />
       <div class="page_name_auto_complete" id="edit_project_list" style="display:none"></div>
 
       <label for="edit_recurring_todo_context_name"><%= Todo.human_attribute_name('context') %></label>

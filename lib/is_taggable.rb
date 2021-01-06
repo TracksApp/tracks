@@ -6,11 +6,11 @@ module IsTaggable
       has_many :taggings, :as => :taggable
       has_many :tags, :through => :taggings do
         def to_s
-          self.to_a.map(&:name).sort.join(Tag::JOIN_DELIMITER)
+          to_a.map(&:name).sort.join(Tag::JOIN_DELIMITER)
         end
 
         def all_except_starred
-          self.to_a.reject { |tag| tag.name == Todo::STARRED_TAG_NAME }
+          to_a.reject { |tag| tag.name == Todo::STARRED_TAG_NAME }
         end
       end
 
@@ -49,7 +49,7 @@ module IsTaggable
           # added following check to prevent empty tags from being saved (which will fail)
           if tag_name.present?
             begin
-              tag = self.user.tags.where(:name => tag_name).first_or_create
+              tag = user.tags.where(:name => tag_name).first_or_create
               raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
               tags << tag
             rescue ActiveRecord::StatementInvalid => e
@@ -62,7 +62,7 @@ module IsTaggable
       # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, or an array of Tags.
       def _remove_tags(outgoing)
         outgoing = tag_cast_to_string(outgoing)
-        tags.destroy(*(self.user.tags.select { |tag| outgoing.include? tag.name }))
+        tags.destroy(*(user.tags.select { |tag| outgoing.include? tag.name }))
       end
 
       def get_tag_name_from_item(item)

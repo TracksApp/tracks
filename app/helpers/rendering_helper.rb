@@ -21,7 +21,7 @@ module RenderingHelper
   def render_text(text)
     rendered = auto_link_message(text)
     rendered = textile(rendered)
-    rendered = auto_link(rendered, link: :urls, html: {target: '_blank'})
+    rendered = auto_link(rendered, link: :urls, html: { target: '_blank' })
 
     relaxed_config = Sanitize::Config::RELAXED
     config = relaxed_config

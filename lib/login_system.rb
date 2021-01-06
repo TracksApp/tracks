@@ -12,7 +12,7 @@ module LoginSystem
   # Logout the {#current_user} and redirect to login page
   #
   # @param [String] message notification to display
-  def logout_user(message=t('login.logged_out'))
+  def logout_user(message = t('login.logged_out'))
     @user.forget_me if logged_in?
     cookies.delete :auth_token
     session['user_id'] = nil
@@ -64,7 +64,7 @@ module LoginSystem
       session['user_id'] = user.id
       set_current_user(user)
       current_user.remember_me
-      cookies[:auth_token] = { :value => current_user.remember_token , :expires => current_user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
+      cookies[:auth_token] = { :value => current_user.remember_token, :expires => current_user.remember_token_expires_at, :secure => SITE_CONFIG['secure_cookies'] }
       flash[:notice] = t('login.successful')
     end
   end
@@ -72,7 +72,7 @@ module LoginSystem
   def login_or_feed_token_required
     if ['rss', 'atom', 'txt', 'ics', 'xml'].include?(params[:format])
       # Login based on the token GET parameter
-      if user = User.where(:token => params[:token]).first
+      if (user = User.where(:token => params[:token]).first)
         set_current_user(user)
         return true
       end
@@ -209,8 +209,8 @@ module LoginSystem
   end
 
   def basic_auth_denied
-      response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
-      render :body => t('login.unsuccessful'), :status => 401
+    response.headers["WWW-Authenticate"] = "Basic realm=\"'Tracks Login Required'\""
+    render :body => t('login.unsuccessful'), :status => 401
   end
 
   private

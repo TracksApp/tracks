@@ -16,9 +16,7 @@ class Project < ApplicationRecord
 
   before_create :set_last_reviewed_now
 
-  validates_presence_of :name
-  validates_length_of :name, :maximum => 255
-  validates_uniqueness_of :name, :scope => "user_id", :case_sensitive => true
+  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :user_id }
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\'', :top_of_list => 0
 
@@ -88,21 +86,21 @@ class Project < ApplicationRecord
   end
 
   def needs_review?(user)
-    return active? && ( last_reviewed.nil? ||
+    return active? && (last_reviewed.nil? ||
                         (last_reviewed < Time.current - user.prefs.review_period.days))
   end
 
   def blocked?
     ## mutually exclusive for stalled and blocked
     # blocked is uncompleted project with deferred or pending todos, but no next actions
-    return false if self.completed?
-    return !self.todos.deferred_or_blocked.empty? && self.todos.active.empty?
+    return false if completed?
+    return !todos.deferred_or_blocked.empty? && todos.active.empty?
   end
 
   def stalled?
     # Stalled projects are active projects with no active next actions
-    return false if self.completed? || self.hidden?
-    return !self.todos.deferred_or_blocked.exists? && !self.todos.active.exists?
+    return false if completed? || hidden?
+    return !todos.deferred_or_blocked.exists? && !todos.active.exists?
   end
 
   def shortened_name(length = 40)

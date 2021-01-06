@@ -132,7 +132,7 @@ class TemplateParser
       line = replace_tokens_in line
 
       # line is either todo/dependency or project
-      if (line[0].chr == "." ) || (line[0].chr == "^")
+      if (line[0].chr == ".") || (line[0].chr == "^")
         if @last_project_id.nil?
           puts "Warning: no project specified for task \"#{line}\". Using default project."
         end
@@ -153,7 +153,8 @@ class TemplatePoster
       password:       ENV['GTD_PASSWORD'],
       projects_uri:   ENV['GTD_PROJECTS_URL'] || 'http://localhost:3000/projects.xml',
       contexts_uri:   ENV['GTD_CONTEXT_URL'] || 'http://localhost:3000/contexts.xml',
-      context_prefix: ENV['GTD_CONTEXT_URL_PREFIX'] || 'http://localhost:3000/contexts/'})
+      context_prefix: ENV['GTD_CONTEXT_URL_PREFIX'] || 'http://localhost:3000/contexts/'
+    })
     @context_id = options[:context_id] ? options[:context_id].to_i : 1
     @project_id = options[:project_id] ? options[:project_id].to_i : 1
   end
@@ -265,7 +266,7 @@ class ConsoleOptionsForTemplate
     @parser.parse!(args)
     @poster = TemplatePoster.new(@options)
 
-    if !@filename.nil? and not File.exist?(@filename)
+    if !@filename.nil? && not File.exist?(@filename)
       puts "ERROR: file #{@filename} doesn't exist"
       exit 1
     end

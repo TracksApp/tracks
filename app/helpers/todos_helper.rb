@@ -3,17 +3,17 @@ require 'staleness'
 module TodosHelper
   # === helpers for rendering container
   def empty_message_holder(container_name, show, title_param = nil)
-    content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none") ) do
-      content_tag(:h2) { t("todos.no_actions.title", :param=>title_param) } +
+    content_tag(:div, :id => "no_todos_in_view", :class => "container #{container_name}", :style => "display:" + (show ? "block" : "none")) do
+      content_tag(:h2) { t("todos.no_actions.title", :param => title_param) } +
       content_tag(:div, :class => "message") do
-        content_tag(:p) { t("todos.no_actions.#{container_name}", :param=>title_param) }
+        content_tag(:p) { t("todos.no_actions.#{container_name}", :param => title_param) }
       end
     end
   end
 
   def todos_container_empty_message(container_name, container_id, show_message)
     content_tag(:div, :id => "#{container_id}-empty-d", :style => "display:#{show_message ? 'block' : 'none'}") do
-      content_tag(:div, :class=>"message") do
+      content_tag(:div, :class => "message") do
         content_tag(:p) do
           t("todos.no_actions.#{container_name}")
         end
@@ -27,7 +27,7 @@ module TodosHelper
       :collapsible => true,
       :show_empty_containers => @show_empty_containers,
       :parent_container_type => @group_view_by
-    })})
+    }) })
   end
 
   def default_collection_settings
@@ -73,10 +73,10 @@ module TodosHelper
 
   def show_deferred_pending_todos(deferred_todos, pending_todos, settings = {})
     settings[:pending] = pending_todos
-    settings[:container_name]="deferred_pending"
+    settings[:container_name] = "deferred_pending"
 
     render :partial => "todos/collection",
-      :object => deferred_todos+pending_todos,
+      :object => deferred_todos + pending_todos,
       :locals => { :settings => settings.reverse_merge!(default_collection_settings) }
   end
 
@@ -113,7 +113,7 @@ module TodosHelper
     settings.reverse_merge!({
         :title => t("todos.actions.#{settings[:parent_container_type]}_#{settings[:container_name]}", :param => settings[:title_param])
       })
-    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class=>"link_in_container_header"){settings[:link_in_header]}
+    header = settings[:link_in_header].nil? ? "" : content_tag(:div, :class => "link_in_container_header") { settings[:link_in_header] }
     header += content_tag(:h2) do
       toggle = settings[:collapsible] ? container_toggle("toggle_#{settings[:id]}") : ""
       "#{toggle} #{settings[:title]} #{settings[:append_descriptor]}".html_safe
@@ -123,7 +123,7 @@ module TodosHelper
   end
 
   def todos_container_items(collection, settings = {})
-    settings.reverse_merge!({:id => "#{settings[:container_name]}"})
+    settings.reverse_merge!({ :id => "#{settings[:container_name]}" })
     # do not pass :class to partial locals
     settings.delete(:class)
 
@@ -140,7 +140,7 @@ module TodosHelper
         :collapsible => false,
         :show_empty_containers => true,
         :container_name => "#{period}",
-        :title =>t("todos.calendar.#{period}", :month => l(Time.zone.now, :format => "%B"), :next_month => l(1.month.from_now, :format => "%B"))
+        :title => t("todos.calendar.#{period}", :month => l(Time.zone.now, :format => "%B"), :next_month => l(1.month.from_now, :format => "%B"))
       } }
   end
 
@@ -168,12 +168,13 @@ module TodosHelper
       :class => "icon_delete_item",
       :id => dom_id(todo, "delete"),
       :x_confirm_message => t('todos.confirm_delete', :description => todo.description),
-      :title => t('todos.delete_action'));
+      :title => t('todos.delete_action')
+    )
   end
 
   def remote_defer_menu_item(days, todo)
     url = { :controller => 'todos', :action => 'defer', :id => todo.id, :days => days,
-      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "") }
+      :_source_view => (@source_view.underscore.gsub(/\s+/, '_') rescue "") }
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
     options = { :x_defer_alert => false, :class => "icon_defer_item icon_defer_#{days}_item", :id => "defer_#{days}_#{dom_id(todo)}" }
@@ -192,13 +193,13 @@ module TodosHelper
     link_to(
       image_tag("blank.png", :title => t('todos.remove_dependency'), :align => "absmiddle", :class => "delete_item"),
       remove_predecessor_todo_path(todo),
-      {:class => "delete_dependency_button", :x_predecessors_id => predecessor.id}
+      { :class => "delete_dependency_button", :x_predecessors_id => predecessor.id }
     )
   end
 
   def remote_promote_to_project_menu_item(todo)
-    url = {:controller => 'todos', :action => 'convert_to_project', :id => todo.id,
-      :_source_view => (@source_view.underscore.gsub(/\s+/,'_') rescue "")}
+    url = { :controller => 'todos', :action => 'convert_to_project', :id => todo.id,
+      :_source_view => (@source_view.underscore.gsub(/\s+/, '_') rescue "") }
     url[:_tag_name] = @tag_name if @source_view == 'tag'
 
     link_to(t('todos.convert_to_project'), url, { :class => "icon_item_to_project", :id => dom_id(todo, "to_project") })
@@ -206,7 +207,7 @@ module TodosHelper
 
   def attachment_image(todo)
     link_to(
-      image_tag('blank.png', width: 16, height: 16, border:0),
+      image_tag('blank.png', width: 16, height: 16, border: 0),
       todo.attachments.first.file.url,
       { :class => 'todo_attachment', title: 'Get attachments of this todo' }
     )
@@ -214,23 +215,23 @@ module TodosHelper
 
   def collapsed_notes_image(todo)
     link = link_to(
-      image_tag( 'blank.png', :width => '16', :height => '16', :border => '0' ),
+      image_tag('blank.png', :width => '16', :height => '16', :border => '0'),
       "#",
       { :class => 'show_notes', :title => 'Show notes' })
     notes = content_tag(:div, {
       :class => "todo_notes",
       :id => dom_id(todo, 'notes'),
       :style => "display:none" }) { raw render_text(todo.notes) }
-    return link+notes
+    return link + notes
   end
 
   def collapsed_successors_image(todo)
-    link = link_to(image_tag('blank.png', :width => '16', :height => '16', :border => '0' ), "#", { :class => 'show_successors', :title => 'Show successors' })
+    link = link_to(image_tag('blank.png', :width => '16', :height => '16', :border => '0'), "#", { :class => 'show_successors', :title => 'Show successors' })
     successors = content_tag(:div, { :class => "todo_successors", :id => dom_id(todo, 'successors'), :style => "display:none" }) do
       render :partial => "todos/successor", :collection => todo.pending_successors,
         :locals => { :parent_container_type => parent_container_type, :suppress_dependencies => true, :predecessor => todo }
     end
-    return link+successors
+    return link + successors
   end
 
   def image_tag_for_recurring_todo(todo)
@@ -257,9 +258,9 @@ module TodosHelper
 
   def date_span(todo = @todo)
     if todo.completed?
-      content_tag(:span, { :class => :grey }) { format_date( todo.completed_at ) }
+      content_tag(:span, { :class => :grey }) { format_date(todo.completed_at) }
     elsif todo.pending?
-      title = t('todos.depends_on')+ ": " + todo.uncompleted_predecessors.to_a.map(&:description).join(', ')
+      title = t('todos.depends_on') + ": " + todo.uncompleted_predecessors.to_a.map(&:description).join(', ')
       content_tag(:a, { :title => title }) { content_tag(:span, { :class => :orange }) { t('todos.pending') } }
     elsif todo.deferred?
       show_date(todo.show_from)
@@ -318,7 +319,7 @@ module TodosHelper
   end
 
   def include_context_link(todo, parent_container_type)
-    return true if (['stats', 'search'].include?(parent_container_type))
+    return true if ['stats', 'search'].include?(parent_container_type)
     # TODO: remove next line if 'project' supports group_view_by
     return true if parent_container_type == 'project'
     return true if @group_view_by == 'project'
@@ -327,7 +328,7 @@ module TodosHelper
 
   def include_project_link(todo, parent_container_type)
     return false unless todo.has_project?
-    return true if (['stats', 'search'].include?(parent_container_type))
+    return true if ['stats', 'search'].include?(parent_container_type)
     # TODO: remove next line if 'context' supports group_view_by
     return true if parent_container_type == 'context'
     return true if @group_view_by == 'context'
@@ -347,9 +348,9 @@ module TodosHelper
     case days_stale
     when 0...start
       ""
-    when start...start*2
+    when start...start * 2
       " stale_l1"
-    when start*2...start*3
+    when start*2...start * 3
       " stale_l2"
     else
       " stale_l3"
@@ -380,19 +381,19 @@ module TodosHelper
 
   def default_contexts_for_autocomplete
     projects = current_user.projects.uncompleted.includes(:default_context).where('NOT(default_context_id IS NULL)')
-    Hash[*projects.map{ |p| [escape_javascript(p.name), escape_javascript(p.default_context.name)] }.flatten].to_json
+    Hash[*projects.map { |p| [escape_javascript(p.name), escape_javascript(p.default_context.name)] }.flatten].to_json
   end
 
   def default_tags_for_autocomplete
     projects = current_user.projects.uncompleted.where("NOT(default_tags = '')")
-    Hash[*projects.map{ |p| [escape_javascript(p.name), p.default_tags] }.flatten].to_json
+    Hash[*projects.map { |p| [escape_javascript(p.name), p.default_tags] }.flatten].to_json
   end
 
   # === various helpers
 
   def formatted_pagination(total)
     s = will_paginate(@todos)
-    (s.gsub(/(<\/[^<]+>)/, '\1 ')).chomp(' ')
+    s.gsub(/(<\/[^<]+>)/, '\1 ').chomp(' ')
   end
 
   def format_ical_notes(notes)
@@ -418,10 +419,11 @@ module TodosHelper
   # if the animation needs to be run inside the namespace of an object, set the
   # object_name to the name of the object and this name will be prepended to each step
   def render_animation(animation, object_name = nil)
-    object_name += "." unless object_name.nil?  # add dot if object_name is given
+    # Add dot if object_name is given
+    object_name += "." unless object_name.nil?
 
     # concatenate all steps into functions that call functions
-    html = animation.map{ |step| "#{object_name}#{step}({ go: function() {" }.join("\r\n")
+    html = animation.map { |step| "#{object_name}#{step}({ go: function() {" }.join("\r\n")
     # close all functions
     html += "}}) " * animation.size + ";"
 
@@ -474,8 +476,8 @@ module TodosHelper
   end
 
   def todo_container_is_empty
-    default_container_empty = ( @down_count == 0 )
-    deferred_container_empty = ( @todo.deferred? && @remaining_deferred_count == 0)
+    default_container_empty = (@down_count == 0)
+    deferred_container_empty = (@todo.deferred? && @remaining_deferred_count == 0)
     return default_container_empty || deferred_container_empty
   end
 
@@ -516,12 +518,12 @@ module TodosHelper
   def update_needs_to_remove_todo_from_container
     source_view do |page|
       page.context  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @todo_should_be_hidden }
-      page.project  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed}
+      page.project  { return @context_changed || @todo_deferred_state_changed || @todo_pending_state_changed || @project_changed }
       page.deferred { return todo_moved_out_of_container || !(@todo.deferred? || @todo.pending?) }
       page.calendar { return @due_date_changed || !@todo.due }
       page.stats    { return @todo.completed? }
-      page.tag      { return ( (@context_changed | @project_changed) && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
-      page.todo     { return todo_moved_out_of_container || @todo.hidden? || @todo.deferred? || @todo.pending?}
+      page.tag      { return ((@context_changed | @project_changed) && !@todo.hidden?) || @tag_was_removed || @todo_hidden_state_changed || @todo_deferred_state_changed }
+      page.todo     { return todo_moved_out_of_container || @todo.hidden? || @todo.deferred? || @todo.pending? }
       page.search   { return false }
     end
     return false
@@ -564,7 +566,7 @@ module TodosHelper
     source_view do |page|
       page.context { return @remaining_in_context == 0 }
     end
-    return @down_count==0
+    return @down_count == 0
   end
 
   def project_container_id(todo)
@@ -609,29 +611,25 @@ module TodosHelper
     raise Exception.new, "no @todo or @successor set" if !todo
 
     source_view do |page|
-      page.project  {
+      page.project do
         return "deferred_pending_container-empty-d" if empty_criteria_met
         return todo_container_empty_id(todo)
-      }
-      page.tag {
+      end
+      page.tag do
         return "deferred_pending_container-empty-d" if empty_criteria_met
         return "hidden_container-empty-d"           if @todo.hidden?
         return todo_container_empty_id(todo)
-      }
-      page.calendar {
+      end
+      page.calendar do
         return "deferred_pending_container-empty-d" if empty_criteria_met
         return "#{@new_due_id}_container-empty-d"
-      }
-      page.context {
+      end
+      page.context do
         return "deferred_pending_container-empty-d" if empty_criteria_met
         return todo_container_empty_id(todo)
-      }
-      page.todo {
-        return todo_container_empty_id(todo)
-      }
-      page.deferred {
-        return todo_container_empty_id(todo)
-      }
+      end
+      page.todo { return todo_container_empty_id(todo) }
+      page.deferred { return todo_container_empty_id(todo) }
     end
 
     return context_container_empty_id(todo)
@@ -656,28 +654,28 @@ module TodosHelper
   def show_empty_message_in_source_container
     container_id = ""
     source_view do |page|
-      page.project  {
+      page.deferred { container_id = todo_container_empty_id(@original_item) if @remaining_in_context == 0 }
+      page.calendar { container_id = "#{@original_item_due_id}_container-empty-d" if @old_due_empty }
+      page.todo { container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0 }
+      page.done { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
+      page.all_done { container_id = "all-done-empty-nd" if @remaining_in_context == 0 }
+      page.project do
         container_id = project_container_empty_id(@original_item) if @remaining_in_context == 0
         container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.deferred { container_id = todo_container_empty_id(@original_item) if @remaining_in_context == 0 }
-      page.calendar { container_id = "#{@original_item_due_id}_container-empty-d" if @old_due_empty }
-      page.tag      {
+      end
+      page.tag do
         container_id = "hidden_container-empty-d" if (@remaining_hidden_count == 0 && !@todo.hidden? && @todo_hidden_state_changed) ||
           (@remaining_hidden_count == 0 && @todo.completed? && @original_item.hidden?)
         container_id = "deferred_pending_container-empty-d" if (todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0) ||
           (@original_item.deferred? && @remaining_deferred_or_pending_count == 0 && (@todo.completed? || @tag_was_removed))
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.context  {
+      end
+      page.context do
         container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0
         container_id = "deferred_pending_container-empty-d" if todo_was_removed_from_deferred_or_blocked_container && @remaining_deferred_or_pending_count == 0
         container_id = "completed_container-empty-d" if @completed_count && @completed_count == 0 && !@todo.completed?
-      }
-      page.todo     { container_id = context_container_empty_id(@original_item) if @remaining_in_context == 0 }
-      page.done     { container_id = "completed_#{@original_completed_period}_container-empty-d" if @remaining_in_context == 0 }
-      page.all_done { container_id = "all-done-empty-nd" if @remaining_in_context == 0 }
+      end
     end
     return container_id.blank? ? "" : "$(\"##{container_id}\").slideDown(100);".html_safe
   end
