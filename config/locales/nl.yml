@@ -174,6 +174,7 @@ nl:
     hide_form: Verberg formulier
     hide_form_title: Verberg formulier voor nieuwe context
     last_completed_in_context: in deze context (laatste %{number})
+    letter_abbreviation: C
     new_context_post: "' zal ook gemaakt worden. Weet u dit zeker?"
     new_context_pre: Nieuwe context '
     no_contexts_: 'No contexts '
@@ -187,6 +188,7 @@ nl:
     status_hidden: Context is verborgen
     todos_append: in deze context
     update_status_message: Naam van de context was veranderd
+    view_link: 'View context: %{name}'
     visible_contexts: Zichtbare contexten
   data:
     import_destination_invalid: Verkeerde bestemming voor import
@@ -355,6 +357,18 @@ nl:
       update: Bijwerken %{model}
   integrations:
     opensearch_description: Zoek in Tracks
+  help:
+    title: Help
+    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    manual_link_text: User manual
+    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    issue_link_text: issue queue
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute_link_text: project website
+    mailing_list_link_text: Mailing list
+    irc_bullet: '%{irc_link} (also available in %{matrix_link})'
+    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    matrix_link_text: Matrix
   layouts:
     mobile_navigation:
       calendar: Calendar
@@ -579,6 +593,7 @@ nl:
     hide_form_title: Verberg nieuw project formulier
     is_active: is actief
     last_completed_in_project: "(laatste %{number})"
+    letter_abbreviation: P
     list_completed_projects: TRACKS::Toon afgeronde projecten
     list_projects: 'TRACKS:: Overzicht van projecten'
     list_reviews: TRACKS::Evaluatie
@@ -601,6 +616,7 @@ nl:
     status_project_name_changed: Naam van het project werd gewijzigd
     this_project: Dit project
     to_new_project_page: Ga naar de nieuwe projectpagina
+    view_link: 'View project: %{name}'
     was_marked_complete: is gemarkeerd als voltooid
     was_marked_hidden: is gemarkeerd als verborgen
     with_default_context: met een standaard context  '%{context_name}'
