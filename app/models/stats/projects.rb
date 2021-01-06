@@ -22,7 +22,7 @@ module Stats
 
     def find_top10_longest_running_projects
       projects = user.projects.order('created_at ASC')
-      projects.sort_by{ |p| p.running_time }.reverse.take(10)
+      projects.sort_by { |p| p.running_time }.reverse.take(10)
     end
   end
 end

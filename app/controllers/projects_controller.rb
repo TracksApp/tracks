@@ -153,7 +153,7 @@ class ProjectsController < ApplicationController
         else
           @project_default_context = t('projects.default_context', :context => @project.default_context.name)
         end
-        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
+        cookies[:mobile_url] = { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
         @mobile_from_project = @project.id
       end
       format.xml do
@@ -245,7 +245,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.js { render :template => template }
-      format.html { redirect_to :action => 'index'}
+      format.html { redirect_to :action => 'index' }
       format.xml do
         if @saved
           render :xml => @project.to_xml(:except => :user_id)

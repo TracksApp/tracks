@@ -5,7 +5,6 @@ class User < ApplicationRecord
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 
-  #for will_paginate plugin
   cattr_accessor :per_page
   @@per_page = 25
 
@@ -15,11 +14,11 @@ class User < ApplicationRecord
              end
 
              def update_positions(context_ids)
-               context_ids.each_with_index { |id, position|
-                 context = self.detect { |c| c.id == id.to_i }
+               context_ids.each_with_index do |id, position|
+                 context = detect { |c| c.id == id.to_i }
                  raise I18n.t('models.user.error_context_not_associated', :context => id, :user => @user.id) if context.nil?
                  context.update_attribute(:position, position + 1)
-               }
+               end
              end
            end
 
@@ -29,27 +28,27 @@ class User < ApplicationRecord
               end
 
               def update_positions(project_ids)
-                project_ids.each_with_index { |id, position|
-                  project = self.find_by(id: id.to_i)
+                project_ids.each_with_index do |id, position|
+                  project = find_by(id: id.to_i)
                   raise I18n.t('models.user.error_project_not_associated', :project => id, :user => @user.id) if project.nil?
                   project.update_attribute(:position, position + 1)
-                }
+                end
               end
 
               def projects_in_state_by_position(state)
-                self.select { |p| p.state == state }.sort_by { |p| p.position }
+                select { |p| p.state == state }.sort_by { |p| p.position }
               end
 
               def next_from(project)
-                self.offset_from(project, 1)
+                offset_from(project, 1)
               end
 
               def previous_from(project)
-                self.offset_from(project, -1)
+                offset_from(project, -1)
               end
 
               def offset_from(project, offset)
-                projects = self.projects_in_state_by_position(project.state)
+                projects = projects_in_state_by_position(project.state)
                 position = projects.index(project)
                 return nil if position == 0 && offset < 0
                 projects.at(position + offset)
@@ -57,7 +56,7 @@ class User < ApplicationRecord
 
               def cache_note_counts
                 project_note_counts = Note.group(:project_id).count
-                self.each do |project|
+                each do |project|
                   project.cached_note_count = project_note_counts[project.id] || 0
                 end
               end
@@ -65,7 +64,7 @@ class User < ApplicationRecord
               def alphabetize(scope_conditions = {})
                 projects = where(scope_conditions)
                 projects = projects.sort_by { |project| project.name.downcase }
-                self.update_positions(projects.map(&:id))
+                update_positions(projects.map(&:id))
                 return projects
               end
 
@@ -75,7 +74,7 @@ class User < ApplicationRecord
                 todos_in_project.reject { |p| p.todos.active.count > 0 }
                 sorted_project_ids = todos_in_project.map(&:id)
 
-                all_project_ids = self.map(&:id)
+                all_project_ids = map(&:id)
                 other_project_ids = all_project_ids - sorted_project_ids
 
                 update_positions(sorted_project_ids + other_project_ids)
@@ -108,19 +107,19 @@ class User < ApplicationRecord
   has_one :preference, dependent: :destroy
   has_many :attachments, through: :todos
 
-  validates_presence_of :login
-  validates_presence_of :password, if: :password_required?
-  validates_length_of :password, within: 5..72, if: :password_required?
-  validates_presence_of :password_confirmation, if: :password_required?
-  validates_confirmation_of :password
-  validates_length_of :login, within: 3..80
+  validates :login, presence: true, length: { within: 3..80 }
   validates_uniqueness_of :login, on: :create, :case_sensitive => false
+  validates :password, presence: true, length: { within: 5..72 }, if: :password_required?
+  validates :password_confirmation, presence: true, if: :password_required?
+  validates :password, confirmation: true
+  validates :email, allow_blank: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+
   validate :validate_auth_type
-  validates :email, :allow_blank => true, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   before_create :crypt_password, :generate_token
   before_update :crypt_password
-  before_destroy :destroy_dependencies, :delete_taggings, prepend: true  # run before deleting todos, projects, contexts, etc.
+  # Run before deleting todos, projects, contexts, etc.
+  before_destroy :destroy_dependencies, :delete_taggings, prepend: true
 
   def validate_auth_type
     unless Tracks::Config.auth_schemes.include?(auth_type)
@@ -136,8 +135,8 @@ class User < ApplicationRecord
     return nil if candidate.nil?
 
     if Tracks::Config.auth_schemes.include?('database')
-      return candidate if candidate.auth_type == 'database' and
-        candidate.password_matches? pass
+
+      return candidate if (candidate.auth_type == 'database' && candidate.password_matches?(pass))
     end
 
     return nil
@@ -177,11 +176,11 @@ class User < ApplicationRecord
   end
 
   def generate_token
-    self.token = Digest::SHA1.hexdigest "#{Time.now.to_i}#{rand}"
+    self.token = Digest::SHA1.hexdigest "#{Time.zone.now.to_i}#{rand}"
   end
 
   def remember_token?
-    remember_token_expires_at && Time.now.utc < remember_token_expires_at
+    remember_token_expires_at && Time.zone.now.utc < remember_token_expires_at
   end
 
   # These create and unset the fields required for remembering users between browser closes
@@ -209,7 +208,7 @@ class User < ApplicationRecord
 
   def crypt_password
     return if password.blank?
-    write_attribute("crypted_password", self.create_hash(password)) if password == password_confirmation
+    write_attribute("crypted_password", create_hash(password)) if password == password_confirmation
   end
 
   def password_required?

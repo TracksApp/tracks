@@ -158,13 +158,13 @@ module RecurringTodos
 
     def continues_recurring?(previous)
       return @recurring_todo.occurrences_count < @recurring_todo.number_of_occurrences unless @recurring_todo.number_of_occurrences.nil?
-      return true if self.end_date.nil? || self.ends_on == 'no_end_date'
+      return true if end_date.nil? || ends_on == 'no_end_date'
 
-      case self.target
+      case target
       when 'due_date'
-        get_due_date(previous) <= self.end_date
+        get_due_date(previous) <= end_date
       when 'show_from_date'
-        get_show_from_date(previous) <= self.end_date
+        get_show_from_date(previous) <= end_date
       end
     end
 
@@ -175,7 +175,7 @@ module RecurringTodos
     # offset needs to be 1.day for daily patterns or the start will be the
     # same day as the previous
     def determine_start(previous, offset = 0.day)
-      start = self.start_from || NullTime.new
+      start = start_from || NullTime.new
       if previous
         # check if the start_from date is later than previous. If so, use
         # start_from as start to search for next date

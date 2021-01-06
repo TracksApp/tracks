@@ -31,7 +31,7 @@ module RecurringTodos
     end
 
     def recurrence_pattern
-      if self.recurrence_selector == 0
+      if recurrence_selector == 0
         I18n.t("todos.recurrence.pattern.every_year_on", :date => date_as_month_day)
       else
         I18n.t("todos.recurrence.pattern.every_year_on",
@@ -94,11 +94,11 @@ module RecurringTodos
       the_next = start.month > month ? Time.zone.local(start.year + 1, month, 1) : start
 
       # get the xth day of the month
-      the_next = get_xth_day_of_month(self.every_xth_day, day_of_week, month, the_next.year)
+      the_next = get_xth_day_of_month(every_xth_day, day_of_week, month, the_next.year)
 
       # if the_next is before previous, we went back into the past, so try next
       # year
-      the_next = get_xth_day_of_month(self.every_xth_day, day_of_week, month, start.year + 1) if the_next <= start
+      the_next = get_xth_day_of_month(every_xth_day, day_of_week, month, start.year + 1) if the_next <= start
 
       the_next
     end

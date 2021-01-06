@@ -29,7 +29,7 @@ module RecurringTodos
     def validate
       super
       validate_not_blank(every_x_week, "Every other nth week may not be empty for weekly recurrence setting")
-      something_set = %w{ sunday monday tuesday wednesday thursday friday saturday }.inject(false) { |set, day| set || self.send("on_#{day}") }
+      something_set = %w{ sunday monday tuesday wednesday thursday friday saturday }.inject(false) { |set, day| set || send("on_#{day}") }
       errors[:base] << "You must specify at least one day on which the todo recurs" unless something_set
     end
 
@@ -41,19 +41,19 @@ module RecurringTodos
 
       # we did not find anything this week, so check the nth next, starting from
       # sunday
-      start = start + self.every_x_week.week - (start.wday).days
+      start = start + every_x_week.week - (start.wday).days
 
       start = find_first_day_in_this_week(start)
       return start unless start == -1
 
-      raise Exception.new, "unable to find next weekly date (#{self.every_day})"
+      raise Exception.new, "unable to find next weekly date (#{every_day})"
     end
 
     private
 
     def determine_start_date(previous)
       if previous.nil?
-        return self.start_from || Time.zone.now
+        return start_from || Time.zone.now
       else
         start = previous + 1.day
         if start.wday == 0
@@ -61,10 +61,10 @@ module RecurringTodos
           # that week. Note that we already went into the next week, so -1
           start += (every_x_week - 1).week
         end
-        unless self.start_from.nil?
+        unless start_from.nil?
           # check if the start_from date is later than previous. If so, use
           # start_from as start to search for next date
-          start = self.start_from if self.start_from > previous
+          start = start_from if start_from > previous
         end
         return start
       end

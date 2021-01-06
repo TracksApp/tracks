@@ -38,7 +38,7 @@ class TodosController < ApplicationController
         @page_title = t('todos.task_list_title')
         # Set count badge to number of not-done, not hidden context items
         @count = current_user.todos.active.not_hidden.count(:all)
-        @todos_without_project = @not_done_todos.select{ |t| t.project.nil? }
+        @todos_without_project = @not_done_todos.select { |t| t.project.nil? }
       end
       format.m do
         @page_title = t('todos.mobile_todos_page_title')
@@ -49,14 +49,14 @@ class TodosController < ApplicationController
 
         render :action => 'index'.freeze
       end
-      format.text  do
+      format.text do
         # somehow passing Mime[:text] using content_type to render does not work
         headers['Content-Type'.freeze] = Mime[:text].to_s
         render :content_type => Mime[:text]
       end
       format.xml do
         @xml_todos = params[:limit_to_active_todos] ? @not_done_todos : @todos
-        render :xml => @xml_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
+        render :xml => @xml_todos.to_xml(*[todo_xml_params[0].merge({ :root => :todos })])
       end
       format.any(:rss, :atom) do
         @feed_title = 'Tracks Actions'.freeze
@@ -70,7 +70,7 @@ class TodosController < ApplicationController
     @projects = current_user.projects.active
     @contexts = current_user.contexts
     respond_to do |format|
-      format.m {
+      format.m do
         @new_mobile = true
         @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
         @mobile_from_context = current_user.contexts.find(params[:from_context]) if params[:from_context]
@@ -79,7 +79,7 @@ class TodosController < ApplicationController
           # we have a project but not a context -> use the default context
           @mobile_from_context = @mobile_from_project.default_context
         end
-      }
+      end
     end
   end
 
@@ -174,7 +174,8 @@ class TodosController < ApplicationController
 
     # first build all todos and check if they would validate on save
     params[:todo][:multiple_todos].split("\n").map do |line|
-      if line.present? #ignore blank lines
+      # Ignore blank lines
+      if line.present?
         @todo = current_user.todos.build({ :description => line, :context_id => p.context_id, :project_id => p.project_id })
         validates &&= @todo.valid?
 
@@ -245,12 +246,12 @@ class TodosController < ApplicationController
     @tag_name = params['_tag_name']
     respond_to do |format|
       format.js
-      format.m {
+      format.m do
         @projects = current_user.projects.active
         @contexts = current_user.contexts
         @edit_mobile = true
         @return_path = cookies[:mobile_url] ? cookies[:mobile_url] : mobile_path
-      }
+      end
     end
   end
 
@@ -258,7 +259,7 @@ class TodosController < ApplicationController
     @todo = current_user.todos.find(params['id'])
     respond_to do |format|
       format.m { render :action => 'show' }
-      format.xml { render :xml => @todo.to_xml( *[todo_xml_params[0].merge({ :root => :todo })] ) }
+      format.xml { render :xml => @todo.to_xml(*[todo_xml_params[0].merge({ :root => :todo })]) }
     end
   end
 
@@ -339,7 +340,7 @@ class TodosController < ApplicationController
           determine_down_count
           determine_completed_count
           determine_deferred_tag_count(params['_tag_name']) if source_view_is(:tag)
-          @wants_redirect_after_complete = @todo.completed?  && !@todo.project_id.nil? && current_user.prefs.show_project_on_todo_done && !source_view_is(:project)
+          @wants_redirect_after_complete = @todo.completed? && !@todo.project_id.nil? && current_user.prefs.show_project_on_todo_done && !source_view_is(:project)
           if source_view_is :calendar
             @original_item_due_id = get_due_id_for_calendar(@original_item.due)
             @old_due_empty = is_old_due_empty(@original_item_due_id)
@@ -347,7 +348,7 @@ class TodosController < ApplicationController
         end
         render
       end
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @todo.to_xml(*todo_xml_params) }
       format.html do
         if @saved
           # TODO: I think this will work, but can't figure out how to test it
@@ -355,10 +356,10 @@ class TodosController < ApplicationController
           redirect_to :action => "index"
         else
           notify(:notice, t("todos.action_marked_complete_error", :description => @todo.description, :completed => @todo.completed? ? 'complete' : 'incomplete'), "index")
-          redirect_to :action =>  "index"
+          redirect_to :action => "index"
         end
       end
-      format.m {
+      format.m do
         if @saved
           if cookies[:mobile_url]
             old_path = cookies[:mobile_url]
@@ -372,7 +373,7 @@ class TodosController < ApplicationController
         else
           render :action => "edit", :format => :m
         end
-      }
+      end
     end
   end
 
@@ -382,9 +383,9 @@ class TodosController < ApplicationController
     @saved = true # cannot determine error
     respond_to do |format|
       format.js
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @todo.to_xml(*todo_xml_params) }
       format.html { redirect_to request.referrer }
-      format.m {
+      format.m do
         if cookies[:mobile_url]
           old_path = cookies[:mobile_url]
           cookies[:mobile_url] = { :value => nil, :secure => SITE_CONFIG['secure_cookies'] }
@@ -394,7 +395,7 @@ class TodosController < ApplicationController
           notify(:notice, "Star toggled")
           onsite_redirect_to todos_path(:format => 'm')
         end
-      }
+      end
     end
   end
 
@@ -413,7 +414,7 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.js  { render :action => :update }
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      format.xml { render :xml => @todo.to_xml(*todo_xml_params) }
     end
   end
 
@@ -437,7 +438,7 @@ class TodosController < ApplicationController
     rescue ActiveRecord::RecordInvalid => exception
       record = exception.record
       if record.is_a?(Dependency)
-        record.errors.each { |key,value| @todo.errors[key] << value }
+        record.errors.each { |key, value| @todo.errors[key] << value }
       end
       @saved = false
     end
@@ -462,12 +463,12 @@ class TodosController < ApplicationController
     @todo.touch_predecessors if @original_item.description != @todo.description
 
     respond_to do |format|
-      format.js {
+      format.js do
         @status_message = @todo.deferred? ? t('todos.action_saved_to_tickler') : t('todos.action_saved')
         @status_message = t('todos.added_new_project') + ' / ' + @status_message if @new_project_created
         @status_message = t('todos.added_new_context') + ' / ' + @status_message if @new_context_created
-      }
-      format.xml { render :xml => @todo.to_xml( *todo_xml_params ) }
+      end
+      format.xml { render :xml => @todo.to_xml(*todo_xml_params) }
       format.m do
         if @saved
           do_mobile_todo_redirection
@@ -490,7 +491,8 @@ class TodosController < ApplicationController
   def destroy
     @source_view = params['_source_view'] || 'todo'
     @todo = current_user.todos.find(params['id'])
-    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
+    # Create a (unsaved) copy of the original todo
+    @original_item = current_user.todos.build(@todo.attributes)
     @context_id = @todo.context_id
     @project_id = @todo.project_id
     @todo_was_destroyed = true
@@ -558,7 +560,7 @@ class TodosController < ApplicationController
       format.html
       format.xml do
         completed_todos = current_user.todos.completed
-        render :xml => completed_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] )
+        render :xml => completed_todos.to_xml(*[todo_xml_params[0].merge({ :root => :todos })])
       end
     end
   end
@@ -581,7 +583,7 @@ class TodosController < ApplicationController
     includes = params[:format] == 'xml' ? [:context, :project] : Todo::DEFAULT_INCLUDES
 
     @not_done_todos = current_user.todos.deferred.includes(includes).reorder('show_from') + current_user.todos.pending.includes(includes)
-    @todos_without_project = @not_done_todos.select{|t|t.project.nil?}
+    @todos_without_project = @not_done_todos.select { |t| t.project.nil? }
     @down_count = @count = @not_done_todos.size
 
     respond_to do |format|
@@ -591,7 +593,7 @@ class TodosController < ApplicationController
         init_data_for_sidebar unless mobile?
       end
       format.m
-      format.xml { render :xml => @not_done_todos.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] ) }
+      format.xml { render :xml => @not_done_todos.to_xml(*[todo_xml_params[0].merge({ :root => :todos })]) }
     end
   end
 
@@ -625,23 +627,23 @@ class TodosController < ApplicationController
 
     todos_with_tag_ids = find_todos_with_tag_expr(@tag_expr)
 
-    @not_done_todos = todos_with_tag_ids.
-      active.not_hidden.
-      reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC')).
-      includes(Todo::DEFAULT_INCLUDES)
-    @hidden_todos = todos_with_tag_ids.
-      hidden.
-      reorder(Arel.sql('todos.completed_at DESC, todos.created_at DESC')).
-      includes(Todo::DEFAULT_INCLUDES)
-    @deferred_todos = todos_with_tag_ids.
-      deferred.
-      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
-      includes(Todo::DEFAULT_INCLUDES)
-    @pending_todos = todos_with_tag_ids.
-      blocked.
-      reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC')).
-      includes(Todo::DEFAULT_INCLUDES)
-    @todos_without_project = @not_done_todos.select{ |t| t.project.nil? }
+    @not_done_todos = todos_with_tag_ids
+      .active.not_hidden
+      .reorder(Arel.sql('todos.due IS NULL, todos.due ASC, todos.created_at ASC'))
+      .includes(Todo::DEFAULT_INCLUDES)
+    @hidden_todos = todos_with_tag_ids
+      .hidden
+      .reorder(Arel.sql('todos.completed_at DESC, todos.created_at DESC'))
+      .includes(Todo::DEFAULT_INCLUDES)
+    @deferred_todos = todos_with_tag_ids
+      .deferred
+      .reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC'))
+      .includes(Todo::DEFAULT_INCLUDES)
+    @pending_todos = todos_with_tag_ids
+      .blocked
+      .reorder(Arel.sql('todos.show_from ASC, todos.created_at DESC'))
+      .includes(Todo::DEFAULT_INCLUDES)
+    @todos_without_project = @not_done_todos.select { |t| t.project.nil? }
 
     # If you've set no_completed to zero, the completed items box isn't shown on
     # the tag page
@@ -664,12 +666,8 @@ class TodosController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.m {
-        cookies[:mobile_url]= { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] }
-      }
-      format.text {
-        render :action => 'index', :layout => false, :content_type => Mime[:text]
-      }
+      format.m { cookies[:mobile_url] = { :value => request.fullpath, :secure => SITE_CONFIG['secure_cookies'] } }
+      format.text { render :action => 'index', :layout => false, :content_type => Mime[:text] }
     end
   end
 
@@ -706,7 +704,7 @@ class TodosController < ApplicationController
     tags_all -= tags_beginning
 
     respond_to do |format|
-      format.autocomplete { render :body => for_autocomplete(tags_beginning+tags_all, params[:term]) }
+      format.autocomplete { render :body => for_autocomplete(tags_beginning + tags_all, params[:term]) }
     end
   end
 
@@ -715,7 +713,8 @@ class TodosController < ApplicationController
     numdays = params['days'].to_i
 
     @todo = current_user.todos.find(params[:id])
-    @original_item = current_user.todos.build(@todo.attributes)  # create a (unsaved) copy of the original todo
+    # Create a (unsaved) copy of the original todo
+    @original_item = current_user.todos.build(@todo.attributes)
 
     @todo_deferred_state_changed = true
     @new_context_created = false
@@ -750,7 +749,7 @@ class TodosController < ApplicationController
   def list_hidden
     @hidden = current_user.todos.hidden
     respond_to do |format|
-      format.xml { render :xml => @hidden.to_xml( *[todo_xml_params[0].merge({ :root => :todos })] ) }
+      format.xml { render :xml => @hidden.to_xml(*[todo_xml_params[0].merge({ :root => :todos })]) }
     end
   end
 
@@ -843,7 +842,7 @@ class TodosController < ApplicationController
   end
 
   def tag_title(tag_expr)
-    and_list = tag_expr.inject([]) { |s,tag_list| s << tag_list.join(',') }
+    and_list = tag_expr.inject([]) { |s, tag_list| s << tag_list.join(',') }
     return and_list.join(' AND ')
   end
 
@@ -905,7 +904,7 @@ end
   end
 
   def find_todos_with_tag_expr(tag_expr)
-    # optimize for the common case: selecting only one tag
+    # Optimize for the common case of selecting only one tag
     if @single_tag
       tag = current_user.tags.where(:name => @tag_name).first
       tag_id = tag.nil? ? -1 : tag.id
@@ -1184,7 +1183,8 @@ end
   def update_tags
     if params[:tag_list]
       @todo.tag_with(params[:tag_list])
-      @todo.tags.reload #force a reload for proper rendering
+      # Force a reload for proper rendering
+      @todo.tags.reload
     end
   end
 
@@ -1197,7 +1197,7 @@ end
   end
 
   def update_date_for_update(key)
-    params['todo'][key] = params["todo"].has_key?(key) ? parse_date_for_update(params["todo"][key], t("todos.error.invalid_#{key}_date")) : ""
+    params['todo'][key] = params["todo"].key?(key) ? parse_date_for_update(params["todo"][key], t("todos.error.invalid_#{key}_date")) : ""
   end
 
   def update_due_and_show_from_dates
@@ -1225,7 +1225,7 @@ end
     # assumes @todo.save was called so that the predecessor_list is persistent
     original_item_predecessor_list =
       @original_item.predecessors
-        .map{ |t| t.specification }
+        .map { |t| t.specification }
         .join(', ')
 
     if original_item_predecessor_list != params[:predecessor_list]

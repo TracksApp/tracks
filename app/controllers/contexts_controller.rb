@@ -98,7 +98,7 @@ class ContextsController < ApplicationController
     @context.attributes = context_params
     @saved = @context.save
     @state_saved = set_state_for_update(@new_state)
-    @saved = @saved && @state_saved
+    @saved &&= @state_saved
 
     if @saved
       @state_changed = (@original_context_state != @context.state)
@@ -148,7 +148,7 @@ class ContextsController < ApplicationController
   #
   def order
     context_ids = params["container_context"]
-    @projects = current_user.contexts.update_positions( context_ids )
+    @projects = current_user.contexts.update_positions(context_ids)
     head :ok
   rescue
     notify :error, $!

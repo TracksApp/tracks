@@ -1,8 +1,8 @@
 module RecurringTodosHelper
   def recurring_todo_tag_list
-    tags_except_starred = @recurring_todo.tags.reject{ |t| t.name == Todo::STARRED_TAG_NAME }
+    tags_except_starred = @recurring_todo.tags.reject { |t| t.name == Todo::STARRED_TAG_NAME }
     tag_list = tags_except_starred
-      .collect{ |t| content_tag(:span,link_to(t.name, tag_path(t.name)), :class => "tag #{t.label}") }
+      .collect { |t| content_tag(:span, link_to(t.name, tag_path(t.name)), :class => "tag #{t.label}") }
       .join('')
     return content_tag :span, tag_list.html_safe, :class => "tags"
   end

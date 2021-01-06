@@ -17,7 +17,7 @@ class RichMessageExtractor
     DUE_MARKER,
     TAG_MARKER,
     STAR_MARKER
-  ]
+  ].freeze
 
   def initialize(message)
     @message = message
@@ -44,7 +44,7 @@ class RichMessageExtractor
     # Regex only matches one tag, so recurse until we have them all
     while string.match /#(.*?)(?=[#{ALL_MARKERS.join}]|\Z)/
       tags << sanitize($1)
-      string.gsub!(/##{$1}/,'')
+      string.gsub!(/##{$1}/, '')
     end
     tags.empty? ? nil : tags
   end
@@ -65,11 +65,11 @@ class RichMessageExtractor
 
   private
 
-  def select_for symbol
+  def select_for(symbol)
     @message.match /#{symbol}(.*?)(?=[#{ALL_MARKERS.join}]|\Z)/
   end
 
-  def fix_date_string yymmdd
+  def fix_date_string(yymmdd)
     "20#{yymmdd[0..1]}-#{yymmdd[2..3]}-#{yymmdd[4..5]} 00:00"
   end
 end

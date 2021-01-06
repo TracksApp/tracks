@@ -36,8 +36,8 @@ module RecurringTodos
 
       if only_work_days?
         # jump over weekend if necessary
-        return start + 2.day if start.wday() == 6 # saturday
-        return start + 1.day if start.wday() == 0 # sunday
+        return start + 2.day if start.wday == 6 # saturday
+        return start + 1.day if start.wday == 0 # sunday
         return start
       else
         # if there was no previous todo, do not add n: the first todo starts on

@@ -8,6 +8,6 @@ class Tagging < ApplicationRecord
   private
 
   def delete_orphaned_tag
-    tag.destroy if tag and tag.taggings.count == 0
+    tag.destroy if tag && tag.taggings.count == 0
   end
 end

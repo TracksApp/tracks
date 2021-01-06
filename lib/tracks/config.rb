@@ -1,7 +1,7 @@
 module Tracks
   class Config
     def self.auth_schemes
-       SITE_CONFIG['authentication_schemes'] || []
+      SITE_CONFIG['authentication_schemes'] || []
     end
 
     def self.openid_enabled?

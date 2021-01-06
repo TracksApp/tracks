@@ -362,7 +362,7 @@ module Stats
     end
 
     def convert_to_weeks_running_array(records, array_size)
-      return convert_to_array(records, array_size) { |r| [difference_in_weeks(r.completed_at, r.created_at)]}
+      return convert_to_array(records, array_size) { |r| [difference_in_weeks(r.completed_at, r.created_at)] }
     end
 
     def convert_to_weeks_running_from_today_array(records, array_size)
@@ -391,7 +391,7 @@ module Stats
 
     def convert_to_cumulative_array(array, max)
       # calculate fractions
-      a = Array.new(array.size) {|i| array[i] * 100.0 / max}
+      a = Array.new(array.size) { |i| array[i] * 100.0 / max }
       # make cumulative
       1.upto(array.size - 1) { |i| a[i] += a[i - 1] }
       return a
@@ -422,7 +422,7 @@ module Stats
     def compute_running_avg_array(set, upper_bound)
       result = set_three_month_avg(set, upper_bound)
       result[upper_bound - 1] = result[upper_bound - 1] * 3 if upper_bound == set.length
-      result[upper_bound - 2] = result[upper_bound - 2] * 3 / 2 if upper_bound > 1 and upper_bound == set.length
+      result[upper_bound - 2] = result[upper_bound - 2] * 3 / 2 if upper_bound > 1 && upper_bound == set.length
       result[0] = "null"
       result
     end # unsolved, not triggered, edge case for set.length == upper_bound + 1

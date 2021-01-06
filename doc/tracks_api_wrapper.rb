@@ -7,7 +7,7 @@ require 'activeresource'
 # sudo gem install activeresource --source http://gems.rubyonrails.org --include-dependencies
 
 # $ SITE="http://myusername:p4ssw0rd@mytracksinstallation.com" irb -r tracks_api_wrapper.rb
-# 
+#
 # >> my_pc = Tracks::Context.find(:first)
 # => #<Tracks::Context:0x139c3c0 @prefix_options={}, @attributes={"name"=>"my pc", "updated_at"=>Mon Aug 13 02:56:18 UTC 2007, "hide"=>0, "id"=>8, "position"=>1, "created_at"=>Wed Feb 28 07:07:28 UTC 2007}
 # >> my_pc.name
@@ -35,26 +35,24 @@ require 'activeresource'
 #   http://blog.pepperdust.org/2007/2/13/enabling-wire-level-debug-output-for-activeresource
 
 module Tracks
-  
   class Base < ActiveResource::Base
     self.site = ENV["SITE"] || "http://username:password@localhost:3000/"
   end
-  
+
   class Todo < Base
-  end  
-  
+  end
+
   class Context < Base
     def todos
       return attributes["todos"] if attributes.keys.include?("todos")
-      return Todo.find(:all, :params => {:context_id => id})
-    end    
+      return Todo.find(:all, :params => { :context_id => id })
+    end
   end
 
   class Project < Base
     def todos
       return attributes["todos"] if attributes.keys.include?("todos")
-      return Todo.find(:all, :params => {:project_id => id})
-    end    
+      return Todo.find(:all, :params => { :project_id => id })
+    end
   end
-  
 end

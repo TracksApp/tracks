@@ -75,7 +75,7 @@ class MessageGateway < ActionMailer::Base
 
   def get_receiving_user_from_mail_header(email)
     user = get_receiving_user_from_sms_email(get_address(email))
-    Rails.logger.info(user.nil? ? "User unknown": "Email belongs to #{user.login}")
+    Rails.logger.info(user.nil? ? "User unknown" : "Email belongs to #{user.login}")
     return user
   end
 
@@ -98,8 +98,8 @@ class MessageGateway < ActionMailer::Base
     return true
   end
 
-  def sender_is_in_mailmap?(user,email)
-    if SITE_CONFIG['mailmap'].is_a? Hash and SITE_CONFIG['email_dispatch'] == 'to'
+  def sender_is_in_mailmap?(user, email)
+    if (SITE_CONFIG['mailmap'].is_a? Hash) && SITE_CONFIG['email_dispatch'] == 'to'
       # Look for the sender in the map of allowed senders
       SITE_CONFIG['mailmap'][user.preference.sms_email].include? email.from[0]
     else

@@ -82,7 +82,7 @@ module Tracks
     end
 
     def specified_by_name?(object_type)
-      self.send("#{object_type}_specified_by_name?")
+      send("#{object_type}_specified_by_name?")
     end
 
     def project_specified_by_name?
