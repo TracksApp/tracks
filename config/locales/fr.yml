@@ -72,8 +72,10 @@ fr:
         odd: doit être impair
         record_invalid: 'La validation a échoué : %{errors}'
         restrict_dependent_destroy:
-          has_one: Cannot delete record because a dependent %{record} exists
-          has_many: Cannot delete record because dependent %{record} exist
+          has_one: Impossible de supprimer l'enregistrement car un %{record} dépendant
+            existe
+          has_many: Impossible de supprimer l'enregistrement car le %{record} dépendant
+            existe
         taken: est déjà pris
         too_long: est trop long (maximum de %{count} caractères)
         too_short: est trop court (minimum de %{count} charactères)
@@ -127,9 +129,8 @@ fr:
     none: Aucun
     not_available_abbr: n/a
     note:
-      one: 1 note
-      other: "%{count} notes"
-      zero: non notes
+      one: non notes
+      other: 1 note
     notes: Notes
     numbered_step: Étape %{number}
     ok: OK
@@ -271,12 +272,10 @@ fr:
       half_a_minute: 30 secondes
       less_than_x_minutes:
         one: moins d'1 minute
-        other: moins de %{count} minutes
-        zero: moins d'1 minute
+        other: moins d'une minute
       less_than_x_seconds:
         one: moins d'1 seconde
-        other: moins de %{count} secondes
-        zero: moins d'1 seconde
+        other: moins d'1 seconde
       over_x_years:
         one: plus d'1 an
         other: plus de %{count} ans
@@ -692,7 +691,7 @@ fr:
       completed: Terminé
       current: Actuel
       hidden: Projets cachés
-      review: Review
+      review: Réviser
       stalled: Stalled
     review: Datée
     review_plural: Datée
@@ -746,7 +745,7 @@ fr:
       avg_created: Moy. créé
       completed: Complété
       created: Créé
-      month_avg_completed: "%{months} Month avg completed"
+      month_avg_completed: "%{months} mois terminé en moy."
       month_avg_created: "%{months} Month avg created"
     legend:
       actions: Actions
@@ -1197,12 +1196,10 @@ fr:
       multi_page_html: Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b>
         au total
       single_page:
-        one: Voir de 1 %{model}
-        other: Afficher tous les %{count} %{model}
-        zero: Aucun %{model} trouvés
+        one: Aucun %{model} trouvés
+        other: Voir de 1 %{model}
       single_page_html:
-        one: Voir de <b>1</b> %{model}
-        other: Afficher <b>tous les %{count}</b> %{model}
-        zero: Aucun %{model} trouvés
+        one: Aucun %{model} trouvés
+        other: Voir de <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "«Précédent"
