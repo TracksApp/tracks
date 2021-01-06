@@ -178,7 +178,6 @@ fi:
     new_context_post: "' luodaan. Oletko varma?"
     new_context_pre: Uusi asiayhteys '
     no_contexts_: 'Ei asiayhteyksiä '
-    last_completed_in_context: "(last %{number})"
     new_context_post: "' will be also created. Are you sure?"
     new_context_pre: New context '
     no_contexts_: 'No contexts '
