@@ -1,12 +1,12 @@
-<h1>Help</h1>
+<h1><%= t('help.title') %></h1>
 
-<p>You can find information on the usage in the <a href="https://github.com/TracksApp/tracks/wiki/User-manual">User manual</a> in the project GitHub wiki.</p>
+<p><%= raw t('help.usage', :manual_link => '<a href="https://github.com/TracksApp/tracks/wiki/User-manual">' + t('help.manual_link_text') + '</a>') %></p>
 
-<p>If you encounter a bug or have a feature request, please report it in the <a href="https://github.com/TracksApp/tracks/issues">issue queue</a>.</p>
+<p><%= raw t('help.bugs', :issue_link => '<a href="https://github.com/TracksApp/tracks/issues">' + t('help.issue_link_text') + '</a>') %></p>
 
-<p>We gladly welcome all contributions to Tracks. Check the <a href="https://www.getontracks.org/contribute/">project website</a> for further information. You can also come discuss with the community:</p>
+<p><%= raw t('help.contribute', :contribute_link => '<a href="https://www.getontracks.org/contribute/">' + t('help.contribute_link_text') + '</a>') %></p>
 
 <ul>
-  <li><a href="http://groups.google.com/group/TracksApp">Mailing list</a></li>
-  <li><a href="https://webchat.freenode.net/#Tracks">IRC channel #Tracks@FreeNode</a> (also available in <a href="https://matrix.to/#/#tracks:matrix.org">Matrix</a>)</li>
+  <li><a href="http://groups.google.com/group/TracksApp"><%= t('help.mailing_list_link_text') %></a></li>
+  <li><%= raw t('help.irc_bullet', :irc_link => '<a href="https://webchat.freenode.net/#Tracks">' + t('help.irc_link_text') + '</a>', :matrix_link => '<a href="https://matrix.to/#/#tracks:matrix.org">' + t('help.matrix_link_text') + '</a>') %></li>
 </ul>

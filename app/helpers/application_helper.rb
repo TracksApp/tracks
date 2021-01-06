@@ -54,28 +54,31 @@ module ApplicationHelper
   end
 
   def link_to_context(context, descriptor = sanitize(context.name))
-    link_to(descriptor, context, :title => "View context: #{context.name}")
+    link_to(descriptor, context, :title => I18n.t("contexts.view_link", :name => context.name))
   end
 
   def link_to_project(project, descriptor = sanitize(project.name))
-    link_to(descriptor, project, :title => "View project: #{project.name}")
+    link_to(descriptor, project, :title => I18n.t("projects.view_link", :name => project.name))
   end
 
   def link_to_edit_note(note, descriptor = sanitize(note.id.to_s))
     link_to(descriptor, edit_note_path(note),
-      { :id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings" })
+      :id => "link_edit_#{dom_id(note)}", :class => "note_edit_settings")
   end
 
   def link_to_project_mobile(project, accesskey, descriptor = sanitize(project.name))
-    link_to(descriptor, project_path(project, :format => 'm'), { :title => "View project: #{project.name}", :accesskey => accesskey })
+    link_to(descriptor, project_path(project, :format => 'm'),
+      :title => I18n.t("projects.view_link", :name => project.name), :accesskey => accesskey)
   end
 
   def item_link_to_context(item)
-    link_to_context(item.context, prefs.verbose_action_descriptors ? "[#{item.context.name}]" : "[C]")
+    link_to_context(item.context,
+      prefs.verbose_action_descriptors ? "[#{item.context.name}]" : "[" + I18n.t("contexts.letter_abbreviation") + "]")
   end
 
   def item_link_to_project(item)
-    link_to_project(item.project, prefs.verbose_action_descriptors ? "[#{item.project.name}]" : "[P]")
+    link_to_project(item.project,
+      prefs.verbose_action_descriptors ? "[#{item.project.name}]" : "[" + I18n.t("projects.letter_abbreviation") + "]")
   end
 
   def render_flash
