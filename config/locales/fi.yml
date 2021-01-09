@@ -384,7 +384,7 @@ fi:
       new_action: Uusi
       projects: Projektit
       starred: Tähditetyt
-      tickler: Tulevat
+      tickler: Muistilista
     navigation:
       admin: Ylläpito
       api_docs: REST-rajapintadokumentaatio
@@ -427,8 +427,8 @@ fi:
       starred_title: Näytä tähdellä merkityt toimenpiteesi
       stats: Tilastot
       stats_title: Näytä tilastosi
-      tickler: Tulevat
-      tickler_title: Tulevat
+      tickler: Muistilista
+      tickler_title: Muistilista
       view: Näytä
     next_actions_rss_feed: RSS-syöte seuraavista toimenpiteistä
     toggle_contexts: Vaihda suljettujen asiayhteyksien tilaa
@@ -630,7 +630,7 @@ fi:
     was_marked_complete: on merkitty valmistuneeksi
     was_marked_hidden: on merkitty piilotetuksi
     with_default_context: with a default context of '%{context_name}'
-    with_default_tags: and with '%{tags}' as the default tags
+    with_default_tags: ja oletusasiasanoilla ”%{tags}”
     with_no_default_context: with no default context
     with_no_default_tags: ja ilman oletusavainsanoja
   search:
@@ -706,8 +706,8 @@ fi:
     actions_actions_avg_created_30days: Viimeisen 30 päivän aikana olet luonut keskimäärin
       %{count} toimenpidettä
     actions_avg_completed: ja valmistunut keskimäärin %{count} toimenpidettä kuukaudessa.
-    actions_avg_completed_30days: and completed an average of %{count} actions per
-      day.
+    actions_avg_completed_30days: ja sait valmiiksi keskimäärin %{count} toimenpidettä
+      päivässä.
     actions_avg_completion_time: Kaikista valmistuneista toimenpiteistäsi keskiarvoinen
       valmistumisaika on %{count} päivää.
     actions_avg_created: Viimeisen 12 kuukauden aikana loit keskimäärin %{count} toimenpidettä
@@ -726,7 +726,8 @@ fi:
       number_of_actions: Number of actions
     actions_lastyear_title: Toimenpidettä viimeisen 12 kuukauden aikana
     actions_min_completion_time: Lyhyin valmistumisaika on %{time}.
-    actions_min_max_completion_days: The Min-/maximum days to complete is %{min}/%{max}.
+    actions_min_max_completion_days: Lyhin aika toimenpiteen valmistumiseen on %{min}
+      päivää ja pisin %{max} päivää.
     actions_selected_from_week: 'Toimenpiteitä valittu viikolta '
     click_to_return: Klikkaa %{link} palataksesi tilastosivulle.
     click_to_return_link: tästä
@@ -761,26 +762,27 @@ fi:
       weeks: Viikkoa sitten
     other_actions_label: "(muut)"
     projects: Projektit
-    running_time_all: Current running time of all incomplete actions
+    running_time_all: Tämänhetkinen juokseva aika kaikille keskeneräisille toimenpiteille
     running_time_all_legend:
       actions: Actions
       percentage: Prosentti
-      running_time: Running time of an action (weeks). Click on a bar for more info
+      running_time: Toimenpiteen kestoaika (viikkoa). Klikkaa pylvästä saadaksesi
+        lisätietoja
     running_time_legend:
       actions: Actions
       percentage: Prosentti
-      weeks: Running time of an action (weeks). Click on a bar for more info
+      weeks: Toimenpiteen kestoaika (viikkoa). Klikkaa pylvästä saadaksesi lisätietoja
     spread_of_actions_for_all_context: Toimenpiteiden jakautuminen asiayhteyksille
-    spread_of_running_actions_for_visible_contexts: Spread of running actions for
-      visible contexts
-    tag_cloud_90days_description: This tag cloud includes tags of actions that were
-      created or completed in the past 90 days.
-    tag_cloud_90days_title: Tag cloud actions in past 90 days
-    tag_cloud_description: This tag cloud includes tags of all actions (completed,
-      not completed, visible and/or hidden)
+    spread_of_running_actions_for_visible_contexts: Näkyvissä asiayhteyksissä olevien
+      keskeneräisten toimenpiteiden jakauma
+    tag_cloud_90days_description: Tässä sanapilvessä ovat sellaisten toimenpiteiden
+      asiasanat, jotka on luotu tai saatu valmiiksi viimeisen 90 vuorokauden aikana.
+    tag_cloud_90days_title: Asiasanapilvi toimenpiteille viimeisen 90 päivän aikana
+    tag_cloud_description: Tässä sanapilvessä ovat kaikkien toimenpiteiden asiasanat
+      valmiudesta ja näkyvyydestä riippumatta
     tag_cloud_title: Avainsanapilvi kaikille toimenpiteille
     tags: Tags
-    time_of_day: Time of day (all actions)
+    time_of_day: Kellonaika (kaikki toimenpiteet)
     time_of_day_legend:
       number_of_actions: Number of actions
       time_of_day: Kellonaika
@@ -801,8 +803,8 @@ fi:
     totals_blocked_actions: "%{count} on riippuvaisia toimenpiteidensä valmistumisesta."
     totals_completed_project_count: ja %{count} on valmistuneita projekteja.
     totals_context_count: Sinulla on %{count} asiayhteyttä.
-    totals_deferred_actions: joista %{count} on lykättyjä toimenpiteitä ticklerissä
-    totals_first_action: Since your first action on %{date}
+    totals_deferred_actions: joista %{count} on lykättyjä toimenpiteitä muistilistassa
+    totals_first_action: Ensimmäisen toimenpiteesi %{date} jälkeen
     totals_hidden_context_count: ja %{count} on piilotettuja asiayhteyksiä.
     totals_hidden_project_count: "%{count} on piilotettu"
     totals_incomplete_actions: Sinulla on %{count} keskeneräistä toimenpidettä
@@ -829,25 +831,25 @@ fi:
       time: ''
     pm: pm
   todos:
-    action_deferred: The action '%{description}' was deferred
+    action_deferred: Toimenpidettä ”%{description}” lykättiin
     action_deleted_error: Toimenpiteen poistaminen epäonnistui
     action_deleted_success: Seuraavan toimenpiteen poistaminen onnistui
     action_due_on: "(määräaika %{date})"
-    action_marked_complete: The action <strong>'%{description}'</strong> was marked
-      as <strong>%{completed}</strong>
-    action_marked_complete_error: The action <strong>'%{description}'</strong> was
-      NOT marked as <strong>%{completed} due to an error on the server.</strong>
+    action_marked_complete: Toimenpide <strong>”%{description}”</strong> merkittiin
+      <strong>%{completed}</strong>
+    action_marked_complete_error: Toimenpidettä <strong>”%{description}”</strong>
+      EI merkitty <strong>%{completed} palvelimen virheen vuoksi.</strong>
     action_saved: Toimenpide tallennettu
-    action_saved_to_tickler: Action saved to tickler
+    action_saved_to_tickler: Toimenpide tallennettu muistilistaan
     actions:
       completed: Valmistuneet toimenpiteet
       context_completed: Valmistuneet toimenpiteet tässä asiayhteydessä
-      context_deferred_pending: Deferred/pending actions in this context
-      context_without_project: Actions without project in %{param}
+      context_deferred_pending: Asiayhteyden lykätyt/odottavat toimenpiteet
+      context_without_project: Projektittomat toimenpiteet %{param}
       home_completed: Valmistuneet toimenpiteet
       home_without_project: Toimenpiteet ilman projektia
       project_completed: Valmistuneita toimenpiteitä tässä projektissa
-      project_deferred_pending: Deferred/pending actions in this project
+      project_deferred_pending: Tämän projektin lykätyt/odottavat toimenpiteet
       project_project: Toimenpiteet tässä projektissa
       tag_completed: Valmistuneet toimenpiteet avainsanalla ”%{param}”
       tag_deferred_pending: Lykätyt/odottavat toimenpiteet asiasanalla ”%{param}”
@@ -861,8 +863,9 @@ fi:
     added_new_next_action_singular: Lisätty uusi seuraava toimenpide
     added_new_project: Uusi projekti lisätty
     all_completed: Kaikki valmistuneet toimenpiteet
-    all_completed_here: here
-    all_completed_tagged_page_title: TRACKS::All completed tasks with tag %{tag_name}
+    all_completed_here: täällä
+    all_completed_tagged_page_title: TRACKS::Kaikki valmistuneet toimenpiteet asiasanalla
+      %{tag_name}
     append_in_this_project: tässä projektissa
     archived_tasks_title: TRACKS::Arkistoidut valmistuneet toimenpiteet
     blocked_by: '%{predecessors} estää'
@@ -880,33 +883,33 @@ fi:
     clear_show_from_date: Tyhjennä Näytä alkaen -ajankohta
     completed: Valmistunut
     completed_actions: Valmistuneet toimenpiteet
-    completed_actions_with: Completed actions with the tag '%{tag_name}'
+    completed_actions_with: Valmistuneet toimenpiteet asiasanalla %{tag_name}
     completed_in_archive:
-      one: There is a completed action in the archive.
-      other: There are %{count} completed actions in the archive.
+      one: Arkistossa on valmistunut toimenpide.
+      other: Arkistossa on %{count} valmistunutta toimenpidettä.
     completed_last_day: Valmistunut viimeisen 24 tunnin sisällä
     completed_last_x_days: Valmistunut viimeisen %{count} päivän sisällä
     completed_recurrence_completed: Poistamasi toistuvan toimenpiteen jälkeen ei ole
       muita toimenpiteitä. Toistuvuus on päättynyt
-    completed_recurring: Completed recurring todos
+    completed_recurring: Valmistuneet toistuvat toimenpiteet
     completed_recurring_actions_title: TRACKS::Valmistuneet toistuvat toimenpiteet
     completed_rest_of_month: Valistunut loppukuukauden aikana
     completed_rest_of_previous_month: Viime kuukauden loppuosassa valmistuneet
     completed_rest_of_week: Viikon lopulla valmistuneet
-    completed_tagged_page_title: TRACKS::Completed tasks with tag '%{tag_name}'
+    completed_tagged_page_title: TRACKS::Valmistuneet toimenpiteet asiasanalla %{tag_name}
     completed_tasks_title: TRACKS::Valmistuneet toimenpiteet
     completed_today: Valmistunut tänään
     confirm_delete: Oletko varma että haluat poistaa toimenpiteen ”%{description}”?
     context_changed: Asiayhteys vaihdettu %{name}
     convert_to_project: Tee projekti
-    defer_date_after_due_date: Defer date is after due date. Please edit and adjust
-      due date before deferring.
+    defer_date_after_due_date: Lykkäyspäivä on määräpäivän jälkeen. Muuta määräpäivää
+      ennen lykkäämistä.
     defer_x_days:
       one: Lykkää 1 päivä
       other: Lykkää %{count} päivää
-    deferred_actions_with: Deferred actions with the tag '%{tag_name}'
-    deferred_pending_actions: Deferred/pending actions
-    deferred_tasks_title: TRACKS::Tulevat
+    deferred_actions_with: Lykätyt toimenpiteet asiasanalla %{tag_name}
+    deferred_pending_actions: Lykätyt/odottavat toimenpiteet
+    deferred_tasks_title: TRACKS::Muistilista
     delete: Delete
     delete_action: Delete action
     delete_recurring_action_confirm: Haluatko varmasti poistaa toistuvan toimenpiteen
@@ -916,9 +919,9 @@ fi:
     depends_on: Riippuu
     depends_on_separate_with_commas: Riippuu (pilkuilla erotettuna)
     done: Valmis?
-    drag_action_title: Drag onto another action to mark that action as a dependency
-      for this action.
-    due: Due
+    drag_action_title: Raahaa toisen toimenpiteen päälle merkitäksesi sen tämän toimenpiteen
+      riippuvuudeksi.
+    due: Määräpäivä
     edit: Muokkaa
     edit_action: Muokkaa toimenpidettä
     edit_action_with_description: Muokkaa toimenpidettä ”%{description}”
@@ -926,43 +929,44 @@ fi:
     error:
       invalid_due_date: Virheellinen määräpäivä
       invalid_show_from_date: Virheellinen Näytä alkaen -ajankohta
-    error_completing_todo: There was an error completing / activating the recurring
-      todo %{description}
-    error_deleting_item: There was an error deleting the item %{description}
+    error_completing_todo: Toistuvan toimenpiteen %{description} valmiiksi merkitsemisessä
+      / aktivoinnissa tapahtui virhe
+    error_deleting_item: '%{description} poistossa tapahtui virhe'
     error_deleting_recurring: Toistuvan toimenpiteen ”%{description}” poistamisessa
       tapahtui virhe
     error_removing_dependency: Riippuvuuden poistaminen epäonnistui
-    error_saving_recurring: There was an error saving the recurring todo '%{description}'
-    error_starring: Could not toggle the star of this todo '%{description}'
+    error_saving_recurring: Toistuvan toimenpiteen ”%{description}” tallennuksessa
+      tapahtui virhe
+    error_starring: Toimenpiteen ”%{description}” tähtimerkinnän vaihtaminen epäonnistui
     error_starring_recurring: Toistuvan toimenpiteen ”%{description}” tähtimerkinnän
       vaihto epäonnistui
-    error_toggle_complete: Could not mark this todo complete
+    error_toggle_complete: Toimenpiteen merkitseminen valmiiksi epäonnistui
     feed_title_in_context: in context '%{context}'
     feed_title_in_project: in project '%{project}'
     feeds:
-      completed: 'Completed: %{date}'
-      due: 'Due: %{date}'
+      completed: 'Valmistunut: %{date}'
+      due: 'Tehtävä: %{date}'
     has_x_pending:
-      one: Has one pending action
-      other: Has %{count} pending actions
+      one: On yksi odottava toimenpide
+      other: On %{count} odottavaa toimenpidettä
     hidden_actions: Piilotetut toimenpiteet
     in_hidden_state: piilotetussa tilassa
     in_pending_state: odottavassa tilassa
-    list_incomplete_next_actions: Lists incomplete next actions
-    list_incomplete_next_actions_with_limit: Lists the last %{count} incomplete next
-      actions
+    list_incomplete_next_actions: Listaa keskeneräiset seuraavat toimenpiteet
+    list_incomplete_next_actions_with_limit: Listaa viimeiset %{count} keskeneräistä
+      seuraavaa toimenpidettä
     mark_complete: Merkitse valmiiksi
     mobile_todos_page_title: Kaikki toimenpiteet
-    new_related_todo_created: A new todo was added which belongs to this recurring
-      todo
+    new_related_todo_created: Lisätty uusi toimenpide joka kuuluu tähän toistuvaan
+      toimenpiteeseen
     new_related_todo_created_short: uusi toimenpide luotu
     new_related_todo_not_created_short: uutta toimenpidettä ei luotu
     next_action_description: Next action description
-    next_action_needed: You need to submit at least one next action
+    next_action_needed: Sinun tulee tallentaa ainakin yksi seuraava toimenpide
     next_actions_description: 'Filter:'
     next_actions_description_additions:
-      completed: in the last %{count} days
-      due_date: with a due date %{due_date} or earlier
+      completed: viimeisessä %{count} vuorokaudessa
+      due_date: määräpäivällä %{due_date} tai aiempi
     next_actions_due_date:
       due_in_x_days: Määräaika %{days} päivän päästä
       due_today: Tehtävä tänään
@@ -971,16 +975,16 @@ fi:
       overdue_by_plural: Myöhässä %{days} päivää
     next_actions_title: Tracks - Next Actions
     next_actions_title_additions:
-      completed: actions completed
+      completed: valmiita toimenpiteitä
       due_today: tehtävä tänään
       due_within_a_week: tehtävä viikon sisällä
     no_actions:
-      completed: Currently there are no completed actions
+      completed: Valmiita toimenpiteitä ei löytynyt
       completed_recurring: Valmistuneita toistuvia toimenpiteitä ei ole
-      completed_rest_of_month: No actions were completed in the rest of this month
-      completed_rest_of_week: No actions were completed in the rest of this week
-      completed_today: No actions were completed today
-      context: Currently there are no incomplete actions in this context
+      completed_rest_of_month: Kuukauden loppuosan aikana ei valmistunut toimenpiteitä
+      completed_rest_of_week: Viikon loppuosan aikana ei valmistunut toimenpiteitä
+      completed_today: Tänään aikana ei valmistunut toimenpiteitä
+      context: Tässä asiayhteydessä ei ole keskeneräisiä toimenpiteitä
       deferred_pending: Ei lykättyjä tai odottavia toimenpiteitä
       due_after_this_month: Ei tämän kuun jälkeen tehtäviä toimenpiteitä
       due_next_week: Ei viikon sisällä erääntyviä toimenpiteitä
@@ -1000,13 +1004,13 @@ fi:
       title: Toimenpiteitä ei löytynyt
       without_project: Projektittomia toimenpiteitä ei ole
     no_actions_due_this_week: Ei loppuviikon aikana erääntyviä toimenpiteitä
-    no_actions_found_title: No actions found title
+    no_actions_found_title: Toimenpiteitä ei löytynyt
     no_actions_with: No actions with
     no_completed_actions: Valmistuneita toimenpiteitä ei ole
-    no_completed_actions_with: No completed actions with
+    no_completed_actions_with: Toimenpiteitä ei löytynyt ehdolla
     no_completed_recurring: Ei valmistuneita toistuvia
     no_deferred_actions: Ei lykättyjä toimenpiteitä
-    no_deferred_actions_with: No deferred actions with
+    no_deferred_actions_with: Lykättyjä toimenpiteitä ei löytynyt ehdolla
     no_last_completed_actions: Valmistuneita toimenpiteitä ei ole
     no_project: "--No project--"
     no_recurring_todos: Ei toistuvia toimenpiteitä
@@ -1079,7 +1083,7 @@ fi:
         show_options: Näytä toimenpide
       starts_on: Alkaa
       weekly: Viikottain
-      weekly_every_number_week: Returns every %{number} week on
+      weekly_every_number_week: Näytetään joka {%number} viikko
       weekly_options: Asetukset viikottain toistuville toimenpiteille
       yearly: Vuosittain
       yearly_every_x_day: Joka %{month} %{day}
@@ -1093,13 +1097,13 @@ fi:
     recurring_action_saved: Toistuva toimenpide tallennettu
     recurring_actions_title: TRACKS::Toistuvat toimenpiteet
     recurring_deleted_success: Toistuvan toimenpiteen poisto onnistui.
-    recurring_pattern_removed: The recurrence pattern is removed from %{count}
+    recurring_pattern_removed: Toistuvuusmekanismi poistettiin %{count}
     recurring_todos: Toistuvat toimenpiteet
     remove_dependency: Poista riippuvuus (ei poista toimenpidettä)
     removed_predecessor: Poistettu %{successor} riippuvuus toimenpiteestä %{predecessor}.
     scheduled_overdue: Ajastettu näkymään %{days} päivän päästä
-    see_all_completed: You can see all completed actions %{link}
-    set_to_pending: "%{task} set to pending"
+    see_all_completed: Näet kaikki valmistuneet toimenpiteet %{link}
+    set_to_pending: "%{task} asetettu odottamaan"
     show_from: Näytä alkaen
     show_in_days: Näytetään %{days} päivän kuluttua
     show_on_date: Näytä %{date}
@@ -1112,19 +1116,20 @@ fi:
     tags: Avainsanat (erota pilkulla)
     task_list_title: TRACKS::Listaa toimenpiteet
     tickler_items_due:
-      one: One tickler item is now due - refresh the page to see it.
-      other: '%{count} tickler items are now due - refresh the page to see them.'
-    to_tickler: to tickler
+      one: Yksi muistilistan merkintä on nyt ajankohtainen – päivitä sivu nähdäksesi
+        sen.
+      other: '{%count} muistilistan merkintää on nyt ajankohtaisia – päivitä sivu
+        nähdäksesi ne.'
+    to_tickler: muistilistaan
     unable_to_add_dependency: Riippuvuuden lisääminen epäonnistui
-    unresolved_dependency: The value you entered in the dependency field did not resolve
-      to an existing action. This value will not be saved with the rest of the action.
-      Continue?
-    was_due_on_date: was due on %{date}
+    unresolved_dependency: Riippuvuuskenttään syöttämäsi arvo ei täsmännyt mihinkään
+      toimenpiteeseen. Arvoa ei tallenneta. Haluatko jatkaa?
+    was_due_on_date: oli tehtävä viimeistään %{date}
   users:
     account_signup: Käyttäjätilin rekisteröiminen
     approve_tos: Hyväksyn käyttöehdot
     auth_change_submit: Muuta tunnistautumistyyppiä
-    auth_type_update_error: 'There was a problem updating your authentication type:
+    auth_type_update_error: 'Tunnistautumistyyppisi päivittämisessä tapahtui virhe:
       %{error_messages}'
     auth_type_updated: Tunnistautumistyyppi muutettu.
     change_auth_type_title: TRACKS::Muuta tunnistautumistyyppiä
@@ -1155,10 +1160,10 @@ fi:
     new_user_heading: 'Rekisteröi uusi käyttäjä:'
     new_user_title: TRACKS::Rekisteröidy
     no_signups_title: TRACKS::Ei rekisteröitymisiä
-    openid_ok_pref_failed: You have successfully verified %{url} as your identity
-      but there was a problem saving your authentication preferences.
-    openid_url_verified: You have successfully verified %{url} as your identity and
-      set your authentication type to OpenID.
+    openid_ok_pref_failed: Olet onnistuneesti varmentanut %{url} henkilöllisyydeksesi,
+      mutta tunnistautumisasetustesi tallennuksessa tapahtui virhe.
+    openid_url_verified: Olet onnistuneesti varmentanut %{url} henkilöllisyydeksesi
+      ja asettanut tunnistautumistyypiksesi OpenID:n.
     password_confirmation_label: Vahvista salasana
     password_updated: Salasana päivitetty.
     register_with_cas: CAS-käyttäjätunnuksellasi
