@@ -23,8 +23,10 @@ fi:
         staleness_starts: Vanhentumisen alkaminen
         time_zone: Aikavyöhyke
         title_date_format: Otsakkeen päivämäärämuoto
-        verbose_action_descriptors: Verbose action descriptors
+        verbose_action_descriptors: Näytä toimenpiteisiin liittyvät lisätiedot (asiayhteys,
+          projekti) laajennetussa muodossa
         week_starts: Viikko alkaa
+        theme: Teema
       project:
         default_context_name: Oletuskonteksti
         default_tags: Oletustagit
@@ -45,10 +47,11 @@ fi:
         email: Sähköpostiosoite
         first_name: Etunimi
         last_name: Sukunimi
-        login: Login
+        login: Käyttäjätunnus
         open_id_url: OpenID-URL
         password: Salasana
         created_at: Luotu
+        last_login_at: Viimeisin kirjautuminen
     errors:
       full_messages:
         format: "%{attribute} %{message}"
@@ -118,7 +121,7 @@ fi:
     forth: Neljäs
     fourth: Neljäs
     go_back: Takaisin
-    last: Viimeisimmät
+    last: Viimeinen
     logout: Kirjaudu ulos
     mailing_list: Postituslista
     month: kuukausi
@@ -199,6 +202,54 @@ fi:
     import_errors: Tuonnissa tapahtui virheitä
     import_successful: Tuonti onnistui.
     invalid_import_destination: Virheellinen tuontikohde
+    xml: XML
+    csv: CSV
+    yaml: YAML
+    export:
+      xml_link_title: XML-tiedosto (vain toimenpiteet)
+      csv_notes_title: CSV-tiedosto (vain muistiinpanot)
+      csv_actions_title: CSV-tiedosto (toimenpiteet, asiayhteydet ja projektit)
+      yaml_link_title: YAML-tiedosto
+      download_link: Latauslinkki
+      xml_link_description: XML-tiedosto, joka sisältää toimenpiteesi, asiayhteytesi,
+        projektisi, avainsanasi ja muistiinpanosi
+      xml_description: '%{xml}: Paras tietojen tuontiin tai tietojen siirtämiseen
+        toiseen tarkoitukseen'
+      csv_notes_description: CSV-tiedosto, joka sisältää kaikki muistiinpanosi
+      csv_actions_description: CSV-tiedosto, joka sisältää kaikki toimenpiteesi asiayhteyksien
+        ja projektien kera
+      csv_description: '%{csv}: Paras tietojen vientiin taulukkolaskenta- tai tietoanalyysiohjelmaan'
+      yaml_experimental: Huomaathan, että YAML-tiedostojen tuonti onnistuu nykyisin
+        vain kokeellisesti. Älä luota siihen kriittisten tietojen varmuuskopioinnissa.
+      yaml_link_description: YAML-tiedosto, joka sisältää toimenpiteesi, asiayhteytesi,
+        projektisi, asiasanasi ja muistiinpanosi
+      yaml_description: '%{yaml}: Paras tietojen vientiin.'
+      format_header: 'Voit valita seuraavien muotojen väliltä:'
+      title: Tietojen vienti
+      page_title: Tracks::Vienti
+    import:
+      warning: Varoitus
+      paste_field: 'Liitä viemäsi YAML-tiedoston sisältö allaolevaan tekstilaatikkoon:'
+      yaml_warning: '%{warning}: kaikki nykyiset tietosi poistetaan ennen YAML-tiedoston
+        tuontia, joten jos sinulla on pääsy tietokantaan, suosittelemme vahvasti tietokannan
+        varmuuskopiointia siltä varalta että jotain menee pieleen.'
+      yaml_disabled: YAMLin tuonti on pois käytöstä
+      todos_count: '%{count} toimenpidettä tuotu'
+      projects_count: '%{count} projektia tuotu'
+      upload_csv: Lähetä CSV-tiedostosi
+      upload: Tuo
+      successful: Tuonti onnistui.
+      target_field: 'Tuo kohteeseen:'
+      submit: Tuo
+      header: Tietojen tuonti
+      map_title: Merkitse tuontitiedostoa vastaavat kentät
+      errors:
+        save_error: Lähetetyn CSV-tiedoston tallentaminen epäonnistui (%{path_and_file}).
+          Pystyykö Tracks kirjoittamaan tallennushakemistoon? %{e}
+        invalid_csv: 'Virheellinen CSV: otsikoiden lukeminen epäonnistui: %{e}'
+        file_blank: Tiedosto ei voi olla tyhjä
+        some: Tuonnissa tapahtui virheitä
+        invalid_destination: 'Virheellinen tuontikohde: %{e}'
   date:
     abbr_day_names:
     - Su
@@ -361,6 +412,93 @@ fi:
       update: Päivitä %{model}
   integrations:
     opensearch_description: Hae Tracksista
+    mailgun:
+      instructions:
+        '1': Mene %{mailgun_link}iin ja rekisteröi ilmainen käyttäjätunnus.
+        '6': 'Päivitä site.yml-tiedostossa oleva mailmap määrittääksesi, mitkä lähettäjät
+          voivat lähettää sähköpostia mihinkin käytettävään osoitteeseen. Jos esimerkiksi
+          haluat lähettää työ- ja kotiosoitteistasi sähköpostia Tracksiin Mailgunin
+          kautta, määritä se näin: %{code}'
+        '5': Lisää Mailgunin API-avaimesi (ei julkinen API-avain) Tracksin site.yml-tiedostoon
+        '4': Valitse oletusasiayhteys, johon sähköpostilla tulevat toimenpiteet lisätään,
+          %{sms_context_name} -kentällä
+        '3': Siirry %{preferences_link} ja syötä Mailgun-sähköpostiosoitteesi (esim.
+          tracks@käyttäjä.mailgun.com) %{sms_email_name} -kenttään.
+        2b: Action-kohtaan merkitään ”forward("http://palvelimeni.example.org/mailgun/mime")”
+        2a: "'Filter expression' asetetaan arvoon 'catch_all()'"
+        '2': 'Mene Mailgunin ohjauspaneelin Routes-kohtaan ja lisää uusi reitti:'
+      gateway_instructions: Kaikki ylläolevat maininnat sähköpostin muotoilusta pätevät
+        myös Mailgun-käsittelyyn, koska tieto käsitellään samalla tavalla kummassakin
+        tapauksessa
+      conditions: Tämän toimiminen edellyttää, että Tracks-palvelimesi on tavoitettavissa
+        internetin kautta jotta Mailgun voi lähettää POST-kutsuja siihen.
+      description: Jos haluat lähettää toimenpiteitä sähköpostilla Tracksiin mutta
+        samalla palvelimella ei ole sähköpostipalvelinta, voit käyttää Tracksin sisäänrakennettua
+        %{mailgun_link}-tukea.
+    cron_email_subject: Tracks-toimenpiteet seuraavan 7 päivän aikana
+    example_names:
+      tag:
+        '2': avainsana2
+        '1': avainsana1
+      project: projekti
+      context: asiayhteys
+      todo: mahtava toimenpiteeni
+    email_rich:
+      field_descriptions:
+        star: Merkitsee toimenpiteen tähdellä
+        tag: Asiasana, johon toimenpide liitetään – voidaan käyttää useamman kerran
+        due_date: Toimenpiteen määräpäivä (2 numeroa pelkän päivän määrittämiseksi,
+          4 numeroa kuukauden ja päivän tai 6 numeroa vuoden, kuukauden ja päivän
+          määrittämiseksi näissä järjestyksissä)
+        project: Projekti, johon toimenpide liitetään
+        context: Konteksti, johon toimenpide liitetään
+      fields_instruction: Kaikki merkinnät ovat valinnaisia. Tekstiä ensimmäiseen
+        merkintään asti käytetään toimenpiteen kuvauksena
+      meaning_title: Tarkoitus
+      symbol_title: Merkintä
+      fields_title: 'Kentät:'
+      description: 'Molemmilla ylläolevilla tavoilla voidaan käyttää seuraavaa muotoilua:'
+    message_gateway:
+      instructions:
+        '3': Lähetä sähköposti juuri asettamaasi osoitteeseen!
+        '2': Sähköpostipalvelimessasi (esimerkiksi sendmail/qmail/postfix), aseta
+          sähköpostialias putkittamaan viestit komennolle %{command}
+        '1': Mene %{preferences_link} ja aseta "%{sms_email_name}" sekä "%{sms_context_name}"
+          sähköpostin kautta lisättäviä toimenpiteitä varten (jotka voisivat muodostua
+          myös SMS-viestin perusteella)
+      one_user_configuration: 'Voit myös merkitä kaikki saapuvat sähköpostit tietyn
+        Tracks-käyttäjän tehtäviksi. Muuta site.yml-tiedoston asetusta mail_dispatch
+        %{single_user_var_name} ja välitä käyttäjän tunnus: %{code}'
+      configuration: Sinun täytyy ehkä muuttaa asetus %{site_yml}-tiedostossa, jotta
+        viestiväylä osaa käyttää %{to_name}-kenttää tai %{from_name}-kenttää löytääkseen
+        sähköpostia vastaavan Tracks-käyttäjän.
+      rich_api_tip: Voit myös käyttää kehittynyttä sähköpostimuotoa lähettääksesi
+        toimenpiteitä kuten ”pese pyykit @ koti” tai ”Soita Jyrille > projekti X”.
+        Viestin otsikkoon täytetään toimenpiteen kuvaus, asiayhteys ja projekti, kun
+        taas viestin runko viedään toimenpiteen muistiinpanokenttään.
+      description: 'Jos Tracks pyörii samalla palvelimella kuin sähköpostisi, voit
+        käyttää sisäänrakennettua sähköpostinkäsittelijää. Käyttöönotto onnistuu seuraavasti:'
+    feeds_link_text: Tracksin tarjoamaa tekstisyötettä
+    cron_2: Voit tietysti käyttää myös toista %{feeds_link} – mikset vaikkapa lähettäisi
+      projektinne seuraavia toimenpiteitä kollegoillesi?
+    cron_1: Jos syötät seuraavan rivin crontabiisi, saat jokapäivä viiden aikaan aamulla
+      sähköpostin jossa on lista seuraavan 7 päivän aikana tehtävistä tehtävistä.
+    tell_us_link_text: Ehdota sitä tiketissä
+    add_your_own: Onko sinulla oma vinkki, jonka haluaisit jakaa? %{tell_us_link}
+      ja saatamme esitellä sen kaikille tulevassa Tracksin versiossa.
+    contents_header: 'Sisällys:'
+    developer_documentation_link: Tracksin kehittäjäohjeista
+    intro: Tracks voidaan liittää erinäisiin muihin työkaluihin – mitä ikinä tarvitsetkaan
+      saadaksesi asioita tehtyä! Tällä sivulla on tietoa joidenkin tällaisten liitäntöjen
+      tekemisestä. Kaikki ohjeista eivät toimi joka alustalla, ja osa vaatii muita
+      enemmän teknistä osaamista. Katso lisätietoja myös %{documentation_link}
+    title: Liitännät
+    sections:
+      email_rich: Kehittynyt sähköpostimuoto toimenpiteitä varten
+      mailgun: Lähetä sähköpostia Tracksiin Mailgunilla
+      message_gateway: Yhdistä Tracks sähköpostipalvelimeen, jotta voit lähettää toimenpiteitä
+        sähköpostilla Tracksiin
+      automatic_email: Tulevien toimenpiteiden automaattinen lähettäminen sähköpostilla
   help:
     title: Ohje
     usage: 'Ohjeita sovelluksen käyttämiseen löytyy %{manual_link} projektin GitHub-wikisivustolta.'
@@ -438,7 +576,7 @@ fi:
     toggle_notes: Vaihda muistiinpanojen tilaa
     toggle_notes_title: Vaihda kaikkien muistiinpanojen tilaa
   login:
-    account_login: Account login
+    account_login: Sisäänkirjautuminen
     cas_create_account: Jos haluat pyytää käyttäjätiliä, mene %{signup_link}
     cas_logged_in_greeting: Hei, %{username}! Olet kirjautunut sisään.
     cas_login: CAS-kirjautuminen
@@ -453,12 +591,12 @@ fi:
     mobile_use_openid: "... tai kirjaudu OpenID:llä"
     openid_identity_url_not_found: Henkilöllisyys-URL:llä (%{identity_url}) ei ole
       käyttäjätiliä
-    option_separator: or,
+    option_separator: tai
     please_login: Kirjaudu sisään käyttääksesi Tracksia
     session_time_out: Istunto on vanhentunut. %{link}
     session_will_expire: istunto vanhenee %{hours} tunnin epäaktiivisuuden jälkeen.
     session_will_not_expire: istunto ei vanhene.
-    sign_in: Sign in
+    sign_in: Kirjaudu sisään
     signup_prompt: Haluatko luoda käyttäjätilin?
     successful: Kirjauduit onnistuneesti sisään. Tervetuloa takaisin!
     successful_with_session_info: 'Kirjautuminen onnistui:'
@@ -472,7 +610,7 @@ fi:
       - Tehtävä ___ päivän päästä
       - Tehtävä _______
       themes:
-        black: Black
+        black: Musta
         light_blue: Vaalea sininen
     project:
       feed_description: Listaa kaikki käyttäjän %{username} projektit
@@ -568,7 +706,7 @@ fi:
     sms_context_none: Ei mikään
     staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
     tabs:
-      authentication: Authentication
+      authentication: Tunnistautuminen
       date_and_time: Päivämäärä ja aika
       profile: Profiili
       remove_account: Poista käyttäjätili
@@ -577,6 +715,8 @@ fi:
     token_description: Avainkoodi (syötteiden ja rajapinnan käyttämiseen)
     token_header: Avainkoodisi
     updated: Asetukset päivitetty
+    result_in: 'Tällä saat: '
+    pick_one: 'Tai valitse joku seuraavista:'
   projects:
     actions_in_project_title: Projektin toimenpiteet
     active_projects: Aktiiviset projektit
@@ -595,9 +735,9 @@ fi:
     default_tags_removed_notice: Poistettu oletusavainsanat
     deferred_actions: Lykätyt toimenpiteet
     deferred_actions_empty: Lykätyt toimenpiteet tyhjä
-    delete_project: Delete project
+    delete_project: Poista projekti
     delete_project_confirmation: Haluatko varmasti poistaa projektin ”%{name}”?
-    delete_project_title: Delete the project
+    delete_project_title: Poista projekti
     edit_project_settings: Muokkaa projektin asetuksia
     edit_project_title: Muokkaa projektia
     hidden_projects: Piilotetut projektit
@@ -719,7 +859,7 @@ fi:
     actions_day_of_week_title: Viikonpäivä (kaikki toimenpiteet)
     actions_dow_30days_legend:
       day_of_week: Viikonpäivä
-      number_of_actions: Number of actions
+      number_of_actions: Toimenpiteiden määrä
     actions_dow_30days_title: Viikonpäivä (viimeiset 30 päivää)
     actions_further: " ja myöhemmät"
     actions_last_year: Toimenpidettä viimeisen vuoden aikana
@@ -786,7 +926,7 @@ fi:
     tags: Tags
     time_of_day: Kellonaika (kaikki toimenpiteet)
     time_of_day_legend:
-      number_of_actions: Number of actions
+      number_of_actions: Toimenpiteiden määrä
       time_of_day: Kellonaika
     tod30: Kellonaika (viimeiset 30 vuorokautta)
     tod30_legend:
@@ -912,8 +1052,8 @@ fi:
     deferred_actions_with: Lykätyt toimenpiteet asiasanalla %{tag_name}
     deferred_pending_actions: Lykätyt/odottavat toimenpiteet
     deferred_tasks_title: TRACKS::Muistilista
-    delete: Delete
-    delete_action: Delete action
+    delete: Poista
+    delete_action: Poista toimenpide
     delete_recurring_action_confirm: Haluatko varmasti poistaa toistuvan toimenpiteen
       ”%{description}”?
     delete_recurring_action_title: Poista toistuva toimenpide
@@ -1045,8 +1185,8 @@ fi:
         every_day: joka päivä
         every_month: joka kuukausi
         every_n: joka %{n}
-        every_n_days: joka %{n} päivä
-        every_n_months: joka %{n} kuukausi
+        every_n_days: joka %{n}. päivä
+        every_n_months: joka %{n}. kuukausi
         every_xth_day_of_every_n_months: joka %{x} %{day} joka %{n_months}
         every_year_on: joka vuosi %{date}
         first: ensimmäinen
@@ -1067,11 +1207,11 @@ fi:
         - Lokakuu
         - Marraskuu
         - Joulukuu
-        on_day_n: on day %{n}
+        on_day_n: '%{n}. päivänä'
         on_work_days: työpäivinä
-        second: sekunti
+        second: Toinen
         show: näytä
-        the_xth_day_of_month: the %{x} %{day} of %{month}
+        the_xth_day_of_month: '%{x}. %{day} %{month}'
         third: kolmas
         times: '%{number} kertaa'
         until: asti
@@ -1085,11 +1225,11 @@ fi:
         show_options: Näytä toimenpide
       starts_on: Alkaa
       weekly: Viikottain
-      weekly_every_number_week: Näytetään joka {%number} viikko
+      weekly_every_number_week: Näytetään joka %{number} viikko
       weekly_options: Asetukset viikottain toistuville toimenpiteille
       yearly: Vuosittain
       yearly_every_x_day: Joka %{month} %{day}
-      yearly_every_xth_day: The %{day} %{day_of_week} of %{month}
+      yearly_every_xth_day: '%{day}. %{day_of_week} %{month}'
       yearly_options: Asetukset vuosittaisille toistuville toimenpiteille
     recurrence_completed: Valmistuneen toistuvan toimenpiteen jälkeen ei ole muita
       toimenpiteitä. Toistuvuus on päättynyt
@@ -1154,7 +1294,7 @@ fi:
       käyttäjätunnus:'
     first_user_title: TRACKS::Sign up as the admin user
     identity_url: Henkilöllisyys-URL
-    label_auth_type: Authentication type
+    label_auth_type: Tunnistautumistyyppi
     manage_users: Hallitse käyttäjiä
     manage_users_title: TRACKS::Hallitse käyttäjiä
     new_password_label: Uusi salasana
@@ -1192,10 +1332,10 @@ fi:
       single_page:
         one: Näytetään 1 %{model}
         other: Näytetään kaikki %{count} %{model}
-        zero: "%{model} ei löytynyt"
+        zero: '%{model} ei löytynyt'
       single_page_html:
         one: Näytetään <b>1</b> %{model}
         other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: "%{model} ei löytynyt"
+        zero: '%{model} ei löytynyt'
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
