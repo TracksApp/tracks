@@ -72,8 +72,10 @@ fr:
         odd: doit être impair
         record_invalid: 'La validation a échoué : %{errors}'
         restrict_dependent_destroy:
-          has_one: Cannot delete record because a dependent %{record} exists
-          has_many: Cannot delete record because dependent %{record} exist
+          has_one: Impossible de supprimer l'enregistrement car un %{record} dépendant
+            existe
+          has_many: Impossible de supprimer l'enregistrement car le %{record} dépendant
+            existe
         taken: est déjà pris
         too_long: est trop long (maximum de %{count} caractères)
         too_short: est trop court (minimum de %{count} charactères)
@@ -270,7 +272,7 @@ fr:
         other: presque %{count} ans
       half_a_minute: 30 secondes
       less_than_x_minutes:
-        one: moins d'1 minute
+        one: moins d'une minute
         other: moins de %{count} minutes
         zero: moins d'1 minute
       less_than_x_seconds:
@@ -692,7 +694,7 @@ fr:
       completed: Terminé
       current: Actuel
       hidden: Projets cachés
-      review: Review
+      review: Réviser
       stalled: Stalled
     review: Datée
     review_plural: Datée
@@ -746,7 +748,7 @@ fr:
       avg_created: Moy. créé
       completed: Complété
       created: Créé
-      month_avg_completed: "%{months} Month avg completed"
+      month_avg_completed: "%{months} mois terminé en moy."
       month_avg_created: "%{months} Month avg created"
     legend:
       actions: Actions
