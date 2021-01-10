@@ -130,8 +130,9 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: ei muistiinpanoja
-      other: 1 muistiinpano
+      one: 1 muistiinpano
+      other: "%{count} muistiinpanoa"
+      zero: ei muistiinpanoja
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -1329,10 +1330,12 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: '%{model} ei löytynyt'
-        other: Näytetään 1 %{model}
+        one: Näytetään 1 %{model}
+        other: Näytetään kaikki %{count} %{model}
+        zero: '%{model} ei löytynyt'
       single_page_html:
-        one: '%{model} ei löytynyt'
-        other: Näytetään <b>1</b> %{model}
+        one: Näytetään <b>1</b> %{model}
+        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
+        zero: '%{model} ei löytynyt'
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
