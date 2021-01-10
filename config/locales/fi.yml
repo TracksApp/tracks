@@ -1043,7 +1043,7 @@ fi:
     completed_today: Valmistunut tänään
     confirm_delete: Oletko varma että haluat poistaa toimenpiteen ”%{description}”?
     context_changed: Asiayhteys vaihdettu %{name}
-    convert_to_project: Tee projekti
+    convert_to_project: Muuta projektiksi
     defer_date_after_due_date: Lykkäyspäivä on määräpäivän jälkeen. Muuta määräpäivää
       ennen lykkäämistä.
     defer_x_days:
