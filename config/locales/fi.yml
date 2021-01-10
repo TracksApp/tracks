@@ -23,7 +23,8 @@ fi:
         staleness_starts: Vanhentumisen alkaminen
         time_zone: Aikavyöhyke
         title_date_format: Otsakkeen päivämäärämuoto
-        verbose_action_descriptors: Verbose action descriptors
+        verbose_action_descriptors: Näytä toimenpiteisiin liittyvät lisätiedot (asiayhteys,
+          projekti) laajennetussa muodossa
         week_starts: Viikko alkaa
       project:
         default_context_name: Oletuskonteksti
@@ -45,7 +46,7 @@ fi:
         email: Sähköpostiosoite
         first_name: Etunimi
         last_name: Sukunimi
-        login: Login
+        login: Käyttäjätunnus
         open_id_url: OpenID-URL
         password: Salasana
         created_at: Luotu
@@ -118,7 +119,7 @@ fi:
     forth: Neljäs
     fourth: Neljäs
     go_back: Takaisin
-    last: Viimeisimmät
+    last: Viimeinen
     logout: Kirjaudu ulos
     mailing_list: Postituslista
     month: kuukausi
@@ -127,9 +128,8 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
-      zero: ei muistiinpanoja
+      one: ei muistiinpanoja
+      other: 1 muistiinpano
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -438,7 +438,7 @@ fi:
     toggle_notes: Vaihda muistiinpanojen tilaa
     toggle_notes_title: Vaihda kaikkien muistiinpanojen tilaa
   login:
-    account_login: Account login
+    account_login: Sisäänkirjautuminen
     cas_create_account: Jos haluat pyytää käyttäjätiliä, mene %{signup_link}
     cas_logged_in_greeting: Hei, %{username}! Olet kirjautunut sisään.
     cas_login: CAS-kirjautuminen
@@ -453,12 +453,12 @@ fi:
     mobile_use_openid: "... tai kirjaudu OpenID:llä"
     openid_identity_url_not_found: Henkilöllisyys-URL:llä (%{identity_url}) ei ole
       käyttäjätiliä
-    option_separator: or,
+    option_separator: tai
     please_login: Kirjaudu sisään käyttääksesi Tracksia
     session_time_out: Istunto on vanhentunut. %{link}
     session_will_expire: istunto vanhenee %{hours} tunnin epäaktiivisuuden jälkeen.
     session_will_not_expire: istunto ei vanhene.
-    sign_in: Sign in
+    sign_in: Kirjaudu sisään
     signup_prompt: Haluatko luoda käyttäjätilin?
     successful: Kirjauduit onnistuneesti sisään. Tervetuloa takaisin!
     successful_with_session_info: 'Kirjautuminen onnistui:'
@@ -472,7 +472,7 @@ fi:
       - Tehtävä ___ päivän päästä
       - Tehtävä _______
       themes:
-        black: Black
+        black: Musta
         light_blue: Vaalea sininen
     project:
       feed_description: Listaa kaikki käyttäjän %{username} projektit
@@ -568,7 +568,7 @@ fi:
     sms_context_none: Ei mikään
     staleness_starts_after: Toimenpide alkaa vanhentumaan %{days} päivän kuluttua
     tabs:
-      authentication: Authentication
+      authentication: Tunnistautuminen
       date_and_time: Päivämäärä ja aika
       profile: Profiili
       remove_account: Poista käyttäjätili
@@ -595,9 +595,9 @@ fi:
     default_tags_removed_notice: Poistettu oletusavainsanat
     deferred_actions: Lykätyt toimenpiteet
     deferred_actions_empty: Lykätyt toimenpiteet tyhjä
-    delete_project: Delete project
+    delete_project: Poista projekti
     delete_project_confirmation: Haluatko varmasti poistaa projektin ”%{name}”?
-    delete_project_title: Delete the project
+    delete_project_title: Poista projekti
     edit_project_settings: Muokkaa projektin asetuksia
     edit_project_title: Muokkaa projektia
     hidden_projects: Piilotetut projektit
@@ -719,7 +719,7 @@ fi:
     actions_day_of_week_title: Viikonpäivä (kaikki toimenpiteet)
     actions_dow_30days_legend:
       day_of_week: Viikonpäivä
-      number_of_actions: Number of actions
+      number_of_actions: Toimenpiteiden määrä
     actions_dow_30days_title: Viikonpäivä (viimeiset 30 päivää)
     actions_further: " ja myöhemmät"
     actions_last_year: Toimenpidettä viimeisen vuoden aikana
@@ -786,7 +786,7 @@ fi:
     tags: Tags
     time_of_day: Kellonaika (kaikki toimenpiteet)
     time_of_day_legend:
-      number_of_actions: Number of actions
+      number_of_actions: Toimenpiteiden määrä
       time_of_day: Kellonaika
     tod30: Kellonaika (viimeiset 30 vuorokautta)
     tod30_legend:
@@ -912,8 +912,8 @@ fi:
     deferred_actions_with: Lykätyt toimenpiteet asiasanalla %{tag_name}
     deferred_pending_actions: Lykätyt/odottavat toimenpiteet
     deferred_tasks_title: TRACKS::Muistilista
-    delete: Delete
-    delete_action: Delete action
+    delete: Poista
+    delete_action: Poista toimenpide
     delete_recurring_action_confirm: Haluatko varmasti poistaa toistuvan toimenpiteen
       ”%{description}”?
     delete_recurring_action_title: Poista toistuva toimenpide
@@ -1045,8 +1045,8 @@ fi:
         every_day: joka päivä
         every_month: joka kuukausi
         every_n: joka %{n}
-        every_n_days: joka %{n} päivä
-        every_n_months: joka %{n} kuukausi
+        every_n_days: joka %{n}. päivä
+        every_n_months: joka %{n}. kuukausi
         every_xth_day_of_every_n_months: joka %{x} %{day} joka %{n_months}
         every_year_on: joka vuosi %{date}
         first: ensimmäinen
@@ -1067,11 +1067,11 @@ fi:
         - Lokakuu
         - Marraskuu
         - Joulukuu
-        on_day_n: on day %{n}
+        on_day_n: '%{n}. päivänä'
         on_work_days: työpäivinä
-        second: sekunti
+        second: Toinen
         show: näytä
-        the_xth_day_of_month: the %{x} %{day} of %{month}
+        the_xth_day_of_month: '%{x}. %{day} %{month}'
         third: kolmas
         times: '%{number} kertaa'
         until: asti
@@ -1085,11 +1085,11 @@ fi:
         show_options: Näytä toimenpide
       starts_on: Alkaa
       weekly: Viikottain
-      weekly_every_number_week: Näytetään joka {%number} viikko
+      weekly_every_number_week: Näytetään joka %{number} viikko
       weekly_options: Asetukset viikottain toistuville toimenpiteille
       yearly: Vuosittain
       yearly_every_x_day: Joka %{month} %{day}
-      yearly_every_xth_day: The %{day} %{day_of_week} of %{month}
+      yearly_every_xth_day: '%{day}. %{day_of_week} %{month}'
       yearly_options: Asetukset vuosittaisille toistuville toimenpiteille
     recurrence_completed: Valmistuneen toistuvan toimenpiteen jälkeen ei ole muita
       toimenpiteitä. Toistuvuus on päättynyt
@@ -1154,7 +1154,7 @@ fi:
       käyttäjätunnus:'
     first_user_title: TRACKS::Sign up as the admin user
     identity_url: Henkilöllisyys-URL
-    label_auth_type: Authentication type
+    label_auth_type: Tunnistautumistyyppi
     manage_users: Hallitse käyttäjiä
     manage_users_title: TRACKS::Hallitse käyttäjiä
     new_password_label: Uusi salasana
@@ -1190,12 +1190,10 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: Näytetään 1 %{model}
-        other: Näytetään kaikki %{count} %{model}
-        zero: "%{model} ei löytynyt"
+        one: '%{model} ei löytynyt'
+        other: Näytetään 1 %{model}
       single_page_html:
-        one: Näytetään <b>1</b> %{model}
-        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: "%{model} ei löytynyt"
+        one: '%{model} ei löytynyt'
+        other: Näytetään <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
