@@ -411,8 +411,8 @@ nl:
       context: context
       project: project
       tag:
-        1: tag1
-        2: tag2
+        '1': tag1
+        '2': tag2
   help:
     title: Help
     usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
