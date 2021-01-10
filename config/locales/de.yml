@@ -404,7 +404,6 @@ de:
       mailgun: Send emails to Tracks with Mailgun
       email_rich: Rich Todo Message email format
     opensearch_description: In Tracks suchen
-    opensearch_description: Hae Tracksista
     title: Integration
     intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen, um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere. Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
     developer_documentation_link: "Entwickler Documentation der Tracks' REST API"

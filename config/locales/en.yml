@@ -410,7 +410,7 @@ en:
       message_gateway: Integrate Tracks with an email server to be able to send an action through email to Tracks
       mailgun: Send emails to Tracks with Mailgun
       email_rich: Rich Todo Message email format
-    opensearch_description: Hae Tracksista
+    opensearch_description: Search in Tracks
     title: Integrations
     intro: "Tracks can be integrated with a number of other tools... whatever it takes to help you get things done! This page has information on setting up some of these. Not all of these are applicable to all platforms, and some require more technical knowledge than others. See also %{documentation_link}"
     developer_documentation_link: developer documentation for Tracks
