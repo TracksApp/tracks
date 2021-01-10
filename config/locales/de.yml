@@ -421,22 +421,22 @@ de:
       configuration: "You may need to configure your %{site_yml} to tell the message gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks' user from the email address in that field."
       one_user_configuration: "You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to %{single_user_var_name} and pass the login of the user: %{code}"
       instructions:
-        1: 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}" for todos sent in via email (which could come from an SMS message)'
-        2: In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to %{command}
-        3: Send an email to your newly configured address!
+        '1': 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}" for todos sent in via email (which could come from an SMS message)'
+        '2': In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to %{command}
+        '3': Send an email to your newly configured address!
     mailgun:
       description: If you want to email tasks to Tracks, but cannot run a mailserver on the same host, you could use the %{mailgun_link} support built in to Tracks.
       conditions: For this to work your Tracks server will need to be reachable from the internet, so that Mailgun can POST data to it.
       gateway_instructions: All the comments about the email format from the section above apply to the Mailgun handling, as the data is processed the same way
       instructions:
-        1: Go to %{mailgun_link} and register for a free account.
-        2: "Go to 'Routes' in the Mailgun control panel, and add a new route:"
-        2a: "'Filter expression' should be set to 'catch_all()'"
-        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
-        3: 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
-        4: 'Select a default context for emails to be put in with "%{sms_context_name"'
-        5: "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
-        6: "Update the mailmap in 'site.yml' to define which senders can send emails to which incoming addresses. For example, to send emails from your work and home email accounts to your tracks Mailgun route, set it up like this: %{code}"
+        '1': Go to %{mailgun_link} and register for a free account.
+        '2': "Go to 'Routes' in the Mailgun control panel, and add a new route:"
+        '2a': "'Filter expression' should be set to 'catch_all()'"
+        '2b': "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        '3': 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
+        '4': 'Select a default context for emails to be put in with "%{sms_context_name"'
+        '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
+        '6': "Update the mailmap in 'site.yml' to define which senders can send emails to which incoming addresses. For example, to send emails from your work and home email accounts to your tracks Mailgun route, set it up like this: %{code}"
     email_rich:
       description: "For both of the above methods, the follow format can be used:"
       fields_title: "The fields are:"
