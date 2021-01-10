@@ -467,8 +467,8 @@ fi:
           sähköpostin kautta lisättäviä toimenpiteitä varten (jotka voisivat muodostua
           myös SMS-viestin perusteella)
       one_user_configuration: 'Voit myös merkitä kaikki saapuvat sähköpostit tietyn
-        Tracks-käyttäjän tehtäviksi. Muuta site.yml-tiedoston asetusta mail_dispatch
-        %{single_user_var_name} ja välitä käyttäjän tunnus: %{code}'
+        Tracks-käyttäjän toimenpiteiksi. Muuta site.yml-tiedoston asetusta email_dispatch arvoon
+        %{single_user_value} ja välitä käyttäjän tunnus putkituskomennossa: %{code}'
       configuration: Sinun täytyy ehkä muuttaa asetus %{site_yml}-tiedostossa, jotta
         viestiväylä osaa käyttää %{to_name}-kenttää tai %{from_name}-kenttää löytääkseen
         sähköpostia vastaavan Tracks-käyttäjän.

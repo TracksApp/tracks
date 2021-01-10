@@ -376,7 +376,7 @@ nl:
       description: 'Als Tracks draait op dezelfde server als jouw mailserver, dan kan je de geïntegreerde mail handler gebruiken van Tracks. Om dit in te stellen:'
       rich_api_tip: 'Je kan ook de Rich Todo API gebruiken om acties te maken zoals "do laundry @ Home" of "Call Bill > project X". Het onderwerp van het bericht zal de bijschrijving van de actie vullen, de context, en het project, terwijl de body van het bericht de notities van de actie zal vullen.'
       configuration: "Het kan nodig zijn om jouw %{site_yml} te configureren om de message gateway te laten kijken naar het %{to_name} veld of het %{from_name} veld om de Tracks-gebruiker op te zoeken met het emailadres uit dat veld."
-      one_user_configuration: "Je kan ook alle email naar een specifieke Tracks gebruiker sturen. Stel mail_dispatch in site.yml in op %{single_user_var_name} en geeft de login van de gebruiker door: %{code}"
+      one_user_configuration: "Je kan ook alle email naar een specifieke Tracks gebruiker sturen. Stel mail_dispatch in site.yml in op %{single_user_value} en geeft de login van de gebruiker door: %{code}"
       instructions:
         '1': 'Ga naar %{preferences_link} en stel in "%{sms_email_name}" en "%{sms_context_name}" voor acties die verzonden zijn via email (die bijv. komen via een SMS message)'
         '2': In sendmail/qmail/postfix/whatever, stel een email address alias in om berichten door te sturen naar %{command}
@@ -389,7 +389,7 @@ nl:
         '1': Go to %{mailgun_link} and register for a free account.
         '2': "Go to 'Routes' in the Mailgun control panel, and add a new route:"
         2a: "'Filter expression' should be set to 'catch_all()'"
-        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        2b: "'Action' should be 'forward(\"http://mytracksserver.example.com/mailgun/mime\")'"
         '3': 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
         '4': 'Select a default context for emails to be put in with "%{sms_context_name"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"

@@ -425,7 +425,7 @@ en:
       description: 'If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into Tracks. Steps to set it up:'
       rich_api_tip: 'You can also use the Rich Todo API to send in tasks like "do laundry @ Home" or "Call Bill > project X". The subject of the message will fill description, context, and project, while the body will populate the tasks''s note.'
       configuration: "You may need to configure your %{site_yml} to tell the message gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks' user from the email address in that field."
-      one_user_configuration: "You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to %{single_user_var_name} and pass the login of the user: %{code}"
+      one_user_configuration: "You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to %{single_user_value} and pass the login of the user in the pipe command: %{code}"
       instructions:
         '1': 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}" for todos sent in via email (which could come from an SMS message)'
         '2': In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to %{command}
@@ -438,7 +438,7 @@ en:
         '1': Go to %{mailgun_link} and register for a free account.
         '2': "Go to 'Routes' in the Mailgun control panel, and add a new route:"
         2a: "'Filter expression' should be set to 'catch_all()'"
-        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        2b: "'Action' should be 'forward(\"http://mytracksserver.example.com/mailgun/mime\")'"
         '3': 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
         '4': 'Select a default context for emails to be put in with "%{sms_context_name}"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"

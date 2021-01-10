@@ -15,7 +15,7 @@
 
 <p><%= I18n.t 'integrations.cron_1' %></p>
 
-<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= root_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s 'Tracks actions due in the next 7 days' youremail@yourdomain.com</textarea>
+<textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= root_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s '<%= I18n.t 'integrations.cron_email_subject' %>' youremail@example.com</textarea>
 
 <p><%= raw I18n.t 'integrations.cron_2', feeds_link: link_to(I18n.t('integrations.feeds_link_text'), feeds_path) %></p>
 
@@ -29,7 +29,7 @@
 </ul>
 <p><%= I18n.t 'integrations.message_gateway.rich_api_tip' %></p>
 <p><%= raw I18n.t 'integrations.message_gateway.configuration', site_yml: '<tt>site.yml</tt>', to_name: '<tt>to:</tt>', from_name: '<tt>from:</tt>' %></p>
-<p><%= raw I18n.t 'integrations.message_gateway.one_user_configuration', single_user_var_name: '<tt>single_user</tt>', code: "<pre>TRACKS_MAIL_RECEIVER=" + current_user.login + " /PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>" %></p>
+<p><%= raw I18n.t 'integrations.message_gateway.one_user_configuration', single_user_value: '<tt>single_user</tt>', code: "<pre>TRACKS_MAIL_RECEIVER=" + current_user.login + " /PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>" %></p>
 
 <a name="mailgun"> </a>
 <h2><%= I18n.t 'integrations.sections.mailgun' %></h2>
@@ -45,11 +45,11 @@
   <li><%= raw I18n.t 'integrations.mailgun.instructions.3', preferences_link: link_to(t('layouts.navigation.preferences'), preferences_url), sms_email_name: Preference.human_attribute_name('sms_email') %></li>
   <li><%= I18n.t 'integrations.mailgun.instructions.4', sms_context_name: Preference.human_attribute_name('sms_context') %></li>
   <li><%= I18n.t 'integrations.mailgun.instructions.5' %></li>
-  <li><%= I18n.t 'integrations.mailgun.instructions.6', code: '<pre class=code>
+  <li><%= raw I18n.t 'integrations.mailgun.instructions.6', code: '<pre class=code>
 mailmap:
   tracks@user.mailgun.org:
-  - me@myhome.domain.net
-  - mr.user@work.company.com
+  - me@myhome.example.net
+  - mr.user@work.example.com
 </pre>' %></li>
 </ul>
 <p><%= I18n.t 'integrations.mailgun.gateway_instructions' %></p>
