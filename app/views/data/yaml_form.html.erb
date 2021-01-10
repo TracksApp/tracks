@@ -1,0 +1,14 @@
+<div id="display_box">
+  <div id="feeds">
+    <div id="feedlegend">
+      <p><%= raw I18n.t "data.import.yaml_warning", warning: '<strong>' + I18n.t('data.import.warning') + '</strong>' %></p>
+      <p><%= I18n.t "data.import.paste_field" %></p>
+    </div>
+    <p>
+      <%= form_for :import, @import, :url => {:controller => 'data', :action => 'yaml_import'} do |f| %>
+        <%= f.text_area :yaml %><br />
+        <input type="submit" value="<%= I18n.t 'data.import.submit' %>">
+      <% end %>
+    </p>
+  </div><!-- End of feeds -->
+</div><!-- End of display_box -->

@@ -356,7 +356,63 @@ nl:
       submit: Bewaar %{model}
       update: Bijwerken %{model}
   integrations:
+    sections:
+      automatic_email: Email jezelf automatisch de acties met een aflopende deadline
+      message_gateway: Integreer Tracks met een email server om een actie via email naar Tracks te sturen
+      mailgun: Send emails to Tracks with Mailgun
+      email_rich: Rich Todo Message email format
     opensearch_description: Zoek in Tracks
+    title: Integratie
+    intro: "Tracks kan met een aantal tools worden geïntegreerd... Alles om je te helpen om dingen gedaan te krijgen! Deze pagina heeft informatie over het tot stand brengen van sommige integratievormen. Deze voorbeelden zijn niet altijd voor alle platformen van toepassing en sommige voorbeelden vragen meer technische kennis dan anderen Zie ook %{documentation_link}."
+    developer_documentation_link: "de documentatie voor ontwikkelaars met Tracks' REST API"
+    contents_header: "Inhoud:"
+    add_your_own: Heb je een tip om hier toe te voegen? %{tell_us_link} en misschien voegen we jouw tip toe op deze pagina in een toekomstige versie van Tracks.
+    tell_us_link_text: Vertel ons er over in onze issue queue
+    cron_1: Als je de volgende regel toevoegd aan jouw crontab, dat ontvang je een e-mail op elke dag rond 05:00 met een lijst met acties waarvan de deadline afloopt binnen de komende 7 dagen.
+    cron_2: "Uiteraard kan je ook een andere %{feeds_link} – bijvoorbeeld een email met een lijst van acties voor een specifiek project naar een groep collega's die werken aan dat project?"
+    cron_email_subject: Tracks actions due in the next 7 days
+    feeds_link_text: text feed gebruiken die Tracks biedt
+    message_gateway:
+      description: 'Als Tracks draait op dezelfde server als jouw mailserver, dan kan je de geïntegreerde mail handler gebruiken van Tracks. Om dit in te stellen:'
+      rich_api_tip: 'Je kan ook de Rich Todo API gebruiken om acties te maken zoals "do laundry @ Home" of "Call Bill > project X". Het onderwerp van het bericht zal de bijschrijving van de actie vullen, de context, en het project, terwijl de body van het bericht de notities van de actie zal vullen.'
+      configuration: "Het kan nodig zijn om jouw %{site_yml} te configureren om de message gateway te laten kijken naar het %{to_name} veld of het %{from_name} veld om de Tracks-gebruiker op te zoeken met het emailadres uit dat veld."
+      one_user_configuration: "Je kan ook alle email naar een specifieke Tracks gebruiker sturen. Stel mail_dispatch in site.yml in op %{single_user_var_name} en geeft de login van de gebruiker door: %{code}"
+      instructions:
+        1: 'Ga naar %{preferences_link} en stel in "%{sms_email_name}" en "%{sms_context_name}" voor acties die verzonden zijn via email (die bijv. komen via een SMS message)'
+        2: In sendmail/qmail/postfix/whatever, stel een email address alias in om berichten door te sturen naar %{command}
+        3: Verstuur een email naar het net geconfigureerde e-mail adres!
+    mailgun:
+      description: If you want to email tasks to Tracks, but cannot run a mailserver on the same host, you could use the %{mailgun_link} support built in to Tracks.
+      conditions: For this to work your Tracks server will need to be reachable from the internet, so that Mailgun can POST data to it.
+      gateway_instructions: All the comments about the email format from the section above apply to the Mailgun handling, as the data is processed the same way
+      instructions:
+        1: Go to %{mailgun_link} and register for a free account.
+        2: "Go to 'Routes' in the Mailgun control panel, and add a new route:"
+        2a: "'Filter expression' should be set to 'catch_all()'"
+        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        3: 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
+        4: 'Select a default context for emails to be put in with "%{sms_context_name"'
+        5: "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
+        6: "Update the mailmap in 'site.yml' to define which senders can send emails to which incoming addresses. For example, to send emails from your work and home email accounts to your tracks Mailgun route, set it up like this: %{code}"
+    email_rich:
+      description: "For both of the above methods, the follow format can be used:"
+      fields_title: "The fields are:"
+      symbol_title: Symbol
+      meaning_title: Meaning
+      fields_instruction: All symbols are optional, and text up to the first symbol (or end of string) is used as the description of the todo
+      field_descriptions:
+        context: The context to place the Todo in
+        project: The project to place the Todo in
+        due_date: The due date for the Todo (may be 2 digits for day, 4 digits for month-day, or 6 digits for year-month-day)
+        tag: A tag to apply to the Todo – may be used multiple times
+        star: Flag to star the Todo
+    example_names:
+      todo: my awesome todo
+      context: context
+      project: project
+      tag:
+        1: tag1
+        2: tag2
   help:
     title: Help
     usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'

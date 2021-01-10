@@ -1,4 +1,4 @@
-<h3>Map fields to be imported<h3>
+<h3><%= I18n.t 'data.import.map_title' %><h3>
 <%= form_tag csv_import_data_path do %>
 	<% @labels.each do |l| %>
 		<%= label_tag l %>:
@@ -7,5 +7,5 @@
 	<% end %>
 	<%= hidden_field_tag :file, @filename %>
 	<%= hidden_field_tag :import_to, @import_to %>
-	<%= submit_tag "Import" %>
+	<%= submit_tag I18n.t("data.import.submit") %>
 <% end %>
