@@ -129,8 +129,9 @@ fr:
     none: Aucun
     not_available_abbr: n/a
     note:
-      one: non notes
-      other: 1 note
+      one: 1 note
+      other: "%{count} notes"
+      zero: non notes
     notes: Notes
     numbered_step: Étape %{number}
     ok: OK
@@ -271,11 +272,13 @@ fr:
         other: presque %{count} ans
       half_a_minute: 30 secondes
       less_than_x_minutes:
-        one: moins d'1 minute
-        other: moins d'une minute
+        one: moins d'une minute
+        other: moins de %{count} minutes
+        zero: moins d'1 minute
       less_than_x_seconds:
         one: moins d'1 seconde
-        other: moins d'1 seconde
+        other: moins de %{count} secondes
+        zero: moins d'1 seconde
       over_x_years:
         one: plus d'1 an
         other: plus de %{count} ans
@@ -1196,10 +1199,12 @@ fr:
       multi_page_html: Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b>
         au total
       single_page:
-        one: Aucun %{model} trouvés
-        other: Voir de 1 %{model}
+        one: Voir de 1 %{model}
+        other: Afficher tous les %{count} %{model}
+        zero: Aucun %{model} trouvés
       single_page_html:
-        one: Aucun %{model} trouvés
-        other: Voir de <b>1</b> %{model}
+        one: Voir de <b>1</b> %{model}
+        other: Afficher <b>tous les %{count}</b> %{model}
+        zero: Aucun %{model} trouvés
     page_gap: "&hellip;"
     previous_label: "«Précédent"

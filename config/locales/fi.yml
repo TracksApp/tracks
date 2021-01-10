@@ -1188,8 +1188,9 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
+        zero: Näytetään 1 %{model}
         one: '%{model} ei löytynyt'
-        other: Näytetään 1 %{model}
+        zero: "%{model} ei löytynyt"
       single_page_html:
         one: '%{model} ei löytynyt'
         other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
