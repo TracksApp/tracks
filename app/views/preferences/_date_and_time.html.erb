@@ -1,8 +1,8 @@
 <%= pref_with_text_field('prefs', 'date_format') %>
 
-<div class='prefs_example'>This will result in: <span id='prefs.date_format'><%= l(Time.zone.today, :format => current_user.prefs.date_format) %></span></div>
+<div class='prefs_example'><%= I18n.t('preferences.result_in') %> <span id='prefs.date_format'><%= l(Time.zone.today, :format => current_user.prefs.date_format) %></span></div>
 <br/>
-Or pick one of the following:<br/>
+<%= I18n.t('preferences.pick_one') %><br/>
 <div class="form-group btn-group" role="group" data-toggle="buttons">
   <% [:default, :short, :long, :longer].each do |format| %>
     <label class="btn btn-default">
@@ -14,9 +14,9 @@ Or pick one of the following:<br/>
 <div class="form-group">
   <%= pref_with_text_field('prefs', 'title_date_format') %>
 </div>
-<div class='prefs_example'>This will result in: <span id='prefs.title_date_format'><%= l(Time.zone.today, :format => current_user.prefs.title_date_format) %></span></div>
+<div class='prefs_example'><%= I18n.t('preferences.result_in') %> <span id='prefs.title_date_format'><%= l(Time.zone.today, :format => current_user.prefs.title_date_format) %></span></div>
 <br/>
-Or pick one of the following:<br/>
+<%= I18n.t('preferences.pick_one') %><br/>
 <div class="form-group btn-group" role="group" data-toggle="buttons">
   <% [:default, :short, :long, :longer].each do |format| %>
     <label class="btn btn-default">

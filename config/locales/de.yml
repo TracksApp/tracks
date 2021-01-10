@@ -193,10 +193,46 @@ de:
     view_link: 'View context: %{name}'
     visible_contexts: Sichtbare Kontexte
   data:
-    import_destination_invalid: Invalid import destination
-    import_errors: Beim Import sind Fehler aufgetreten.
-    import_successful: Import war erfolgreich.
-    invalid_import_destination: Invalid import destination
+    import:
+      errors:
+        invalid_destination: "Invalid import destination: %{e}"
+        some: Beim Import sind Fehler aufgetreten.
+        file_blank: File can't be blank
+        invalid_csv: "Invalid CSV: could not read headers: %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write to the upload directory? %{e}"
+      map_title: Map fields to be imported
+      header: Importing data
+      submit: Importieren
+      successful: Import war erfolgreich.
+      target_field: "Import to:"
+      upload: Upload
+      upload_csv: Please upload your CSV file
+      projects_count: "%{count} Projects imported"
+      todos_count: "%{count} Todos imported"
+      yaml_disabled: "YAML loading is disabled"
+      yaml_warning: "%{warning}: vor dem Import der YAML Datei werden alle Daten in Ihrer Datenbank gelöscht. Falls Sie entsprechenden Zugriff auf Ihre Datenbank haben, empfiehlt es sich, ein Backup anzulegen, bevor Sie fortfahren."
+      paste_field: "Fügen Sie den Inhalt der kopierten YAML Datei in das untenstehende Formular ein:"
+      warning: Vorsicht
+    export:
+      page_title: Tracks::Export
+      title: Daten exportieren
+      format_header: "Sie können zwischen den folgenden Formaten wählen:"
+      yaml_description: "%{yaml}: Für den Daten-Import bevorzugt."
+      yaml_link_description: YAML-Datei mit all Ihren Aktionen, Umgebungen, Projekten, Tags und Notizen
+      yaml_experimental: "Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle Funktionalität darstellt. Nutzen Sie diese Option also nicht. um kritische Daten zu sichern."
+      csv_description: "%{csv}: Am besten für den Export in eine Tabellen-Kalkulation oder ähnliche Auswertungs-Software geeignet"
+      csv_actions_description: CSV-Datei mit all Ihren Aktionen, benannten Umgebungen und Projekten
+      csv_notes_description: CSV-Datei mit all Ihren Notizen
+      xml_description: "%{xml}: Am besten für den Daten-Import oder automatische Weiterverarbeitung"
+      xml_link_description: XML-Datei mit all Ihren Aktionen, Umgebungen, Projekten, Tags und Notizen
+      download_link: Download link
+      yaml_link_title: YAML Datei
+      csv_actions_title: CSV Dile (Aktionen, Umgebungen und Projekte)
+      csv_notes_title: CSV Datei (nur Notizen)
+      xml_link_title: XML file (actions only)
+    yaml: YAML
+    csv: CSV
+    xml: XML
   date:
     abbr_day_names:
     - So
@@ -362,7 +398,64 @@ de:
       submit: Сохранить %{model}
       update: Обновить %{model}
   integrations:
+    sections:
+      automatic_email: Anstehende Aufgaben automatisch sich via E-Mail zusenden lassen
+      message_gateway: Tracks mit einem Mail-Server integrieren, um Aufgaben via E-Mail zu erstellen
+      mailgun: Send emails to Tracks with Mailgun
+      email_rich: Rich Todo Message email format
     opensearch_description: In Tracks suchen
+    opensearch_description: Hae Tracksista
+    title: Integration
+    intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen, um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere. Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
+    developer_documentation_link: "Entwickler Documentation der Tracks' REST API"
+    contents_header: "Inhalt:"
+    add_your_own: Sie haben weitere Beispiele? %{tell_us_link}, damit wir es für die nächsten Versionen berücksichtigen können.
+    tell_us_link_text: Berichten Sie uns in unserem issue queue
+    cron_1: If you enter the following entry to your crontab, you will receive email every day around 5 AM with a list of the upcoming actions which are due within the next 7 days.
+    cron_2: You can of course use other text %{feeds_link} – why not email a list of next actions in a particular project to a group of colleagues who are working on the project?
+    cron_email_subject: Tracks actions due in the next 7 days
+    feeds_link_text: feeds provided by Tracks
+    message_gateway:
+      description: 'If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:'
+      rich_api_tip: 'You can also use the Rich Todo API to send in tasks like "do laundry @ Home" or "Call Bill > project X". The subject of the message will fill description, context, and project, while the body will populate the tasks''s note.'
+      configuration: "You may need to configure your %{site_yml} to tell the message gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks' user from the email address in that field."
+      one_user_configuration: "You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to %{single_user_var_name} and pass the login of the user: %{code}"
+      instructions:
+        1: 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}" for todos sent in via email (which could come from an SMS message)'
+        2: In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to %{command}
+        3: Send an email to your newly configured address!
+    mailgun:
+      description: If you want to email tasks to Tracks, but cannot run a mailserver on the same host, you could use the %{mailgun_link} support built in to Tracks.
+      conditions: For this to work your Tracks server will need to be reachable from the internet, so that Mailgun can POST data to it.
+      gateway_instructions: All the comments about the email format from the section above apply to the Mailgun handling, as the data is processed the same way
+      instructions:
+        1: Go to %{mailgun_link} and register for a free account.
+        2: "Go to 'Routes' in the Mailgun control panel, and add a new route:"
+        2a: "'Filter expression' should be set to 'catch_all()'"
+        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        3: 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
+        4: 'Select a default context for emails to be put in with "%{sms_context_name"'
+        5: "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
+        6: "Update the mailmap in 'site.yml' to define which senders can send emails to which incoming addresses. For example, to send emails from your work and home email accounts to your tracks Mailgun route, set it up like this: %{code}"
+    email_rich:
+      description: "For both of the above methods, the follow format can be used:"
+      fields_title: "The fields are:"
+      symbol_title: Symbol
+      meaning_title: Meaning
+      fields_instruction: All symbols are optional, and text up to the first symbol (or end of string) is used as the description of the todo
+      field_descriptions:
+        context: The context to place the Todo in
+        project: The project to place the Todo in
+        due_date: The due date for the Todo (may be 2 digits for day, 4 digits for month-day, or 6 digits for year-month-day)
+        tag: A tag to apply to the Todo – may be used multiple times
+        star: Flag to star the Todo
+    example_names:
+      todo: my awesome todo
+      context: context
+      project: project
+      tag:
+        1: tag1
+        2: tag2
   help:
     title: Help
     usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'

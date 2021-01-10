@@ -1,15 +1,15 @@
 <div id="display_box">
   <div id="feeds">
     <div id="feedlegend">
-      <h2>Importing data</h2>
+      <h2><%= I18n.t "data.import.header" %></h2>
       <div>
-        <h3>Please upload your CSV file</h3>
+        <h3><%= I18n.t "data.import.upload_csv" %></h3>
         <%= form_tag csv_map_data_path, :id => 'upload_form', multipart: true do %>
-          <label for="import_to">Import to:</label>
+          <label for="import_to"><%= I18n.t "data.import.target_field" %></label>
           <%= select_tag(:import_to, options_for_select([['Projects', 'projects'], ['Todos', 'todos']], 1) ) %>
           <br><br>
           <%= file_field_tag :file %>
-          <%= submit_tag "Upload", :id => "upload_form_submit" %>
+          <%= submit_tag I18n.t("data.import.upload"), :id => "upload_form_submit" %>
         <% end %>
       </div>
     </div>

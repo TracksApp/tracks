@@ -2,15 +2,15 @@ class DataController < ApplicationController
   require 'csv'
 
   def index
-    @page_title = "TRACKS::Export"
+    @page_title = t('data.export.page_title')
   end
 
   def import; end
 
   def csv_map
     if params[:file].blank?
-      flash[:notice] = "File can't be blank"
-      redirect_to :back
+      flash[:notice] = t "data.import.errors.file_blank"
+      redirect_back fallback_location: root_path
     else
       @import_to = params[:import_to]
 
@@ -20,8 +20,8 @@ class DataController < ApplicationController
         @headers = import_headers(params[:file].path).collect { |v| [v, i += 1] }
         @headers.unshift ['', i]
       rescue Exception => e
-        flash[:error] = "Invalid CVS: could not read headers: #{e}"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.invalid_csv", e: e
+        redirect_back fallback_location: root_path
         return
       end
 
@@ -32,8 +32,8 @@ class DataController < ApplicationController
         path_and_file = Rails.root.join('public', 'uploads', 'csv', @filename)
         File.open(path_and_file, "wb") { |f| f.write(uploaded_file.read) }
       rescue Exception => e
-        flash[:error] = "Could not save uploaded CSV (#{path_and_file}). Can Tracks write to the upload directory? #{e}"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.save_error", path_and_file: path_and_file, e: e
+        redirect_back fallback_location: root_path
         return
       end
 
@@ -43,8 +43,8 @@ class DataController < ApplicationController
       when 'todos'
         @labels = [:description, :context, :project, :notes, :created_at, :due, :completed_at]
       else
-        flash[:error] = "Invalid import destination"
-        redirect_to :back
+        flash[:error] = t "data.import.errors.invalid_destination"
+        redirect_back fallback_location: root_path
       end
       respond_to do |format|
         format.html
@@ -59,15 +59,15 @@ class DataController < ApplicationController
       case params[:import_to]
       when 'projects'
         count = Project.import path_and_file, params, current_user
-        flash[:notice] = "#{count} Projects imported"
+        flash[:notice] = t 'data.import.projects_count', count: count
       when 'todos'
         count = Todo.import path_and_file, params, current_user
-        flash[:notice] = "#{count} Todos imported"
+        flash[:notice] = t 'data.import.todos.count', count: count
       else
-        flash[:error] = t('data.invalid_import_destination')
+        flash[:error] = t('data.import.errors.invalid_destination')
       end
     rescue Exception => e
-      flash[:error] = t('data.invalid_import_destination') + ": #{e}"
+      flash[:error] = t 'data.import.invalid_destination', e: e
     end
     File.delete(path_and_file)
     redirect_to import_data_path
@@ -203,7 +203,7 @@ class DataController < ApplicationController
   end
 
   def yaml_import
-    raise "YAML loading is disabled"
+    raise t "data.import.yaml_disabled"
   end
 
   private

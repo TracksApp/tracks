@@ -1,0 +1,36 @@
+<div id="display_box">
+  <div id="feeds">
+    <div id="feedlegend">
+      <h3><%= I18n.t "data.export.title" %></h3>
+      <p><%= I18n.t "data.export.format_header" %></p>
+      <ul>
+        <li><%= raw I18n.t "data.export.yaml_description", yaml: "<strong>" + I18n.t("data.yaml") + "</strong>" %><br/><em><%= I18n.t "data.export.yaml_experimental" %></em></li>
+        <li><%= raw I18n.t "data.export.csv_description", csv: "<strong>" + I18n.t("data.csv") + "</strong>" %></li>
+        <li><%= raw I18n.t "data.export.xml_description", xml: "<strong>" + I18n.t("data.xml") + "</strong>" %></li>
+      </ul>
+    </div>
+    <br/><br/>
+    <table class="export_table">
+      <tr>
+        <th><%= I18n.t "common.description" %></th>
+        <th><%= I18n.t "data.export.download_link" %></th>
+      </tr>
+      <tr>
+        <td><%= I18n.t "data.export.yaml_link_description" %></td>
+        <td><%= link_to I18n.t("data.export.yaml_link_title"), data_yaml_export_path %></td>
+      </tr>
+      <tr>
+        <td><%= I18n.t "data.export.csv_actions_description" %></td>
+        <td><%= link_to I18n.t("data.export.csv_actions_title"), data_csv_actions_path %></td>
+      </tr>
+      <tr>
+        <td><%= I18n.t "data.export.csv_notes_description" %></td>
+        <td><%= link_to I18n.t("data.export.csv_notes_title"), data_csv_notes_path %></td>
+      </tr>
+      <tr>
+        <td><%= I18n.t "data.export.xml_link_description" %></td>
+        <td><%= link_to I18n.t('data.export.xml_link_title'), data_xml_export_path %></td>
+      </tr>
+    </table>
+  </div>
+</div>

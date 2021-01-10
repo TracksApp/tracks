@@ -191,10 +191,46 @@ es:
     view_link: 'View context: %{name}'
     visible_contexts: Contextos visible
   data:
-    import_destination_invalid: Invalid import destination
-    import_errors: Han ocurrido algunos errores durante la importación
-    import_successful: Importación se realizó correctamente.
-    invalid_import_destination: Invalid import destination
+    import:
+      errors:
+        invalid_destination: "Invalid import destination: %{e}"
+        some: Han ocurrido algunos errores durante la importación
+        file_blank: File can't be blank
+        invalid_csv: "Invalid CSV: could not read headers: %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write to the upload directory? %{e}"
+      map_title: Map fields to be imported
+      header: Importing data
+      submit: Import
+      successful: Importación se realizó correctamente.
+      target_field: "Import to:"
+      upload: Upload
+      upload_csv: Please upload your CSV file
+      projects_count: "%{count} Projects imported"
+      todos_count: "%{count} Todos imported"
+      yaml_disabled: "YAML loading is disabled"
+      yaml_warning: "%{warning}: all your current data will be destroyed before importing the YAML file, so if you have access to the database, we strongly recommend backing up the database right now in case that anything goes wrong."
+      paste_field: "Paste the contents of the YAML file you exported into the text box below:"
+      warning: Beware
+    export:
+      page_title: Tracks::Export
+      title: Exportar datos
+      format_header: "Puede escoger entre los siguientes formatos:"
+      yaml_description: "%{yaml}: Mejor formato para exportar datos."
+      yaml_link_description: Fichero YAML con todas sus acciones, contextos, proyectos, etiquetas y notas
+      yaml_experimental: "Por favor tenga en cuenta que la importación de ficheros YAML actualmente esta soportada de forma experimental. No confíe en este formato para hacer copias de seguridad de datos importantes."
+      csv_description: "%{csv}: Mejor formato para importar en una hoja de cálculo o en programas de análisis de datos."
+      csv_actions_description: Fichero CSV con todas sus acciones, con contextos por nombre y proyectos
+      csv_notes_description: Fichero CSV con todas sus notas
+      xml_description: "%{xml}: Mejor formato para transformar los datos a otro formato"
+      xml_link_description: Fichero XML con todas sus acciones, contextos, proyectos, etiquetas y notas
+      download_link: Enlace de descarga
+      yaml_link_title: Fichero YAML
+      csv_actions_title: Fichero CSV (acciones, contextos y proyectos)
+      csv_notes_title: Fichero CSV (sólo notas)
+      xml_link_title: Fichero XML
+    yaml: YAML
+    csv: CSV
+    xml: XML
   date:
     abbr_day_names:
     - Dom

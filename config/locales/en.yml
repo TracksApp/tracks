@@ -21,6 +21,7 @@ en:
         sms_context: Default email context
         sms_email: From email
         staleness_starts: Start of staleness
+        theme: Theme
         time_zone: Time zone
         title_date_format: Title date format
         verbose_action_descriptors: Show descriptors (context, project) of actions
@@ -42,9 +43,11 @@ en:
         tags: Tags
       user:
         auth_type: Auth type
+        created_at: Created at
         display_name: Display name
         email: Email address
         first_name: First name
+        last_login_at: Last login at
         last_name: Last name
         login: Login
         open_id_url: OpenID URL
@@ -195,10 +198,46 @@ en:
     view_link: 'View context: %{name}'
     visible_contexts: Visible contexts
   data:
-    import_destination_invalid: Invalid import destination
-    import_errors: Some errors occurred during import
-    import_successful: Import was successful.
-    invalid_import_destination: Invalid import destination
+    import:
+      errors:
+        invalid_destination: "Invalid import destination: %{e}"
+        some: Some errors occurred during import
+        file_blank: File can't be blank
+        invalid_csv: "Invalid CSV: could not read headers: %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write to the upload directory? %{e}"
+      map_title: Map fields to be imported
+      header: Importing data
+      submit: Import
+      successful: Import was successful.
+      target_field: "Import to:"
+      upload: Upload
+      upload_csv: Please upload your CSV file
+      projects_count: "%{count} Projects imported"
+      todos_count: "%{count} Todos imported"
+      yaml_disabled: "YAML loading is disabled"
+      yaml_warning: "%{warning}: all your current data will be destroyed before importing the YAML file, so if you have access to the database, we strongly recommend backing up the database right now in case that anything goes wrong."
+      paste_field: "Paste the contents of the YAML file you exported into the text box below:"
+      warning: Beware
+    export:
+      page_title: Tracks::Export
+      title: Exporting data
+      format_header: "You can choose between the following formats:"
+      yaml_description: "%{yaml}: Best for exporting data."
+      yaml_link_description: YAML file containing all your actions, contexts, projects, tags and notes
+      yaml_experimental: "Please note that importing YAML files is currently supported only in experimentally. Do not rely on it for backing up critical data."
+      csv_description: "%{csv}: Best for importing into spreadsheet or data analysis software"
+      csv_actions_description: CSV file containing all of your actions, with named contexts and projects
+      csv_notes_description: CSV file containing all your notes
+      xml_description: "%{xml}: Best for importing or repurposing the data"
+      xml_link_description: XML file containing all your actions, contexts, projects, tags and notes
+      download_link: Download link
+      yaml_link_title: YAML file
+      csv_actions_title: CSV file (actions, contexts and projects)
+      csv_notes_title: CSV file (notes only)
+      xml_link_title: XML file (actions only)
+    yaml: YAML
+    csv: CSV
+    xml: XML
   date:
     abbr_day_names:
     - Sun
@@ -366,7 +405,63 @@ en:
       submit: Save %{model}
       update: Update %{model}
   integrations:
-    opensearch_description: Search in Tracks
+    sections:
+      automatic_email: Automatically Email Yourself Upcoming Actions
+      message_gateway: Integrate Tracks with an email server to be able to send an action through email to Tracks
+      mailgun: Send emails to Tracks with Mailgun
+      email_rich: Rich Todo Message email format
+    opensearch_description: Hae Tracksista
+    title: Integrations
+    intro: "Tracks can be integrated with a number of other tools... whatever it takes to help you get things done! This page has information on setting up some of these. Not all of these are applicable to all platforms, and some require more technical knowledge than others. See also %{documentation_link}"
+    developer_documentation_link: developer documentation for Tracks
+    contents_header: "Contents:"
+    add_your_own: Do you have one of your own to add? %{tell_us_link} and we may include it on this page in a future versions of Tracks.
+    tell_us_link_text: Tell us about it in our issue queue
+    cron_1: If you enter the following entry to your crontab, you will receive email every day around 5 AM with a list of the upcoming actions which are due within the next 7 days.
+    cron_2: You can of course use other text %{feeds_link} – why not email a list of next actions in a particular project to a group of colleagues who are working on the project?
+    cron_email_subject: Tracks actions due in the next 7 days
+    feeds_link_text: feeds provided by Tracks
+    message_gateway:
+      description: 'If Tracks is running on the same server as your mail server, you can use the integrated mail handler built into tracks. Steps to set it up:'
+      rich_api_tip: 'You can also use the Rich Todo API to send in tasks like "do laundry @ Home" or "Call Bill > project X". The subject of the message will fill description, context, and project, while the body will populate the tasks''s note.'
+      configuration: "You may need to configure your %{site_yml} to tell the message gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks' user from the email address in that field."
+      one_user_configuration: "You can also send all email to a specific Tracks user. Configure mail_dispatch in site.yml to %{single_user_var_name} and pass the login of the user: %{code}"
+      instructions:
+        1: 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}" for todos sent in via email (which could come from an SMS message)'
+        2: In sendmail/qmail/postfix/whatever, set up an email address alias to pipe messages to %{command}
+        3: Send an email to your newly configured address!
+    mailgun:
+      description: If you want to email tasks to Tracks, but cannot run a mailserver on the same host, you could use the %{mailgun_link} support built in to Tracks.
+      conditions: For this to work your Tracks server will need to be reachable from the internet, so that Mailgun can POST data to it.
+      gateway_instructions: All the comments about the email format from the section above apply to the Mailgun handling, as the data is processed the same way
+      instructions:
+        1: Go to %{mailgun_link} and register for a free account.
+        2: "Go to 'Routes' in the Mailgun control panel, and add a new route:"
+        2a: "'Filter expression' should be set to 'catch_all()'"
+        2b: "'Action' should be 'forward(\"http://mytracksserver.domain.com/mailgun/mime\")'"
+        3: 'Go to %{preferences_link} and enter your incoming Mailgun email address (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
+        4: 'Select a default context for emails to be put in with "%{sms_context_name"'
+        5: "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
+        6: "Update the mailmap in 'site.yml' to define which senders can send emails to which incoming addresses. For example, to send emails from your work and home email accounts to your tracks Mailgun route, set it up like this: %{code}"
+    email_rich:
+      description: "For both of the above methods, the follow format can be used:"
+      fields_title: "The fields are:"
+      symbol_title: Symbol
+      meaning_title: Meaning
+      fields_instruction: All symbols are optional, and text up to the first symbol (or end of string) is used as the description of the todo
+      field_descriptions:
+        context: The context to place the Todo in
+        project: The project to place the Todo in
+        due_date: The due date for the Todo (may be 2 digits for day, 4 digits for month-day, or 6 digits for year-month-day)
+        tag: A tag to apply to the Todo – may be used multiple times
+        star: Flag to star the Todo
+    example_names:
+      todo: my awesome todo
+      context: context
+      project: project
+      tag:
+        1: tag1
+        2: tag2
   help:
     title: Help
     usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
@@ -566,9 +661,11 @@ en:
     page_title: TRACKS::Preferences
     page_title_edit: TRACKS::Edit Preferences
     password_changed: You password has been changed, please log on again.
+    pick_one: 'Or pick one of the following:'
     remove_introduction: You can remove your user account here. Note that this is
       irreversible and will remove all your data! After removal you will be logged
       out.
+    result_in: 'This will result in: '
     show_number_completed: Show %{number} completed items
     sms_context_none: None
     staleness_starts_after: Staleness starts after %{days} days
