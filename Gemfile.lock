@@ -250,7 +250,7 @@ GEM
       parser (>= 2.7.1.5)
     ruby-progressbar (1.11.0)
     safe_yaml (1.0.5)
-    sanitize (5.2.2)
+    sanitize (5.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.8.0)
       nokogumbo (~> 2.0)
