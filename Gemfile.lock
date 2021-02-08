@@ -268,7 +268,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    solargraph (0.40.2)
+    solargraph (0.40.3)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
@@ -298,7 +298,7 @@ GEM
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
-    thor (1.0.1)
+    thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
     tolk (4.0.1)
