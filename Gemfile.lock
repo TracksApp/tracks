@@ -229,7 +229,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     ref (2.0.0)
-    regexp_parser (2.0.3)
+    regexp_parser (2.1.1)
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
@@ -237,7 +237,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.1)
-    rubocop (1.9.1)
+    rubocop (1.11.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -354,7 +354,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.9)
+  rubocop (~> 1.11)
   sanitize (~> 5.2)
   sassc-rails (~> 2.1.2)
   simplecov
