@@ -121,7 +121,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.8.9)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (0.9.33)
+    i18n-tasks (0.9.34)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -146,7 +146,7 @@ GEM
     listen (3.4.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.8.0)
+    loofah (2.9.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -165,7 +165,7 @@ GEM
     mocha (1.12.0)
     mysql2 (0.5.3)
     nio4r (2.5.5)
-    nokogiri (1.11.1)
+    nokogiri (1.11.2)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
     nokogumbo (2.0.4)
@@ -291,7 +291,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
-    terminal-table (2.0.0)
+    terminal-table (3.0.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
@@ -338,7 +338,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 5.15.1)
   htmlentities
-  i18n-tasks (~> 0.9.33)
+  i18n-tasks (~> 0.9.34)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   listen
