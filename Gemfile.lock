@@ -9,7 +9,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.3.2)
-    aasm (5.1.1)
+    aasm (5.2.0)
       concurrent-ruby (~> 1.0)
     actioncable (6.0.3.4)
       actionpack (= 6.0.3.4)
@@ -325,7 +325,7 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
-  aasm (~> 5.1.1)
+  aasm (~> 5.2.0)
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list

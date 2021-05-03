@@ -16,7 +16,7 @@ gem 'font-awesome-sass', '~> 5.15.1'
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'aasm', '~> 5.1.1'
+gem 'aasm', '~> 5.2.0'
 gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.16'
 gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
