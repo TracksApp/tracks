@@ -239,16 +239,16 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.1)
-    rubocop (1.14.0)
+    rubocop (1.16.1)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml
-      rubocop-ast (>= 1.5.0, < 2.0)
+      rubocop-ast (>= 1.7.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.5.0)
+    rubocop-ast (1.7.0)
       parser (>= 3.0.1.1)
     ruby-progressbar (1.11.0)
     safe_yaml (1.0.5)
@@ -356,7 +356,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.14)
+  rubocop (~> 1.16)
   sanitize (~> 5.2)
   sassc-rails (~> 2.1.2)
   simplecov
