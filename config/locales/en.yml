@@ -472,7 +472,7 @@ en:
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (also available in %{matrix_link})'
-    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    irc_link_text: 'IRC channel #Tracks@Libera'
     matrix_link_text: Matrix
   layouts:
     mobile_navigation:

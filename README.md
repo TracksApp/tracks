@@ -12,7 +12,7 @@
 * Hosted services: https://github.com/TracksApp/tracks/wiki/Hosted-Tracks
 * Bug reports and feature requests: https://github.com/TracksApp/tracks/issues
 * Mailing list: http://groups.google.com/group/TracksApp
-* IRC channel: #tracks on Freenode, available also on [Matrix](https://matrix.to/#/#tracks:matrix.org)
+* IRC channel: #tracks on Libera, available also on [Matrix](https://matrix.to/#/#tracks:matrix.org)
 * License: See COPYING
 
 Full instructions for both new installations and upgrades from older installations
