@@ -536,7 +536,7 @@ ru:
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (также доснупно %{matrix_link})'
-    irc_link_text: 'Канал IRC #Tracks@FreeNode'
+    irc_link_text: 'IRC-канал #Tracks@Libera'
     matrix_link_text: Matrix
   layouts:
     mobile_navigation:
