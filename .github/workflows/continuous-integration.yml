@@ -10,9 +10,13 @@ jobs:
         db: [sqlite, mysql, postgres]
         exclude:
           - ruby: "2.5"
-            db: [sqlite, postgres]
+            db: sqlite
+          - ruby: "2.5"
+            db: postgres
           - ruby: "2.6"
-            db: [sqlite, postgres]
+            db: sqlite
+          - ruby: "2.6"
+            db: postgres
 
     steps:
       - uses: actions/checkout@v1
