@@ -6,8 +6,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["2.5", "2.6", "2.7", "3.0"]
+        ruby: ["2.5", "2.6", "2.7"]
         db: [sqlite, mysql, postgres]
+        exclude:
+          - ruby: "2.5"
+            db: [sqlite, postgres]
+          - ruby: "2.6"
+            db: [sqlite, postgres]
+
     steps:
       - uses: actions/checkout@v1
       - run: bash -x script/cibuild ${{ matrix.ruby }} ${{ matrix.db }}
