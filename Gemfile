@@ -68,3 +68,6 @@ group :test do
   gem 'rspec-expectations'
   gem 'simplecov'
 end
+
+gem "mini_racer"
+
