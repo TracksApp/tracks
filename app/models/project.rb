@@ -16,7 +16,7 @@ class Project < ApplicationRecord
 
   before_create :set_last_reviewed_now
 
-  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :user_id }
+  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :user_id, case_sensitive: true }
 
   acts_as_list :scope => 'user_id = #{user_id} AND state = \'#{state}\'', :top_of_list => 0
 
