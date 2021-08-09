@@ -424,7 +424,7 @@ fi:
           %{sms_context_name} -kentällä
         '3': Siirry %{preferences_link} ja syötä Mailgun-sähköpostiosoitteesi (esim.
           tracks@käyttäjä.mailgun.com) %{sms_email_name} -kenttään.
-        2b: Action-kohtaan merkitään ”forward("http://palvelimeni.example.org/mailgun/mime")”
+        2b: Action-kohtaan merkitään ”forward("http://palvelimeni.example.com/mailgun/mime")”
         2a: "'Filter expression' asetetaan arvoon 'catch_all()'"
         '2': 'Mene Mailgunin ohjauspaneelin Routes-kohtaan ja lisää uusi reitti:'
       gateway_instructions: Kaikki ylläolevat maininnat sähköpostin muotoilusta pätevät
@@ -467,8 +467,9 @@ fi:
           sähköpostin kautta lisättäviä toimenpiteitä varten (jotka voisivat muodostua
           myös SMS-viestin perusteella)
       one_user_configuration: 'Voit myös merkitä kaikki saapuvat sähköpostit tietyn
-        Tracks-käyttäjän toimenpiteiksi. Muuta site.yml-tiedoston asetusta email_dispatch arvoon
-        %{single_user_value} ja välitä käyttäjän tunnus putkituskomennossa: %{code}'
+        Tracks-käyttäjän toimenpiteiksi. Muuta site.yml-tiedoston asetusta email_dispatch
+        arvoon %{single_user_value} ja välitä käyttäjän tunnus putkituskomennossa:
+        %{code}'
       configuration: Sinun täytyy ehkä muuttaa asetus %{site_yml}-tiedostossa, jotta
         viestiväylä osaa käyttää %{to_name}-kenttää tai %{from_name}-kenttää löytääkseen
         sähköpostia vastaavan Tracks-käyttäjän.
@@ -1043,7 +1044,7 @@ fi:
     completed_today: Valmistunut tänään
     confirm_delete: Oletko varma että haluat poistaa toimenpiteen ”%{description}”?
     context_changed: Asiayhteys vaihdettu %{name}
-    convert_to_project: Tee projekti
+    convert_to_project: Muuta projektiksi
     defer_date_after_due_date: Lykkäyspäivä on määräpäivän jälkeen. Muuta määräpäivää
       ennen lykkäämistä.
     defer_x_days:
