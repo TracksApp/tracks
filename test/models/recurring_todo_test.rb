@@ -156,10 +156,10 @@ class RecurringTodoTest < ActiveSupport::TestCase
     ## Test: every year
 
     # start from after june 8th 2008
-    @yearly.start_from = Time.zone.local(2020,6,12)
-    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(nil) # jun 8th next year
-    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(Time.zone.local(2019,6,1)) # also next year
-    assert_equal Time.zone.local(2021,6,8), @yearly.get_due_date(Time.zone.local(2020,6,15)) # also next year
+    @yearly.start_from = Time.zone.local(2021,6,12)
+    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(nil) # jun 8th next year
+    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(Time.zone.local(2019,6,1)) # also next year
+    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(Time.zone.local(2020,6,15)) # also next year
 
     this_year = Time.zone.now.utc.year
     @yearly.start_from = Time.zone.local(this_year+1,6,12)

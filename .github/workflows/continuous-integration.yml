@@ -1,38 +1,23 @@
 ---
 name: Automated tests
-
 on: pull_request
-
 jobs:
-  test25mysql:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby: ["2.5", "2.6", "2.7"]
+        db: [sqlite, mysql, postgres]
+        exclude:
+          - ruby: "2.5"
+            db: sqlite
+          - ruby: "2.5"
+            db: postgres
+          - ruby: "2.6"
+            db: sqlite
+          - ruby: "2.6"
+            db: postgres
+
     steps:
       - uses: actions/checkout@v1
-      - run: bash -x script/cibuild 2.5 mysql
-
-  test26mysql:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: bash -x script/cibuild 2.6 mysql
-
-  test27mysql:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: bash -x script/cibuild 2.7 mysql
-
-  test27postgres:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: bash -x script/cibuild 2.7 postgres
-
-  test27sqlite:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - run: bash -x script/cibuild 2.7 sqlite
-
-#      - run: bash -x script/cibuild 2.5 postgres
-#      - run: bash -x script/cibuild 2.7 postgres
+      - run: bash -x script/cibuild ${{ matrix.ruby }} ${{ matrix.db }}
