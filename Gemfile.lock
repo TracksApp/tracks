@@ -78,7 +78,7 @@ GEM
     ast (2.4.2)
     autoprefixer-rails (10.1.0.0)
       execjs
-    backport (1.1.2)
+    backport (1.2.0)
     bcrypt (3.1.16)
     benchmark (0.1.1)
     bootstrap-sass (3.4.1)
@@ -248,7 +248,7 @@ GEM
       rubocop-ast (>= 1.8.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.8.0)
+    rubocop-ast (1.9.0)
       parser (>= 3.0.1.1)
     ruby-progressbar (1.11.0)
     safe_yaml (1.0.5)
@@ -270,10 +270,11 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    solargraph (0.40.4)
-      backport (~> 1.1)
+    solargraph (0.43.0)
+      backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
+      diff-lcs (~> 1.4)
       e2mmap
       jaro_winkler (~> 1.5)
       kramdown (~> 2.3)
