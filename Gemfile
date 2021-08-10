@@ -22,10 +22,10 @@ gem 'bcrypt', '~> 3.1.16'
 gem 'chartjs-ror', :git => 'git://github.com/ZeiP/chartjs-ror.git'
 gem 'htmlentities'
 gem 'paperclip'
-gem 'puma', '~> 5.3'
+gem 'puma', '~> 5.4'
 gem 'rails_autolink'
 gem 'RedCloth'
-gem 'sanitize', '~> 5.2'
+gem 'sanitize', '~> 6.0'
 gem 'will_paginate'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
@@ -40,7 +40,7 @@ group :development do
   gem 'spring'
   gem 'yard'
 
-  gem 'tolk', '~> 4.0.1'
+  gem 'tolk', '~> 4.1.0'
 
   gem 'bullet'
   gem 'rack-mini-profiler'
