@@ -25,7 +25,7 @@ gem 'paperclip'
 gem 'puma', '~> 5.4'
 gem 'rails_autolink'
 gem 'RedCloth'
-gem 'sanitize', '~> 5.2'
+gem 'sanitize', '~> 6.0'
 gem 'will_paginate'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
