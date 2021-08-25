@@ -1,7 +1,13 @@
-#!/usr/bin/env ruby
-if File.exist?("#{__dir__}/../.use-docker")
-  exec("#{__dir__}/../script/docker-environment", $PROGRAM_NAME, *ARGV) unless File.exist?("/etc/app-env")
-end
-require_relative '../config/boot'
-require 'rake'
-Rake.application.run
+#!/bin/sh
+
+# Absolute path to this script, e.g. /home/user/bin/foo.sh
+SCRIPT=$(readlink -f "$0")
+# Absolute path this script is in, thus /home/user/bin
+SCRIPTPATH=$(dirname "$SCRIPT")
+
+if [ -e $SCRIPTPATH/../.use-docker -a ! -e /etc/app-env ];
+then
+  $SCRIPTPATH/../script/docker-environment $0 "$@"
+else
+  $SCRIPTPATH/run-rake "$@"
+fi
