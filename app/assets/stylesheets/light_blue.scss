@@ -2,6 +2,7 @@
  * Apparently the requires need to be in the "root" stylesheet file, not
  * the imported manifest.
  *
+ *= require jquery-ui
  *= require jquery-ui/menu
  *= require jquery-ui/autocomplete
  *= require jquery-ui/datepicker
