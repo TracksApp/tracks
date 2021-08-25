@@ -335,6 +335,7 @@ DEPENDENCIES
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   listen
+  mini_racer
   minitest-stub-const
   mocha
   mysql2 (~> 0.5.3)
