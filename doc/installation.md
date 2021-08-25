@@ -81,16 +81,17 @@ Tracks container. In future there should be an official image in Docker Hub. You
 
 You can override database connection details by defining the environment variables in the run command, for example ”-e DATABASE_USERNAME=tracks_dev” or docker-compose.yml, if using Docker Compose.
 
-|Name              |Default    |For PostgreSQL |
-|------------------|-----------|---------------|
-|DATABASE_NAME     |tracks     |               |
-|DATABASE_HOST     |db         |               |
-|DATABASE_PORT     |3306       |5432           |
-|DATABASE_USERNAME |tracks     |               |
-|DATABASE_PASSWORD |password   |               |
-|DATABASE_TYPE     |mysql2     |postgresql     |
-|DATABASE_ENCODING |utf8       |unicode        |
-|RAILS_ENV         |production |
+|Name              |Default    |For PostgreSQL      |
+|------------------|-----------|--------------------|
+|DATABASE_NAME     |tracks     |                    |
+|DATABASE_HOST     |db         |                    |
+|DATABASE_PORT     |3306       |5432                |
+|DATABASE_USERNAME |tracks     |                    |
+|DATABASE_PASSWORD |password   |                    |
+|DATABASE_TYPE     |mysql2     |postgresql          |
+|DATABASE_ENCODING |utf8       |unicode             |
+|RAILS_ENV         |production |                    |
+|BUNDLE_WITHOUT    |           |Gem classes to omit |
 
 ### Override files
 
