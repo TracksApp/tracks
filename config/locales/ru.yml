@@ -102,6 +102,7 @@ ru:
       one: действий
       few: действие
       many: действия
+      other: действия
     add: Добавить
     ajaxError: От сервера была получена ошибка
     back: Назад
@@ -1079,6 +1080,7 @@ ru:
       one: Отложить на 1 день
       few: Отложить на %{count} дня
       many: Отложить на %{count} дней
+      other: Отложить на %{count} дней
     deferred_actions_with: Отложенные действия с меткой '%{tag_name}'
     deferred_pending_actions: Отложенные/ожидающие действия
     deferred_tasks_title: TRACKS::Отложенные
