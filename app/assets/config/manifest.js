@@ -1,3 +1,11 @@
 //= link_tree ../images
 //= link_directory ../javascripts .js
 //= link_directory ../stylesheets .css
+//= link datepicker-cs.js
+//= link datepicker-de.js
+//= link datepicker-es.js
+//= link datepicker-fi.js
+//= link datepicker-fr.js
+//= link datepicker-he.js
+//= link datepicker-nl.js
+//= link datepicker-ru.js
