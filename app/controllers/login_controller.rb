@@ -80,6 +80,6 @@ class LoginController < ApplicationController
 
   def expiry_time
     return Time.zone.now + 10 unless session['expiry_time']
-    DateTime.strptime(session['expiry_time'], "%FT%T.%L%Z")
+    Time.zone.parse(session['expiry_time'])
   end
 end
