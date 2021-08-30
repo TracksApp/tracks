@@ -1,22 +1,19 @@
-<h1>REST API Documentation for Developers</h1>
+<h1><%= t('rest_help.title') %></h1>
 
-<h2>Introduction</h2>
+<h2><%= t('rest_help.intro.title') %></h2>
 
-<p>Tracks is designed to be integrated with scripts, web services, and third-party applications. This page serves as the documentation of our REST API.</p>
+<p><%= t('rest_help.intro.content') %></p>
+<p><%= t('rest_help.intro.content_2') %></p>
 
-<h2>Tracks REST API</h2>
+<p><%= raw I18n.t 'rest_help.intro.content_3', restful_link: link_to(I18n.t('rest_help.intro.restful_link_text'), 'http://en.wikipedia.org/wiki/REST') %></p>
 
-<p>The Tracks REST API allows developers to integrate Tracks into their applications. It allows applications to access and modify Tracks data, and is implemented as Vanilla XML over HTTP.</p>
+<h2><%= t('rest_help.auth.title') %></h2>
 
-<p>The API is a <a href="http://en.wikipedia.org/wiki/REST">RESTful</a> service. All data is available through the API as a resource to which can be referred using a unique identifier. It responds to a number of the HTTP methods, specifically GET, PUT, POST and UPDATE, and all responses from the API are in a simple XML format encoded as UTF-8.</p>
+<p><%= raw I18n.t 'rest_help.auth.content', auth_link: link_to(I18n.t('rest_help.auth.basic_auth_link_text'), 'http://en.wikipedia.org/wiki/Basic_authentication') %></p>
 
-<h2>Authentication</h2>
+<h2><%= t('rest_help.retrieve.title') %></h2>
 
-<p>Authentication is handled using <a href="http://en.wikipedia.org/wiki/Basic_authentication">Basic HTTP authentication</a>. Your Tracks username and password is used as the authentication credentials for the API. Note that in Basic HTTP authentication, your password is sent in clear text. If you need a more secure authentication solution, you should configure your web server to run Tracks under HTTPS.</p>
-
-<h2>Retrieving data from the API</h2>
-
-<p>To retrieve data you only need to do an HTTP GET on a resource identifier. For example, if you want to get all the contexts with <a href="http://en.wikipedia.org/wiki/CURL">cURL</a>:</p>
+<p><%= raw I18n.t 'rest_help.retrieve.content', curl_link: link_to(I18n.t('rest_help.curl_link_text'), 'http://en.wikipedia.org/wiki/CURL') %></p>
 
 <pre>
 <code>
@@ -27,7 +24,7 @@
 </code>
 </pre>
 
-<p>Getting a single context:</p>
+<p><%= t('rest_help.retrieve.single_context') %></p>
 
 <pre>
 <code>
@@ -38,7 +35,7 @@
 </code>
 </pre>
 
-<p>Getting the todos within a context:</p>
+<p><%= t('rest_help.retrieve.todos_from_context') %></p>
 
 <pre>
 <code>
@@ -49,28 +46,28 @@
 </code>
 </pre>
 
-<p>You also can apply the pattern shown above with projects instead of contexts.</p>
-
-<p>All data is available according to the following resource paths:</p>
+<p><%= t('rest_help.retrieve.projects') %></p>
+<p><%= t('rest_help.retrieve.paths_title') %></p>
 
 <ul>
   <li>/todos.xml</li>
   <li>/todos/done.xml</li>
-  <li>/todos/<code>ID</code>.xml</li>
+  <li>/todos/<code><%= t('rest_help.id') %></code>.xml</li>
   <li>/tickler.xml</li>
   <li>/hidden.xml</li>
   <li>/calendar.xml</li>
   <li>/contexts.xml</li>
-  <li>/contexts/<code>ID</code>.xml</li>
-  <li>/contexts/<code>ID</code>/todos.xml</li>
+  <li>/contexts/<code><%= t('rest_help.id') %></code>.xml</li>
+  <li>/contexts/<code><%= t('rest_help.id') %></code>/todos.xml</li>
   <li>/projects.xml</li>
-  <li>/projects/<code>ID</code>.xml</li>
-  <li>/projects/<code>ID</code>/todos.xml</li>
+  <li>/projects/<code><%= t('rest_help.id') %></code>.xml</li>
+  <li>/projects/<code><%= t('rest_help.id') %></code>/todos.xml</li>
 </ul>
 
-<p>For the todo resources (todos, tickler, done, hidden and calendar) you can limit the returned
-field to <code>ID, created_at, modified_at, completed_at</code> by adding the parameter
-<code>limit_fields</code> and setting it to <code>index</code>. For example:</p>
+<p><%= raw t('rest_help.retrieve.limit', {
+  fields: '<code>ID, created_at, modified_at, completed_at</code>',
+  limit_parameter: '<code>limit_fields</code>',
+  set_to: '<code>index</code>'}) %></p>
 
 <pre>
 <code>
@@ -79,7 +76,7 @@ field to <code>ID, created_at, modified_at, completed_at</code> by adding the pa
 </code>
 </pre>
 
-If you only want to get the active todos, you add the parameter <code>limit_to_active_todos</code> and set it to some value like this:
+<p><%= raw t('rest_help.retrieve.active_todos', active_code: '<code>limit_to_active_todos</code>') %></p>
 
 <pre>
 <code>
@@ -88,16 +85,19 @@ If you only want to get the active todos, you add the parameter <code>limit_to_a
 </code>
 </pre>
 
-<h2>Writing to the API</h2>
+<h2><%= t('rest_help.writing.title') %></h2>
 
-<p>The API provides mechanisms for adding, updating and deleting resources using the HTTP methods <code>PUT</code>, <code>POST</code> and <code>DELETE</code> in combination with the content.</p>
+<p><%= raw t('rest_help.writing.description', {
+  put: '<code>PUT</code>',
+  post: '<code>POST</code>',
+  delete: '<code>DELETE</code>'}) %></p>
 
-<p>Creating a new project, using curl:</p>
+<p><%= t('rest_help.writing.example_title') %></p>
 
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    -d "&lt;project&gt;&lt;name&gt;Build a treehouse for the kids&lt;/name&gt;&lt;/project&gt;" \
+    -d "&lt;project&gt;&lt;name&gt;<%= t('rest_help.writing.example_project_name') %>&lt;/name&gt;&lt;/project&gt;" \
     <%= root_url %>projects.xml -i
 &gt;&gt; HTTP/1.1 201 Created
 Location: <%= root_url %>projects/65.xml
@@ -105,12 +105,14 @@ Location: <%= root_url %>projects/65.xml
 </code>
 </pre>
 
-<p>The response is an <code>HTTP/1.1 201 Created</code> with <code>Location</code> header indicating where the new project resource can be found. Now we can add a todo to this project, using curl:</p>
+<p><%= raw t('rest_help.writing.example_project_response_title', {
+  response_code: '<code>HTTP/1.1 201 Created</code>',
+  header: '<code>Location</code>'}) %></p>
 
 <pre>
 <code>
 $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
-    -d "&lt;todo&gt;&lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;/project_id&gt;&lt;/todo&gt;" \
+    -d "&lt;todo&gt;&lt;description&gt;<%= t('rest_help.writing.example_todo_name') %>&lt;/description&gt;&lt;context_id&gt;2&lt;/context_id&gt;&lt;project_id&gt;65&lt;/project_id&gt;&lt;/todo&gt;" \
     <%= root_url %>todos.xml -i
 &gt;&gt; HTTP/1.1 201 Created
 Location: <%= root_url %>todos/452.xml
@@ -118,12 +120,14 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-<p>The response is a again an <code>HTTP/1.1 201 Created</code> with <code>Location</code> header indicating where the new todo resource can be found. Changing the todo notes, again using curl:</p>
+<p><%= raw t('rest_help.writing.example_todo_response_title', {
+  response_code: '<code>HTTP/1.1 201 Created</code>',
+  header: '<code>Location</code>'}) %></p>
 
 <pre>
 <code>
   $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" -X PUT \
-      -d "&lt;todo&gt;&lt;notes&gt;use maple texture&lt;/notes&gt;&lt;/todos&gt;" \
+      -d "&lt;todo&gt;&lt;notes&gt;<%= t('rest_help.writing.example_note_text') %>&lt;/notes&gt;&lt;/todos&gt;" \
       <%= root_url %>todos/452.xml -i
   &gt;&gt; HTTP/1.1 200 OK
   ...
@@ -131,15 +135,16 @@ Location: <%= root_url %>todos/452.xml
   &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;todo&gt;
     ...
-    &lt;description&gt;Model treehouse in SketchUp&lt;/description&gt;
+    &lt;description&gt;<%= t('rest_help.writing.example_todo_name') %>&lt;/description&gt;
 
-    &lt;notes&gt;use maple texture&lt;/notes&gt;
+    &lt;notes&gt;<%= t('rest_help.writing.example_note_text') %>&lt;/notes&gt;
     ...
   &lt;/todo&gt;
 </code>
 </pre>
 
-<p>The response is an <code>HTTP/1.1 200 OK</code> with in the body the XML representation of the updated todo. We provide a shorcut method to toggle a todo done or undone without having to perform the update with the right field values:</p>
+<p><%= raw t('rest_help.writing.example_note_response_title', {
+  response_code: '<code>HTTP/1.1 200 OK</code>'}) %></p>
 
 <pre>
 <code>
@@ -159,8 +164,8 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-
-<p>If we want to delete that todo we can call its unique resource identifier (the URL) with the HTTP method <code>DELETE</code>, again with curl:</p>
+<p><%= raw t('rest_help.writing.example_delete_title', {
+  delete: '<code>DELETE</code>'}) %></p>
 
 <pre>
 <code>
@@ -171,15 +176,17 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-	<p>The API returns an <code>HTTP/1.1 200 OK</code> and the todo is now deleted.</p>
+<p><%= raw t('rest_help.writing.example_delete_response_title', {
+  response_code: '<code>HTTP/1.1 200 OK</code>'}) %></p>
 
+<h2><%= t('rest_help.response.title') %></h2>
 
-<h2>Dealing with the response and response status</h2>
+<p><%= raw t('rest_help.response.description', {
+  response_200: '<code>200 OK</code>',
+  response_201: '<code>201 Created</code>',
+  example_call: '<code>GET /contexts/2/todos.xml</code>'}) %></p>
 
-
-<p>All successful operations respond with a status code of <code>200 OK</code> or <code>201 Created</code> depending on the operation. Sometimes a list, say <code>GET /contexts/2/todos.xml</code> will not have any items, it will return an empty list.</p>
-
-<p>The XML for empty list responses look like this, again with curl:</p>
+<p><%= t('rest_help.response.xml_description') %></p>
 
 <pre>
 <code>
@@ -191,9 +198,13 @@ $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
 </code>
 </pre>
 
-<h2>Consuming the API with ActiveResource</h2>
+<h2><%= t('rest_help.activeresource.title') %></h2>
 
-<p><a href="http://weblog.rubyonrails.org/2007/9/30/rails-2-0-0-preview-release">ActiveResource</a> is a thin but powerful wrapper around RESTful services exposed by <a href="http://www.rubyonrails.org">Ruby on Rails</a>. It will be part of Rails 2.0 but until then you can get it with <code>gem install activeresource --source http://gems.rubyonrails.org --include-dependencies</code>.</p>
+<p><%= raw I18n.t 'rest_help.activeresource.description', {
+  activeresource_link: link_to(I18n.t('rest_help.activeresource.activeresource_link_text'), 'http://weblog.rubyonrails.org/2007/9/30/rails-2-0-0-preview-release'),
+  ror_link: link_to(I18n.t('rest_help.activeresource.ror_link_text'), 'http://www.rubyonrails.org'),
+  gem_command: '<code>gem install activeresource --source http://gems.rubyonrails.org --include-dependencies</code>'
+} %></p>
 
 <pre>
 <code>
@@ -213,10 +224,10 @@ Loading development environment (Rails 1.2.4)
 &gt;&gt; &gt;&gt; Context.find :all
 =&gt; [#&lt;Context:0x274cfc8 @prefix_options={}, @attributes={...}, ...]
 </code>
-
 </pre>
 
-	<p>Inspired by <a href="http://www.37signals.com">37 Signals</a> &#8217;s Highrise wrapper, we&#8217;ve put together a small ruby wrapper (find it in the doc/ directory) for the API which sets up the ActiveResource models for you to play with in an IRB session:</p>
+<p><%= raw I18n.t 'rest_help.activeresource.wrapper_description', {
+  signals_link: link_to(I18n.t('rest_help.activeresource.signals_link_text'), 'http://www.37signals.com')} %></p>
 
 <pre>
 <code>
@@ -230,13 +241,18 @@ irb(main):003:0&gt;
 </code>
 </pre>
 
-	<h3>Notes about the documentation</h3>
+<h2><%= t('rest_help.notes.title') %></h2>
 
-	<p>A few conventions have been applied in the documentation, these are:</p>
+<p><%= t('rest_help.notes.description') %></p>
 
 <ul>
-  <li><code>ID</code>&#8217;s in a resource <span class="caps">URL</span> indicate that the resource&#8217;s unique ID needs to be inserted there</li>
-  <li><code>...</code> indicates that unimportant bits of response data have been removed to eliminate noise from the documentation</li>
+  <li><%= raw I18n.t 'rest_help.notes.bullet1', {
+    id: '<code>ID</code>',
+    url: '<span class="caps">URL</span>'} %></li>
+  <li><%= raw I18n.t 'rest_help.notes.bullet2', {
+    omit: '<code>...</code>' } %></li>
 </ul>
 
-<p>All examples make use of <a href="http://en.wikipedia.org/wiki/CURL">cURL</a> .</p></div>
+<p><%= raw I18n.t 'rest_help.notes.curl_description', {
+  curl: link_to(I18n.t('rest_help.curl_link_text'), 'http://en.wikipedia.org/wiki/CURL')} %></p>
+</div>

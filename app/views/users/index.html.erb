@@ -22,7 +22,7 @@
       <td><%= h user.login %></td>
       <td><%= h user.display_name %></td>
       <td><%= h user.email %></td>
-      <td><%= h user.auth_type %></td>
+      <td><%= t('auth_type.' + user.auth_type) %></td>
       <td><%= h user.open_id_url || '-' %></td>
       <td><%= h user.todos.size %></td>
       <td><%= h user.contexts.size %></td>
