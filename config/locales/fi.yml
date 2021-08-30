@@ -9,6 +9,7 @@ fi:
         due_style: Määräpäivän esitystapa
         first_name: Etunimi
         last_name: Sukunimi
+        email: Sähköpostiosoite
         locale: Kieli
         mobile_todos_per_page: Toimenpidettä sivulla (mobiilisivustolla)
         refresh: Päivitystiheys (minuutteina)
@@ -1340,3 +1341,5 @@ fi:
         zero: '%{model} ei löytynyt'
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
+  auth_type:
+    database: Tietokanta
