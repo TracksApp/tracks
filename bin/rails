@@ -9,5 +9,5 @@ if [ -e ../.use-docker -a ! -e /etc/app-env ];
 then
   $SCRIPTPATH/../script/docker-environment $0 "$@"
 else
-  $SCRIPTPATH/run-rake "$@"
+  $SCRIPTPATH/run-rails "$@"
 fi
