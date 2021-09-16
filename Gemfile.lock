@@ -169,7 +169,7 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
-    parallel (1.20.1)
+    parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -230,7 +230,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.1)
-    rubocop (1.20.0)
+    rubocop (1.21.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -348,7 +348,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.20)
+  rubocop (~> 1.21)
   sanitize (~> 6.0)
   sassc-rails (~> 2.1.2)
   simplecov
