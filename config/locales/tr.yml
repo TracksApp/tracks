@@ -1,1 +1,205 @@
-{}
+data:
+  import:
+    yaml_disabled: YAML yükleme kapalı
+    todos_count: İçeri aktarılacak Todos sayısı %{count}
+    projects_count: İçe aktarılacak proje sayısı %{count}
+    upload_csv: Lütfen CSV dosyanızı yükleyin
+    upload: Karşıya yükle
+    target_field: 'Şuraya içe aktar:'
+    successful: İçe aktarma başarılı.
+    map_title: Harita dosyaları içe aktarılabilir
+    header: Dosya içe aktarılıyor
+    submit: İçe aktar
+    errors:
+      invalid_destination: 'Geçersiz içe aktarma dizini: %{e}'
+      some: İçe aktarım esnasında hata meydana geldi
+      save_error: Kayıt yüklenemedi CSV (%{path_and_file}). Tracks yükleme dizinine
+        yazsın mı? %{e}
+      invalid_csv: 'Geçersiz CSV: headerler okunamadı: %{e}'
+      file_blank: Dosya boş olamaz
+contexts:
+  visible_contexts: Görünür içerikler
+  view_link: '%{name} içeriğini görüntüle'
+  update_status_message: İçerik adı değiştirildi
+  todos_append: bu içerikte
+  status_hidden: İçerik gizli
+  status_active: İçerik etkin
+  show_form_title: Bir içerik ekle
+  show_form: Yeni bir içerik oluştur
+  save_status_message: İçerik kaydedildi
+  no_contexts_hidden: Şu anda gizli bir içerik bulunmuyor
+  no_contexts_closed: Şu anda kapalı bir içerik bulunmuyor
+  no_contexts_active: Şu anda etkin bir içerik bulunmuyor
+  no_contexts_: 'İçerik yok '
+  new_context_pre: Yeni içerik '
+  new_context_post: "' de oluşturulacaktır. Emin misiniz?"
+  letter_abbreviation: C
+  last_completed_in_context: (son%{number})
+  hide_form_title: Yeni içerik biçimini gizle
+  hide_form: Biçimi gizle
+  hidden_contexts: Gizlenmiş içerikler
+  edit_context: İçeriği düzenle
+  delete_context_title: İçeriği sil
+  delete_context_confirmation: Şu içeriği silmek istediğinize emin misiniz? %{name}'
+    İçerikteki bütün (tekrarlanan) eylemler de silinecektir!
+  delete_context: İçeriği sil
+  context_state: İçerik durumu
+  context_name: İçerik adı
+  context_hide: Font sayfasında gizle?
+  context_deleted: Silinen içerik '%{name}'
+  completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan eylemler
+  all_completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan bütün eylemler
+  add_context: İçerik ekle
+common:
+  wiki: Wiki
+  weeks: haftalar
+  week: hafta
+  website: İnternet sayfası
+  update: Güncelle
+  todo: todo
+  third: Üçüncü
+  sort:
+    sort: Sırala
+    by_task_count_title_confirm: Bu projeleri görev sayısına göre sıralamak istediğinize
+      emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
+    by_task_count_title: Görev sayısına göre sırala
+    by_task_count: Görev sayısına göre
+    alphabetically_title: Projeleri alfabetik olarak sırala
+    alphabetically_confirm: Bu projeleri alfabetik olarak sıralamak istediğinize emin
+      misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
+    alphabetically: Alfabetik sırayla
+  show_all: Hepsini göster
+  server_error: Sunucuda bir hata meydana geldi.
+  second: İkinci
+  search: Ara
+  review: Gözden geçir
+  recurring_todos: Tekrarlanan eylemler
+  projects: Projeler
+  project: Proje
+  previous: Önceki
+  optional: opsiyonel
+  ok: Tamam
+  numbered_step: Adım %{number}
+  notes: Notlar
+  not_available_abbr: n/a
+  none: Hiçbiri
+  next: Sıradaki
+  months: aylar
+  month: ay
+  mailing_list: E-posta listesi
+  logout: Çıkış
+  last: Son
+  go_back: Geri git
+  fourth: Dördüncü
+  forth: İleri
+  first: Birinci
+  errors_with_fields: 'Şu alanlarda sorunlarla karşılaşıldı:'
+  email: E-posta
+  drag_handle: SÜRÜKLE
+  description: Açıklama
+  deferred: ertelenmiş
+  create: Oluştur
+  contribute: Katkıda bulun
+  contexts: İçerikler
+  context: İçerik
+  collapse_expand: Daralt/genişlet
+  cancel: İptal
+  bugs: Hatalar
+  back: Geri
+  ajaxError: Sunucudan alınırken bir hatayla karşılaşıldı
+  add: Ekle
+  actions: Eylemler
+  action: Eylem
+activerecord:
+  errors:
+    template:
+      header:
+        one: 1 hata şunun %{model} kaydını engelledi
+        other: '%{count} hataları şunların %{model} kayıtlarını engelledi'
+      body: 'Şu alanlarda sorunlar mevcuttur:'
+    models:
+      project:
+        attributes:
+          name:
+            too_long: proje adı 256 karakterden kısa olmalıdır
+            taken: zaten mevcut
+            blank: projenin bir adı olmalıdır
+    messages:
+      wrong_length: yanlış uzunlukta (should be %{count} characters)
+      too_short: çok kısa (minimum is %{count} characters)
+      too_long: çok uzun (maximum is %{count} characters)
+      taken: zaten alınmış
+      restrict_dependent_destroy:
+        has_many: Bu kayda bağlı bir dosya bulunduğu için kayıt silinemez %{record}
+        has_one: Bu kayda bağlı farklı bir dosya bulunduğu için kayıt silinemez %{record}
+      record_invalid: 'Doğrulama başarısız: %{errors}'
+      odd: tek sayı olmalıdır
+      not_a_number: rakam değildir
+      less_than_or_equal_to: şundan az veya denk olmalıdır %{count}
+      less_than: şundan az olmalıdır %{count}
+      invalid: geçersiz
+      inclusion: listeye dahil değildir
+      greater_than_or_equal_to: şuna denk veya büyük olmalıdır %{count}
+      greater_than: şundan büyük olmalıdır %{count}
+      exclusion: alınmıştır
+      even: eşit olmalıdır
+      equal_to: şuna eşdeğer olmalıdır %{count}
+      empty: boş bırakılamaz
+      confirmation: eşleşmiyor
+      blank: boş bırakılamaz
+      accepted: Kabul edilmelidir
+    full_messages:
+      format: '%{attribute} %{message}'
+  attributes:
+    user:
+      password: Şifre
+      open_id_url: OpenID URL
+      login: Giriş
+      last_name: Soyad
+      last_login_at: Son giriş tarihi
+      first_name: İlk ad
+      email: E-posta adresi
+      display_name: Görüntüleme adı
+      created_at: Oluşturulma
+      auth_type: Auth türü
+    todo:
+      tags: Etiketler
+      show_from: Şuradan göster
+      project: Proje
+      predecessors: Değişiklik gösterir
+      notes: Notlar
+      due: Bitiş tarihi
+      description: Açıklama
+      context: içerik
+    project:
+      name: Ad
+      description: Açıklama
+      default_tags: Varsayılan etiketler
+      default_context_name: Varsayılan ortam
+    preference:
+      week_starts: Hafta başlama tarihi
+      verbose_action_descriptors: Eylem anahtar sözcüklerini (bağlam, proje) verboz
+        biçiminde göster
+      title_date_format: Başlık zaman biçimi
+      time_zone: Zaman dilimi
+      theme: Tema
+      staleness_starts: Stagnasyonu başlat
+      sms_email: E-posta'dan
+      sms_context: Varsayılan e-posta içeriği
+      show_project_on_todo_done: Yapılacaklar bitiminde proje sayfasına git
+      show_number_completed: Bitmiş eylemlerin sayısını göster
+      show_hidden_projects_in_sidebar: Gizli projeleri kenar çubuğunda göster
+      show_hidden_contexts_in_sidebar: Bitmiş içerikleri kenar çubuğunda göster
+      show_completed_projects_in_sidebar: Bitmiş projeleri kenar çubuğunda göster
+      review_period: Proje yenilenme aralığı
+      refresh: Yenilenme aralığı (dakika)
+      mobile_todos_per_page: Sayfa başı eylem sayısı (Mobil Görünüm)
+      locale: Lokal
+      email: E-posta
+      last_name: Soyad
+      first_name: İlk ad
+      due_style: Bitiş şekli
+      date_format: Tarih formatı
+    note:
+      updated_at: Güncellenme tarihi
+      created_at: Oluşturulma tarihi
