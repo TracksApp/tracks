@@ -17,6 +17,37 @@ data:
         yazsın mı? %{e}
       invalid_csv: 'Geçersiz CSV: headerler okunamadı: %{e}'
       file_blank: Dosya boş olamaz
+    paste_field: 'İçe aktarılan YAML dosyasının içeriğini aşağıdaki metin kutucuğuna
+      yapıştır:'
+    warning: Dikkat
+    yaml_warning: '%{warning}: YAML dosyası dışa aktarılmadan önce mevcut bütün bilgileriniz
+      kaybolacak. Herhangi bir sorun yaşama ihtimalinize karşılık, eğer veri tabanına
+      şu anda erişiminiz var ise yedeklemenizi öneririz.'
+  export:
+    page_title: Tracks::Export
+    title: Dışa aktarılıyor
+    format_header: 'Aşağıdaki biçimleri seçebilirsiniz:'
+    csv_actions_description: CSV dosyası bütün eylemlerinizi, isimlendirilmiş içeriklerinizi
+      ve projelerinizi içerir
+    csv_notes_description: CSV dosyası bütün notlarınızı içerir
+    yaml_link_description: YAML dosyası bütün eylemlerinizi, içeriklerinizi, projelerinizi,
+      etiketlerinizi ve notlarınızı içerir
+    csv_notes_title: CSV dosyası (sadece notlar)
+    xml_link_title: XML dosyası (sadece eylemler)
+    yaml_description: ':{yaml}: Dışarı aktarmak için en iyisidir.'
+    download_link: İndirme bağlantısı
+    yaml_link_title: YAML dosyası
+    xml_description: '%{xml}: Veri aktarımı ve düzenleme için en iyisidir'
+    yaml_experimental: Lütfen YAML dosyalarının deneysel olarak desteklendiğini göz
+      önünde bulundurunuz. Önemli verileri yedeklerken dikkatli olunuz.
+    csv_description: '%{csv}: İş tablosuna veya veri analizi yazılımlarına aktarmak
+      için en iyisidir'
+    xml_link_description: XML dosyası bütün eylemlerinizi, içeriklerinizi, projelerinizi,
+      etiketlerinizi ve notlarınızı içerir
+    csv_actions_title: CSV dosyası (eylemler, içerikler ve projeler)
+  yaml: YAML
+  csv: CSV
+  xml: XML
 contexts:
   visible_contexts: Görünür içerikler
   view_link: '%{name} içeriğini görüntüle'
@@ -203,3 +234,120 @@ activerecord:
     note:
       updated_at: Güncellenme tarihi
       created_at: Oluşturulma tarihi
+date:
+  abbr_day_names:
+  - Pa
+  - Pt
+  - Pe
+  - Cu
+  - Ct
+  abbr_month_names:
+  - Kas
+  - Oca
+  - Şub
+  - Mar
+  - Nis
+  - May
+  - Haz
+  - Tem
+  - Ağu
+  - Eyl
+  - Eki
+  day_names:
+  - Pazar
+  - Pazartesi
+  - Salı
+  - Çarşamba
+  - Perşembe
+  - Cuma
+  - Cumartesi
+  formats:
+    default: '%d/%m/%Y'
+    short: '%d %b'
+    long: '%d-%m-%Y'
+    longer: '%A %d %B, %Y'
+  month_names:
+  - Ocak
+  - Şubat
+  - Eylül
+  - Mart
+  - Nisan
+  - Mayıs
+  - Haziran
+  - Temmuz
+  - Ağustos
+  - Ekim
+  - Kasım
+  - Aralık
+  order:
+  - :yıl
+  - :gün
+datetime:
+  prompts:
+    day: Gün
+    hour: Saat
+    minute: Dakika
+    month: Ay
+    year: Yıl
+    second: Saniye
+  distance_in_words:
+    almost_x_years:
+      one: neredeyse 1 yıl
+      other: neredeyse %{count} yıl
+    half_a_minute: yarım dakika
+    x_seconds:
+      one: 1 saniye
+      other: '%{count} saniye'
+    x_days:
+      one: 1 gün
+      other: '%{count} gün'
+    x_months:
+      one: 1 ay
+      other: '%{count} ay'
+    about_x_months:
+      one: yaklaşık 1 ay
+      other: yaklaşık %{count} ay
+    about_x_hours:
+      one: yaklaşık 1 saat
+      other: yaklaşık %{count} saat
+    about_x_years:
+      one: yaklaşık 1 yıl
+      other: yaklaşık %{count} yıl
+    x_minutes:
+      one: 1 dakika
+      other: '%{count} dakika'
+    over_x_years:
+      one: 1 yıldan fazla
+      other: '%{count} yıldan fazla'
+errors:
+  messages:
+    blank: boş bırakılamaz
+    less_than: "%{count}'dan az olmalıdır"
+    not_a_number: bir sayı değildir
+    other_than: "%{count}'dan farklı olmalıdır"
+    present: boş olmalıdır
+    taken: daha önceden alınmış
+    not_an_integer: integer olmalıdır
+    odd: tek sayı olmalıdır
+    too_long: çok uzun (en fazla %{count} karakter olabilir)
+    too_short: çok kısa ( en az %{count} karakter olabilir)
+    accepted: kabul edilmelidir
+    confirmation: '%{attribute} ile eşleşmemektedir'
+    empty: boş bırakılamaz
+    equal_to: '%{count} ile eşit olmalıdır'
+    inclusion: listeye dahil değildir
+    invalid: geçersiz
+    less_than_or_equal_to: "%{count}'dan az veya eşit olmalıdır"
+    wrong_length: yanlış uzunluk (karakter sayısı %{count} kadar olmalıdır)
+    even: eşit olmalıdır
+    greater_than_or_equal_to: "%{count}'dan büyük veya eşit olmalıdır"
+    exclusion: daha önceden alınmış
+    greater_than: "%{count}'dan büyük olmalıdır"
+  format: '%{attribute} %{message}'
+  user_unauthorized: '401 Yetkisiz: sadece yetkili kullanıcılar bu özelliğe erişime
+    sahiptir.'
+feedlist:
+  actions_completed_last_week: Son 7 günde tamamlanan eylemler
+  actions_due_next_week: 7 gün veya daha önce bitecek eylemler
+  actions_due_today: Bugün veya daha erken bitecek olan eylemler
+  active_projects_wo_next: Eylemi bulunmayan aktif projeler
