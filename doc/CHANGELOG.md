@@ -4,6 +4,7 @@ See doc/upgrading.md for the upgrade documentation!
 
 ### New features
 
+* Whole Tracks is now translatable.
 * New Finnish locale by the maintainer Jyri-Petteri ”ZeiP” Paloposki.
 * Update last login field when validating an existing login.
 * Show more users in the user list and allow changing the order criteria.
