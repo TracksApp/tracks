@@ -73,7 +73,7 @@ GEM
       execjs
     backport (1.2.0)
     bcrypt (3.1.16)
-    benchmark (0.1.1)
+    benchmark (0.2.0)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -222,7 +222,7 @@ GEM
       ffi (~> 1.0)
     ref (2.0.0)
     regexp_parser (2.1.1)
-    reverse_markdown (2.0.0)
+    reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
     rspec-expectations (3.10.1)
@@ -259,7 +259,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    solargraph (0.44.0)
+    solargraph (0.44.2)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
