@@ -131,9 +131,8 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
-      zero: ei muistiinpanoja
+      one: ei muistiinpanoja
+      other: 1 muistiinpano
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -513,7 +512,7 @@ fi:
     contribute_link_text: projektin verkkosivustolta
     mailing_list_link_text: Sähköpostilista
     irc_bullet: '%{irc_link} (käytettävissä myös %{matrix_link})'
-    irc_link_text: 'IRC-kanava #Tracks@FreeNode'
+    irc_link_text: 'IRC-kanava #Tracks@Libera'
     matrix_link_text: Matrixin kautta
   layouts:
     mobile_navigation:
@@ -1332,14 +1331,97 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: Näytetään 1 %{model}
-        other: Näytetään kaikki %{count} %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään 1 %{model}
       single_page_html:
-        one: Näytetään <b>1</b> %{model}
-        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
   auth_type:
     database: Tietokanta
+  rest_help:
+    writing:
+      example_todo_name: Mallinna puumaja SketchUpilla
+      title: Rajapintaan kirjoittaminen
+      example_title: 'Luo uusi projekti curlilla:'
+      example_project_name: Rakenna puumaja lapsille
+      example_project_response_title: 'Vastaus on %{response_code} yhdessä otsakkeen
+        %{header} kanssa, joka osoittaa mistä uusi projektiresurssi löytyy. Nyt voimme
+        lisätä tähän projektiin uuden tehtävän käyttäen curlia:'
+      example_delete_response_title: Rajapinta palauttaa %{response_code} ja tehtävä
+        on nyt poistettu.
+      example_delete_title: 'Kun haluamme poistaa tehtävän, kutsumme sen yksilöllistä
+        resurssitunnistetta (URL-osoite) HTTP-metodilla %{delete}, jälleen curlilla:'
+      example_todo_response_title: 'Vastaus on jälleen %{response_code} yhdessä otsakkeen
+        %{header} kanssa, joka osoittaa mistä uusi tehtäväresurssi löytyy. Tehtävän
+        muistiinpanojen muuttaminen, jälleen curlilla:'
+      example_note_response_title: 'Vastaus on %{response_code} ja sen rungossa on
+        päivitetty tehtävä XML-muotoisena. Tarjoamme helpomman tavan muuttaa tehtävä
+        tehdyksi tai tekemättömäksi ilman tarvetta päivitysoperaation tekemiselle
+        kenttäarvoilla:'
+      description: Rajapinta tarjoaa mekanismit resurssien lisäämiseen, päivittämiseen
+        ja poistamiseen käyttämällä %{put}, %{post} ja %{delete} yhdessä sisällön
+        kanssa.
+      example_note_text: käytä vaahterakuviota
+    title: REST-rajapinnan dokumentaatio kehittäjille
+    intro:
+      title: Esittely
+      content_2: Tracksin REST-rajapinnan avulla kehittäjät voivat integroida Tracksin
+        sovelluksiinsa. Sen avulla sovellukset voivat lukea ja muuttaa Tracksiin tallennettuja
+        tietoja ja se on toteutettu XML:nä HTTP:n yli.
+      restful_link_text: RESTful
+      content: Tracks on suunniteltu integroitavaksi skripteihin, verkkopalveluihin
+        ja kolmannen osapuolen sovelluksiin. Tämä sivu toimii REST-rajapintamme dokumentaationa.
+      content_3: Rajapinta on %{restful_link}-palvelu. Kaikki tieto on saatavilla
+        rajapinnan kautta resursseina, joihin voidaan viitata yksilöllisellä tunnisteella.
+        Rajapinta vastaa lajitelmaan HTTP-kutsuja (GET, PUT, POST ja UPDATE) ja kaikki
+        rajapinnan vastaukset ovat XML-muotoiltua UTF-8:aa.
+    auth:
+      title: Tunnistautuminen
+      content: Tunnistautuminen tapahtuu %{auth_link}. Tracksin käyttäjätunnusta ja
+        salasanaa käytetään rajapinnan tunnisteina. Huomaathan, että Basic-HTTP-tunnistautumisessa
+        salasanasi lähetetään pelkkänä tekstinä. Jos tarvitset turvallisempaa tunnistautumisratkaisua,
+        asenna verkkopalvelimesi palvelemaan Tracks HTTPS:n yli.
+      basic_auth_link_text: Basic-HTTP-tunnistautuminen
+    retrieve:
+      content: 'Noutaaksesi tietoa sinun tarvitsee vain tehdä HTTP GET-pyyntö resurssitunnisteella.
+        Esimerkiksi jos haluat hakea kaikki asiayhteydet %{curl_link}illa:'
+      single_context: 'Yksittäisen asiayhteyden noutaminen:'
+      todos_from_context: 'Asiayhteyteen kuuluvien tehtävien noutaminen:'
+      projects: Voit käyttää yllä esitettyä muotoa myös projekteilla asiayhteyksien
+        sijaan.
+      paths_title: 'Kaikki tiedot ovat saatavilla seuraavissa resurssipoluissa:'
+      active_todos: 'Jos haluat noutaa vain aktiiviset tehtävät, voit lisätä parametrin
+        %{active_code} ja asettaa siihen jonkin arvon, kuten:'
+      title: Tiedon noutaminen rajapinnasta
+      limit: 'Tehtäväresursseille (tehtävät, tickler, tehdyt, piilotetut ja kalenteri)
+        voit palauttaa vain kentät %{fields} lisäämällä parametrin %{limit_parameter}
+        ja asettamalla sen arvoksi %{set_to}. Esimerkiksi:'
+    notes:
+      description: 'Ohjeessa on noudatettu muutamia merkintötapoja:'
+      curl_description: Kaikki esimerkit käyttävät %{curl}ia.
+      bullet2: '%{omit} osoittaa että epäolennaisia osuuksia vastaustiedosta on jätetty
+        pois ohjeen selkiyttämiseksi'
+      bullet1: '%{id} resurssin %{url} osoittavat että se tulee korvata resurssin
+        yksilöllisellä tunnisteella'
+      title: Huomioita ohjeesta
+    activeresource:
+      title: Rajapinnan käyttäminen ActiveResourcella
+      wrapper_description: '%{signals_link}in Highrise-wrapperin innostamana teimme
+        pienen Ruby-wrapperin (löytyy doc/-hakemistosta) rajapinnalle joka luo sinulle
+        ActiveResource-mallit joilla voit leikkiä IRB-istunnossa:'
+      ror_link_text: Ruby on Rails
+      signals_link_text: 37 Signals
+      activeresource_link_text: ActiveResource
+      description: '%{activeresource_link} on ohut mutta hyödyllinen RESTful-palveluiden
+        ympärillä %{ror_link}issa oleva palvelu. Se tulee olemaan osa Rails 2.0:aa,
+        mutta siihen asti voit noutaa sen %{gem_command}.'
+    response:
+      xml_description: 'XML tyhjälle listalle näyttää tältä, jälleen curlilla:'
+      title: Vastauksen ja vastauskoodin käsittely
+      description: Kaikki onnistuneet toiminnot palauttavat tilakoodin %{response_200}
+        tai %{response_201} riippuen toiminnosta. Joissain tapauksissa listassa, esimerkiksi
+        %{example_call} ei ole lainkaan tuloksia, jolloin palautetaan tyhjä lista.
+    curl_link_text: cURL
+    id: ID
