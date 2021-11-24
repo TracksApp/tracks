@@ -4,7 +4,7 @@ appdir=$(cd $(dirname "$0")/.. && pwd)
 [ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
 
 for i in {1..60}; do
-  curl -sf db:3306 >/dev/null && exit
+  curl -sf telnet://db:3306 >/dev/null && exit
   sleep 1
 done
 
