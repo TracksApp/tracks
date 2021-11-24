@@ -50,8 +50,8 @@ Tracks container. In future there should be an official image in Docker Hub. You
 1. Make sure you have Docker properly installed.
 2. Start a database container with either MySQL or PostgreSQL:
 ```
-   $ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
-   $ docker run -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
+   $ docker run -d -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
+   $ docker run -d -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
 ```
 3. Create a database and a user for Tracks in the database:
 ```
@@ -72,8 +72,8 @@ Tracks container. In future there should be an official image in Docker Hub. You
 ```
 5. Start the Tracks server:
 ```
-   $ docker run -p 3000:3000 --name tracks --link mariadb:db -t tracks
-   $ docker run -p 3000:3000 --name tracks --link postgres:db -t tracks
+   $ docker run -d -p 3000:3000 --name tracks --link mariadb:db -t tracks
+   $ docker run -d -p 3000:3000 --name tracks --link postgres:db -t tracks
 ```
 6. You should now be able to access Tracks in http://localhost:3000
 
@@ -153,13 +153,13 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
   * If you are using SQLite:
 
         ```
-        bundle install --without development test mysql
+        bundle install --without "development test mysql"
         ```
 
   * If you are using MySQL:
 
         ```
-        bundle install --without development test sqlite
+        bundle install --without "development test sqlite"
         ```
 
   * If you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed, you may also append `therubyracer` as an additional "without" parameter.
