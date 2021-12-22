@@ -114,7 +114,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (0.9.35)
+    i18n-tasks (0.9.36)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -139,7 +139,7 @@ GEM
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.12.0)
+    loofah (2.13.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -169,7 +169,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.21.0)
-    parser (3.0.2.0)
+    parser (3.0.3.2)
       ast (~> 2.4.1)
     pg (1.2.3)
     puma (5.5.2)
@@ -333,7 +333,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 5.15.1)
   htmlentities
-  i18n-tasks (~> 0.9.35)
+  i18n-tasks (~> 0.9.36)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   listen
