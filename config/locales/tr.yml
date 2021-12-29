@@ -351,3 +351,51 @@ feedlist:
   actions_due_next_week: 7 gün veya daha önce bitecek eylemler
   actions_due_today: Bugün veya daha erken bitecek olan eylemler
   active_projects_wo_next: Eylemi bulunmayan aktif projeler
+  all_projects: Bütün Projeler
+  choose_context: Almak istediğiniz içeriği seçin
+  projects_and_actions: Aktif projeler ve eylemleri
+  rss_feed: RSS Akışı
+  active_starred_actions: Yıldızlı, etkin eylemler
+  all_actions: Tüm eylemler
+  all_contexts: Bütün İçerikler
+  choose_project: Almak istediğiniz projeyi seçin
+  context_centric_actions: Belirli bir içerikteki tamamlanmamış eylemler için akış
+  context_needed: Akış talep etmeden önce en az bir içerik olmalı
+  ical_feed: iCal akış
+  last_fixed_number: Son %{number} eylem/ler
+  legend: 'Semboller:'
+  notice_incomplete_only: "Not: Akış, aksi işaretlenmedikçe sadece tamamlanmamış eylemleri\
+    \ gösterir. Bu iCal akışları todo listesine eklenebilir. Eğer bitimi yaklaşan\
+    \ todo'ları takvimde görüntülemek istiyorsanız, takvim sayfasından iCal akışını\
+    \ kullanın"
+  plain_text_feed: Düz Yazı Akışı
+  project_centric: Belirli bir projedeki tamamlanmamış eylemler akışı
+  project_needed: Akış talep etmeden önce en az bir proje olmalı
+  select_feed_for_context: Bu içerik için akış seçin
+  select_feed_for_project: Bu proje için akış seçin
+integrations:
+  sections:
+    email_rich: Zengin Todo Mesaj e-posta formatı
+    message_gateway: Tracks aracılığıyla e-posta gönderebilmek için Tracks'ı e-posta
+      serverine bağlayın
+    automatic_email: Yaklaşan eylemler için kendinize otomatik e-posta gönderin
+    mailgun: Mailgun aracılığıyla Tracks'a e-posta gönder
+  opensearch_description: Tracks'ta ara
+  title: Entegrasyonlar
+  add_your_own: Eklemek istediğiniz araç mı var? Tracks'ın gelecek sürümlerine ekleyebilmemiz
+    için bize gönderin %{tell_us_link}.
+  intro: 'Tracks işinize yarayabilecek diğer araçlarla entegre edilebilir! Bu sayfa
+    bazılarını entegre etmeye yönelik bilgi içerir. Her platforma uygulanabilir olmayabilirler
+    ve bazıları diğerlerine kıyasla daha fazla teknik bilgi gerektirebilir. Ek bilgi
+    için: %{documentation_link}'
+  developer_documentation_link: Tracks için geliştirici dokümantasyonu
+  contents_header: 'İçerikler:'
+footer:
+  send_feedback: Geri bildirim gönderin %{version}
+helpers:
+  select:
+    prompt: Seçiniz
+  submit:
+    create: Oluştur %{model}
+    submit: Kaydet %{model}
+    update: Güncelle %{model}
