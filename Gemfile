@@ -8,7 +8,7 @@ gem 'coffee-rails', '~> 5.0.0'
 gem 'jquery-rails', '~> 4.4'
 gem 'jquery-ui-rails', '~>6.0.1'
 
-gem 'rails', '~> 6.0.3'
+gem 'rails', '~> 6.0.4'
 gem 'sassc-rails', '~> 2.1.2'
 
 gem 'bootstrap-sass', '3.4.1'
