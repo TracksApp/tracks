@@ -80,11 +80,11 @@ module RecurringTodos
     end
 
     def validate_not_blank(object, msg)
-      errors[:base] << msg if object.blank?
+      errors.add(:base, msg) if object.blank?
     end
 
     def validate_not_nil(object, msg)
-      errors[:base] << msg if object.nil?
+      errors.add(:base, msg) if object.nil?
     end
 
     def validate
@@ -100,7 +100,7 @@ module RecurringTodos
       when "ends_on_end_date"
         validate_not_blank(end_date, "The end date needs to be filled in for 'Ends on'")
       else
-        errors[:base] << "The end of the recurrence is not selected" unless ends_on == "no_end_date"
+        errors.add(:base, "The end of the recurrence is not selected") unless ends_on == "no_end_date"
       end
     end
 
@@ -113,7 +113,7 @@ module RecurringTodos
         validate_not_nil(show_always?, "Please select when to show the action")
         validate_not_blank(show_from_delta, "Please fill in the number of days to show the todo before the due date") unless show_always?
       else
-        errors[:base] << "Unexpected value of recurrence target selector '#{target}'"
+        errors.add(:base, "Unexpected value of recurrence target selector '#{target}'")
       end
     end
 
