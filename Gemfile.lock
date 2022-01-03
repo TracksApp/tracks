@@ -346,6 +346,7 @@ DEPENDENCIES
   codeclimate-test-reporter (= 1.0.7)
   coffee-rails (~> 5.0.0)
   database_cleaner
+  database_cleaner-active_record
   factory_bot_rails
   font-awesome-sass (~> 6.1.2)
   htmlentities
