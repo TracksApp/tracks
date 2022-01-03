@@ -28,7 +28,7 @@ class RenderingHelperTest < ActionView::TestCase
   end
 
   test "message link" do
-    expected = '<p>Call <a href="message://%3C123%3E">message://&lt;123&gt;</a>.</p>'
+    expected = '<p>Call <a href="message://<123>">message://&lt;123&gt;</a>.</p>'
     actual = render_text("Call message://<123>.")
     assert_equal(expected, actual)
   end
