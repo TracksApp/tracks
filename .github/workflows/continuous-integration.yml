@@ -6,13 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["2.5", "2.6", "2.7"]
+        ruby: ["2.6", "2.7"]
         db: [sqlite, mysql, postgres]
         exclude:
-          - ruby: "2.5"
-            db: sqlite
-          - ruby: "2.5"
-            db: postgres
           - ruby: "2.6"
             db: sqlite
           - ruby: "2.6"

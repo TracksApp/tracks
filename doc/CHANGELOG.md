@@ -1,5 +1,11 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.6
+
+## Removed features
+
+* No longer supporting EOL Ruby 2.5
+
 ## Version 2.5.2
 
 ### New features
