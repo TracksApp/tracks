@@ -2,6 +2,10 @@ See doc/upgrading.md for the upgrade documentation!
 
 ## Version 2.6
 
+## New features
+
+* Ruby 3.0 is now supported.
+
 ## Removed features
 
 * No longer supporting EOL Ruby 2.5
