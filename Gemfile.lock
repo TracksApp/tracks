@@ -114,7 +114,7 @@ GEM
     htmlentities (4.3.4)
     i18n (1.8.11)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (0.9.36)
+    i18n-tasks (0.9.37)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       erubi
@@ -204,9 +204,9 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails-i18n (6.0.0)
+    rails-i18n (7.0.1)
       i18n (>= 0.7, < 2)
-      railties (>= 6.0.0, < 7)
+      railties (>= 6.0.0, < 8)
     rails_autolink (1.1.6)
       rails (> 3.1)
     railties (6.0.4.1)
@@ -312,7 +312,7 @@ GEM
     will_paginate (3.3.1)
     yard (0.9.27)
       webrick (~> 1.7.0)
-    zeitwerk (2.5.1)
+    zeitwerk (2.5.3)
 
 PLATFORMS
   ruby
@@ -333,7 +333,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 5.15.1)
   htmlentities
-  i18n-tasks (~> 0.9.36)
+  i18n-tasks (~> 0.9.37)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   listen
