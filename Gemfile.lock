@@ -135,11 +135,11 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    kt-paperclip (6.4.1)
+    kt-paperclip (7.0.1)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
+      marcel (~> 1.0.1)
       mime-types
-      mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     libv8 (3.16.14.19)
     listen (3.7.0)
@@ -155,9 +155,6 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2021.1115)
-    mimemagic (0.3.10)
-      nokogiri (~> 1)
-      rake
     mini_mime (1.1.2)
     mini_portile2 (2.6.1)
     minitest (5.15.0)
@@ -336,7 +333,7 @@ DEPENDENCIES
   i18n-tasks (~> 0.9.37)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
-  kt-paperclip (~> 6.4, >= 6.4.1)
+  kt-paperclip (~> 7.0)
   listen
   minitest-stub-const
   mocha
