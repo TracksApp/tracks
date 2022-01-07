@@ -96,9 +96,8 @@ en:
     action: Action
     actions: Actions
     actions_midsentence:
-      one: action
-      other: actions
-      zero: actions
+      one: actions
+      other: action
     add: Add
     ajaxError: There was an error retrieving from server
     back: Back
@@ -110,9 +109,8 @@ en:
     contribute: Contribute
     create: Create
     days_midsentence:
-      one: day
-      other: days
-      zero: days
+      one: days
+      other: day
     deferred: deferred
     description: Description
     drag_handle: DRAG
@@ -131,9 +129,8 @@ en:
     none: None
     not_available_abbr: n/a
     note:
-      one: 1 notes
-      other: "%{count} notes"
-      zero: no notes
+      one: no notes
+      other: 1 notes
     notes: Notes
     numbered_step: Step %{number}
     ok: Ok
@@ -320,13 +317,11 @@ en:
         other: almost %{count} years
       half_a_minute: half a minute
       less_than_x_minutes:
-        one: less than a minute
-        other: less than %{count} minutes
-        zero: less than 1 minute
+        one: less than 1 minute
+        other: less than a minute
       less_than_x_seconds:
         one: less than 1 second
-        other: less than %{count} seconds
-        zero: less than 1 second
+        other: less than 1 second
       over_x_years:
         one: over 1 year
         other: over %{count} years
@@ -1325,13 +1320,11 @@ en:
       multi_page_html: Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>
         in total
       single_page:
-        one: Displaying 1 %{model}
-        other: Displaying all %{count} %{model}
-        zero: No %{model} found
+        one: No %{model} found
+        other: Displaying 1 %{model}
       single_page_html:
-        one: Displaying <b>1</b> %{model}
-        other: Displaying <b>all&nbsp;%{count}</b> %{model}
-        zero: No %{model} found
+        one: No %{model} found
+        other: Displaying <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Previous"
   auth_type:
@@ -1342,49 +1335,88 @@ en:
     curl_link_text: cURL
     intro:
       title: Introduction
-      content: Tracks is designed to be integrated with scripts, web services, and third-party applications. This page serves as the documentation of our REST API.
-      content_2: The Tracks REST API allows developers to integrate Tracks into their applications. It allows applications to access and modify Tracks data, and is implemented as Vanilla XML over HTTP.
-      content_3: The API is a %{restful_link} service. All data is available through the API as a resource to which can be referred using a unique identifier. It responds to a number of the HTTP methods, specifically GET, PUT, POST and UPDATE, and all responses from the API are in a simple XML format encoded as UTF-8.
+      content: Tracks is designed to be integrated with scripts, web services, and
+        third-party applications. This page serves as the documentation of our REST
+        API.
+      content_2: The Tracks REST API allows developers to integrate Tracks into their
+        applications. It allows applications to access and modify Tracks data, and
+        is implemented as Vanilla XML over HTTP.
+      content_3: The API is a %{restful_link} service. All data is available through
+        the API as a resource to which can be referred using a unique identifier.
+        It responds to a number of the HTTP methods, specifically GET, PUT, POST and
+        UPDATE, and all responses from the API are in a simple XML format encoded
+        as UTF-8.
       restful_link_text: RESTful
     auth:
       title: Authentication
-      content: Authentication is handled using %{auth_link}. Your Tracks username and password is used as the authentication credentials for the API. Note that in Basic HTTP authentication, your password is sent in clear text. If you need a more secure authentication solution, you should configure your web server to run Tracks under HTTPS.
+      content: Authentication is handled using %{auth_link}. Your Tracks username
+        and password is used as the authentication credentials for the API. Note that
+        in Basic HTTP authentication, your password is sent in clear text. If you
+        need a more secure authentication solution, you should configure your web
+        server to run Tracks under HTTPS.
       basic_auth_link_text: Basic HTTP authentication
     retrieve:
       title: Retrieving data from the API
-      content: 'To retrieve data you only need to do an HTTP GET on a resource identifier. For example, if you want to get all the contexts with %{curl_link}:'
+      content: 'To retrieve data you only need to do an HTTP GET on a resource identifier.
+        For example, if you want to get all the contexts with %{curl_link}:'
       single_context: 'Getting a single context:'
       todos_from_context: 'Getting the todos within a context:'
-      projects: You also can apply the pattern shown above with projects instead of contexts.
+      projects: You also can apply the pattern shown above with projects instead of
+        contexts.
       paths_title: 'All data is available according to the following resource paths:'
-      limit: 'For the todo resources (todos, tickler, done, hidden and calendar) you can limit the returnedfield to %{fields} by adding the parameter %{limit_parameter} and setting it to %{set_to}. For example:'
-      active_todos: 'If you only want to get the active todos, you add the parameter %{active_code} and set it to some value like this:'
+      limit: 'For the todo resources (todos, tickler, done, hidden and calendar) you
+        can limit the returnedfield to %{fields} by adding the parameter %{limit_parameter}
+        and setting it to %{set_to}. For example:'
+      active_todos: 'If you only want to get the active todos, you add the parameter
+        %{active_code} and set it to some value like this:'
     writing:
       title: Writing to the API
-      description: The API provides mechanisms for adding, updating and deleting resources using the HTTP methods %{put}, %{post} and %{delete} in combination with the content.
+      description: The API provides mechanisms for adding, updating and deleting resources
+        using the HTTP methods %{put}, %{post} and %{delete} in combination with the
+        content.
       example_title: 'Creating a new project, using curl:'
       example_project_name: Build a treehouse for the kids
-      example_project_response_title: 'The response is an %{response_code} with %{header} header indicating where the new project resource can be found. Now we can add a todo to this project, using curl:'
+      example_project_response_title: 'The response is an %{response_code} with %{header}
+        header indicating where the new project resource can be found. Now we can
+        add a todo to this project, using curl:'
       example_todo_name: Model treehouse in SketchUp
-      example_todo_response_title: 'The response is a again an %{response_code} with %{header} header indicating where the new todo resource can be found. Changing the todo notes, again using curl:'
+      example_todo_response_title: 'The response is a again an %{response_code} with
+        %{header} header indicating where the new todo resource can be found. Changing
+        the todo notes, again using curl:'
       example_note_text: use maple texture
-      example_note_response_title: 'The response is an %{response_code} with in the body the XML representation of the updated todo. We provide a shorcut method to toggle a todo done or undone without having to perform the update with the right field values:'
-      example_delete_title: 'If we want to delete that todo we can call its unique resource identifier (the URL) with the HTTP method %{delete}, again with curl:'
-      example_delete_response_title: The API returns an %{response_code} and the todo is now deleted.
+      example_note_response_title: 'The response is an %{response_code} with in the
+        body the XML representation of the updated todo. We provide a shorcut method
+        to toggle a todo done or undone without having to perform the update with
+        the right field values:'
+      example_delete_title: 'If we want to delete that todo we can call its unique
+        resource identifier (the URL) with the HTTP method %{delete}, again with curl:'
+      example_delete_response_title: The API returns an %{response_code} and the todo
+        is now deleted.
     response:
       title: Dealing with the response and response status
-      description: All successful operations respond with a status code of %{response_200} or %{response_201} depending on the operation. Sometimes a list, say %{example_call} will not have any items, it will return an empty list.
-      xml_description: 'The XML for empty list responses look like this, again with curl:'
+      description: All successful operations respond with a status code of %{response_200}
+        or %{response_201} depending on the operation. Sometimes a list, say %{example_call}
+        will not have any items, it will return an empty list.
+      xml_description: 'The XML for empty list responses look like this, again with
+        curl:'
     activeresource:
       title: Consuming the API with ActiveResource
-      description: '%{activeresource_link} is a thin but powerful wrapper around RESTful services exposed by %{ror_link}. It will be part of Rails 2.0 but until then you can get it with %{gem_command}.'
+      description: '%{activeresource_link} is a thin but powerful wrapper around RESTful
+        services exposed by %{ror_link}. It will be part of Rails 2.0 but until then
+        you can get it with %{gem_command}.'
       activeresource_link_text: ActiveResource
       ror_link_text: Ruby on Rails
-      wrapper_description: 'Inspired by %{signals_link}  &#8217;s Highrise wrapper, we&#8217;ve put together a small ruby wrapper (find it in the doc/ directory) for the API which sets up the ActiveResource models for you to play with in an IRB session:'
+      wrapper_description: 'Inspired by %{signals_link}  &#8217;s Highrise wrapper,
+        we&#8217;ve put together a small ruby wrapper (find it in the doc/ directory)
+        for the API which sets up the ActiveResource models for you to play with in
+        an IRB session:'
       signals_link_text: 37 Signals
     notes:
       title: Notes about the documentation
-      description: 'A few conventions have been applied in the documentation, these are:'
-      bullet1: '%{id}&#8217;s in a resource %{url} indicate that the resource&#8217;s unique ID needs to be inserted there'
-      bullet2: '%{omit} indicates that unimportant bits of response data have been removed to eliminate noise from the documentation'
+      description: 'A few conventions have been applied in the documentation, these
+        are:'
+      bullet1: '%{id}&#8217;s in a resource %{url} indicate that the resource&#8217;s
+        unique ID needs to be inserted there'
+      bullet2: '%{omit} indicates that unimportant bits of response data have been
+        removed to eliminate noise from the documentation'
       curl_description: 'All examples make use of %{curl}.'
