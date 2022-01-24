@@ -141,6 +141,15 @@ common:
   add: Ekle
   actions: Eylemler
   action: Eylem
+  days_midsentence:
+    one: Gün
+    other: Günler
+  note:
+    one: Not yok
+    other: 1 not var
+  actions_midsentence:
+    one: Eylem
+    other: Eylemler
 activerecord:
   errors:
     template:
@@ -241,6 +250,8 @@ date:
   - Pe
   - Cu
   - Ct
+  - Cum
+  - Cmt
   abbr_month_names:
   - Kas
   - Oca
@@ -253,6 +264,8 @@ date:
   - Ağu
   - Eyl
   - Eki
+  - Kas
+  - Ara
   day_names:
   - Pazar
   - Pazartesi
@@ -279,9 +292,11 @@ date:
   - Ekim
   - Kasım
   - Aralık
+  - Aralık
   order:
   - :yıl
   - :gün
+  - :day
 datetime:
   prompts:
     day: Gün
@@ -390,6 +405,17 @@ integrations:
     için: %{documentation_link}'
   developer_documentation_link: Tracks için geliştirici dokümantasyonu
   contents_header: 'İçerikler:'
+  tell_us_link_text: Bunun hakkında bize görüş bildirin
+  cron_2: Başka bir metin kullanabilirsiniz %{feeds_link} Projede birlikte çalıştığınız
+    meslektaşlarınıza neden listeyi e-posta gönderemeyesiniz ki?
+  cron_email_subject: Bitimi 7 gün içerisinde olan Tracks eylemleri
+  feeds_link_text: akış Tracks tarafından sağlanmıştır
+  cron_1: Bu girdiyi crontab üzerinden girerseniz, her gün ÖÖ 5'te 7 gün içerisinde
+    bitimi yaklaşan eylemlerle ilgili bir e-posta alacaksınız.
+  message_gateway:
+    rich_api_tip: Mesaj içeriği tanım, içerik ve proje kısmına, not ise gövde metnine
+      yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" ve benzeri türden
+      görevler oluşturmak için Rich Todo API kullanabilirsiniz.
 footer:
   send_feedback: Geri bildirim gönderin %{version}
 helpers:
