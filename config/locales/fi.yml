@@ -131,9 +131,8 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
-      zero: ei muistiinpanoja
+      one: ei muistiinpanoja
+      other: 1 muistiinpano
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -756,7 +755,7 @@ fi:
     no_last_completed_recurring_todos: Valmiita toistuvia toimenpiteitä ei löytynyt
     no_notes_attached: Projektiin ei ole liitetty muistiinpanoja
     no_projects: Projekteja ei löytynyt
-    notes: Notes
+    notes: Muistiinpanot
     notes_empty: Tälle projektille ei ole muistiinpanoja
     page_title: 'TRACKS::Project: %{project}'
     project_destroyed_status: Projekti ”%{name}” poistettu
@@ -1158,7 +1157,7 @@ fi:
     no_last_completed_actions: Valmistuneita toimenpiteitä ei ole
     no_project: "--No project--"
     no_recurring_todos: Ei toistuvia toimenpiteitä
-    notes: Notes
+    notes: Muistiinpanot
     overdue: Myöhässä
     pending: Odottaa
     recurrence:
@@ -1332,13 +1331,11 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: Näytetään 1 %{model}
-        other: Näytetään kaikki %{count} %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään 1 %{model}
       single_page_html:
-        one: Näytetään <b>1</b> %{model}
-        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
   auth_type:
