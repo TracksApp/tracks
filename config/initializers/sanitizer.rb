@@ -7,4 +7,4 @@ safe_list =
     Loofah::HTML5::WhiteList
   end
 
-safe_list::ALLOWED_PROTOCOLS.merge(%w(message onenote))
+safe_list::ALLOWED_PROTOCOLS.merge(%w(message onenote obsidian))
