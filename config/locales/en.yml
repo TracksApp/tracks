@@ -96,8 +96,9 @@ en:
     action: Action
     actions: Actions
     actions_midsentence:
-      one: actions
-      other: action
+      one: action
+      other: actions
+      zero: actions
     add: Add
     ajaxError: There was an error retrieving from server
     back: Back
@@ -109,8 +110,9 @@ en:
     contribute: Contribute
     create: Create
     days_midsentence:
-      one: days
-      other: day
+      one: day
+      other: days
+      zero: days
     deferred: deferred
     description: Description
     drag_handle: DRAG
@@ -129,8 +131,9 @@ en:
     none: None
     not_available_abbr: n/a
     note:
-      one: no notes
-      other: 1 notes
+      one: 1 notes
+      other: "%{count} notes"
+      zero: no notes
     notes: Notes
     numbered_step: Step %{number}
     ok: Ok
@@ -317,11 +320,13 @@ en:
         other: almost %{count} years
       half_a_minute: half a minute
       less_than_x_minutes:
-        one: less than 1 minute
-        other: less than a minute
+        one: less than a minute
+        other: less than %{count} minutes
+        zero: less than 1 minute
       less_than_x_seconds:
         one: less than 1 second
-        other: less than 1 second
+        other: less than %{count} seconds
+        zero: less than 1 second
       over_x_years:
         one: over 1 year
         other: over %{count} years
@@ -1320,11 +1325,13 @@ en:
       multi_page_html: Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>
         in total
       single_page:
-        one: No %{model} found
-        other: Displaying 1 %{model}
+        one: Displaying 1 %{model}
+        other: Displaying all %{count} %{model}
+        zero: No %{model} found
       single_page_html:
-        one: No %{model} found
-        other: Displaying <b>1</b> %{model}
+        one: Displaying <b>1</b> %{model}
+        other: Displaying <b>all&nbsp;%{count}</b> %{model}
+        zero: No %{model} found
     page_gap: "&hellip;"
     previous_label: "&#8592; Previous"
   auth_type:

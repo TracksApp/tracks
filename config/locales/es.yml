@@ -98,8 +98,9 @@ es:
     action: Tarea
     actions: Tareas
     actions_midsentence:
-      one: tareas
-      other: tarea
+      one: tarea
+      other: tareas
+      zero: tareas
     add: Añadir
     ajaxError: Hubo un error al recuperar desde el servidor
     back: Atrás
@@ -131,8 +132,9 @@ es:
     none: Ninguno
     not_available_abbr: n/d
     note:
-      one: 0 notas
-      other: 1 nota
+      one: 1 nota
+      other: "%{count} notas"
+      zero: 0 notas
     notes: Notas
     numbered_step: Paso %{number}
     ok: Aceptar
@@ -314,11 +316,13 @@ es:
         other: Casi %{count} años
       half_a_minute: medio minuto
       less_than_x_minutes:
-        one: menos de 1 minuto
-        other: menos de un minuto
+        one: menos de un minuto
+        other: menos de %{count} minutos
+        zero: menos de 1 minuto
       less_than_x_seconds:
         one: menos de 1 segundo
-        other: menos de 1 segundo
+        other: menos de %{count} segundos
+        zero: menos de 1 segundo
       over_x_years:
         one: más de un año
         other: en %{count} años
@@ -1232,11 +1236,13 @@ es:
       multi_page_html: Representando %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de
         <b>%{count}</b> en el total
       single_page:
-        one: No %{model} encontrado
-        other: Viendo del 1 %{model}
+        one: Viendo del 1 %{model}
+        other: Viendo todos los %{count} %{model}
+        zero: No %{model} encontrado
       single_page_html:
-        one: No %{model} encontrado
-        other: Viendo del <b>1</b> %{model}
+        one: Viendo del <b>1</b> %{model}
+        other: Viendo <b>todos los %{count}</b> %{model}
+        zero: No %{model} encontrado
     page_gap: "&hellip;"
     previous_label: "« Anterior"
   rest_help:
