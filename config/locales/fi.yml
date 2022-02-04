@@ -756,7 +756,7 @@ fi:
     no_last_completed_recurring_todos: Valmiita toistuvia toimenpiteitä ei löytynyt
     no_notes_attached: Projektiin ei ole liitetty muistiinpanoja
     no_projects: Projekteja ei löytynyt
-    notes: Notes
+    notes: Muistiinpanot
     notes_empty: Tälle projektille ei ole muistiinpanoja
     page_title: 'TRACKS::Project: %{project}'
     project_destroyed_status: Projekti ”%{name}” poistettu
@@ -1158,7 +1158,7 @@ fi:
     no_last_completed_actions: Valmistuneita toimenpiteitä ei ole
     no_project: "--No project--"
     no_recurring_todos: Ei toistuvia toimenpiteitä
-    notes: Notes
+    notes: Muistiinpanot
     overdue: Myöhässä
     pending: Odottaa
     recurrence:
