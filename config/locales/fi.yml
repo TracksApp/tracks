@@ -63,14 +63,14 @@ fi:
         empty: ei voi olla tyhjä
         equal_to: täytyy olla sama kuin %{count}
         even: täytyy olla tasan
-        exclusion: is reserved
+        exclusion: on varattu
         greater_than: täytyy olla suurempi kuin %{count}
         greater_than_or_equal_to: täytyy olla suurempi tai yhtäsuuri kuin %{count}
         inclusion: ei sisälly listaan
-        invalid: cannot contain the comma (',') character
+        invalid: ei voi sisältää pilkkua
         less_than: täytyy olla vähemmän kuin %{count}
         less_than_or_equal_to: täytyy olla vähemmän tai yhtäsuuri kuin %{count}
-        not_a_number: is not a number
+        not_a_number: ei ole numero
         odd: täytyy olla pariton
         record_invalid: 'Validointi epäonnistui: %{errors}'
         restrict_dependent_destroy:
@@ -192,7 +192,7 @@ fi:
     save_status_message: Asiayhteys tallennettu
     show_form: Luo uusi asiayhteys
     show_form_title: Lisää asiayhteys
-    status_active: Context is active
+    status_active: Asiayhteys on aktiivinen
     status_hidden: Asiayhteys on piilotettu
     todos_append: tässä asiayhteydessä
     update_status_message: Asiayhteyden nimi muutettiin
@@ -745,7 +745,7 @@ fi:
     hidden_projects: Piilotetut projektit
     hide_form: Piilota lomake
     hide_form_title: Piilota projektinluontilomake
-    is_active: is active
+    is_active: on aktiivinen
     last_completed_in_project: "(viimeiset %{number})"
     letter_abbreviation: P
     list_completed_projects: TRACKS::Valmistuneiden projektien lista
@@ -775,7 +775,7 @@ fi:
     was_marked_hidden: on merkitty piilotetuksi
     with_default_context: with a default context of '%{context_name}'
     with_default_tags: ja oletusasiasanoilla ”%{tags}”
-    with_no_default_context: with no default context
+    with_no_default_context: ilman oletusasiayhteyttä
     with_no_default_tags: ja ilman oletusavainsanoja
   search:
     contexts_matching_query: hakua vastaavaa asiayhteyttä
