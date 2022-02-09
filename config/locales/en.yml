@@ -207,6 +207,7 @@ en:
         invalid_csv: "Invalid CSV: could not read headers: %{e}"
         save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write\
           \ to the upload directory? %{e}"
+        no_context: No default context could be found
       map_title: Map fields to be imported
       header: Importing data
       submit: Import
