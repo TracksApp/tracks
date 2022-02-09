@@ -62,12 +62,16 @@ class DataController < ApplicationController
         flash[:notice] = t 'data.import.projects_count', count: count
       when 'todos'
         count = Todo.import path_and_file, params, current_user
-        flash[:notice] = t 'data.import.todos.count', count: count
+        if !count
+          flash[:error] = t('data.import.errors.no_context')
+        else
+          flash[:notice] = t 'data.import.todos_count', count: count
+        end
       else
         flash[:error] = t('data.import.errors.invalid_destination')
       end
     rescue Exception => e
-      flash[:error] = t 'data.import.invalid_destination', e: e
+      flash[:error] = t 'data.import.errors.invalid_destination', e: e
     end
     File.delete(path_and_file)
     redirect_to import_data_path
