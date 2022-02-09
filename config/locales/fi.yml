@@ -131,9 +131,8 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
-      zero: ei muistiinpanoja
+      one: ei muistiinpanoja
+      other: 1 muistiinpano
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -251,6 +250,7 @@ fi:
         file_blank: Tiedosto ei voi olla tyhjä
         some: Tuonnissa tapahtui virheitä
         invalid_destination: 'Virheellinen tuontikohde: %{e}'
+        no_context: Asiayhteyttä ei löytynyt oletusarvoksi
   date:
     abbr_day_names:
     - Su
@@ -1332,13 +1332,11 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: Näytetään 1 %{model}
-        other: Näytetään kaikki %{count} %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään 1 %{model}
       single_page_html:
-        one: Näytetään <b>1</b> %{model}
-        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
   auth_type:
