@@ -62,7 +62,7 @@ class DataController < ApplicationController
         flash[:notice] = t 'data.import.projects_count', count: count
       when 'todos'
         count = Todo.import path_and_file, params, current_user
-        if ! count
+        if !count
           flash[:error] = t('data.import.errors.no_context')
         else
           flash[:notice] = t 'data.import.todos_count', count: count
