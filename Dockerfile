@@ -17,9 +17,24 @@ RUN apt-get update && apt-get install -y yarn netcat
 
 RUN mkdir /app/log
 
-COPY . /app/
+COPY COPYING /app/
+COPY config /app/config/
 COPY config/database.docker.yml /app/config/database.yml
 COPY config/site.docker.yml /app/config/site.yml
+
+COPY bin /app/bin/
+COPY script /app/script/
+COPY public /app/public/
+COPY vendor /app/vendor/
+
+COPY .yardopts /app/
+COPY Rakefile /app/
+COPY config.ru /app/
+COPY docker-entrypoint.sh /app/
+
+COPY lib /app/lib/
+COPY app /app/app/
+COPY db /app/db/
 
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 
