@@ -251,6 +251,7 @@ fi:
         file_blank: Tiedosto ei voi olla tyhjä
         some: Tuonnissa tapahtui virheitä
         invalid_destination: 'Virheellinen tuontikohde: %{e}'
+        no_context: Asiayhteyttä ei löytynyt oletusarvoksi
   date:
     abbr_day_names:
     - Su
