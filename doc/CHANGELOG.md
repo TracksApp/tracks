@@ -17,6 +17,7 @@ See doc/upgrading.md for the upgrade documentation!
 * Lots of dependencies have been upgraded.
 * Fixed some error messages in import.
 * Fixed import in the Docker image.
+* Footer shows the Git version hash and date in the Docker image
 
 ## Updated translations
 

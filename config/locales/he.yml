@@ -304,7 +304,8 @@ he:
     select_feed_for_context: בחירת ההזנה עבור ההקשר הנתון
     select_feed_for_project: בחירת ההזנה עבור הפרוייקט
   footer:
-    send_feedback: שליחת משוב על גירסא %{version}
+    send_feedback: שליחת משוב על גירסא
+    version: 'Tracks %{version} (%{revision_with_date})'
   helpers:
     select:
       prompt: Выберите

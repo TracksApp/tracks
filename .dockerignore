@@ -1,5 +1,4 @@
 .bundle
-.git
 config/database.yml
 config/site.yml
 coverage

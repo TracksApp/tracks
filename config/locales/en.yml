@@ -407,7 +407,8 @@ en:
     select_feed_for_context: Select the feed for this context
     select_feed_for_project: Select the feed for this project
   footer:
-    send_feedback: Send feedback on %{version}
+    version: 'Tracks %{version} (%{revision_with_date})'
+    send_feedback: Send feedback
   helpers:
     select:
       prompt: Please select

@@ -404,7 +404,8 @@ fi:
     select_feed_for_context: Valitse tämän asiayhteyden syöte
     select_feed_for_project: Valitse tämän projektin syöte
   footer:
-    send_feedback: Lähetä palautetta versiosta %{version}
+    version: 'Tracks %{version} (%{revision_with_date})'
+    send_feedback: Lähetä palautetta
   helpers:
     select:
       prompt: Valitse

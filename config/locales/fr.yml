@@ -354,7 +354,8 @@ fr:
     select_feed_for_context: Selectionner un flux pour ce contexte
     select_feed_for_project: Selectionner le flux pour ce projet
   footer:
-    send_feedback: Envoyer un feedback sur %{version}
+    send_feedback: Envoyer un feedback
+    version: 'Tracks %{version} (%{revision_with_date})'
   helpers:
     select:
       prompt: Veuillez sélectionner

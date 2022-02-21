@@ -417,7 +417,8 @@ integrations:
       yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" ve benzeri türden
       görevler oluşturmak için Rich Todo API kullanabilirsiniz.
 footer:
-  send_feedback: Geri bildirim gönderin %{version}
+  send_feedback: Geri bildirim
+  version: 'Tracks %{version} (%{revision_with_date})'
 helpers:
   select:
     prompt: Seçiniz

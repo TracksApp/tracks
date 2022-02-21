@@ -402,7 +402,8 @@ es:
     select_feed_for_context: Seleccione el canal para este contexto
     select_feed_for_project: Seleccione el canal para este proyecto
   footer:
-    send_feedback: Envía comentarios sobre la %{version}
+    version: 'Tracks %{version} (%{revision_with_date})'
+    send_feedback: Envía comentarios sobre
   helpers:
     select:
       prompt: Seleccione
