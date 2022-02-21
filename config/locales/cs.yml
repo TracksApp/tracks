@@ -347,7 +347,8 @@ cs:
     select_feed_for_context: Select the feed for this context
     select_feed_for_project: Vyberte feed pro tento projekt
   footer:
-    send_feedback: Poslat zpětnou vazbu na %{version}
+    version: 'Tracks %{version} (%{revision_with_date})'
+    send_feedback: Poslat zpětnou vazbu
   helpers:
     select:
       prompt: Выберите

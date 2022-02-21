@@ -36,6 +36,8 @@ COPY lib /app/lib/
 COPY app /app/app/
 COPY db /app/db/
 
+COPY .git /app/.git
+
 RUN RAILS_ENV=production bundle exec rake assets:precompile
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]

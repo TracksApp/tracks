@@ -425,7 +425,8 @@ ru:
     select_feed_for_context: Выберите ленту новостей для этого контекста
     select_feed_for_project: Выберите ленту новостей для этого проекта
   footer:
-    send_feedback: Обратная связь. Версия %{version}
+    send_feedback: Обратная связь
+    version: 'Tracks %{version} (%{revision_with_date})'
   helpers:
     select:
       prompt: Выберите...

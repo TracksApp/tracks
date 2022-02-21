@@ -1,6 +1,7 @@
 <div class="bootstrap">
   <div class="footer">
-    <%= t('footer.send_feedback', :version => TRACKS_VERSION) %>
+    <%= t('footer.version', :version => TRACKS_VERSION, :revision_with_date => TRACKS_REVISION_WITH_DATE, :revision => TRACKS_REVISION) %>
+    <%= t('footer.send_feedback') %>
     <span class="footer-line">
       <a href="https://github.com/TracksApp/tracks/issues"><%= t('common.bugs')%></a> |
       <a href="https://github.com/TracksApp/tracks/wiki"><%= t('common.wiki')%></a> |

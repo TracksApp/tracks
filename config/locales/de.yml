@@ -402,7 +402,8 @@ de:
     select_feed_for_context: Feed für diesen Kontext auswählen
     select_feed_for_project: Feed für dieses Projekt auswählen
   footer:
-    send_feedback: Senden Sie Feedback zu %{version}
+    version: 'Tracks %{version} (%{revision_with_date})'
+    send_feedback: Senden Sie Feedback
   helpers:
     select:
       prompt: Выберите
