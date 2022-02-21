@@ -1,14 +1,28 @@
 See doc/upgrading.md for the upgrade documentation!
 
-## Version 2.6
+## Version 2.6.0
 
 ## New features
 
 * Ruby 3.0 is now supported.
+* Support obsidian links in notes.
 
 ## Removed features
 
 * No longer supporting EOL Ruby 2.5
+
+### Bug fixes
+
+* Fix Docker image functionality in certain cases.
+* Lots of dependencies have been upgraded.
+* Fixed some error messages in import.
+* Fixed import in the Docker image.
+
+## Updated translations
+
+* Finnish (by maintainer Jyri-Petteri ”ZeiP” Paloposki)
+* Turkish (thanks Burak Ekseli!)
+* Spanish (thanks Francisco Serrador!)
 
 ## Version 2.5.2
 
