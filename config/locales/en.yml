@@ -21,6 +21,7 @@ en:
         show_project_on_todo_done: Go to project page on completing todo
         sms_context: Default email context
         sms_email: From email
+        sms_permitted_senders: Permitted email senders (use comma as separator)
         staleness_starts: Start of staleness
         theme: Theme
         time_zone: Time zone

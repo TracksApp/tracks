@@ -99,9 +99,15 @@ class MessageGateway < ActionMailer::Base
   end
 
   def sender_is_in_mailmap?(user, email)
-    if (SITE_CONFIG['mailmap'].is_a? Hash) && SITE_CONFIG['email_dispatch'] == 'to'
-      # Look for the sender in the map of allowed senders
-      SITE_CONFIG['mailmap'][user.preference.sms_email].include? email.from[0]
+    if SITE_CONFIG['email_dispatch'] == 'to'
+      if SITE_CONFIG['mailmap'].is_a? Hash
+        # Look for the sender in the map of allowed senders
+        SITE_CONFIG['mailmap'][user.preference.sms_email].include? email.from[0]
+      else
+        # If the config mailmap isn't defined, use the values provided by the users.
+        pref_senders = user.prefs.sms_permitted_senders.split(',').collect(&:strip)
+        pref_senders.include? email.from[0]
+      end
     else
       # We can't check the map if it's not defined, or if the lookup is the
       # wrong way round, so just allow it

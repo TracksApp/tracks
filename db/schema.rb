@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(version: 2020_08_20_000743) do
     t.string "locale"
     t.integer "review_period", default: 14, null: false
     t.string "theme"
+    t.string "sms_permitted_senders"
     t.index ["user_id"], name: "index_preferences_on_user_id"
   end
 

@@ -38,5 +38,8 @@
   <%= pref('prefs', "sms_context") { select('prefs', 'sms_context_id', current_user.contexts.map{|c| [c.name, c.id]}, {}, class: "form-control") } %>
 </div>
 <div class="form-group">
+  <%= pref_with_text_field('prefs', "sms_permitted_senders") %>
+</div>
+<div class="form-group">
   <%= pref_with_select_field('prefs', 'theme', [[t('models.preference.themes.black'), Preference.themes[:black]], [t('models.preference.themes.light_blue'), Preference.themes[:light_blue]]]) %>
 </div>
