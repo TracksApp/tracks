@@ -16,3 +16,20 @@ Style/StringLiterals:
 
 Layout/AlignParameters:
   EnforcedStyle: with_fixed_indentation
+
+Metrics/AbcSize:
+  Max: 100
+Metrics/CyclomaticComplexity:
+  Max: 100
+Metrics/MethodLength:
+  Max: 100
+  CountAsOne: ['array', 'hash', 'heredoc']
+Metrics/ModuleLength:
+  Max: 300
+  CountAsOne: ['array', 'hash', 'heredoc']
+Metrics/ClassLength:
+  Max: 300
+Metrics/ParameterLists:
+  Max: 20
+Metrics/PerceivedComplexity:
+  Max: 100
