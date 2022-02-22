@@ -5,7 +5,7 @@ SCRIPT=$(readlink -f "$0")
 # Absolute path this script is in, thus /home/user/bin
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-if [ -e ../.use-docker -a ! -e /etc/app-env ];
+if [ -e $SCRIPTPATH/../.use-docker -a ! -e /etc/app-env ];
 then
   $SCRIPTPATH/../script/docker-environment $0 "$@"
 else
