@@ -462,7 +462,8 @@ fi:
       meaning_title: Tarkoitus
       symbol_title: Merkintä
       fields_title: 'Kentät:'
-      description: 'Molemmilla ylläolevilla tavoilla voidaan käyttää seuraavaa muotoilua:'
+      description: 'Molemmilla ylläolevilla tavoilla voidaan käyttää viestin otsikossa
+        seuraavaa muotoilua tietojen lisäämiseen:'
     message_gateway:
       instructions:
         '3': Lähetä sähköposti juuri asettamaasi osoitteeseen!
