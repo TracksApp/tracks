@@ -483,7 +483,7 @@ en:
           \ and home email accounts to your Tracks Mailgun route, set it up like this:\
           \ %{code}"
     email_rich:
-      description: "For both of the above methods, the follow format can be used:"
+      description: "For both of the above methods, the following format can be used in the message subject to add metadata:"
       fields_title: "The fields are:"
       symbol_title: Symbol
       meaning_title: Meaning
