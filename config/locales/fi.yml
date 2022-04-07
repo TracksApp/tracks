@@ -131,9 +131,8 @@ fi:
     none: Ei
     not_available_abbr: ei
     note:
-      one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
-      zero: ei muistiinpanoja
+      one: ei muistiinpanoja
+      other: 1 muistiinpano
     notes: Muistiinpanot
     numbered_step: Askel %{number}
     ok: Ok
@@ -455,6 +454,9 @@ fi:
           määrittämiseksi näissä järjestyksissä)
         project: Projekti, johon toimenpide liitetään
         context: Konteksti, johon toimenpide liitetään
+        tickler_date: Toimenpiteen näyttöajankohta (2 numeroa pelkän päivän määrittämiseksi,
+          4 numeroa kuukauden ja päivän tai 6 numeroa vuoden, kuukauden ja päivän
+          määrittämiseksi näissä järjestyksissä)
       fields_instruction: Kaikki merkinnät ovat valinnaisia. Tekstiä ensimmäiseen
         merkintään asti käytetään toimenpiteen kuvauksena
       meaning_title: Tarkoitus
@@ -1334,13 +1336,11 @@ fi:
       multi_page_html: Näytetään %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> yhteensä
         <b>%{count}</b> tietueesta
       single_page:
-        one: Näytetään 1 %{model}
-        other: Näytetään kaikki %{count} %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään 1 %{model}
       single_page_html:
-        one: Näytetään <b>1</b> %{model}
-        other: Näytetään <b>kaikki&nbsp;%{count}</b> %{model}
-        zero: '%{model} ei löytynyt'
+        one: '%{model} ei löytynyt'
+        other: Näytetään <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Edellinen"
   auth_type:
