@@ -74,6 +74,14 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.17)
     benchmark (0.2.0)
+    better_html (1.0.16)
+      actionview (>= 4.0)
+      activesupport (>= 4.0)
+      ast (~> 2.0)
+      erubi (~> 1.4)
+      html_tokenizer (~> 0.0.6)
+      parser (>= 2.4)
+      smart_properties
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -92,7 +100,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     crass (1.0.6)
     database_cleaner (1.8.5)
     diff-lcs (1.5.0)
@@ -111,12 +119,14 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     highline (2.0.3)
+    html_tokenizer (0.0.7)
     htmlentities (4.3.4)
     i18n (1.10.0)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (0.9.37)
+    i18n-tasks (1.0.8)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
+      better_html (~> 1.0)
       erubi
       highline (>= 2.0.0)
       i18n
@@ -145,7 +155,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.14.0)
+    loofah (2.16.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -201,7 +211,7 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    rails-i18n (7.0.1)
+    rails-i18n (7.0.3)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
     rails_autolink (1.1.6)
@@ -256,6 +266,7 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
+    smart_properties (1.17.0)
     solargraph (0.44.3)
       backport (~> 1.2)
       benchmark
@@ -290,7 +301,7 @@ GEM
     thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    tolk (4.1.1)
+    tolk (4.3.0)
       rails (>= 5.0)
       safe_yaml (>= 0.8.6)
       sassc
@@ -331,7 +342,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 5.15.1)
   htmlentities
-  i18n-tasks (~> 0.9.37)
+  i18n-tasks (~> 1.0.8)
   jquery-rails (~> 4.4)
   jquery-ui-rails (~> 6.0.1)
   kt-paperclip (~> 7.1)
@@ -355,7 +366,7 @@ DEPENDENCIES
   spring
   sqlite3
   therubyracer
-  tolk (~> 4.1.1)
+  tolk (~> 4.3.0)
   tracks-chartjs-ror
   uglifier (>= 1.3.0)
   will_paginate

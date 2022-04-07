@@ -40,13 +40,13 @@ group :development do
   gem 'spring'
   gem 'yard'
 
-  gem 'tolk', '~> 4.1.1'
+  gem 'tolk', '~> 4.3.0'
 
   gem 'bullet'
   gem 'rack-mini-profiler'
   gem 'solargraph'
 
-  gem 'i18n-tasks', '~> 0.9.37'
+  gem 'i18n-tasks', '~> 1.0.8'
 end
 
 group :development, :test do
