@@ -494,6 +494,8 @@ en:
         project: The project to place the Todo in
         due_date: The due date for the Todo (may be 2 digits for day, 4 digits for
           month-day, or 6 digits for year-month-day)
+        tickler_date: The tickler date for the Todo (may be 2 digits for day, 4 digits for
+          month-day, or 6 digits for year-month-day)
         tag: A tag to apply to the Todo – may be used multiple times
         star: Flag to star the Todo
     example_names:
