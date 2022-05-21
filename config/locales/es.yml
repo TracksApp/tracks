@@ -98,9 +98,8 @@ es:
     action: Tarea
     actions: Tareas
     actions_midsentence:
-      one: tarea
-      other: tareas
-      zero: tareas
+      one: tareas
+      other: tarea
     add: Añadir
     ajaxError: Hubo un error al recuperar desde el servidor
     back: Atrás
@@ -132,9 +131,8 @@ es:
     none: Ninguno
     not_available_abbr: n/d
     note:
-      one: 1 nota
-      other: "%{count} notas"
-      zero: 0 notas
+      one: 0 notas
+      other: 1 nota
     notes: Notas
     numbered_step: Paso %{number}
     ok: Aceptar
@@ -203,23 +201,29 @@ es:
   data:
     import:
       errors:
-        invalid_destination: ""
+        invalid_destination: "Destino de importación no válido: %{e}"
         some: Han ocurrido algunos errores durante la importación
-        file_blank: ''
-        invalid_csv: ""
-        save_error: ""
-      map_title: ''
+        file_blank: 'Archivo no puede estar en blanco'
+        invalid_csv: "CSV inválido: no pudo leer cabeceras: %{e}"
+        save_error: "No pudo guardar CSV subido (%{path_and_file}). Puede hacer un\
+          \ seguimiento de escritura al directorio de la subida? %{e}"
+        no_context: No pudo encontrar un contexto predeterminado
+      map_title: 'Asocia campos a ser importados'
       header: Importando datos
       submit: Importar
       successful: Importación se realizó correctamente.
       target_field: "Import to:"
       upload: Subir
-      upload_csv: ''
+      upload_csv: 'Suba su archivo CSV'
       projects_count: "%{count} proyectos importados"
       todos_count: "%{count} pendientes importados"
-      yaml_disabled: ""
-      yaml_warning: ""
-      paste_field: ""
+      yaml_disabled: "Carga YAML deshabilitada"
+      yaml_warning: "%{warning}: todos sus datos actuales serán destruidos antes de\
+        \ importar el archivo YAML, por lo que si tiene acceso a la base de datos,\
+        \ le recomendamos encarecidamente respaldar la base de dato ahora mismo, por\
+        \ si algo pueda salir mal."
+      paste_field: "Pegue el contenido del archivo YAML que ha exportado a la caja\
+        \ de texto de abajo:"
       warning: Aviso
     export:
       page_title: Tracks::Export
@@ -299,7 +303,10 @@ es:
     - Octubre
     - Noviembre
     - Diciembre
-    order: "[:year, :month, :day]"
+    order:
+    - :año
+    - :mes
+    - :día
   datetime:
     distance_in_words:
       about_x_hours:
@@ -316,13 +323,11 @@ es:
         other: Casi %{count} años
       half_a_minute: medio minuto
       less_than_x_minutes:
-        one: menos de un minuto
-        other: menos de %{count} minutos
-        zero: menos de 1 minuto
+        one: menos de 1 minuto
+        other: menos de un minuto
       less_than_x_seconds:
         one: menos de 1 segundo
-        other: menos de %{count} segundos
-        zero: menos de 1 segundo
+        other: menos de 1 segundo
       over_x_years:
         one: más de un año
         other: en %{count} años
@@ -413,17 +418,20 @@ es:
       update: Actualizar %{model}
   integrations:
     opensearch_description: Buscar en las Pistas
+    sections:
+      message_gateway: Integre Seguimientos con un servidor de correo para ser capaz
+        de enviar una acción a través del correo a los Seguimientos
+      mailgun: Enviar correos a los Seguimientos con Mailgun
   help:
     title: Help
     usage: ''
     manual_link_text: User manual
     bugs: ''
     issue_link_text: ''
-    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link}
-      for further information. You can also come discuss with the community:'
+    contribute: ''
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
-    irc_bullet: '%{irc_link} (also available in %{matrix_link})'
+    irc_bullet: '%{irc_link} (también disponible en %{matrix_link})'
     irc_link_text: 'IRC channel #Tracks@FreeNode'
     matrix_link_text: Matriz
   layouts:
@@ -440,7 +448,7 @@ es:
       tickler: Recordatorio
     navigation:
       admin: Admin
-      api_docs: REST API Docs
+      api_docs: ''
       calendar: Calendario
       calendar_title: Calendario de las acciones pendientes
       completed_tasks: Hecho
@@ -462,7 +470,7 @@ es:
       integrations_: Pistas Integradas
       manage_users: Administrar usuarios
       manage_users_title: Añadir o eliminar usuarios
-      mobile: Mobile Site
+      mobile: ''
       notes_title: Mostrar todas las notas
       options: Opciones
       organize: Organizar
@@ -483,34 +491,34 @@ es:
       tickler: Recordatorio
       tickler_title: Recordatorio
       view: Ver
-    next_actions_rss_feed: RSS feed of next actions
+    next_actions_rss_feed: ''
     toggle_contexts: Conmuta contextos colapsados
     toggle_contexts_title: Hacer que los contextos colapsados sea (in)visibles
     toggle_notes: Conmuta anotaciones
     toggle_notes_title: Conmuta todas las anotaciones
   login:
     account_login: Acceso a la cuenta
-    cas_create_account: If you like to request on please go here to %{signup_link}
-    cas_logged_in_greeting: Hello, %{username}! You are authenticated.
-    cas_login: CAS Login
-    cas_no_user_found: Hello, %{username}! You do not have an account on Tracks.
+    cas_create_account: ''
+    cas_logged_in_greeting: ''
+    cas_login: ''
+    cas_no_user_found: ''
     cas_signup_link: Solicitar cuenta
     cas_username_not_found: Disculpe, ningún usuario por esa id de usuario CAS existe
       (%{username})
-    log_in_again: log in again.
-    logged_out: You have been logged out of Tracks.
-    login_cas: go to the CAS
-    login_standard: go back to the standard login
-    login_with_openid: login with an OpenID
-    mobile_use_openid: "…or login with an OpenID"
-    openid_identity_url_not_found: Sorry, no user by that identity URL exists (%{identity_url})
+    log_in_again: ''
+    logged_out: ''
+    login_cas: ''
+    login_standard: ''
+    login_with_openid: ''
+    mobile_use_openid: ""
+    openid_identity_url_not_found: ''
     option_separator: o,
-    please_login: Please log in to use Tracks
-    session_time_out: Session has timed out. Please %{link}
-    session_will_expire: session will expire after %{hours} hour(s) of inactivity.
+    please_login: ''
+    session_time_out: ''
+    session_will_expire: ''
     session_will_not_expire: sesión no caducada.
     sign_in: Entrar
-    signup_prompt: Want to create an account?
+    signup_prompt: ''
     successful: Has entrado correctamente. ¡Bienvenido de nuevo!
     successful_with_session_info: 'Entrada correcta:'
     unsuccessful: Entrada incorrecta.
@@ -533,19 +541,18 @@ es:
     user:
       error_context_not_associated: ID de contexto %{context} no asociado con el id
         %{user} del usuario.
-      error_project_not_associated: Project id %{project} not associated with user
-        id %{user}.
+      error_project_not_associated: ''
   notes:
-    delete_confirmation: Are you sure that you want to delete the note '%{id}'?
+    delete_confirmation: ''
     delete_item_title: Delete item
     delete_note_confirm: Are you sure that you want to delete the note '%{id}'?
     delete_note_title: Delete the note '%{id}'
     deleted_note: Deleted note '%{id}'
     edit_item_title: Edit item
     in_project: 'En: '
-    no_notes_available: 'Currently there are no notes: add notes to projects from
-      individual project pages.'
-    note_header: Note %{id}
+    no_notes_available: 'Ahora no hay notas: agregue notas a proyectos desde páginas
+      de proyecto individuales.'
+    note_header: Nota %{id}
     note_link_title: Mostrar nota %{id}
     note_location_link: 'En:'
     save_status_message: Nota %{id} fue guardada
@@ -558,14 +565,14 @@ es:
         precision: '2'
         separator: "."
         significant: Significant
-        strip_insignificant_zeros: Strip insignificant zeros
+        strip_insignificant_zeros: Recorta ceros insignificantes
         unit: "€"
     format:
       delimiter: ","
       precision: '3'
       separator: "."
-      significant: Significant
-      strip_insignificant_zeros: Strip insignificant zeros
+      significant: Significante
+      strip_insignificant_zeros: Recorta ceros insignificantes
     human:
       decimal_units:
         format: "%n %u"
@@ -1152,57 +1159,55 @@ es:
     recurring_todos: Recursión pendiente
     remove_dependency: Remove dependency (does not delete the action)
     removed_predecessor: Removed %{successor} as dependency from %{predecessor}.
-    scheduled_overdue: Scheduled to show %{days} days ago
+    scheduled_overdue: Planificado para mostrar %{days} días anteriores
     see_all_completed: Usted puede ver todas las acciones realizadas %{link}
-    set_to_pending: "%{task} set to pending"
-    show_from: Show from
-    show_in_days: Show in %{days} days
-    show_on_date: Show on %{date}
+    set_to_pending: "%{task} fijar a pendiente"
+    show_from: Mostrar origen
+    show_in_days: Muestra en %{days} días
+    show_on_date: Mostrar en %{date}
     show_today: Show Today
-    show_tomorrow: Show Tomorrow
-    star_action: Star this action
-    star_action_with_description: star the action '%{description}'
-    tagged_page_title: TRACKS::Tagged with '%{tag_name}'
-    tagged_with: tagged with &lsquo;%{tag_name}&rsquo;
-    tags: Tags (separate with commas)
-    task_list_title: TRACKS::List tasks
+    show_tomorrow: Muestra Mañana
+    star_action: Iniciar esta acción
+    star_action_with_description: inicia la acción '%{description}'
+    tagged_page_title: TRACKS::Etiquetado con '%{tag_name}'
+    tagged_with: etiquetado con &lsquo;%{tag_name}&rsquo;
+    tags: Etiquetas (separadas por comas)
+    task_list_title: TRACKS::List etiquetadas
     tickler_items_due:
-      one: One tickler item is now due - refresh the page to see it.
-      other: '%{count} tickler items are now due - refresh the page to see them.'
+      one: Un elemento de tiquet ahora está vencido - recargue la página para verlo.
+      other: '%{count} elementos de ticket ahora están vencidos - recargue la página
+        para verlos.'
     to_tickler: al recordatorio
-    unable_to_add_dependency: Unable to add dependency
-    unresolved_dependency: The value you entered in the dependency field did not resolve
-      to an existing action. This value will not be saved with the rest of the action.
-      Continue?
-    was_due_on_date: was due on %{date}
+    unable_to_add_dependency: Es imposible añadir dependencia
+    unresolved_dependency: ''
+    was_due_on_date: venció el %{date}
   users:
-    account_signup: Account signup
-    approve_tos: I approve the Terms of Service
-    auth_change_submit: Change authentication type
-    auth_type_update_error: 'There was a problem updating your authentication type:
+    account_signup: ''
+    approve_tos: Apruebo los Términos del Servicio
+    auth_change_submit: Modifica el tipo de autenticación
+    auth_type_update_error: 'Hubo un problema actualizando su tipo de autenticación:
       %{error_messages}'
-    auth_type_updated: Authentication type updated.
-    change_auth_type_title: TRACKS::Change authentication type
-    change_authentication_type: Change authentication type
-    change_password_prompt: Enter your new password in the fields below and click
-      'Change password' to replace your current password with your new one.
-    change_password_submit: Change password
+    auth_type_updated: Tipo autenticador actualizado
+    change_auth_type_title: TRACKS::Change tipo de autenticación
+    change_authentication_type: Cambia el tipo de autenticación
+    change_password_prompt: Introduzca su contraseña nueva dentro de los campos debajo
+      y pulse «Cambiar contraseña» para sustituirla con la nueva.
+    change_password_submit: Cambiar contraseña
     change_password_title: TRACKS::Change password
-    choose_password: Choose password
-    confirm_password: Confirm password
-    desired_login: Desired login
-    destroy_confirmation: 'Warning: this will delete user ''%{login}'', all their
-      actions, contexts, project and notes. Are you sure that you want to continue?'
-    destroy_error: There was an error deleting the user %{login}
-    destroy_successful: User %{login} was successfully destroyed
-    destroy_user: Destroy user
-    email_address: Email address
-    failed_to_delete_user: Failed to delete user %{username}
-    first_user_heading: 'Welcome to TRACKS. To get started, please create an admin
-      account:'
+    choose_password: Elija contraseña
+    confirm_password: Conformar contraseña
+    desired_login: Acceso deseado
+    destroy_confirmation: ''
+    destroy_error: Hubo un error al borrar el usuario %{login}
+    destroy_successful: El usuario %{login} fue destruido completamente
+    destroy_user: Destruir usuario
+    email_address: Dirección de correo-e
+    failed_to_delete_user: Error al borrar el usuario %{username}
+    first_user_heading: 'Bienvenido a TRACKS. Para ver como iniciar, cree una cuenta
+      de admin:'
     first_user_title: TRACKS::Sign up as the admin user
-    identity_url: Identity URL
-    label_auth_type: Authentication type
+    identity_url: Identidad URL
+    label_auth_type: Tipo de autenticación
     manage_users: Manage users
     new_password_label: New password
     new_token_generated: New token successfully generated
@@ -1237,15 +1242,15 @@ es:
       multi_page_html: Representando %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de
         <b>%{count}</b> en el total
       single_page:
-        one: Viendo del 1 %{model}
-        other: Viendo todos los %{count} %{model}
-        zero: No %{model} encontrado
+        one: No %{model} encontrado
+        other: Viendo del 1 %{model}
       single_page_html:
-        one: Viendo del <b>1</b> %{model}
-        other: Viendo <b>todos los %{count}</b> %{model}
-        zero: No %{model} encontrado
+        one: No %{model} encontrado
+        other: Viendo del <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "« Anterior"
   rest_help:
     auth:
       title: Autenticación
+    activeresource:
+      ror_link_text: Ruby on Rails
