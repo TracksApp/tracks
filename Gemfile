@@ -33,7 +33,7 @@ gem 'therubyracer', group: :therubyracer
 
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
-gem 'mysql2', '~> 0.5.3', group: :mysql
+gem 'mysql2', '~> 0.5.4', group: :mysql
 gem 'pg', '~> 1.3.5', group: :postgresql
 
 group :development do
@@ -52,7 +52,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'listen'
-  gem 'rubocop', '~> 1.28', require: false
+  gem 'rubocop', '~> 1.30', require: false
 end
 
 group :test do
