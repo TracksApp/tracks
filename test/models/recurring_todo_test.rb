@@ -107,7 +107,6 @@ class RecurringTodoTest < ActiveSupport::TestCase
   def test_start_from_in_future
 
     ## Test: every day
-
     # every_day should return start_day if it is in the future
     @every_day.start_from = @in_three_days
     due_date = @every_day.get_due_date(nil)
@@ -120,18 +119,14 @@ class RecurringTodoTest < ActiveSupport::TestCase
     due_date = @every_day.get_due_date(@in_four_days)
     assert_equal (@in_four_days+1.day).at_midnight, due_date
 
-    
     ## Test: Every weekday
-
     # 1 Jan 2020 is a Wednesday
     @weekly_every_day.start_from = Time.zone.local(2020,1,1)
     assert_equal Time.zone.local(2020,1,1), @weekly_every_day.get_due_date(nil)
     assert_equal Time.zone.local(2020,1,1), @weekly_every_day.get_due_date(Time.zone.local(2019,10,1))
     assert_equal Time.zone.local(2020,1,10), @weekly_every_day.get_due_date(Time.zone.local(2020,1,9))
 
-
     ## Test: every month
-
     @monthly_every_last_friday.start_from = Time.zone.local(@next_year,3,1)
 
     last_friday_in_march = Time.zone.local(@next_year, 3, 31)
@@ -152,16 +147,17 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # Starting from 1 April next year: next due date is the last Friday of April
     assert_equal last_friday_in_april, @monthly_every_last_friday.get_due_date(Time.zone.local(@next_year,4,1))
 
-
     ## Test: every year
-
-    # start from after june 8th 2008
-    @yearly.start_from = Time.zone.local(2021,6,12)
-    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(nil) # jun 8th next year
-    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(Time.zone.local(2019,6,1)) # also next year
-    assert_equal Time.zone.local(2022,6,8), @yearly.get_due_date(Time.zone.local(2020,6,15)) # also next year
-
     this_year = Time.zone.now.utc.year
+    next_year = this_year + 1
+
+    # Test that we're getting the next due date both without a specific date,
+    # after this year and after the next year's.
+    @yearly.start_from = Time.zone.local(this_year, 6, 12)
+    assert_equal Time.zone.local(next_year, 6, 8), @yearly.get_due_date(nil) # jun 8th next year
+    assert_equal Time.zone.local(next_year, 6, 8), @yearly.get_due_date(Time.zone.local(next_year, 6, 1)) # also next year
+    assert_equal Time.zone.local(next_year + 1, 6, 8), @yearly.get_due_date(Time.zone.local(next_year, 6, 15)) # also next year
+
     @yearly.start_from = Time.zone.local(this_year+1,6,12)
     due_date = @yearly.get_due_date(nil)
     assert_equal due_date.year, this_year+2
