@@ -72,7 +72,7 @@ GEM
     autoprefixer-rails (10.1.0.0)
       execjs
     backport (1.2.0)
-    bcrypt (3.1.17)
+    bcrypt (3.1.18)
     benchmark (0.2.0)
     better_html (1.0.16)
       actionview (>= 4.0)
@@ -334,7 +334,7 @@ DEPENDENCIES
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list
-  bcrypt (~> 3.1.17)
+  bcrypt (~> 3.1.18)
   bootstrap-sass (= 3.4.1)
   bullet
   byebug
