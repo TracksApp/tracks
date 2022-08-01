@@ -1,1 +1,4 @@
-{}
+activerecord:
+  attributes:
+    note:
+      created_at: Opprettet
