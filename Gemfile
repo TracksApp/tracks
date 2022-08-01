@@ -16,7 +16,7 @@ gem 'font-awesome-sass', '~> 6.1.2'
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'aasm', '~> 5.2.0'
+gem 'aasm', '~> 5.3.0'
 gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.18'
 gem 'htmlentities'
@@ -34,7 +34,7 @@ gem 'therubyracer', group: :therubyracer
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
 gem 'mysql2', '~> 0.5.4', group: :mysql
-gem 'pg', '~> 1.4.1', group: :postgresql
+gem 'pg', '~> 1.4.2', group: :postgresql
 
 group :development do
   gem 'spring'
