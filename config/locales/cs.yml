@@ -248,9 +248,9 @@ cs:
     - Listopad
     - Prosinec
     order:
-    - rok
-    - ":měsíc"
-    - den
+    - :year
+    - :month
+    - :day
   datetime:
     distance_in_words:
       about_x_hours:
