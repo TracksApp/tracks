@@ -1,4 +1,5 @@
-activerecord:
-  attributes:
-    note:
-      created_at: Opprettet
+nb_NO:
+  activerecord:
+    attributes:
+      note:
+        created_at: Opprettet
