@@ -7,5 +7,8 @@
 //= link datepicker-fi.js
 //= link datepicker-fr.js
 //= link datepicker-he.js
+//= link datepicker-nb_NO.js
 //= link datepicker-nl.js
 //= link datepicker-ru.js
+//= link datepicker-sv.js
+//= link datepicker-tr.js

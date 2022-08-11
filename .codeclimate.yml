@@ -12,7 +12,7 @@ checks:
   method-lines:
     config:
       threshold: 100
-engines:
+plugins:
   brakeman:
     enabled: true
   fixme:
@@ -30,3 +30,5 @@ engines:
         enabled: false
       Rubocop/Style/HashSyntax:
         enabled: false
+#exclude_patterns:
+#- app/assets/javascripts-jquery-ui
