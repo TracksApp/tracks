@@ -56,10 +56,10 @@ group :development, :test do
 end
 
 group :test do
-
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.7', group: :test, require: nil
   gem 'database_cleaner'
+  gem 'database_cleaner-active_record'
   gem 'factory_bot_rails'
   gem 'minitest-stub-const'
   gem 'mocha', :require => false
