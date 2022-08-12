@@ -39,6 +39,13 @@ force_ssl: false
 # the relative URL. Mongrel, for example, has a --prefix option.
 # subdir: "/tracks"
 
+# Set this to respective values if you're instance is running behind a proxy
+# (e.g. localhost:3000 is not the client visible host).
+# default_url_options:
+#   :host: 'example.org'
+#   :protocol: 'https://'
+#   :port: 443
+
 # Set to true to allow anyone to sign up for a username.
 open_signups: false
 

@@ -35,5 +35,7 @@ module Tracksapp
 
     # configure Tracks to handle deployment in a subdir
     config.relative_url_root = SITE_CONFIG['subdir'] if SITE_CONFIG['subdir']
+    # or deployment behind a proxy
+    config.action_controller.default_url_options = SITE_CONFIG['default_url_options'] if SITE_CONFIG['default_url_options']
   end
 end
