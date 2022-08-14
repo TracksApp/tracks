@@ -8,7 +8,7 @@ gem 'coffee-rails', '~> 5.0.0'
 gem 'jquery-rails', '~> 4.5'
 gem 'jquery-ui-rails', '~>6.0.1'
 
-gem 'rails', '~> 6.0.4'
+gem 'rails', '~> 6.0.0'
 gem 'sassc-rails', '~> 2.1.2'
 
 gem 'bootstrap-sass', '3.4.1'
@@ -37,7 +37,7 @@ gem 'mysql2', '~> 0.5.4', group: :mysql
 gem 'pg', '~> 1.4.3', group: :postgresql
 
 group :development do
-  gem 'spring'
+  gem 'spring', '~> 3'
   gem 'yard'
 
   gem 'tolk', '~> 4.3.0'
@@ -59,7 +59,7 @@ group :test do
 
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.7', group: :test, require: nil
-  gem 'database_cleaner'
+  gem 'database_cleaner', '~> 1'
   gem 'factory_bot_rails'
   gem 'minitest-stub-const'
   gem 'mocha', :require => false

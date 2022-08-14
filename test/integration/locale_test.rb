@@ -17,6 +17,9 @@ class LocaleTest < ActionDispatch::IntegrationTest
       assert_response :success
       assert_template "todos/index"
     end
+
+    # Finally log in as normal admin user to prevent other tests from failing to the non-English locale.
+    logs_in_as(users(:admin_user), 'abracadabra')
   end
 
 end
