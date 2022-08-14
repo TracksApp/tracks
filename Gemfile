@@ -37,7 +37,7 @@ gem 'mysql2', '~> 0.5.4', group: :mysql
 gem 'pg', '~> 1.4.3', group: :postgresql
 
 group :development do
-  gem 'spring', '~> 3'
+  gem 'spring', '~> 4'
   gem 'yard'
 
   gem 'tolk', '~> 4.3.0'
