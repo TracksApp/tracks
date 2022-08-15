@@ -347,7 +347,8 @@ nl:
     select_feed_for_context: Kies de feed voor deze context
     select_feed_for_project: Kies de feed voor dit project
   footer:
-    send_feedback: Stuur reactie op %{version}
+    send_feedback: Stuur reactie
+    version: 'Tracks %{version} (%{revision_with_date})'
   helpers:
     select:
       prompt: Maak een keuze

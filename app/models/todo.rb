@@ -353,6 +353,7 @@ class Todo < ApplicationRecord
 
   def self.import(filename, params, user)
     default_context = user.contexts.order('id').first
+    return false if default_context.nil?
 
     count = 0
     CSV.foreach(filename, headers: true) do |row|

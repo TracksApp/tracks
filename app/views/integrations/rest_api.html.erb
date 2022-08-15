@@ -64,10 +64,10 @@
   <li>/projects/<code><%= t('rest_help.id') %></code>/todos.xml</li>
 </ul>
 
-<p><%= raw t('rest_help.retrieve.limit', {
+<p><%= raw t('rest_help.retrieve.limit',
   fields: '<code>ID, created_at, modified_at, completed_at</code>',
   limit_parameter: '<code>limit_fields</code>',
-  set_to: '<code>index</code>'}) %></p>
+  set_to: '<code>index</code>') %></p>
 
 <pre>
 <code>
@@ -87,10 +87,10 @@
 
 <h2><%= t('rest_help.writing.title') %></h2>
 
-<p><%= raw t('rest_help.writing.description', {
+<p><%= raw t('rest_help.writing.description',
   put: '<code>PUT</code>',
   post: '<code>POST</code>',
-  delete: '<code>DELETE</code>'}) %></p>
+  delete: '<code>DELETE</code>') %></p>
 
 <p><%= t('rest_help.writing.example_title') %></p>
 
@@ -105,9 +105,9 @@ Location: <%= root_url %>projects/65.xml
 </code>
 </pre>
 
-<p><%= raw t('rest_help.writing.example_project_response_title', {
+<p><%= raw t('rest_help.writing.example_project_response_title',
   response_code: '<code>HTTP/1.1 201 Created</code>',
-  header: '<code>Location</code>'}) %></p>
+  header: '<code>Location</code>') %></p>
 
 <pre>
 <code>
@@ -120,9 +120,9 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-<p><%= raw t('rest_help.writing.example_todo_response_title', {
+<p><%= raw t('rest_help.writing.example_todo_response_title',
   response_code: '<code>HTTP/1.1 201 Created</code>',
-  header: '<code>Location</code>'}) %></p>
+  header: '<code>Location</code>') %></p>
 
 <pre>
 <code>
@@ -143,8 +143,8 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-<p><%= raw t('rest_help.writing.example_note_response_title', {
-  response_code: '<code>HTTP/1.1 200 OK</code>'}) %></p>
+<p><%= raw t('rest_help.writing.example_note_response_title',
+  response_code: '<code>HTTP/1.1 200 OK</code>') %></p>
 
 <pre>
 <code>
@@ -164,8 +164,8 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-<p><%= raw t('rest_help.writing.example_delete_title', {
-  delete: '<code>DELETE</code>'}) %></p>
+<p><%= raw t('rest_help.writing.example_delete_title',
+  delete: '<code>DELETE</code>') %></p>
 
 <pre>
 <code>
@@ -176,15 +176,15 @@ Location: <%= root_url %>todos/452.xml
 </code>
 </pre>
 
-<p><%= raw t('rest_help.writing.example_delete_response_title', {
-  response_code: '<code>HTTP/1.1 200 OK</code>'}) %></p>
+<p><%= raw t('rest_help.writing.example_delete_response_title',
+  response_code: '<code>HTTP/1.1 200 OK</code>') %></p>
 
 <h2><%= t('rest_help.response.title') %></h2>
 
-<p><%= raw t('rest_help.response.description', {
+<p><%= raw t('rest_help.response.description',
   response_200: '<code>200 OK</code>',
   response_201: '<code>201 Created</code>',
-  example_call: '<code>GET /contexts/2/todos.xml</code>'}) %></p>
+  example_call: '<code>GET /contexts/2/todos.xml</code>') %></p>
 
 <p><%= t('rest_help.response.xml_description') %></p>
 
@@ -200,11 +200,11 @@ $ curl -u username:p4ssw0rd -H "Content-Type: text/xml" \
 
 <h2><%= t('rest_help.activeresource.title') %></h2>
 
-<p><%= raw I18n.t 'rest_help.activeresource.description', {
+<p><%= raw I18n.t 'rest_help.activeresource.description',
   activeresource_link: link_to(I18n.t('rest_help.activeresource.activeresource_link_text'), 'http://weblog.rubyonrails.org/2007/9/30/rails-2-0-0-preview-release'),
   ror_link: link_to(I18n.t('rest_help.activeresource.ror_link_text'), 'http://www.rubyonrails.org'),
   gem_command: '<code>gem install activeresource --source http://gems.rubyonrails.org --include-dependencies</code>'
-} %></p>
+%></p>
 
 <pre>
 <code>
@@ -226,8 +226,8 @@ Loading development environment (Rails 1.2.4)
 </code>
 </pre>
 
-<p><%= raw I18n.t 'rest_help.activeresource.wrapper_description', {
-  signals_link: link_to(I18n.t('rest_help.activeresource.signals_link_text'), 'http://www.37signals.com')} %></p>
+<p><%= raw I18n.t 'rest_help.activeresource.wrapper_description',
+  signals_link: link_to(I18n.t('rest_help.activeresource.signals_link_text'), 'http://www.37signals.com') %></p>
 
 <pre>
 <code>
@@ -246,13 +246,13 @@ irb(main):003:0&gt;
 <p><%= t('rest_help.notes.description') %></p>
 
 <ul>
-  <li><%= raw I18n.t 'rest_help.notes.bullet1', {
+  <li><%= raw I18n.t 'rest_help.notes.bullet1',
     id: '<code>ID</code>',
-    url: '<span class="caps">URL</span>'} %></li>
-  <li><%= raw I18n.t 'rest_help.notes.bullet2', {
-    omit: '<code>...</code>' } %></li>
+    url: '<span class="caps">URL</span>' %></li>
+  <li><%= raw I18n.t 'rest_help.notes.bullet2',
+    omit: '<code>...</code>' %></li>
 </ul>
 
-<p><%= raw I18n.t 'rest_help.notes.curl_description', {
-  curl: link_to(I18n.t('rest_help.curl_link_text'), 'http://en.wikipedia.org/wiki/CURL')} %></p>
+<p><%= raw I18n.t 'rest_help.notes.curl_description',
+  curl: link_to(I18n.t('rest_help.curl_link_text'), 'http://en.wikipedia.org/wiki/CURL') %></p>
 </div>

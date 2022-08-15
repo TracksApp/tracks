@@ -109,6 +109,17 @@ end
 
 class ActionDispatch::IntegrationTest
 
+  def logs_in_as(user, plain_pass)
+    @user = user
+    post "/login", params: { :user_login => @user.login,
+      :user_password => plain_pass,
+      :user_noexpiry => 'n' }
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+    assert_template "todos/index"
+  end
+
   def authenticated_post_xml(url, username, password, parameters, headers = {})
     post url, params: parameters, headers:
         { 'HTTP_AUTHORIZATION' => "Basic " + Base64.encode64("#{username}:#{password}"),

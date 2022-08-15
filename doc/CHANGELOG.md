@@ -1,9 +1,55 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.6.1
+
+### Deprecations
+
+* This will be the last release to support Ruby 2.6, which is already end-of-life.
+
+### Bug fixes
+
+* Lots of dependencies have been updated (including security updates).
+* Fixed some documentation.
+* Updated and added missing Datepicker localisations which caused some locales to fail.
+* Added PostgreSQL documentation (thanks Sean Pappalardo!)
+* URL options can be specified to make autocompletion work behind a proxy (thanks Michal Koutný!)
+
+### Updated translations
+
+* Finnish (by maintainer Jyri-Petteri ”ZeiP” Paloposki)
+* Spanish (thanks Francisco Serrador!)
+* Norwegian Bokmål (thanks Allan Nordhøy!)
+
+## Version 2.6.0
+
+### New features
+
+* Ruby 3.0 is now supported.
+* Support obsidian links in notes.
+
+### Removed features
+
+* No longer supporting EOL Ruby 2.5
+
+### Bug fixes
+
+* Fix Docker image functionality in certain cases.
+* Lots of dependencies have been upgraded.
+* Fixed some error messages in import.
+* Fixed import in the Docker image.
+* Footer shows the Git version hash and date in the Docker image
+
+### Updated translations
+
+* Finnish (by maintainer Jyri-Petteri ”ZeiP” Paloposki)
+* Turkish (thanks Burak Ekseli!)
+* Spanish (thanks Francisco Serrador!)
+
 ## Version 2.5.2
 
 ### New features
 
+* Whole Tracks is now translatable.
 * New Finnish locale by the maintainer Jyri-Petteri ”ZeiP” Paloposki.
 * Update last login field when validating an existing login.
 * Show more users in the user list and allow changing the order criteria.

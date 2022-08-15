@@ -1,1 +1,5 @@
-{}
+nb_NO:
+  activerecord:
+    attributes:
+      note:
+        created_at: Opprettet

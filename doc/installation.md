@@ -50,8 +50,8 @@ Tracks container. In future there should be an official image in Docker Hub. You
 1. Make sure you have Docker properly installed.
 2. Start a database container with either MySQL or PostgreSQL:
 ```
-   $ docker run -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
-   $ docker run -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
+   $ docker run -d -p 5432:5432 --name postgres -e POSTGRES_PASSWORD=password -d postgres
+   $ docker run -d -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=password -d mariadb
 ```
 3. Create a database and a user for Tracks in the database:
 ```
@@ -72,8 +72,8 @@ Tracks container. In future there should be an official image in Docker Hub. You
 ```
 5. Start the Tracks server:
 ```
-   $ docker run -p 3000:3000 --name tracks --link mariadb:db -t tracks
-   $ docker run -p 3000:3000 --name tracks --link postgres:db -t tracks
+   $ docker run -d -p 3000:3000 --name tracks --link mariadb:db -t tracks
+   $ docker run -d -p 3000:3000 --name tracks --link postgres:db -t tracks
 ```
 6. You should now be able to access Tracks in http://localhost:3000
 
@@ -153,13 +153,13 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
   * If you are using SQLite:
 
         ```
-        bundle install --without development test mysql
+        bundle install --without "development test mysql"
         ```
 
   * If you are using MySQL:
 
         ```
-        bundle install --without development test sqlite
+        bundle install --without "development test sqlite"
         ```
 
   * If you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed, you may also append `therubyracer` as an additional "without" parameter.
@@ -168,10 +168,13 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
 ## Configure variables
 
 1. In the `config` folder, copy the files `database.yml.tmpl` and `site.yml.tmpl` to `database.yml` and `site.yml`, respectively.
-2. Open the file `config/database.yml` and edit the `production:` section with the details of your database. If you are using MySQL the `adapter:` line should read `adapter: mysql2`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks.db`.
-3. Open the file `config/site.yml`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change are the `secret_token`, the administrator email address (`admin_email`), and the time zone setting. For the time zone setting you can use the command `bundle exec rake time:zones:local` to see all available timezones on your machine
-4. If you are using Windows, you may need to check the ‘shebang’ lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all Unix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
-5. If you intend to use Tracks behind a web server or reverse proxy with https enabled, ensure to set `force_ssl` option to `true`.
+2. Open the file `config/database.yml` and edit the `production:` section with the details of your database.
+   * If you are using MySQL the `adapter:` line should read `adapter: mysql2`, `host: localhost` (in the majority of cases), and your username and password should match those you assigned when you created the database. 
+   * If you are using PostgreSQL, set the line to `adapter: postgresql` and adjust host, username and password as appropriate.
+   * If you are using SQLite3, you should have only two lines under the production section: `adapter: sqlite3` and `database: db/tracks.db`.
+5. Open the file `config/site.yml`, and read through the settings to make sure that they suit your setup. In most cases, all you need to change are the `secret_token`, the administrator email address (`admin_email`), and the time zone setting. For the time zone setting you can use the command `bundle exec rake time:zones:local` to see all available timezones on your machine
+6. If you are using Windows, you may need to check the ‘shebang’ lines (`#!/usr/bin/env ruby`) of the `/public/dispatch.*` files and all the files in the `/script` directory. They are set to `#!/usr/bin/env ruby` by default. This should work for all Unix based setups (Linux or Mac OS X), but Windows users will probably have to change it to something like `#c:/ruby/bin/ruby` to point to the Ruby binary on your system.
+7. If you intend to use Tracks behind a web server or reverse proxy with https enabled, ensure to set `force_ssl` option to `true`.
 
 ### Populate your database with the Tracks schema
 
