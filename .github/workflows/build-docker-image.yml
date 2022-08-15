@@ -41,7 +41,7 @@ jobs:
           tags: |
             tracksapp/tracks:latest
             tracksapp/tracks:master
-            ghcr.io/TracksApp/tracks:latest
+            ghcr.io/tracksapp/tracks:latest
 
 #ghcr.io/TracksApp/tracks:1.0.0
 #tracksapp/tracks:1.0.0
