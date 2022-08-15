@@ -1,10 +1,9 @@
-name: 'build'
-
+---
+name: 'Build latest'
 on:
   push:
     branches:
     - master
-  pull_request:
 
 jobs:
   build-and-publish-latest:
@@ -43,5 +42,3 @@ jobs:
             ghcr.io/tracksapp/tracks:latest
 
 #          platforms: linux/amd64,linux/arm64
-#ghcr.io/TracksApp/tracks:1.0.0
-#tracksapp/tracks:1.0.0
