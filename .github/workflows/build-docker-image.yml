@@ -36,12 +36,12 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             tracksapp/tracks:latest
             tracksapp/tracks:master
             ghcr.io/tracksapp/tracks:latest
 
+#          platforms: linux/amd64,linux/arm64
 #ghcr.io/TracksApp/tracks:1.0.0
 #tracksapp/tracks:1.0.0
