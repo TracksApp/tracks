@@ -114,7 +114,7 @@ GEM
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffi (1.15.5)
-    font-awesome-sass (6.1.2)
+    font-awesome-sass (6.2.0)
       sassc (~> 2.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -180,7 +180,7 @@ GEM
     parser (3.1.2.1)
       ast (~> 2.4.1)
     pg (1.4.3)
-    puma (5.6.4)
+    puma (5.6.5)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.4)
@@ -269,7 +269,7 @@ GEM
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
-    solargraph (0.45.0)
+    solargraph (0.46.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
@@ -342,7 +342,7 @@ DEPENDENCIES
   coffee-rails (~> 5.0.0)
   database_cleaner (~> 1)
   factory_bot_rails
-  font-awesome-sass (~> 6.1.2)
+  font-awesome-sass (~> 6.2.0)
   htmlentities
   i18n-tasks (~> 1.0.11)
   jquery-rails (~> 4.5)
