@@ -19,13 +19,15 @@ It would be great to first discuss them on the [mailing list](https://groups.goo
 If you want to contribute an enhancement or a fix, you can:
 
 1. [fork the project](https://help.github.com/articles/fork-a-repo) 
-1. [create a topic branch](http://learn.github.com/p/branching.html).
-1. install [docker-compose](https://docs.docker.com/compose/)
-1. copy `app/config/site.yml.tmpl` to `app/config/site.yml` and customize as needed
-1. then with `./bin/setup` you will prepare for the first run
-1. start the server with `./script/server` which will start everything you need in Docker and present Tracks at [http://0.0.0.0:3000](http://0.0.0.0:3000)
-1. if you need, you can launch a Rails console with `./bin/rails c` (will run inside Docker)
-1. make your changes and add/update relevant tests
-1. run the test suite with `./bin/rake test` (will run inside Docker)
-1. commit the changes
-1. send a pull request.
+2. [create a topic branch](http://learn.github.com/p/branching.html).
+3. install [docker-compose](https://docs.docker.com/compose/)
+4. copy `app/config/site.yml.tmpl` to `app/config/site.yml` and customize as needed
+5. then with `./bin/setup` you will prepare for the first run
+6. start the server with `./script/server` which will start everything you need in Docker and present Tracks at [http://0.0.0.0:3000](http://0.0.0.0:3000)
+7. if you need, you can launch a Rails console with `./bin/rails c` (will run inside Docker)
+8. make your changes and add/update relevant tests
+9. run the test suite with `./bin/rake test` (will run inside Docker)
+10. commit the changes
+11. send a pull request.
+
+Make sure that you've added the necessary tests for any new functionality and preferably also for any bugs and that your contribution conforms to the coding style defined by the CodeClimate checks. The coding style definition should be approximately the same as the [Shopify Ruby Style Guide](https://ruby-style-guide.shopify.dev/).
