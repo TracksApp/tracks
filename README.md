@@ -3,6 +3,7 @@
 [![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions)
 [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks)
 [![Translation status](https://hosted.weblate.org/widgets/tracks/-/tracks/svg-badge.svg)](https://hosted.weblate.org/engage/tracks/)
+[![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6459/badge)](https://bestpractices.coreinfrastructure.org/projects/6459)
 
 ## About
 
