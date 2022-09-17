@@ -2,8 +2,8 @@ es:
   activerecord:
     attributes:
       note:
-        created_at: Creado el
-        updated_at: actualizado a las
+        created_at: Creado en
+        updated_at: Actualizado en
       preference:
         date_format: Formato de fecha
         due_style: Debido al estilo
@@ -93,14 +93,15 @@ es:
         body: 'Hubo problemas con los campos siguientes:'
         header:
           one: Un error ha impedido que se guarde este %{model}
-          other: '%{count} errores han impedido que se guarden este %{model}'
+          many: '%{count} errores han impedido que se guarden este %{model}'
+          other: ''
   common:
     action: Tarea
     actions: Tareas
     actions_midsentence:
-      one: tarea
+      one: tareas
+      many: tarea
       other: tareas
-      zero: tareas
     add: Añadir
     ajaxError: Hubo un error al recuperar desde el servidor
     back: Atrás
@@ -113,7 +114,8 @@ es:
     create: Crear
     days_midsentence:
       one: día
-      other: días
+      many: días
+      other: ''
     deferred: pospuestas
     description: Descripción
     drag_handle: ARRASTRAR
@@ -132,9 +134,9 @@ es:
     none: Ninguno
     not_available_abbr: n/d
     note:
-      one: 1 nota
-      other: "%{count} notas"
-      zero: 0 notas
+      one: 0 notas
+      many: 1 nota
+      other: '%{count} notas'
     notes: Notas
     numbered_step: Paso %{number}
     ok: Aceptar
@@ -313,40 +315,49 @@ es:
     distance_in_words:
       about_x_hours:
         one: alrededor de 1 hora
-        other: Acerca de %{count} horas
+        many: Acerca de %{count} horas
+        other: ''
       about_x_months:
         one: alrededor de 1 mes
-        other: Acerca de %{count} meses
+        many: Acerca de %{count} meses
+        other: ''
       about_x_years:
         one: alrededor de 1 año
-        other: Acerca de %{count} años
+        many: Acerca de %{count} años
+        other: ''
       almost_x_years:
         one: casi 1 año
-        other: Casi %{count} años
+        many: Casi %{count} años
+        other: ''
       half_a_minute: medio minuto
       less_than_x_minutes:
-        one: menos de un minuto
+        one: menos de 1 minuto
+        many: menos de un minuto
         other: menos de %{count} minutos
-        zero: menos de 1 minuto
       less_than_x_seconds:
-        one: menos de 1 segundo
-        other: menos de %{count} segundos
-        zero: menos de 1 segundo
+        one: menos de %{count} segundo
+        many: más de %{count} segundos
+        other: ''
       over_x_years:
         one: más de un año
-        other: en %{count} años
+        many: en %{count} años
+        other: ''
       x_days:
         one: 1 día
-        other: '%{count} días'
+        many: '%{count} días'
+        other: ''
       x_minutes:
         one: 1 minuto
-        other: '%{count} minutos'
+        many: '%{count} minutos'
+        other: ''
       x_months:
         one: 1 mes
-        other: '%{count} meses'
+        many: '%{count} meses'
+        other: ''
       x_seconds:
         one: Un segundo
-        other: '%{count} segundos'
+        many: '%{count} segundos'
+        other: ''
     prompts:
       day: Día
       hour: Hora
@@ -426,6 +437,52 @@ es:
       message_gateway: Integre Seguimientos con un servidor de correo para ser capaz
         de enviar una acción a través del correo a los Seguimientos
       mailgun: Enviar correos a los Seguimientos con Mailgun
+      automatic_email: Envíese automáticamente por correo electrónico las próximas
+        acciones
+    message_gateway:
+      one_user_configuration: 'También puede enviar todos los correos electrónicos
+        a un usuario específico de Tracks. Configure mail_dispatch en site.yml a %{single_user_value}
+        y pase el inicio de sesión del usuario en el comando de canalización: %{code}'
+      instructions:
+        '1': Vaya a %{preferences_link} y configure su "%{sms_email_name}" y "%{sms_context_name}"
+          para todos los enviados por correo electrónico (que podrían provenir de
+          un mensaje SMS)
+        '3': ¡Envíe un correo electrónico a su dirección recién configurada!
+        '2': En sendmail/qmail/postfix/whatever, configure un alias de dirección de
+          correo electrónico para enviar mensajes a %{command}
+      description: 'Si Tracks se ejecuta en el mismo servidor que tu correo, puedes
+        utilizar el gestor de correo integrado en Tracks. Pasos para configurarlo:'
+      rich_api_tip: También puedes utilizar la Rich Todo API para enviar tareas como
+        "lavar la ropa en casa" o "llamar a Bill > proyecto X". El asunto del mensaje
+        rellenará la descripción, el contexto y el proyecto, mientras que el cuerpo
+        rellenará la nota de la tarea.
+      configuration: Es posible que deba configurar su %{site_yml} para decirle a
+        la puerta de enlace de mensajes que mire el campo %{to_name} o el campo %{from_name}
+        para buscar al usuario de Tracks desde la dirección de correo electrónico
+        en ese campo.
+    mailgun:
+      description: Si desea enviar tareas por correo electrónico a Tracks, pero no
+        puede ejecutar un servidor de correo en el mismo host, puede utilizar la compatibilidad
+        con %{mailgun_link} integrada en Tracks.
+    developer_documentation_link: Información para desarrolladores de Tracks
+    cron_email_subject: Realiza un seguimiento de las acciones que vencen en los próximos
+      7 días
+    title: Integraciones
+    intro: Tracks se puede integrar con otras herramientas... lo que sea necesario
+      para ayudarle a hacer las cosas! Esta página tiene información sobre cómo configurar
+      algunos de estos. No todas ellas son aplicables a todas las plataformas, y algunas
+      requieren más conocimientos técnicos que otras. Véase también %{documentation_link}
+    cron_2: Por supuesto, puede utilizar otro texto %{feeds_link} - ¿Por qué no enviar
+      una lista de las próximas acciones delproyecto en particular a un grupo de colegas
+      que están trabajando en el proyecto?
+    feeds_link_text: feeds proporcionados por Tracks
+    contents_header: 'Contenido:'
+    add_your_own: ¿Tienes uno propio para agregar? %{tell_us_link} y podemos incluirlo
+      en esta página en futuras versiones de Tracks.
+    tell_us_link_text: Cuéntanos sobre ello en nuestra cola de problemas
+    cron_1: Si ingresa la siguiente entrada a su crontab, recibirá un correo electrónico
+      todos los días alrededor de las 5 AM con una lista de las próximas acciones
+      que deben realizarse dentro de los próximos 7 días.
   help:
     title: Help
     usage: ''
@@ -436,7 +493,7 @@ es:
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (también disponible en %{matrix_link})'
-    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    irc_link_text: 'Canal IRC #Tracks@Libera'
     matrix_link_text: Matriz
   layouts:
     mobile_navigation:
@@ -597,7 +654,8 @@ es:
         units:
           byte:
             one: Byte
-            other: Bytes
+            many: Bytes
+            other: ''
           gb: GB
           kb: KB
           mb: MB
@@ -953,7 +1011,8 @@ es:
     completed_actions_with: Acciones completadas con la lengüeta «%{tag_name}»
     completed_in_archive:
       one: There is one completed action in the archive.
-      other: There are %{count} completed actions in the archive.
+      many: There are %{count} completed actions in the archive.
+      other: ''
     completed_last_day: Completed in the last 24 hours
     completed_last_x_days: Completed in last %{count} days
     completed_recurrence_completed: There is no next action after the recurring action
@@ -973,7 +1032,8 @@ es:
       due date before deferring.
     defer_x_days:
       one: Defer one day
-      other: Defer %{count} days
+      many: Defer %{count} days
+      other: ''
     deferred_actions_with: Deferred actions with the tag '%{tag_name}'
     deferred_pending_actions: Deferred/pending actions
     deferred_tasks_title: TRACKS::Recordatorio
@@ -1012,7 +1072,8 @@ es:
       due: 'Vence: %{date}'
     has_x_pending:
       one: Tiene una tarea pendiente
-      other: Tiene %{count} tareas pendientes
+      many: Tiene %{count} tareas pendientes
+      other: ''
     hidden_actions: Tareas ocultas
     in_hidden_state: en estado oculto
     in_pending_state: en estado pendiente
@@ -1179,8 +1240,9 @@ es:
     task_list_title: TRACKS::List etiquetadas
     tickler_items_due:
       one: Un elemento de tiquet ahora está vencido - recargue la página para verlo.
-      other: '%{count} elementos de ticket ahora están vencidos - recargue la página
+      many: '%{count} elementos de ticket ahora están vencidos - recargue la página
         para verlos.'
+      other: ''
     to_tickler: al recordatorio
     unable_to_add_dependency: Es imposible añadir dependencia
     unresolved_dependency: ''
@@ -1191,7 +1253,7 @@ es:
     auth_change_submit: Modifica el tipo de autenticación
     auth_type_update_error: 'Hubo un problema actualizando su tipo de autenticación:
       %{error_messages}'
-    auth_type_updated: Tipo autenticador actualizado
+    auth_type_updated: Tipo autenticador actualizado.
     change_auth_type_title: TRACKS::Change tipo de autenticación
     change_authentication_type: Cambia el tipo de autenticación
     change_password_prompt: Introduzca su contraseña nueva dentro de los campos debajo
@@ -1246,13 +1308,13 @@ es:
       multi_page_html: Representando %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de
         <b>%{count}</b> en el total
       single_page:
-        one: Viendo del 1 %{model}
+        one: No %{model} encontrado
+        many: Viendo del 1 %{model}
         other: Viendo todos los %{count} %{model}
-        zero: No %{model} encontrado
       single_page_html:
-        one: Viendo del <b>1</b> %{model}
+        one: No %{model} encontrado
+        many: Viendo del <b>1</b> %{model}
         other: Viendo <b>todos los %{count}</b> %{model}
-        zero: No %{model} encontrado
     page_gap: "&hellip;"
     previous_label: "« Anterior"
   rest_help:
@@ -1260,3 +1322,5 @@ es:
       title: Autenticación
     activeresource:
       ror_link_text: Ruby on Rails
+    notes:
+      curl_description: Todos los ejemplos utilizan %{curl}.
