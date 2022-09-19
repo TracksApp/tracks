@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     RedCloth (4.3.2)
-    aasm (5.3.0)
+    aasm (5.3.1)
       concurrent-ruby (~> 1.0)
     actioncable (6.0.5.1)
       actionpack (= 6.0.5.1)
@@ -74,12 +74,11 @@ GEM
     backport (1.2.0)
     bcrypt (3.1.18)
     benchmark (0.2.0)
-    better_html (1.0.16)
-      actionview (>= 4.0)
-      activesupport (>= 4.0)
+    better_html (2.0.1)
+      actionview (>= 6.0)
+      activesupport (>= 6.0)
       ast (~> 2.0)
       erubi (~> 1.4)
-      html_tokenizer (~> 0.0.6)
       parser (>= 2.4)
       smart_properties
     bootstrap-sass (3.4.1)
@@ -119,14 +118,13 @@ GEM
     globalid (1.0.0)
       activesupport (>= 5.0)
     highline (2.0.3)
-    html_tokenizer (0.0.7)
     htmlentities (4.3.4)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.0.11)
+    i18n-tasks (1.0.12)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
-      better_html (~> 1.0)
+      better_html (>= 1.0, < 3.0)
       erubi
       highline (>= 2.0.0)
       i18n
@@ -156,7 +154,7 @@ GEM
     listen (3.7.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -168,7 +166,7 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.16.2)
+    minitest (5.16.3)
     minitest-stub-const (0.6)
     mocha (1.14.0)
     mysql2 (0.5.4)
@@ -233,10 +231,10 @@ GEM
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
-    rspec-expectations (3.11.0)
+    rspec-expectations (3.11.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.11.0)
-    rspec-support (3.11.0)
+    rspec-support (3.11.1)
     rubocop (1.36.0)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -314,7 +312,7 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     uniform_notifier (1.16.0)
     webrick (1.7.0)
     websocket-driver (0.7.5)
@@ -330,7 +328,7 @@ PLATFORMS
 
 DEPENDENCIES
   RedCloth
-  aasm (~> 5.3.0)
+  aasm (~> 5.3.1)
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.1)
   acts_as_list
@@ -344,7 +342,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 6.2.0)
   htmlentities
-  i18n-tasks (~> 1.0.11)
+  i18n-tasks (~> 1.0.12)
   jquery-rails (~> 4.5)
   jquery-ui-rails (~> 6.0.1)
   kt-paperclip (~> 7.1)
