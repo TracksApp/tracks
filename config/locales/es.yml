@@ -439,6 +439,7 @@ es:
       mailgun: Enviar correos a los Seguimientos con Mailgun
       automatic_email: Envíese automáticamente por correo electrónico las próximas
         acciones
+      email_rich: Formato del correo electrónico de Rich Todo Message
     message_gateway:
       one_user_configuration: 'También puede enviar todos los correos electrónicos
         a un usuario específico de Tracks. Configure mail_dispatch en site.yml a %{single_user_value}
