@@ -58,7 +58,7 @@ Tracks container. In future there should be an official image in Docker Hub. You
    # MySQL
    $ mysql -u root -p
    mysql> CREATE DATABASE tracks;
-   mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@localhost IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
+   mysql> GRANT ALL PRIVILEGES ON tracks.* TO yourmysqluser@'%' IDENTIFIED BY 'password-goes-here' WITH GRANT OPTION;
 
    # PostgreSQL
    $ sudo -u postgres psql
