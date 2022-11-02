@@ -168,7 +168,7 @@ GEM
     mini_portile2 (2.8.0)
     minitest (5.16.3)
     minitest-stub-const (0.6)
-    mocha (1.16.0)
+    mocha (2.0.0)
     mysql2 (0.5.4)
     nio4r (2.5.8)
     nokogiri (1.13.9)
