@@ -213,7 +213,7 @@ GEM
     rails-i18n (7.0.5)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
-    rails_autolink (1.1.6)
+    rails_autolink (1.1.7)
       rails (> 3.1)
     railties (6.0.5.1)
       actionpack (= 6.0.5.1)
@@ -321,7 +321,7 @@ GEM
     will_paginate (3.3.1)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.5)
 
 PLATFORMS
   ruby
