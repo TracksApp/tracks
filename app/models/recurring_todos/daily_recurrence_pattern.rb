@@ -24,7 +24,7 @@ module RecurringTodos
 
     def validate
       super
-      errors[:base] << "Every other nth day may not be empty for this daily recurrence setting" if (!only_work_days?) && every_x_days.blank?
+      errors.add(:base, "Every other nth day may not be empty for this daily recurrence setting") if (!only_work_days?) && every_x_days.blank?
     end
 
     def get_next_date(previous)

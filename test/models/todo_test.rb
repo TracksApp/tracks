@@ -102,7 +102,7 @@ class TodoTest < ActiveSupport::TestCase
     @not_completed2
     assert_equal :active, @not_completed2.aasm.current_state
     @not_completed2.show_from = Time.zone.now + 1.week
-    assert @not_completed2.save, "should have saved successfully" + @not_completed2.errors.to_xml
+    assert @not_completed2.save, "should have saved successfully " + @not_completed2.errors.full_messages.to_s
     assert_equal :deferred, @not_completed2.aasm.current_state
   end
 
@@ -112,14 +112,14 @@ class TodoTest < ActiveSupport::TestCase
     todo.show_from = next_week
     todo.context_id = 1
     todo.description = 'foo'
-    assert todo.save, "should have saved successfully" + todo.errors.to_xml
+    assert todo.save, "should have saved successfully" + todo.errors.full_messages.to_s
     assert_equal :deferred, todo.aasm.current_state
   end
 
   def test_create_a_new_deferred_todo_by_passing_attributes
     user = users(:other_user)
     todo = user.todos.build(:show_from => next_week, :context_id => 1, :description => 'foo')
-    assert todo.save, "should have saved successfully" + todo.errors.to_xml
+    assert todo.save, "should have saved successfully " + todo.errors.full_messages.to_s
     assert_equal :deferred, todo.aasm.current_state
   end
 
@@ -551,7 +551,7 @@ class TodoTest < ActiveSupport::TestCase
     new_path = attachment.file.path
 
     # then the attachment should be there
-    assert File.exists?(new_path), "attachment should be on file system"
+    assert File.exist?(new_path), "attachment should be on file system"
     assert_equal 1, todo.attachments.reload.count, "should have one attachment"
 
     # When I destroy the todo
@@ -559,7 +559,7 @@ class TodoTest < ActiveSupport::TestCase
 
     # Then the attachement and file should nogt be there anymore
     assert_equal 0, todo.user.attachments.reload.count
-    assert !File.exists?(new_path), "attachment should not be on file system"
+    assert !File.exist?(new_path), "attachment should not be on file system"
   end
 
   def test_destroying_action_activates_successors

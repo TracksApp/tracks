@@ -154,7 +154,7 @@ class TodosController < ApplicationController
           if @saved
             head :created, :location => todo_url(@todo)
           else
-            render_failure @todo.errors.to_xml.html_safe, 409
+            render_failure @todo.errors.full_messages.to_xml(root: "errors", skip_types: true).html_safe, 409
           end
         end
       end
@@ -438,7 +438,7 @@ class TodosController < ApplicationController
     rescue ActiveRecord::RecordInvalid => exception
       record = exception.record
       if record.is_a?(Dependency)
-        record.errors.each { |key, value| @todo.errors[key] << value }
+        record.errors.each { |key, value| @todo.errors.add(key, value) }
       end
       @saved = false
     end
@@ -1192,7 +1192,7 @@ end
     begin
       parse_date_per_user_prefs(date)
     rescue
-      @todo.errors[:base] << error_msg
+      @todo.errors.add(:base, error_msg)
     end
   end
 

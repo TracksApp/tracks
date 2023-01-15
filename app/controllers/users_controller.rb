@@ -125,7 +125,7 @@ class UsersController < ApplicationController
         unless user.new_record?
           render :body => t('users.user_created'), :status => 200
         else
-          render_failure user.errors.to_xml, 409
+          render_failure user.errors.full_messages.to_xml(root: "errors", skip_types: true), 409
         end
         return
       end

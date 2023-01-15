@@ -83,7 +83,7 @@ class ContextsController < ApplicationController
       end
       format.xml do
         if @context.new_record?
-          render_failure @context.errors.to_xml.html_safe, 409
+          render_failure @context.errors.full_messages.to_xml(root: "errors", skip_types: true).html_safe, 409
         else
           head :created, :location => context_url(@context)
         end
