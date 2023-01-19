@@ -40,7 +40,7 @@ group :development do
   gem 'spring', '~> 4'
   gem 'yard'
 
-  gem 'tolk', '~> 4.3.0'
+  gem 'tolk', '~> 5.0.0'
 
   gem 'bullet'
   gem 'rack-mini-profiler'
