@@ -73,7 +73,7 @@ GEM
       execjs (~> 2)
     backport (1.2.0)
     bcrypt (3.1.18)
-    benchmark (0.2.0)
+    benchmark (0.2.1)
     better_html (2.0.1)
       actionview (>= 6.0)
       activesupport (>= 6.0)
@@ -241,7 +241,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     ref (2.0.0)
-    regexp_parser (2.6.1)
+    regexp_parser (2.6.2)
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
@@ -281,7 +281,7 @@ GEM
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
     smart_properties (1.17.0)
-    solargraph (0.47.2)
+    solargraph (0.48.0)
       backport (~> 1.2)
       benchmark
       bundler (>= 1.17.2)
