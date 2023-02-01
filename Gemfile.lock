@@ -66,7 +66,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
       zeitwerk (~> 2.2, >= 2.2.2)
-    acts_as_list (1.0.4)
+    acts_as_list (1.1.0)
       activerecord (>= 4.2)
     ast (2.4.2)
     autoprefixer-rails (10.4.7.0)
@@ -99,7 +99,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     crass (1.0.6)
     database_cleaner (1.99.0)
     date (3.3.3)
@@ -323,7 +323,7 @@ GEM
       sprockets-rails (~> 3.4)
     tracks-chartjs-ror (3.6.4)
       rails (>= 3.1)
-    tzinfo (1.2.10)
+    tzinfo (1.2.11)
       thread_safe (~> 0.1)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
