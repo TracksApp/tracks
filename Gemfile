@@ -16,7 +16,7 @@ gem 'font-awesome-sass', '~> 6.2.1'
 
 gem 'uglifier', '>=1.3.0'
 
-gem 'aasm', '~> 5.4.0'
+gem 'aasm', '~> 5.5.0'
 gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.18'
 gem 'htmlentities'
