@@ -34,7 +34,7 @@ gem 'therubyracer', group: :therubyracer
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
 gem 'mysql2', '~> 0.5.5', group: :mysql
-gem 'pg', '~> 1.4.5', group: :postgresql
+gem 'pg', '~> 1.4.6', group: :postgresql
 
 group :development do
   gem 'spring', '~> 4'
