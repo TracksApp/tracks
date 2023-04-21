@@ -248,7 +248,7 @@ GEM
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.2.5)
-    rspec-expectations (3.12.2)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
