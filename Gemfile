@@ -29,7 +29,7 @@ gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', group: :therubyracer
+gem 'mini_racer', group: :therubyracer
 
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
