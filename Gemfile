@@ -18,7 +18,7 @@ gem 'uglifier', '>=1.3.0'
 
 gem 'aasm', '~> 5.5.0'
 gem 'acts_as_list'
-gem 'bcrypt', '~> 3.1.18'
+gem 'bcrypt', '~> 3.1.19'
 gem 'htmlentities'
 gem "kt-paperclip", "~> 7.1"
 gem 'puma', '~> 6.2'
