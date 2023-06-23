@@ -99,7 +99,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.2.0)
+    concurrent-ruby (1.2.2)
     crass (1.0.6)
     database_cleaner (1.99.0)
     date (3.3.3)
@@ -120,7 +120,7 @@ GEM
       activesupport (>= 5.0)
     highline (2.0.3)
     htmlentities (4.3.4)
-    i18n (1.12.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.12)
       activesupport (>= 4.0.2)
@@ -145,7 +145,7 @@ GEM
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    kt-paperclip (7.1.1)
+    kt-paperclip (7.2.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       marcel (~> 1.0.1)
@@ -167,10 +167,10 @@ GEM
     method_source (1.0.0)
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2022.0105)
+    mime-types-data (3.2023.0218.1)
     mini_mime (1.1.2)
     mini_portile2 (2.8.2)
-    minitest (5.17.0)
+    minitest (5.18.1)
     minitest-stub-const (0.6)
     mocha (2.0.2)
       ruby2_keywords (>= 0.0.5)
@@ -339,7 +339,7 @@ GEM
     websocket-extensions (0.1.5)
     will_paginate (4.0.0)
     yard (0.9.34)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   ruby
@@ -363,7 +363,7 @@ DEPENDENCIES
   i18n-tasks (~> 1.0.12)
   jquery-rails (~> 4.5)
   jquery-ui-rails (~> 6.0.1)
-  kt-paperclip (~> 7.1)
+  kt-paperclip (~> 7.2)
   listen
   minitest-stub-const
   mocha

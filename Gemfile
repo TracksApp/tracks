@@ -20,7 +20,7 @@ gem 'aasm', '~> 5.5.0'
 gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.18'
 gem 'htmlentities'
-gem "kt-paperclip", "~> 7.1"
+gem "kt-paperclip", "~> 7.2"
 gem 'puma', '~> 6.2'
 gem 'rails_autolink'
 gem 'RedCloth'
