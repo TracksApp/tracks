@@ -151,6 +151,7 @@ GEM
       marcel (~> 1.0.1)
       mime-types
       terrapin (~> 0.6.0)
+    language_server-protocol (3.17.0.3)
     libv8 (3.16.14.19)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
@@ -254,8 +255,9 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
-    rubocop (1.52.1)
+    rubocop (1.54.0)
       json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
       parser (>= 3.2.2.3)
       rainbow (>= 2.2.2, < 4.0)
@@ -377,7 +379,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.0.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.52)
+  rubocop (~> 1.54)
   sanitize (~> 6.0)
   sassc-rails (~> 2.1.2)
   simplecov
