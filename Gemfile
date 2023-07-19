@@ -5,7 +5,7 @@ gem 'activemodel-serializers-xml', '~> 1.0.1'
 
 gem 'coffee-rails', '~> 5.0.0'
 
-gem 'jquery-rails', '~> 4.5'
+gem 'jquery-rails', '~> 4.6'
 gem 'jquery-ui-rails', '~>6.0.1'
 
 gem 'rails', '~> 6.0.0'
