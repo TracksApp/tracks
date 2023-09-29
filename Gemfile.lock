@@ -72,6 +72,7 @@ GEM
     autoprefixer-rails (10.4.7.0)
       execjs (~> 2)
     backport (1.2.0)
+    base64 (0.1.1)
     bcrypt (3.1.19)
     benchmark (0.2.1)
     better_html (2.0.1)
@@ -251,12 +252,13 @@ GEM
     regexp_parser (2.8.1)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.2.5)
+    rexml (3.2.6)
     rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.0)
-    rubocop (1.54.2)
+    rubocop (1.56.4)
+      base64 (~> 0.1.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -264,7 +266,7 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
-      rubocop-ast (>= 1.28.0, < 2.0)
+      rubocop-ast (>= 1.28.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.29.0)
@@ -380,7 +382,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.1.1)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.54)
+  rubocop (~> 1.56)
   sanitize (~> 6.0)
   sassc-rails (~> 2.1.2)
   simplecov
