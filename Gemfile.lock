@@ -174,7 +174,7 @@ GEM
     mini_portile2 (2.8.2)
     minitest (5.18.1)
     minitest-stub-const (0.6)
-    mocha (2.0.4)
+    mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
     mysql2 (0.5.5)
     net-imap (0.3.6)
