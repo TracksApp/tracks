@@ -46,7 +46,7 @@ group :development do
   gem 'rack-mini-profiler'
   gem 'solargraph'
 
-  gem 'i18n-tasks', '~> 1.0.12'
+  gem 'i18n-tasks', '~> 1.0.13'
 end
 
 group :development, :test do
