@@ -75,7 +75,7 @@ GEM
     base64 (0.1.1)
     bcrypt (3.1.19)
     benchmark (0.2.1)
-    better_html (2.0.1)
+    better_html (2.0.2)
       actionview (>= 6.0)
       activesupport (>= 6.0)
       ast (~> 2.0)
@@ -119,18 +119,18 @@ GEM
       sassc (~> 2.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    highline (2.0.3)
+    highline (2.1.0)
     htmlentities (4.3.4)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
-    i18n-tasks (1.0.12)
+    i18n-tasks (1.0.13)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
       better_html (>= 1.0, < 3.0)
       erubi
       highline (>= 2.0.0)
       i18n
-      parser (>= 2.2.3.0)
+      parser (>= 3.2.2.1)
       rails-i18n
       rainbow (>= 2.2.2, < 4.0)
       terminal-table (>= 1.5.1)
@@ -157,7 +157,7 @@ GEM
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.21.3)
+    loofah (2.21.4)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     mail (2.8.1)
@@ -171,8 +171,8 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0218.1)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
-    minitest (5.18.1)
+    mini_portile2 (2.8.4)
+    minitest (5.20.0)
     minitest-stub-const (0.6)
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
@@ -187,7 +187,7 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     nio4r (2.5.9)
-    nokogiri (1.15.3)
+    nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.23.0)
@@ -229,7 +229,7 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    rails-i18n (7.0.5)
+    rails-i18n (7.0.8)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
     rails_autolink (1.1.8)
@@ -345,7 +345,7 @@ GEM
     websocket-extensions (0.1.5)
     will_paginate (4.0.0)
     yard (0.9.34)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   ruby
@@ -366,7 +366,7 @@ DEPENDENCIES
   factory_bot_rails
   font-awesome-sass (~> 6.4.0)
   htmlentities
-  i18n-tasks (~> 1.0.12)
+  i18n-tasks (~> 1.0.13)
   jquery-rails (~> 4.6)
   jquery-ui-rails (~> 6.0.1)
   kt-paperclip (~> 7.2)
