@@ -24,7 +24,7 @@ gem "kt-paperclip", "~> 7.2"
 gem 'puma', '~> 6.3'
 gem 'rails_autolink'
 gem 'RedCloth'
-gem 'sanitize', '~> 6.0'
+gem 'sanitize', '~> 6.1'
 gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
