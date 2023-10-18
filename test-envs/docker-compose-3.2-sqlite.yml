@@ -1,0 +1,17 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile-3.2
+    environment:
+      # These are set in script/ci-build, so we need to pass-thru them.
+      RAILS_ENV: $RAILS_ENV
+      DATABASE_NAME: "/app/db.sqlite"
+      DATABASE_TYPE: sqlite3
+    volumes:
+      - ${VOLUME:-..}:/app:Z
+      - ${VOLUME:-..}/config/database.docker.yml:/app/config/database.yml:Z
+      - ${VOLUME:-..}/config/site.docker.yml:/app/config/site.yml:Z
+    ports:
+      - 3000:3000
