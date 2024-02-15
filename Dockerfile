@@ -8,7 +8,7 @@ WORKDIR /app
 RUN touch /etc/app-env
 
 COPY Gemfile* /app/
-RUN gem install bundler
+RUN gem install bundler -v 2.4.22
 RUN bundle install --jobs 4
 
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
