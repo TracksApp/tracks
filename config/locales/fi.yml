@@ -21,6 +21,7 @@ fi:
         show_project_on_todo_done: Siirry projektinäkymään toimenpiteen valmistuessa
         sms_context: Sähköpostin oletusasiayhteys
         sms_email: Lähettäjän sähköpostiosoite
+        sms_permitted_senders: Sallitut lähettäjät (käytä pilkkua erottimena)
         staleness_starts: Vanhentumisen alkaminen
         time_zone: Aikavyöhyke
         title_date_format: Otsakkeen päivämäärämuoto

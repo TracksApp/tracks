@@ -2,7 +2,7 @@ class MessageGateway < ActionMailer::Base
   def receive(email)
     user = get_receiving_user_from_email_address(email)
     return false if user.nil?
-    return false unless check_sender_is_in_mailmap(user, email)
+    return false unless check_sender_is_in_mailmap(user, email.from[0])
 
     context = user.prefs.sms_context
     todo_params = get_todo_params(email)
@@ -90,23 +90,24 @@ class MessageGateway < ActionMailer::Base
     return user
   end
 
-  def check_sender_is_in_mailmap(user, email)
-    if user.present? && !sender_is_in_mailmap?(user, email)
-      Rails.logger.warn "#{email.from[0]} not found in mailmap for #{user.login}"
+  def check_sender_is_in_mailmap(user, from)
+    if user.present? && SITE_CONFIG['email_dispatch'] == 'to' && !sender_is_in_mailmap?(user, from)
+      Rails.logger.warn "#{from} not found in mailmap for #{user.login}"
       return false
     end
     return true
   end
 
-  def sender_is_in_mailmap?(user, email)
-    if (SITE_CONFIG['mailmap'].is_a? Hash) && SITE_CONFIG['email_dispatch'] == 'to'
+  def sender_is_in_mailmap?(user, from)
+    if SITE_CONFIG['mailmap'].is_a? Hash
       # Look for the sender in the map of allowed senders
-      SITE_CONFIG['mailmap'][user.preference.sms_email].include? email.from[0]
-    else
-      # We can't check the map if it's not defined, or if the lookup is the
-      # wrong way round, so just allow it
-      true
+      SITE_CONFIG['mailmap'][user.preference.sms_email].include? from
+    elsif !(pref_senders = user.prefs.sms_permitted_senders).empty?
+      # If the config mailmap isn't defined, use the values provided by the users.
+      pref_senders.split(',').collect(&:strip).include? from
     end
+    # We can't check the map if it's not defined so just allow it
+    true
   end
 
   def get_text_or_nil(text)

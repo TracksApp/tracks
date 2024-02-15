@@ -2,6 +2,8 @@ class Preference < ApplicationRecord
   belongs_to :user
   belongs_to :sms_context, :class_name => 'Context'
 
+  validates :sms_email, uniqueness: { case_sensitive: false }
+
   def self.themes
     { :black => 'black', :light_blue => 'light_blue' }
   end
