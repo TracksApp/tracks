@@ -369,6 +369,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 6.0.1)
   kt-paperclip (~> 7.2)
   listen
+  mini_racer
   minitest-stub-const
   mocha
   mysql2 (~> 0.5.5)

@@ -29,7 +29,10 @@ gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'therubyracer', group: :therubyracer
+group :therubyracer do
+  gem 'therubyracer'
+  gem 'mini_racer'
+end
 
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
@@ -56,7 +59,6 @@ group :development, :test do
 end
 
 group :test do
-
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.9', group: :test, require: nil
   gem 'database_cleaner', '~> 1'
