@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ["3.0"]
+        ruby: ["3.0", "3.1"]
         db: [sqlite, mysql, postgres]
 
     steps:

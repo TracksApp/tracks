@@ -1,22 +1,25 @@
 version: '3'
 services:
   db:
-    image: mysql:5.7
+    image: postgres:13
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_DATABASE: ${TRACKS_DB:-tracks}
+      POSTGRES_DB: ${DATABASE_NAME:-tracks}
+      POSTGRES_PASSWORD: password
     volumes:
-      - db-data:/var/lib/mysql
+      - db-data:/var/lib/postgresql/data
   web:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-3.1
     environment:
       # These are set in script/ci-build, so we need to pass-thru them.
       RAILS_ENV: $RAILS_ENV
       DATABASE_NAME: $DATABASE_NAME
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD_EMPTY: 1
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_TYPE: postgresql
+      DATABASE_ENCODING: unicode
+      DATABASE_PORT: 5432
     volumes:
       - ${VOLUME:-..}:/app:Z
       - ${VOLUME:-..}/config/database.docker.yml:/app/config/database.yml:Z
