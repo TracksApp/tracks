@@ -4,8 +4,6 @@
 <br/><p><%= I18n.t 'integrations.contents_header' %></p>
 <ul>
   <li><a href="#email-cron-section"><%= I18n.t 'integrations.sections.automatic_email' %></a></li>
-  <li><a href="#message_gateway"><%= I18n.t 'integrations.sections.message_gateway' %></a></li>
-  <li><a href="#mailgun"><%= I18n.t 'integrations.sections.mailgun' %></a></li>
   <li><a href="#todo_rich_message_format"><%= I18n.t 'integrations.sections.email_rich' %></a></li>
 </ul>
 <p><%= raw I18n.t 'integrations.add_your_own', tell_us_link: link_to(I18n.t('integrations.tell_us_link_text'), 'https://github.com/TracksApp/tracks/issues') %></p>
@@ -18,41 +16,6 @@
 <textarea id="cron" name="cron">0 5 * * * /usr/bin/curl -0 "<%= root_url %>todos.txt?due=6&token=<%= current_user.token %>" | /usr/bin/mail -e -s '<%= I18n.t 'integrations.cron_email_subject' %>' youremail@example.com</textarea>
 
 <p><%= raw I18n.t 'integrations.cron_2', feeds_link: link_to(I18n.t('integrations.feeds_link_text'), feeds_path) %></p>
-
-<a name="message_gateway"> </a>
-<h2><%= I18n.t 'integrations.sections.message_gateway' %></h2>
-<p><%= I18n.t 'integrations.message_gateway.description' %></p>
-<ul>
-  <li><%= raw I18n.t 'integrations.message_gateway.instructions.1', preferences_link: link_to(t('layouts.navigation.preferences'), preferences_url), sms_email_name: Preference.human_attribute_name('sms_email'), sms_context_name: Preference.human_attribute_name('sms_context') %></li>
-  <li><%= raw I18n.t 'integrations.message_gateway.instructions.2', command: "<pre>/PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>" %></li>
-  <li><%= I18n.t 'integrations.message_gateway.instructions.3' %></li>
-</ul>
-<p><%= I18n.t 'integrations.message_gateway.rich_api_tip' %></p>
-<p><%= raw I18n.t 'integrations.message_gateway.configuration', site_yml: '<tt>site.yml</tt>', to_name: '<tt>to:</tt>', from_name: '<tt>from:</tt>' %></p>
-<p><%= raw I18n.t 'integrations.message_gateway.one_user_configuration', single_user_value: '<tt>single_user</tt>', code: "<pre>TRACKS_MAIL_RECEIVER=" + current_user.login + " /PATH/TO/TRACKS/bin/rails r -e production 'MessageGateway.receive(STDIN.read)'</pre>" %></p>
-
-<a name="mailgun"> </a>
-<h2><%= I18n.t 'integrations.sections.mailgun' %></h2>
-<p><%= raw I18n.t 'integrations.mailgun.description', mailgun_link: link_to('Mailgun', 'http://www.mailgun.com/') %></p>
-<p><%= I18n.t 'integrations.mailgun.conditions' %></p>
-<ul>
-  <li><%= raw I18n.t 'integrations.mailgun.instructions.1', mailgun_link: link_to('Mailgun', 'http://www.mailgun.com/') %></li>
-  <li><%= I18n.t 'integrations.mailgun.instructions.2' %></li>
-  <ul>
-    <li><%= I18n.t 'integrations.mailgun.instructions.2a' %></li>
-    <li><%= I18n.t 'integrations.mailgun.instructions.2b' %></li>
-  </ul>
-  <li><%= raw I18n.t 'integrations.mailgun.instructions.3', preferences_link: link_to(t('layouts.navigation.preferences'), preferences_url), sms_email_name: Preference.human_attribute_name('sms_email') %></li>
-  <li><%= I18n.t 'integrations.mailgun.instructions.4', sms_context_name: Preference.human_attribute_name('sms_context') %></li>
-  <li><%= I18n.t 'integrations.mailgun.instructions.5' %></li>
-  <li><%= raw I18n.t 'integrations.mailgun.instructions.6', code: '<pre class=code>
-mailmap:
-  tracks@user.mailgun.org:
-  - me@myhome.example.net
-  - mr.user@work.example.com
-</pre>' %></li>
-</ul>
-<p><%= I18n.t 'integrations.mailgun.gateway_instructions' %></p>
 
 <a name="todo_rich_message_format"> </a>
 <h2><%= I18n.t 'integrations.sections.email_rich' %></h2>
