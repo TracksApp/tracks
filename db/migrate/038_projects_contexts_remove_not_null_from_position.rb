@@ -1,7 +1,7 @@
 class ProjectsContextsRemoveNotNullFromPosition < ActiveRecord::Migration[5.2]
   def self.up
-    change_column :projects, :position, :integer, {:null => true, :default => nil}
-    change_column :contexts, :position, :integer, {:null => true, :default => nil}
+    change_column :projects, :position, :integer, :null => true, :default => nil
+    change_column :contexts, :position, :integer, :null => true, :default => nil
   end
 
   def self.down
@@ -10,13 +10,13 @@ class ProjectsContextsRemoveNotNullFromPosition < ActiveRecord::Migration[5.2]
       project.position = 0 if !project.position?
       project.save
     end
-    change_column :projects, :position, :integer, {:null => false, :default => nil}
+    change_column :projects, :position, :integer, :null => false, :default => nil
 
     @contexts = Context.find(:all)
     @contexts.each do |context|
       context.position = 0 if !context.position?
       context.save
     end
-    change_column :contexts, :position, :integer, {:null => false, :default => nil}
+    change_column :contexts, :position, :integer, :null => false, :default => nil
   end
 end

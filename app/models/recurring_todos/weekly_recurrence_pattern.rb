@@ -30,7 +30,7 @@ module RecurringTodos
       super
       validate_not_blank(every_x_week, "Every other nth week may not be empty for weekly recurrence setting")
       something_set = %w{ sunday monday tuesday wednesday thursday friday saturday }.inject(false) { |set, day| set || send("on_#{day}") }
-      errors[:base] << "You must specify at least one day on which the todo recurs" unless something_set
+      errors.add(:base, "You must specify at least one day on which the todo recurs") unless something_set
     end
 
     def get_next_date(previous)

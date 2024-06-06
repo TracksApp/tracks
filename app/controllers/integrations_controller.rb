@@ -1,8 +1,7 @@
 class IntegrationsController < ApplicationController
   require 'mail'
 
-  skip_before_action :login_required, :only => [:cloudmailin, :search_plugin]
-  skip_before_action :verify_authenticity_token, only: [:cloudmailin]
+  skip_before_action :login_required, :only => [:search_plugin]
 
   def index
     @page_title = 'TRACKS::Integrations'
@@ -21,30 +20,7 @@ class IntegrationsController < ApplicationController
       .pack('m').gsub(/\n/, '')
   end
 
-  def cloudmailin
-    if !verify_cloudmailin_signature
-      render :body => "Message signature verification failed.", :status => 403
-      return false
-    end
-
-    if process_message(params[:message])
-      render :body => 'success', :status => 200
-    else
-      render :body => "No user found or other error", :status => 404
-    end
-  end
-
   private
-
-  def process_message(message)
-    MessageGateway.receive(Mail.new(message))
-  end
-
-  def verify_cloudmailin_signature
-    provided = request.request_parameters.delete(:signature)
-    signature = Digest::MD5.hexdigest(flatten_params(request.request_parameters).sort.map { |k, v| v }.join + SITE_CONFIG['cloudmailin'])
-    return provided == signature
-  end
 
   def flatten_params(params, title = nil, result = {})
     params.each do |key, value|
