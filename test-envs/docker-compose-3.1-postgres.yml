@@ -10,7 +10,7 @@ services:
   web:
     build:
       context: ..
-      dockerfile: Dockerfile-3.1
+      dockerfile: Dockerfile
     environment:
       # These are set in script/ci-build, so we need to pass-thru them.
       RAILS_ENV: $RAILS_ENV
