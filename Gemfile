@@ -33,7 +33,7 @@ gem 'mini_racer', group: :therubyracer
 
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', group: :sqlite
-gem 'mysql2', '~> 0.5.5', group: :mysql
+gem 'mysql2', '~> 0.5.6', group: :mysql
 gem 'pg', '~> 1.5.4', group: :postgresql
 
 group :development do

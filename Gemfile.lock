@@ -182,7 +182,7 @@ GEM
     minitest-stub-const (0.6)
     mocha (2.1.0)
       ruby2_keywords (>= 0.0.5)
-    mysql2 (0.5.5)
+    mysql2 (0.5.6)
     net-imap (0.4.12)
       date
       net-protocol
@@ -376,7 +376,7 @@ DEPENDENCIES
   mini_racer
   minitest-stub-const
   mocha
-  mysql2 (~> 0.5.5)
+  mysql2 (~> 0.5.6)
   pg (~> 1.5.4)
   puma (~> 6.4)
   rack-mini-profiler
