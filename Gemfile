@@ -12,7 +12,7 @@ gem 'rails', '~> 6.1'
 gem 'sassc-rails', '~> 2.1.2'
 
 gem 'bootstrap-sass', '3.4.1'
-gem 'font-awesome-sass', '~> 6.5.1'
+gem 'font-awesome-sass', '~> 6.5.2'
 
 gem 'uglifier', '>=1.3.0'
 
