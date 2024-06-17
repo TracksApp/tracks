@@ -2,8 +2,8 @@ es:
   activerecord:
     attributes:
       note:
-        created_at: Creado el
-        updated_at: actualizado a las
+        created_at: Creado en
+        updated_at: Actualizado en
       preference:
         date_format: Formato de fecha
         due_style: Debido al estilo
@@ -150,13 +150,13 @@ es:
     show_all: Mostrar todo
     sort:
       alphabetically: Alfabéticamente
-      alphabetically_confirm: "¿Está seguro que desea ordenar estos proyectos alfabéticamente?\
-        \ Esto reemplazará el orden existente."
+      alphabetically_confirm: "¿Está seguro que desea ordenar estos proyectos alfabéticamente?
+        Esto reemplazará el orden existente."
       alphabetically_title: Ordenar proyectos alfabéticamente
       by_task_count: Por número de tareas
       by_task_count_title: Ordenar por número de tareas
-      by_task_count_title_confirm: "¿Seguro que desea ordenar estos proyectos por\
-        \ el número de tareas? Esto reemplazará la ordenación existente."
+      by_task_count_title_confirm: "¿Seguro que desea ordenar estos proyectos por
+        el número de tareas? Esto reemplazará la ordenación existente."
       sort: Ordenar
     third: Tercero
     todo: pendiente
@@ -175,9 +175,9 @@ es:
     context_name: Nombre contextual
     context_state: Estado contextual
     delete_context: Borrar contexto
-    delete_context_confirmation: "¿Seguro que desea borrar el contexto '%{name}'?\
-      \ ¡Tenga en cuenta que esto también borra todas las acciones (recurrentes) dentro\
-      \ de este contexto!"
+    delete_context_confirmation: "¿Seguro que desea borrar el contexto '%{name}'?
+      ¡Tenga en cuenta que esto también borra todas las acciones (recurrentes) dentro
+      de este contexto!"
     delete_context_title: Borrar contexto
     edit_context: Editar contexto
     hidden_contexts: Contextos ocultos
@@ -207,8 +207,8 @@ es:
         some: Han ocurrido algunos errores durante la importación
         file_blank: 'Archivo no puede estar en blanco'
         invalid_csv: "CSV inválido: no pudo leer cabeceras: %{e}"
-        save_error: "No pudo guardar CSV subido (%{path_and_file}). Puede hacer un\
-          \ seguimiento de escritura al directorio de la subida? %{e}"
+        save_error: "No pudo guardar CSV subido (%{path_and_file}). Puede hacer un
+          seguimiento de escritura al directorio de la subida? %{e}"
         no_context: No pudo encontrar un contexto predeterminado
       map_title: 'Asocia campos a ser importados'
       header: Importando datos
@@ -220,12 +220,12 @@ es:
       projects_count: "%{count} proyectos importados"
       todos_count: "%{count} pendientes importados"
       yaml_disabled: "Carga YAML deshabilitada"
-      yaml_warning: "%{warning}: todos sus datos actuales serán destruidos antes de\
-        \ importar el archivo YAML, por lo que si tiene acceso a la base de datos,\
-        \ le recomendamos encarecidamente respaldar la base de dato ahora mismo, por\
-        \ si algo pueda salir mal."
-      paste_field: "Pegue el contenido del archivo YAML que ha exportado a la caja\
-        \ de texto de abajo:"
+      yaml_warning: "%{warning}: todos sus datos actuales serán destruidos antes de
+        importar el archivo YAML, por lo que si tiene acceso a la base de datos, le
+        recomendamos encarecidamente respaldar la base de dato ahora mismo, por si
+        algo pueda salir mal."
+      paste_field: "Pegue el contenido del archivo YAML que ha exportado a la caja
+        de texto de abajo:"
       warning: Aviso
     export:
       page_title: Tracks::Export
@@ -234,11 +234,11 @@ es:
       yaml_description: "%{yaml}: Mejor formato para exportar datos."
       yaml_link_description: Fichero YAML con todas sus acciones, contextos, proyectos,
         etiquetas y notas
-      yaml_experimental: "Por favor tenga en cuenta que la importación de ficheros\
-        \ YAML actualmente esta soportada de forma experimental. No confíe en este\
-        \ formato para hacer copias de seguridad de datos importantes."
-      csv_description: "%{csv}: Mejor formato para importar en una hoja de cálculo\
-        \ o en programas de análisis de datos"
+      yaml_experimental: "Por favor tenga en cuenta que la importación de ficheros
+        YAML actualmente esta soportada de forma experimental. No confíe en este formato
+        para hacer copias de seguridad de datos importantes."
+      csv_description: "%{csv}: Mejor formato para importar en una hoja de cálculo
+        o en programas de análisis de datos"
       csv_actions_description: Fichero CSV con todas sus acciones, con contextos por
         nombre y proyectos
       csv_notes_description: Fichero CSV con todas sus notas
@@ -426,17 +426,116 @@ es:
       message_gateway: Integre Seguimientos con un servidor de correo para ser capaz
         de enviar una acción a través del correo a los Seguimientos
       mailgun: Enviar correos a los Seguimientos con Mailgun
+      automatic_email: Envíese automáticamente por correo electrónico las próximas
+        acciones
+      email_rich: Formato del correo electrónico de Rich Todo Message
+    message_gateway:
+      one_user_configuration: 'También puede enviar todos los correos electrónicos
+        a un usuario específico de Tracks. Configure mail_dispatch en site.yml a %{single_user_value}
+        y pase el inicio de sesión del usuario en el comando de canalización: %{code}'
+      instructions:
+        '1': Vaya a %{preferences_link} y configure su "%{sms_email_name}" y "%{sms_context_name}"
+          para todos los enviados por correo electrónico (que podrían provenir de
+          un mensaje SMS)
+        '3': ¡Envíe un correo electrónico a su dirección recién configurada!
+        '2': En sendmail/qmail/postfix/whatever, configure un alias de dirección de
+          correo electrónico para enviar mensajes a %{command}
+      description: 'Si Tracks se ejecuta en el mismo servidor que tu correo, puedes
+        utilizar el gestor de correo integrado en Tracks. Pasos para configurarlo:'
+      rich_api_tip: También puedes utilizar la Rich Todo API para enviar tareas como
+        "lavar la ropa en casa" o "llamar a Bill > proyecto X". El asunto del mensaje
+        rellenará la descripción, el contexto y el proyecto, mientras que el cuerpo
+        rellenará la nota de la tarea.
+      configuration: Es posible que deba configurar su %{site_yml} para decirle a
+        la puerta de enlace de mensajes que mire el campo %{to_name} o el campo %{from_name}
+        para buscar al usuario de Tracks desde la dirección de correo electrónico
+        en ese campo.
+    mailgun:
+      description: Si desea enviar tareas por correo electrónico a Tracks, pero no
+        puede ejecutar un servidor de correo en el mismo host, puede utilizar la compatibilidad
+        con %{mailgun_link} integrada en Tracks.
+      conditions: Para que esto funcione, su servidor de Tracks tendrá que ser accesible
+        desde Internet, para que Mailgun pueda enviarle datos.
+      instructions:
+        '1': Vaya a %{mailgun_link} y regístrese para obtener una cuenta gratuita.
+        '3': Vaya a %{preferences_link} e introduzca su dirección de correo electrónico
+          entrante de Mailgun (por ejemplo, tracks@user.mailgun.com) en la casilla
+          "%{sms_email_name}".
+        '4': Seleccione un contexto predeterminado para los correos electrónicos que
+          se pondrán con "%{sms_context_name}"
+        '2': "Vaya a 'Rutas' en el panel de control de Mailgun, y añada una nueva
+          ruta:"
+        2a: La 'Expresión de filtro' debe establecerse en 'catch_all()'
+        2b: "'Acción' debe ser 'adelante (\"http://mytracksserver.example.com/mailgun/mime\"\
+          )'"
+        '5': Añade tu clave de API de Mailgun (no la clave de API pública) a los Tracks
+          'site.yml'
+        '6': "Actualice el mapa de correo en 'site.yml' para definir qué remitentes
+          pueden enviar correos electrónicos a qué direcciones entrantes. Por ejemplo,
+          para enviar correos electrónicos desde sus cuentas de correo electrónico
+          del trabajo y de casa a su ruta Tracks Mailgun, configúrelo de la siguiente
+          manera: %{code}"
+      gateway_instructions: Todos los comentarios sobre el formato de correo electrónico
+        de la sección anterior se aplican a la gestión de Mailgun, ya que los datos
+        se procesan de la misma manera
+    developer_documentation_link: Información para desarrolladores de Tracks
+    cron_email_subject: Realiza un seguimiento de las acciones que vencen en los próximos
+      7 días
+    title: Integraciones
+    intro: Tracks se puede integrar con otras herramientas... lo que sea necesario
+      para ayudarle a hacer las cosas! Esta página tiene información sobre cómo configurar
+      algunos de estos. No todas ellas son aplicables a todas las plataformas, y algunas
+      requieren más conocimientos técnicos que otras. Véase también %{documentation_link}
+    cron_2: Por supuesto, puede utilizar otro texto %{feeds_link} - ¿Por qué no enviar
+      una lista de las próximas acciones delproyecto en particular a un grupo de colegas
+      que están trabajando en el proyecto?
+    feeds_link_text: feeds proporcionados por Tracks
+    contents_header: 'Contenido:'
+    add_your_own: ¿Tienes uno propio para agregar? %{tell_us_link} y podemos incluirlo
+      en esta página en futuras versiones de Tracks.
+    tell_us_link_text: Cuéntanos sobre ello en nuestra cola de problemas
+    cron_1: Si ingresa la siguiente entrada a su crontab, recibirá un correo electrónico
+      todos los días alrededor de las 5 AM con una lista de las próximas acciones
+      que deben realizarse dentro de los próximos 7 días.
+    example_names:
+      context: contexto
+      project: proyecto
+      tag:
+        '1': etiqueta1
+        '2': etiqueta2
+      todo: mi impresionante tarea
+    email_rich:
+      description: 'Para los dos métodos anteriores, se puede utilizar el siguiente
+        formato en el asunto del mensaje para añadir metadatos:'
+      fields_title: 'Los campos son:'
+      symbol_title: Símbolo
+      meaning_title: Significado
+      field_descriptions:
+        due_date: La fecha de vencimiento de las tareas (puede ser de 2 dígitos para
+          el día, de 4 dígitos para el mes-día o de 6 dígitos para el año-mes-día)
+        tag: Una etiqueta para aplicar a la tarea - puede utilizarse varias veces
+        star: Bandera para empezar la tarea
+        project: El proyecto para colocar la tarea en
+        context: El contexto en el que colocar la tarea
+        tickler_date: La fecha clave para las tareas (puede ser de 2 dígitos para
+          el día, 4 dígitos para el día del mes o 6 dígitos para el día del mes)
+      fields_instruction: Todos los símbolos son opcionales, y el texto hasta el primer
+        símbolo (o el final de la cadena) se utiliza como descripción de la tarea
   help:
     title: Help
-    usage: ''
+    usage: 'Puedes encontrar información sobre el uso en el %{manual_link} en la wiki
+      de GitHub del proyecto.'
     manual_link_text: User manual
-    bugs: ''
-    issue_link_text: ''
-    contribute: ''
+    bugs: 'Si encuentras un error o tienes una petición de funcionalidad, por favor
+      infórmalo en el %{issue_link}.'
+    issue_link_text: 'cola de problemas'
+    contribute: 'Todas las contribuciones a Tracks son bienvenidas. Consulta el enlace
+      %{contribute_link} para más información. También puedes venir a debatir con
+      la comunidad:'
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (también disponible en %{matrix_link})'
-    irc_link_text: 'IRC channel #Tracks@FreeNode'
+    irc_link_text: 'Canal IRC #Tracks@Libera'
     matrix_link_text: Matriz
   layouts:
     mobile_navigation:
@@ -452,7 +551,7 @@ es:
       tickler: Recordatorio
     navigation:
       admin: Admin
-      api_docs: ''
+      api_docs: 'Documentación sobre la API REST'
       calendar: Calendario
       calendar_title: Calendario de las acciones pendientes
       completed_tasks: Hecho
@@ -460,7 +559,7 @@ es:
       contexts_title: Contextos
       export: Exportar
       export_title: Exportar datos
-      feeds: ''
+      feeds: 'Feeds'
       feeds_title: Vea un listado de alimentaciones disponibles
       group_view_by_context: Grupo por contexto
       group_view_by_project: Grupo por proyecto
@@ -474,7 +573,7 @@ es:
       integrations_: Pistas Integradas
       manage_users: Administrar usuarios
       manage_users_title: Añadir o eliminar usuarios
-      mobile: ''
+      mobile: 'Version móvil'
       notes_title: Mostrar todas las notas
       options: Opciones
       organize: Organizar
@@ -495,34 +594,35 @@ es:
       tickler: Recordatorio
       tickler_title: Recordatorio
       view: Ver
-    next_actions_rss_feed: ''
+    next_actions_rss_feed: 'RSS de las próximas acciones'
     toggle_contexts: Conmuta contextos colapsados
     toggle_contexts_title: Hacer que los contextos colapsados sea (in)visibles
     toggle_notes: Conmuta anotaciones
     toggle_notes_title: Conmuta todas las anotaciones
   login:
     account_login: Acceso a la cuenta
-    cas_create_account: ''
-    cas_logged_in_greeting: ''
-    cas_login: ''
-    cas_no_user_found: ''
+    cas_create_account: 'Si desea realizar una solicitud, por favor vaya aquí %{signup_link}'
+    cas_logged_in_greeting: '¡Hola, %{username}! Está autenticad@.'
+    cas_login: 'Inicio de sesión en CAS'
+    cas_no_user_found: '¡Hola, %{username}! No tienes una cuenta en Tracks.'
     cas_signup_link: Solicitar cuenta
     cas_username_not_found: Disculpe, ningún usuario por esa id de usuario CAS existe
       (%{username})
-    log_in_again: ''
-    logged_out: ''
-    login_cas: ''
-    login_standard: ''
-    login_with_openid: ''
-    mobile_use_openid: ""
-    openid_identity_url_not_found: ''
+    log_in_again: 'conéctate de nuevo.'
+    logged_out: 'Has salido de Tracks.'
+    login_cas: 'ir al CAS'
+    login_standard: 'volver al inicio de sesión estándar'
+    login_with_openid: 'iniciar sesión con OpenID'
+    mobile_use_openid: "...o iniciar sesión con OpenID"
+    openid_identity_url_not_found: 'Lo sentimos, no existe ningún usuari@ con esa
+      URL (%{identity_url})'
     option_separator: o,
-    please_login: ''
-    session_time_out: ''
-    session_will_expire: ''
+    please_login: 'Por favor, inicia sesión para utilizar Tracks'
+    session_time_out: 'La sesión ha expirado. Por favor %{link}'
+    session_will_expire: 'la sesión expirará tras %{hours} hora(s) de inactividad.'
     session_will_not_expire: sesión no caducada.
     sign_in: Entrar
-    signup_prompt: ''
+    signup_prompt: '¿Quiere crear una cuenta?'
     successful: Has entrado correctamente. ¡Bienvenido de nuevo!
     successful_with_session_info: 'Entrada correcta:'
     unsuccessful: Entrada incorrecta.
@@ -545,9 +645,10 @@ es:
     user:
       error_context_not_associated: ID de contexto %{context} no asociado con el id
         %{user} del usuario.
-      error_project_not_associated: ''
+      error_project_not_associated: 'El id de proyecto %{project} no está asociado
+        al id de usuario %{user}.'
   notes:
-    delete_confirmation: ''
+    delete_confirmation: '¿Estás seguro de que quieres borrar la nota ''%{id}''?'
     delete_item_title: Delete item
     delete_note_confirm: Are you sure that you want to delete the note '%{id}'?
     delete_note_title: Delete the note '%{id}'
@@ -642,6 +743,8 @@ es:
     token_description: Token (for feeds and API use)
     token_header: Su vale
     updated: Las preferencias de actualización
+    pick_one: 'O elige uno de los siguientes:'
+    result_in: 'Esto dará lugar a: '
   projects:
     actions_in_project_title: Acciones en este proyecto
     active_projects: Proyectos Activos
@@ -986,7 +1089,8 @@ es:
     depends_on: Depends on
     depends_on_separate_with_commas: Depende de (separar con comas)
     done: Done?
-    drag_action_title: ''
+    drag_action_title: 'Arrastre sobre otra acción para marcar esa acción como dependencia
+      de esta acción.'
     due: Fecha límite
     edit: Edit
     edit_action: Edit action
@@ -1183,15 +1287,17 @@ es:
         para verlos.'
     to_tickler: al recordatorio
     unable_to_add_dependency: Es imposible añadir dependencia
-    unresolved_dependency: ''
+    unresolved_dependency: 'El valor que ha introducido en el campo de dependencia
+      no se ha resuelto con una acción existente. Este valor no se guardará con el
+      resto de la acción. ¿Continuar?'
     was_due_on_date: venció el %{date}
   users:
-    account_signup: ''
+    account_signup: 'Registro de la cuenta'
     approve_tos: Apruebo los Términos del Servicio
     auth_change_submit: Modifica el tipo de autenticación
     auth_type_update_error: 'Hubo un problema actualizando su tipo de autenticación:
       %{error_messages}'
-    auth_type_updated: Tipo autenticador actualizado
+    auth_type_updated: Tipo autenticador actualizado.
     change_auth_type_title: TRACKS::Change tipo de autenticación
     change_authentication_type: Cambia el tipo de autenticación
     change_password_prompt: Introduzca su contraseña nueva dentro de los campos debajo
@@ -1201,7 +1307,8 @@ es:
     choose_password: Elija contraseña
     confirm_password: Conformar contraseña
     desired_login: Acceso deseado
-    destroy_confirmation: ''
+    destroy_confirmation: 'Aviso: esto eliminará al usuario ''%{login}'', todas sus
+      acciones, contextos, proyecto y notas. ¿Está seguro de que desea continuar?'
     destroy_error: Hubo un error al borrar el usuario %{login}
     destroy_successful: El usuario %{login} fue destruido completamente
     destroy_user: Destruir usuario
@@ -1239,6 +1346,7 @@ es:
     total_users_count: You have a total of %{count} users
     user_created: User created.
     you_have_to_reset_your_password: Usted tiene que restablecer su contraseña
+    manage_users_title: TRACKS::Gestión de usuarios
   will_paginate:
     next_label: Siguiente »
     page_entries_info:
@@ -1258,5 +1366,94 @@ es:
   rest_help:
     auth:
       title: Autenticación
+      basic_auth_link_text: Autenticación HTTP básica
+      content: La autenticación se gestiona mediante %{auth_link}. Su nombre de usuario
+        y contraseña de Tracks se utilizan como credenciales de autenticación para
+        la API. Tenga en cuenta que en la autenticación HTTP básica, su contraseña
+        se envía en texto claro. Si necesitas una solución de autenticación más segura,
+        debes configurar tu servidor web para ejecutar Tracks bajo HTTPS.
     activeresource:
       ror_link_text: Ruby on Rails
+      title: Consumir la API con ActiveResource
+      activeresource_link_text: ActiveResource
+      wrapper_description: 'Inspirándonos en el contenedor Highrise de %{signals_link},
+        creamos un pequeño contenedor Ruby (que se encuentra en el directorio doc/-)
+        para la interfaz que crea modelos ActiveResource para que juegues con ellos
+        en una sesión IRB:'
+      description: '%{activeresource_link} es un contenedor delgado pero poderoso
+        para los servicios RESTful expuestos por %{ror_link}. Será parte de Rails
+        2.0 pero hasta entonces podrás obtenerlo con %{gem_command}.'
+      signals_link_text: 37 Signals
+    notes:
+      curl_description: Todos los ejemplos utilizan %{curl}.
+      description: 'En la documentación se han aplicado algunas convenciones, las
+        cuales son:'
+      bullet1: '%{id} del recurso %{url} indica que debe reemplazarse con el identificador
+        único del recurso'
+      bullet2: '%{omit} indica que se han omitido partes irrelevantes de los datos
+        de la respuesta para aclarar la instrucción'
+      title: Notas sobre la documentación
+    title: Documentación de la API REST para desarrolladores
+    id: ID
+    curl_link_text: cURL
+    intro:
+      title: Introducción
+      content: Tracks está diseñado para integrarse con scripts, servicios web y aplicaciones
+        de terceros. Esta página sirve como documentación de nuestra API REST.
+      content_2: La API REST de Tracks permite a los desarrolladores integrar Tracks
+        en sus aplicaciones. Permite a las aplicaciones acceder a los datos de Tracks
+        y modificarlos, y se implementa como Vanilla XML sobre HTTP.
+      restful_link_text: RESTful
+      content_3: La API es un servicio %{restful_link}. Todos los datos están disponibles
+        a través de la API como un recurso al que se puede hacer referencia utilizando
+        un identificador único. Responde a varios de los métodos HTTP, concretamente
+        GET, PUT, POST y UPDATE, y todas las respuestas de la API están en un formato
+        XML sencillo codificado como UTF-8.
+    writing:
+      example_todo_response_title: 'La respuesta es de nuevo un %{response_code} con
+        la cabecera %{header} indicando dónde se puede encontrar el nuevo recurso
+        todo. Cambiando las notas de todo, de nuevo usando curl:'
+      title: Escribiendo en la API
+      example_project_response_title: 'La respuesta es un %{response_code} con una
+        cabecera %{header} que indica dónde se puede encontrar el nuevo recurso del
+        proyecto. Ahora podemos añadir una tarea a este proyecto, usando curl:'
+      example_todo_name: Modelar la casa del árbol en SketchUp
+      example_note_text: usar textura de arce
+      example_delete_title: 'Si queremos borrar esa tarea podemos llamar a su identificador
+        único de recurso (la URL) con el método HTTP %{delete}, de nuevo con curl:'
+      example_delete_response_title: La API devuelve un %{response_code} y la tarea
+        se elimina.
+      example_title: 'Creando un nuevo proyecto, usando curl:'
+      description: La API proporciona mecanismos para añadir, actualizar y eliminar
+        recursos utilizando los métodos HTTP %{put}, %{post} y %{delete} en combinación
+        con el contenido.
+      example_project_name: Construir una casa en el árbol para los niños
+      example_note_response_title: 'La respuesta es un %{response_code} con en el
+        cuerpo la representación XML de la tarea actualizada. Proporcionamos un método
+        abreviado para activar o desactivar una tarea sin tener que realizar la actualización
+        con los valores de campo correctos:'
+    retrieve:
+      content: 'Para recuperar datos basta con hacer un HTTP GET sobre un identificador
+        de recurso. Por ejemplo, si desea obtener todos los contextos con %{curl_link}:'
+      single_context: 'Obtener un contexto único:'
+      todos_from_context: 'Obtener las tareas dentro de un contexto:'
+      paths_title: 'Todos los datos están disponibles según las siguientes rutas de
+        recursos:'
+      active_todos: 'Si sólo quieres obtener las tareas activas, añade el parámetro
+        %{active_code} y ponlo en algún valor como este:'
+      title: Recuperar datos de la API
+      projects: También puede aplicar el patrón mostrado anteriormente con proyectos
+        en lugar de contextos.
+      limit: 'Para los recursos de tareas pendientes (tareas, tickler, hecho, oculto
+        y calendario), puede limitar el campo devuelto a %{fields} agregando el parámetro
+        %{limit_parameter} y configurándolo en %{set_to}. Por ejemplo:'
+    response:
+      title: Tratamiento de la respuesta y estado de la respuesta
+      description: Todas las operaciones exitosas responden con un código de estado
+        de %{response_200} o %{response_201} dependiendo de la operación. A veces
+        una lista, digamos %{example_call} no tendrá ningún elemento, devolverá una
+        lista vacía.
+      xml_description: 'El XML para las respuestas de la lista vacía tiene este aspecto,
+        de nuevo con curl:'
+  auth_type:
+    database: Base de datos

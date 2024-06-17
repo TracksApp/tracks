@@ -21,9 +21,9 @@ tr:
       paste_field: 'İçe aktarılan YAML dosyasının içeriğini aşağıdaki metin kutucuğuna
         yapıştır:'
       warning: Dikkat
-      yaml_warning: '%{warning}: YAML dosyası dışa aktarılmadan önce mevcut bütün bilgileriniz
-        kaybolacak. Herhangi bir sorun yaşama ihtimalinize karşılık, eğer veri tabanına
-        şu anda erişiminiz var ise yedeklemenizi öneririz.'
+      yaml_warning: '%{warning}: YAML dosyası dışa aktarılmadan önce mevcut bütün
+        bilgileriniz kaybolacak. Herhangi bir sorun yaşama ihtimalinize karşılık,
+        eğer veri tabanına şu anda erişiminiz var ise yedeklemenizi öneririz.'
     export:
       page_title: Tracks::Export
       title: Dışa aktarılıyor
@@ -39,8 +39,8 @@ tr:
       download_link: İndirme bağlantısı
       yaml_link_title: YAML dosyası
       xml_description: '%{xml}: Veri aktarımı ve düzenleme için en iyisidir'
-      yaml_experimental: Lütfen YAML dosyalarının deneysel olarak desteklendiğini göz
-        önünde bulundurunuz. Önemli verileri yedeklerken dikkatli olunuz.
+      yaml_experimental: Lütfen YAML dosyalarının deneysel olarak desteklendiğini
+        göz önünde bulundurunuz. Önemli verileri yedeklerken dikkatli olunuz.
       csv_description: '%{csv}: İş tablosuna veya veri analizi yazılımlarına aktarmak
         için en iyisidir'
       xml_link_description: XML dosyası bütün eylemlerinizi, içeriklerinizi, projelerinizi,
@@ -80,7 +80,8 @@ tr:
     context_hide: Font sayfasında gizle?
     context_deleted: Silinen içerik '%{name}'
     completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan eylemler
-    all_completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan bütün eylemler
+    all_completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan bütün
+      eylemler
     add_context: İçerik ekle
   common:
     wiki: Wiki
@@ -97,8 +98,8 @@ tr:
       by_task_count_title: Görev sayısına göre sırala
       by_task_count: Görev sayısına göre
       alphabetically_title: Projeleri alfabetik olarak sırala
-      alphabetically_confirm: Bu projeleri alfabetik olarak sıralamak istediğinize emin
-        misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
+      alphabetically_confirm: Bu projeleri alfabetik olarak sıralamak istediğinize
+        emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
       alphabetically: Alfabetik sırayla
     show_all: Hepsini göster
     server_error: Sunucuda bir hata meydana geldi.
@@ -149,8 +150,8 @@ tr:
       one: Not yok
       other: 1 not var
     actions_midsentence:
-      one: Eylem
-      other: Eylemler
+      one: eylem
+      other: eylemler
   activerecord:
     errors:
       template:
@@ -172,7 +173,8 @@ tr:
         taken: zaten alınmış
         restrict_dependent_destroy:
           has_many: Bu kayda bağlı bir dosya bulunduğu için kayıt silinemez %{record}
-          has_one: Bu kayda bağlı farklı bir dosya bulunduğu için kayıt silinemez %{record}
+          has_one: Bu kayda bağlı farklı bir dosya bulunduğu için kayıt silinemez
+            %{record}
         record_invalid: 'Doğrulama başarısız: %{errors}'
         odd: tek sayı olmalıdır
         not_a_number: rakam değildir
@@ -380,10 +382,10 @@ tr:
     ical_feed: iCal akış
     last_fixed_number: Son %{number} eylem/ler
     legend: 'Semboller:'
-    notice_incomplete_only: "Not: Akış, aksi işaretlenmedikçe sadece tamamlanmamış eylemleri\
-      \ gösterir. Bu iCal akışları todo listesine eklenebilir. Eğer bitimi yaklaşan\
-      \ todo'ları takvimde görüntülemek istiyorsanız, takvim sayfasından iCal akışını\
-      \ kullanın"
+    notice_incomplete_only: "Not: Akış, aksi işaretlenmedikçe sadece tamamlanmamış\
+      \ eylemleri gösterir. Bu iCal akışları todo listesine eklenebilir. Eğer bitimi\
+      \ yaklaşan todo'ları takvimde görüntülemek istiyorsanız, takvim sayfasından\
+      \ iCal akışını kullanın"
     plain_text_feed: Düz Yazı Akışı
     project_centric: Belirli bir projedeki tamamlanmamış eylemler akışı
     project_needed: Akış talep etmeden önce en az bir proje olmalı
@@ -401,9 +403,9 @@ tr:
     add_your_own: Eklemek istediğiniz araç mı var? Tracks'ın gelecek sürümlerine ekleyebilmemiz
       için bize gönderin %{tell_us_link}.
     intro: 'Tracks işinize yarayabilecek diğer araçlarla entegre edilebilir! Bu sayfa
-      bazılarını entegre etmeye yönelik bilgi içerir. Her platforma uygulanabilir olmayabilirler
-      ve bazıları diğerlerine kıyasla daha fazla teknik bilgi gerektirebilir. Ek bilgi
-      için: %{documentation_link}'
+      bazılarını entegre etmeye yönelik bilgi içerir. Her platforma uygulanabilir
+      olmayabilirler ve bazıları diğerlerine kıyasla daha fazla teknik bilgi gerektirebilir.
+      Ek bilgi için: %{documentation_link}'
     developer_documentation_link: Tracks için geliştirici dokümantasyonu
     contents_header: 'İçerikler:'
     tell_us_link_text: Bunun hakkında bize görüş bildirin
@@ -415,8 +417,8 @@ tr:
       bitimi yaklaşan eylemlerle ilgili bir e-posta alacaksınız.
     message_gateway:
       rich_api_tip: Mesaj içeriği tanım, içerik ve proje kısmına, not ise gövde metnine
-        yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" ve benzeri türden
-        görevler oluşturmak için Rich Todo API kullanabilirsiniz.
+        yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" ve benzeri
+        türden görevler oluşturmak için Rich Todo API kullanabilirsiniz.
   footer:
     send_feedback: Geri bildirim
     version: 'Tracks %{version} (%{revision_with_date})'
