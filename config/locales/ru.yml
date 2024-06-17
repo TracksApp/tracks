@@ -103,6 +103,7 @@ ru:
       one: действий
       few: действие
       many: действия
+      other: действия
     add: Добавить
     ajaxError: От сервера была получена ошибка
     back: Назад
@@ -114,9 +115,9 @@ ru:
     contribute: Сотрудничество
     create: Создать
     days_midsentence:
-      one: день
-      few: дня
-      many: дней
+      one: дней
+      few: день
+      many: дня
     deferred: отложенные
     description: Описание
     drag_handle: ТАЩИТЬ
@@ -135,9 +136,10 @@ ru:
     none: Не задано
     not_available_abbr: н/д
     note:
-      one: нет записей
-      few: 1 запись
-      many: '%{count} записи'
+      few: "%{count} записи"
+      one: 1 запись
+      other: '%{count} записи'
+      zero: нет записей
     notes: Заметки
     numbered_step: Шаг %{number}
     ok: ОК
@@ -1361,13 +1363,13 @@ ru:
       multi_page: Отображено %{model} %{from} - %{to} из %{count}
       multi_page_html: Отображено %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> из <b>%{count}</b>
       single_page:
-        one: '%{model} не найден'
-        few: Отображён 1 %{model}
-        many: Отображены все %{count} %{model}
+        one: Отображён 1 %{model}
+        other: Отображены все %{count} %{model}
+        zero: '%{model} не найден'
       single_page_html:
-        one: '%{model} не найден'
-        few: Отображен <b>1</b> %{model}
-        many: Отображены <b>все&nbsp;%{count}</b> %{model}
+        one: Отображен <b>1</b> %{model}
+        other: Отображены <b>все&nbsp;%{count}</b> %{model}
+        zero: '%{model} не найден'
     page_gap: "&hellip;"
     previous_label: "&#8592; Пред"
   rest_help:
