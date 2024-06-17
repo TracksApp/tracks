@@ -1,5 +1,29 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.7
+
+### Removed features
+
+* Support for Ruby 2.6 and 2.7 were dropped.
+* Support for inbound message handling was dropped due to API changes caused by required Ruby on Rails upgrade. If you need this, comment in the issue https://github.com/TracksApp/tracks/issues/2463
+* Rubocop is no longer used in the CI due to missing support for Ruby > 2.5.
+
+### Deprecations
+
+* This will be the last release to support Ruby 3.0, which is already end-of-life.
+
+### Bug fixes
+
+* The base version for the Docker image was updated from Ruby 2.7 to Ruby 3.3.
+* Lots of dependencies have been updated (including security updates).
+
+### Updated translations
+
+* Spanish (thanks Gallegonovato!)
+* Dutch (thanks Ranforingus!)
+* Russian (thanks Alexey Svistunov!)
+* Turkish (thanks Burak Hüseyin Ekseli!)
+
 ## Version 2.6.1
 
 ### Deprecations
