@@ -101,7 +101,7 @@ GEM
     crass (1.0.6)
     database_cleaner (1.99.0)
     date (3.3.4)
-    diff-lcs (1.5.0)
+    diff-lcs (1.5.1)
     docile (1.1.5)
     e2mmap (0.1.0)
     erubi (1.13.0)
@@ -251,10 +251,10 @@ GEM
       nokogiri
     rexml (3.3.0)
       strscan
-    rspec-expectations (3.12.3)
+    rspec-expectations (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
-      rspec-support (~> 3.12.0)
-    rspec-support (3.12.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.1)
     rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
