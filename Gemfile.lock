@@ -189,7 +189,7 @@ GEM
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.25.1)
-    parser (3.3.3.0)
+    parser (3.3.4.0)
       ast (~> 2.4.1)
       racc
     pg (1.5.6)
@@ -249,19 +249,19 @@ GEM
     regexp_parser (2.9.2)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.0)
+    rexml (3.3.1)
       strscan
     rspec-expectations (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    rubocop (1.64.1)
+    rubocop (1.65.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.8, < 3.0)
+      regexp_parser (>= 2.4, < 3.0)
       rexml (>= 3.2.5, < 4.0)
       rubocop-ast (>= 1.31.1, < 2.0)
       ruby-progressbar (~> 1.7)
@@ -376,7 +376,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.2.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.64)
+  rubocop (~> 1.65)
   sanitize (~> 6.1)
   sassc-rails (~> 2.1.2)
   simplecov
