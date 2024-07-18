@@ -23,7 +23,6 @@ services:
       DATABASE_ENCODING: unicode
       DATABASE_PORT: 5432
     volumes:
-      - ${VOLUME:-..}:/app:Z
       - ${VOLUME:-..}/config/database.docker.yml:/app/config/database.yml:Z
       - ${VOLUME:-..}/config/site.docker.yml:/app/config/site.yml:Z
     ports:
