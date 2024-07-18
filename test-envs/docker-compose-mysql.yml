@@ -10,7 +10,9 @@ services:
   web:
     build:
       context: ..
-      dockerfile: Dockerfile-3.0
+      target: test
+      args:
+        RUBY_VERSION: ${RUBY_VERSION}
     environment:
       # These are set in script/ci-build, so we need to pass-thru them.
       RAILS_ENV: $RAILS_ENV
