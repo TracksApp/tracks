@@ -28,6 +28,11 @@ gem 'sanitize', '~> 6.1'
 gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
+group :layout do
+  gem 'listen'
+  gem 'tolk', '~> 5.0.1'
+end
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'mini_racer', group: :therubyracer
 
@@ -40,8 +45,6 @@ group :development do
   gem 'spring', '~> 4'
   gem 'yard'
 
-  gem 'tolk', '~> 5.0.1'
-
   gem 'bullet'
   gem 'rack-mini-profiler'
   gem 'solargraph'
@@ -51,12 +54,10 @@ end
 
 group :development, :test do
   gem 'byebug'
-  gem 'listen'
   gem 'rubocop', '~> 1.65', require: false
 end
 
 group :test do
-
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.9', group: :test, require: nil
   gem 'database_cleaner', '~> 1'
@@ -68,3 +69,5 @@ group :test do
   gem 'rspec-expectations'
   gem 'simplecov'
 end
+
+gem 'stripe', "~> 5.24.0", group: :stripe
