@@ -6,6 +6,8 @@ gem 'activemodel-serializers-xml', '~> 1.0.1'
 gem 'rails', '~> 6.1'
 
 gem 'font-awesome-sass', '~> 6.5.2'
+gem 'jquery-rails', '~> 4.6'
+gem 'jquery-ui-rails', '~>7.0.0'
 gem 'aasm', '~> 5.5.0'
 gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.20'
@@ -28,8 +30,6 @@ gem 'mini_racer', group: :therubyracer
 
 group :assets do
   gem 'coffee-rails', '~> 5.0.0'
-  gem 'jquery-rails', '~> 4.6'
-  gem 'jquery-ui-rails', '~>7.0.0'
   gem 'sassc-rails', '~> 2.1.2'
   gem 'bootstrap-sass', '3.4.1'
   gem 'uglifier', '>=1.3.0'
