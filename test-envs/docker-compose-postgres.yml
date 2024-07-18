@@ -5,8 +5,6 @@ services:
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-tracks}
       POSTGRES_PASSWORD: password
-    volumes:
-      - db-data:/var/lib/postgresql/data
   web:
     build:
       context: ..
@@ -29,5 +27,3 @@ services:
       - 3000:3000
     depends_on:
       - db
-volumes:
-  db-data:

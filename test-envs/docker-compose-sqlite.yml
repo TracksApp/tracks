@@ -12,7 +12,7 @@ services:
       DATABASE_NAME: "/app/db/db.sqlite"
       DATABASE_TYPE: sqlite3
     volumes:
-      - ${VOLUME:-sqlite}:/app/db:Z
+      - sqlite:/app/db:Z
       - ${VOLUME:-..}/config/database.docker.yml:/app/config/database.yml:Z
       - ${VOLUME:-..}/config/site.docker.yml:/app/config/site.yml:Z
     ports:
