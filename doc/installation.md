@@ -153,13 +153,22 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
   * If you are using SQLite:
 
         ```
-        bundle install --without "development test mysql"
+        bundle config set without "development test mysql"
+        bundle install
         ```
 
   * If you are using MySQL:
 
         ```
-        bundle install --without "development test sqlite"
+        bundle config set without "development test sqlite"
+        bundle install
+        ```
+  
+  * If you are using PostgreSQL:
+
+        ```
+        bundle config set without "development test sqlite mysql"
+        bundle install
         ```
 
   * If you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed, you may also append `therubyracer` as an additional "without" parameter.
