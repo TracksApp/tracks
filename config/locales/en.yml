@@ -1281,6 +1281,7 @@ en:
     change_password_title: TRACKS::Change password
     choose_password: Choose password
     confirm_password: Confirm password
+    create_error: User creation failed, maybe you already have an account here?
     desired_login: Desired login
     destroy_confirmation: 'Warning: this will delete user ''%{login}'', all their
       actions, contexts, project and notes. Are you sure that you want to continue?'
@@ -1315,6 +1316,7 @@ en:
     signup_successful: Signup successful for user %{username}.
     successfully_deleted_user: Successfully deleted user %{username}
     tos_link: read the Terms of Service
+    tos_error: You have to accept the terms of service to sign up!
     total_actions: Total actions
     total_contexts: Total contexts
     total_notes: Total notes
