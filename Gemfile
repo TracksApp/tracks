@@ -69,5 +69,5 @@ group :test, :optional => true do
 end
 
 group :stripe, :optional => true do
-  gem 'stripe', "~> 5.24.0"
+  gem 'stripe'
 end
