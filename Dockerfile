@@ -30,7 +30,9 @@ COPY lib /app/lib/
 COPY app /app/app/
 COPY db /app/db/
 
-COPY .git /app/.git
+# Use glob to omit error if the .git directory doesn't exists (in case the
+# code is from a release archive, not a Git clone)
+COPY .gi[t] /app/.git
 
 COPY Gemfile* /app/
 
