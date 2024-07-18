@@ -29,9 +29,9 @@ gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
 # Use --without <group> argument to skip unnecessary drivers
-gem 'sqlite3', group: :sqlite
-gem 'mysql2', '~> 0.5.6', group: :mysql
-gem 'pg', '~> 1.5.6', group: :postgresql
+gem 'sqlite3', '~> 1.4', group: :sqlite
+gem 'mysql2', '~> 0.5', group: :mysql
+gem 'pg', '~> 1.1', group: :postgresql
 
 group :assets, :optional => true do
   gem 'listen'
