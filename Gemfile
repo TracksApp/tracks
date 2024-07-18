@@ -59,7 +59,7 @@ group :test do
 
   # get test coverage info on codeclimate
   gem 'codeclimate-test-reporter', '1.0.9', group: :test, require: nil
-  gem 'database_cleaner', '~> 1'
+  gem 'database_cleaner', '~> 2'
   gem 'factory_bot_rails'
   gem 'minitest-stub-const'
   gem 'mocha', :require => false
