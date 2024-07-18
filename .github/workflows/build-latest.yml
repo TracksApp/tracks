@@ -35,6 +35,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
+          target: production
           push: true
           tags: |
             tracksapp/tracks:latest

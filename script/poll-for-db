@@ -2,13 +2,15 @@
 
 echo "==> Polling DB…"
 
-appdir=$(cd $(dirname "$0")/.. && pwd)
-[ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
+if [ "$DATABASE_TYPE" == "mysql" ]; then
+  appdir=$(cd $(dirname "$0")/.. && pwd)
+  [ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
 
-for i in {1..60}; do
-  nc -z -w5 db 3306 && exit
-  sleep 1
-done
+  for i in {1..60}; do
+    nc -z -w5 db 3306 && exit
+    sleep 1
+  done
 
-echo "Unable to reach database!"
-exit 1
+  echo "Unable to reach database!"
+  exit 1
+fi

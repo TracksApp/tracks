@@ -1,19 +1,13 @@
-FROM ruby:3.3
-
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
+ARG RUBY_VERSION=3.3
+FROM ruby:${RUBY_VERSION} AS base
 
 WORKDIR /app
-
 RUN touch /etc/app-env
-
-COPY Gemfile* /app/
-RUN gem install bundler
-RUN bundle install --jobs 4
 
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 RUN apt-get update && apt-get install -y yarn netcat-openbsd
+RUN gem install bundler
 
 RUN mkdir /app/log
 
@@ -38,10 +32,33 @@ COPY db /app/db/
 
 COPY .git /app/.git
 
-RUN RAILS_ENV=production bundle exec rake assets:precompile
+COPY Gemfile* /app/
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
-
 EXPOSE 3000
-
 CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+
+FROM base AS precompile
+RUN bundle config set with assets
+RUN bundle config set deployment true
+RUN bundle install --jobs 4
+RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
+
+# Build the environment-specific stuff
+FROM base AS production
+RUN bundle config --global frozen 1
+RUN bundle install --jobs 4
+COPY --from=precompile /app/public/assets /app/public/assets
+
+FROM base AS test
+COPY test /app/test/
+# For testing the API client
+COPY doc /app/doc/
+RUN bundle config set with development test assets
+RUN bundle config --global frozen 1
+RUN bundle install --jobs 4
+RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
+
+FROM base AS development
+RUN bundle config set with development test
+RUN bundle install --jobs 4

@@ -8,7 +8,9 @@ services:
     volumes:
       - db-data:/var/lib/mysql
   web:
-    build: .
+    build:
+      context: .
+      target: production # can also be development or test
     environment:
       # These are set in script/ci-build, so we need to pass-thru them.
       RAILS_ENV: $RAILS_ENV
