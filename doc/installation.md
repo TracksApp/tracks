@@ -44,7 +44,7 @@ Tracks container. In future there should be an official image in Docker Hub. You
 1. Get the Tracks code base by either downloading the archive file for the latest releast or cloning it from GitHub.
 2. Run the following command in the Tracks directory to build the image:
 ```
-   $ docker build -t="tracks" .
+   $ docker build -t="tracks" --target=production .
 ```
 
 1. Make sure you have Docker properly installed.
@@ -153,13 +153,22 @@ Tracks is built upon a number of Ruby libraries (known as ‘gems’). The Bundl
   * If you are using SQLite:
 
         ```
-        bundle install --without "development test mysql"
+        bundle config set without mysql postgresql
+        bundle install
         ```
 
   * If you are using MySQL:
 
         ```
-        bundle install --without "development test sqlite"
+        bundle config set without sqlite postgresql
+        bundle install
+        ```
+  
+  * If you are using PostgreSQL:
+
+        ```
+        bundle config set without sqlite mysql
+        bundle install
         ```
 
   * If you are installing Tracks on Windows or Mac OS X, or if you have another JavaScript runtime such as Node.js installed, you may also append `therubyracer` as an additional "without" parameter.

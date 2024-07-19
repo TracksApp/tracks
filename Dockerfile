@@ -41,13 +41,13 @@ EXPOSE 3000
 CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
 
 FROM base AS precompile
-RUN bundle config set with assets
 RUN bundle config set deployment true
 RUN bundle install --jobs 4
 RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
 
 # Build the environment-specific stuff
 FROM base AS production
+RUN bundle config set without assets
 RUN bundle config --global frozen 1
 RUN bundle install --jobs 4
 COPY --from=precompile /app/public/assets /app/public/assets
@@ -56,10 +56,11 @@ FROM base AS test
 COPY test /app/test/
 # For testing the API client
 COPY doc /app/doc/
-RUN bundle config set with development test assets
+RUN bundle config set without assets
+RUN bundle config set with development test
 RUN bundle config --global frozen 1
 RUN bundle install --jobs 4
-RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
+COPY --from=precompile /app/public/assets /app/public/assets
 
 FROM base AS development
 RUN bundle config set with development test

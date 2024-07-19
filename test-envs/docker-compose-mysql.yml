@@ -5,8 +5,6 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: ${TRACKS_DB:-tracks}
-    volumes:
-      - db-data:/var/lib/mysql
   web:
     build:
       context: ..
@@ -20,12 +18,9 @@ services:
       DATABASE_USERNAME: root
       DATABASE_PASSWORD_EMPTY: 1
     volumes:
-      - ${VOLUME:-..}:/app:Z
       - ${VOLUME:-..}/config/database.docker.yml:/app/config/database.yml:Z
       - ${VOLUME:-..}/config/site.docker.yml:/app/config/site.yml:Z
     ports:
       - 3000:3000
     depends_on:
       - db
-volumes:
-  db-data:
