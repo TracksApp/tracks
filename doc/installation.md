@@ -142,7 +142,7 @@ You need to create a database and database-user to use with Tracks. For this, yo
 #### PostgreSQL
 
     $ sudo -u postgres psql
-    postgres=# CREATE USER tracks WITH ENCRYPTED PASSWORD 'password-goes-here';
+    postgres=# CREATE ROLE tracks WITH LOGIN NOSUPERUSER INHERIT CREATEDB CREATEROLE NOREPLICATION PASSWORD 'password-goes-here';
     postgres=# CREATE DATABASE tracks OWNER=tracks;
 
 ### Install dependencies
