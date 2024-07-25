@@ -863,8 +863,10 @@ class TodosController < ApplicationController
     end
 
     @single_tag = @tag_expr.size == 1 && @tag_expr[0].size == 1
-    @tag_name = @tag_expr[0][0]
-    @tag_title = @single_tag ? @tag_name : tag_title(@tag_expr)
+
+    # These are used in the templates, sanitise to prevent XSS.
+    @tag_name = sanitize(@tag_expr[0][0])
+    @tag_title = sanitize(@single_tag ? @tag_name : tag_title(@tag_expr))
   end
 
   def filter_format_for_tag_view
