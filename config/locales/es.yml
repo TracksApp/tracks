@@ -133,7 +133,7 @@ es:
     not_available_abbr: n/d
     note:
       one: 1 nota
-      other: "%{count} notas"
+      other: '%{count} notas'
       zero: 0 notas
     notes: Notas
     numbered_step: Paso %{number}
@@ -1347,6 +1347,8 @@ es:
     user_created: User created.
     you_have_to_reset_your_password: Usted tiene que restablecer su contraseña
     manage_users_title: TRACKS::Gestión de usuarios
+    create_error: La creación de usuario falló, ¿quizás ya tienes una cuenta aquí?
+    tos_error: ¡Tienes que aceptar los términos del servicio para registrarte!
   will_paginate:
     next_label: Siguiente »
     page_entries_info:

@@ -132,7 +132,7 @@ fi:
     not_available_abbr: ei
     note:
       one: 1 muistiinpano
-      other: "%{count} muistiinpanoa"
+      other: '%{count} muistiinpanoa'
       zero: ei muistiinpanoja
     notes: Muistiinpanot
     numbered_step: Askel %{number}
@@ -1331,6 +1331,9 @@ fi:
     total_users_count: Sinulla on yhteensä %{count} käyttäjää
     user_created: Käyttäjä luotu.
     you_have_to_reset_your_password: Palauta salasanasi
+    create_error: Tunnuksen luominen epäonnistui, ehkä sinulla on jo käyttäjätunnus
+      täällä?
+    tos_error: Sinun täytyy hyväksyä käyttöehdot rekisteröityäksesi!
   will_paginate:
     next_label: Seuraava &#8594;
     page_entries_info:
