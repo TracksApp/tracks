@@ -4,8 +4,8 @@
     unless @further
 -%>
 <%= raw t('stats.click_to_show_actions_from_week',
-      :link => link_to("here", show_actions_from_chart_path(:id=>"#{params[:id]}_end", :index => params[:index])),
-      :week => params[:index])
+      :link => link_to("here", show_actions_from_chart_path(:id=>"#{params[:id].to_i}_end", :index => params[:index].to_i)),
+      :week => params[:index].to_i)
 -%>
 <%
     end

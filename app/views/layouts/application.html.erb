@@ -7,14 +7,14 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <script type="text/javascript">
-      var SOURCE_VIEW = '<%=@source_view%>';
-      var AUTH_TOKEN = '<%= raw(protect_against_forgery? ? form_authenticity_token.inspect : "") %>'
-      var TAG_NAME = '<%= @tag_name ? @tag_name : "" %>'
-      var GROUP_VIEW_BY = '<%= @group_view_by ? @group_view_by : "" %>'
+      var SOURCE_VIEW = '<%=j @source_view %>';
+      var AUTH_TOKEN = '<%=j raw(protect_against_forgery? ? form_authenticity_token.inspect : "") %>'
+      var TAG_NAME = '<%=j @tag_name ? @tag_name : "" %>'
+      var GROUP_VIEW_BY = '<%=j @group_view_by ? @group_view_by : "" %>'
       var defaultContexts = <%= default_contexts_for_autocomplete.html_safe rescue '{}' %>;
       var defaultTags = <%= default_tags_for_autocomplete.html_safe rescue '{}' %>;
-      var dateFormat = '<%= date_format_for_date_picker %>';
-      var weekStart = '<%= current_user.prefs.week_starts %>';
+      var dateFormat = '<%=j date_format_for_date_picker %>';
+      var weekStart = '<%=j current_user.prefs.week_starts %>';
       function relative_to_root(path) { return '<%= root_url %>'+path; };
       <% if current_user.prefs.refresh != 0 -%>
         setup_auto_refresh(<%= current_user.prefs["refresh"].to_i*60000 %>);
