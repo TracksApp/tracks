@@ -1,5 +1,40 @@
 See doc/upgrading.md for the upgrade documentation!
 
+## Version 2.7.1
+
+### Security advisory CVE-2024-41805 (severity 6.1 / moderate)
+
+This release fixes a few reflected XSS vulnerabilities which enabled execution
+of malicious JavaScript in the context of a user’s browser if that user clicks
+on a malicious link, possibly allowing retrieval or modification of the current
+user's data. The issue is of moderate severity (score 6.1/10) with the CVSS
+rating CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N.
+
+I want to thank Alec Romano for reporting the issues.
+
+### New features
+
+* The test suite now uses always the same Dockerfile as the main build.
+* The Dockerfile now supports environment-specific builds via stages.
+  Note: This requires slight changes to docker build commands, see documentation!
+
+### Deprecations
+
+* This will be the last release to support Ruby 3.0, which is already end-of-life.
+
+### Bug fixes
+
+* Lots of dependencies have been updated (including security updates).
+* Fixed Docker build not working on an archive version (ie. one not cloned with Git)
+* An error is shown if the user being created already exists.
+* The TOS error in user creation is now in template.
+* Schema.rb has been updated for Postgres support.
+
+### Updated translations
+
+* Spanish (thanks Gallegonovato!)
+* Finnish (by maintainer Jyri-Petteri ”ZeiP” Paloposki)
+
 ## Version 2.7
 
 ### Removed features
