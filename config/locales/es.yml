@@ -93,15 +93,14 @@ es:
         body: 'Hubo problemas con los campos siguientes:'
         header:
           one: Un error ha impedido que se guarde este %{model}
-          many: '%{count} errores han impedido que se guarden este %{model}'
-          other: ''
+          other: '%{count} errores han impedido que se guarden este %{model}'
   common:
     action: Tarea
     actions: Tareas
     actions_midsentence:
-      one: tareas
-      many: tarea
+      one: tarea
       other: tareas
+      zero: tareas
     add: Añadir
     ajaxError: Hubo un error al recuperar desde el servidor
     back: Atrás
@@ -114,8 +113,7 @@ es:
     create: Crear
     days_midsentence:
       one: día
-      many: días
-      other: ''
+      other: días
     deferred: pospuestas
     description: Descripción
     drag_handle: ARRASTRAR
@@ -134,9 +132,9 @@ es:
     none: Ninguno
     not_available_abbr: n/d
     note:
-      one: 0 notas
-      many: 1 nota
+      one: 1 nota
       other: '%{count} notas'
+      zero: 0 notas
     notes: Notas
     numbered_step: Paso %{number}
     ok: Aceptar
@@ -315,49 +313,40 @@ es:
     distance_in_words:
       about_x_hours:
         one: alrededor de 1 hora
-        many: Acerca de %{count} horas
-        other: ''
+        other: Acerca de %{count} horas
       about_x_months:
         one: alrededor de 1 mes
-        many: Acerca de %{count} meses
-        other: ''
+        other: Acerca de %{count} meses
       about_x_years:
         one: alrededor de 1 año
-        many: Acerca de %{count} años
-        other: ''
+        other: Acerca de %{count} años
       almost_x_years:
         one: casi 1 año
-        many: Casi %{count} años
-        other: ''
+        other: Casi %{count} años
       half_a_minute: medio minuto
       less_than_x_minutes:
-        one: menos de 1 minuto
-        many: menos de un minuto
+        one: menos de un minuto
         other: menos de %{count} minutos
+        zero: menos de 1 minuto
       less_than_x_seconds:
         one: menos de 1 segundo
-        many: menos de 1 segundo
         other: menos de %{count} segundos
+        zero: menos de 1 segundo
       over_x_years:
         one: más de un año
-        many: en %{count} años
-        other: ''
+        other: en %{count} años
       x_days:
         one: 1 día
-        many: '%{count} días'
-        other: ''
+        other: '%{count} días'
       x_minutes:
         one: 1 minuto
-        many: '%{count} minutos'
-        other: ''
+        other: '%{count} minutos'
       x_months:
         one: 1 mes
-        many: '%{count} meses'
-        other: ''
+        other: '%{count} meses'
       x_seconds:
         one: Un segundo
-        many: '%{count} segundos'
-        other: ''
+        other: '%{count} segundos'
     prompts:
       day: Día
       hour: Hora
@@ -709,8 +698,7 @@ es:
         units:
           byte:
             one: Byte
-            many: Bytes
-            other: ''
+            other: Bytes
           gb: GB
           kb: KB
           mb: MB
@@ -1068,8 +1056,7 @@ es:
     completed_actions_with: Acciones completadas con la lengüeta «%{tag_name}»
     completed_in_archive:
       one: There is one completed action in the archive.
-      many: There are %{count} completed actions in the archive.
-      other: ''
+      other: There are %{count} completed actions in the archive.
     completed_last_day: Completed in the last 24 hours
     completed_last_x_days: Completed in last %{count} days
     completed_recurrence_completed: There is no next action after the recurring action
@@ -1089,8 +1076,7 @@ es:
       due date before deferring.
     defer_x_days:
       one: Defer one day
-      many: Defer %{count} days
-      other: ''
+      other: Defer %{count} days
     deferred_actions_with: Deferred actions with the tag '%{tag_name}'
     deferred_pending_actions: Deferred/pending actions
     deferred_tasks_title: TRACKS::Recordatorio
@@ -1130,8 +1116,7 @@ es:
       due: 'Vence: %{date}'
     has_x_pending:
       one: Tiene una tarea pendiente
-      many: Tiene %{count} tareas pendientes
-      other: ''
+      other: Tiene %{count} tareas pendientes
     hidden_actions: Tareas ocultas
     in_hidden_state: en estado oculto
     in_pending_state: en estado pendiente
@@ -1298,9 +1283,8 @@ es:
     task_list_title: TRACKS::List etiquetadas
     tickler_items_due:
       one: Un elemento de tiquet ahora está vencido - recargue la página para verlo.
-      many: '%{count} elementos de ticket ahora están vencidos - recargue la página
+      other: '%{count} elementos de ticket ahora están vencidos - recargue la página
         para verlos.'
-      other: ''
     to_tickler: al recordatorio
     unable_to_add_dependency: Es imposible añadir dependencia
     unresolved_dependency: 'El valor que ha introducido en el campo de dependencia
@@ -1372,13 +1356,13 @@ es:
       multi_page_html: Representando %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> de
         <b>%{count}</b> en el total
       single_page:
-        one: No %{model} encontrado
-        many: Viendo del 1 %{model}
+        one: Viendo del 1 %{model}
         other: Viendo todos los %{count} %{model}
+        zero: No %{model} encontrado
       single_page_html:
-        one: No %{model} encontrado
-        many: Viendo del <b>1</b> %{model}
+        one: Viendo del <b>1</b> %{model}
         other: Viendo <b>todos los %{count}</b> %{model}
+        zero: No %{model} encontrado
     page_gap: "&hellip;"
     previous_label: "« Anterior"
   rest_help:
