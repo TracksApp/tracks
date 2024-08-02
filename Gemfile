@@ -23,7 +23,7 @@ gem 'will_paginate'
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', '~> 1.4', group: :sqlite
 gem 'mysql2', '~> 0.5', group: :mysql
-gem 'pg', '~> 1.1', group: :postgresql
+gem 'pg', '~> 1.5', group: :postgresql
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'mini_racer', group: :therubyracer
