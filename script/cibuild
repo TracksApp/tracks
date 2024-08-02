@@ -4,7 +4,7 @@ set -e
 
 export RUBY_VERSION=$1
 
-docker_compose="docker-compose --file test-envs/docker-compose-$2.yml"
+docker_compose="docker compose --file test-envs/docker-compose-$2.yml"
 
 function cleanup() {
   $docker_compose down
