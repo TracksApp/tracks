@@ -22,7 +22,7 @@ export DATABASE_NAME=tracks_test
 
 $docker_compose build
 $docker_compose up -d
-script/poll-for-db
+script/poll-for-db $2
 
 # Leaving this in since it will be needed for Rails 5
 $docker_compose run web bin/rails db:environment:set RAILS_ENV=test || true
