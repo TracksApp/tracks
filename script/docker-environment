@@ -2,7 +2,7 @@
 
 set -e
 
-docker_compose="docker-compose --file docker-compose.yml"
+docker_compose="docker compose --file docker-compose.yml"
 
 # Find our app dir
 appdir=$(cd $(dirname "$0")/.. && pwd)
