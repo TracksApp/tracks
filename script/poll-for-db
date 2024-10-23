@@ -2,11 +2,12 @@
 
 echo "==> Polling DB…"
 
-if [ "$DATABASE_TYPE" == "mysql" ]; then
+if [ "$1" == "mysql" ]; then
   appdir=$(cd $(dirname "$0")/.. && pwd)
   [ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
 
   for i in {1..60}; do
+    echo "... Checking for connection"
     nc -z -w5 db 3306 && exit
     sleep 1
   done

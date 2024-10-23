@@ -1,4 +1,3 @@
-version: '3'
 services:
   web:
     build:
@@ -7,7 +6,7 @@ services:
       args:
         RUBY_VERSION: ${RUBY_VERSION}
     environment:
-      # These are set in script/ci-build, so we need to pass-thru them.
+      # These are set in script/cibuild, so we need to pass-thru them.
       RAILS_ENV: $RAILS_ENV
       DATABASE_NAME: "/app/db/db.sqlite"
       DATABASE_TYPE: sqlite3
