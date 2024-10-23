@@ -175,7 +175,7 @@ GEM
     mocha (2.4.5)
       ruby2_keywords (>= 0.0.5)
     mysql2 (0.5.6)
-    net-imap (0.4.12)
+    net-imap (0.4.17)
       date
       net-protocol
     net-pop (0.1.2)
