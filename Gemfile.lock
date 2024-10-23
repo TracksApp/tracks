@@ -193,7 +193,7 @@ GEM
       ast (~> 2.4.1)
       racc
     pg (1.5.7)
-    puma (6.4.2)
+    puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.10)
