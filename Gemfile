@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'actionpack-xml_parser', '~> 2.0'
 gem 'activemodel-serializers-xml', '~> 1.0.1'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.1'
 
 gem 'font-awesome-sass', '~> 6.5.2'
 gem 'jquery-rails', '~> 4.6'
