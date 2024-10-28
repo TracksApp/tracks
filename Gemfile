@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'actionpack-xml_parser', '~> 2.0'
-gem 'activemodel-serializers-xml', '~> 1.0.1'
+gem 'activemodel-serializers-xml', '~> 1.0.3'
 
 gem 'rails', '~> 6.1'
 
