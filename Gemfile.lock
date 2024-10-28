@@ -249,7 +249,7 @@ GEM
     regexp_parser (2.9.2)
     reverse_markdown (2.1.1)
       nokogiri
-    rexml (3.3.8)
+    rexml (3.3.9)
     rspec-expectations (3.13.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
