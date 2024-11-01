@@ -192,7 +192,7 @@ GEM
     parser (3.3.5.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.7)
+    pg (1.5.9)
     puma (6.4.3)
       nio4r (~> 2.0)
     racc (1.8.1)
