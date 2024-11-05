@@ -34,7 +34,7 @@ group :assets do
   gem 'bootstrap-sass', '3.4.1'
   gem 'uglifier', '>=1.3.0'
   gem 'listen'
-  gem 'tolk', '~> 5.0.1'
+  gem 'tolk', '~> 5.0.2'
 end
 
 group :development, :optional => true do
