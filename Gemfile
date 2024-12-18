@@ -5,7 +5,7 @@ gem 'activemodel-serializers-xml', '~> 1.0.3'
 
 gem 'rails', '~> 6.1'
 
-gem 'font-awesome-sass', '~> 6.5.2'
+gem 'font-awesome-sass', '~> 6.7.2'
 gem 'jquery-rails', '~> 4.6'
 gem 'jquery-ui-rails', '~>7.0.0'
 gem 'aasm', '~> 5.5.0'
