@@ -142,7 +142,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (7.0.0)
       railties (>= 3.2.16)
-    json (2.9.0)
+    json (2.9.1)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
@@ -251,7 +251,7 @@ GEM
     rb-inotify (0.11.1)
       ffi (~> 1.0)
     rbs (2.8.4)
-    regexp_parser (2.9.3)
+    regexp_parser (2.10.0)
     reverse_markdown (2.1.1)
       nokogiri
     rexml (3.3.9)
@@ -259,7 +259,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.1)
-    rubocop (1.69.2)
+    rubocop (1.70.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -269,7 +269,7 @@ GEM
       rubocop-ast (>= 1.36.2, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.36.2)
+    rubocop-ast (1.37.0)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
@@ -379,7 +379,7 @@ DEPENDENCIES
   rails-dom-testing (~> 2.2.0)
   rails_autolink
   rspec-expectations
-  rubocop (~> 1.69)
+  rubocop (~> 1.70)
   sanitize (~> 6.1)
   sassc-rails (~> 2.1.2)
   simplecov

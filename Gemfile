@@ -50,7 +50,7 @@ end
 
 group :development, :test, :optional => true do
   gem 'byebug'
-  gem 'rubocop', '~> 1.69'
+  gem 'rubocop', '~> 1.70'
 end
 
 group :test, :optional => true do
