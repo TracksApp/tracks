@@ -20,6 +20,8 @@ gem 'sanitize', '~> 6.1'
 gem 'tracks-chartjs-ror'
 gem 'will_paginate'
 
+gem 'rexml'
+
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', '~> 1.4', group: :sqlite
 gem 'mysql2', '~> 0.5', group: :mysql

@@ -383,6 +383,7 @@ DEPENDENCIES
   rails-controller-testing
   rails-dom-testing (~> 2.2.0)
   rails_autolink
+  rexml
   rspec-expectations
   rubocop (~> 1.70)
   sanitize (~> 6.1)
