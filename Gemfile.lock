@@ -319,7 +319,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3)
+    sqlite3 (2.0.4)
       mini_portile2 (~> 2.8.0)
     stripe (13.3.1)
     terminal-table (3.0.2)
@@ -391,7 +391,7 @@ DEPENDENCIES
   simplecov
   solargraph
   spring (~> 4)
-  sqlite3 (~> 1.4)
+  sqlite3 (~> 2.0)
   stripe
   tolk (~> 5.0.2)
   tracks-chartjs-ror
