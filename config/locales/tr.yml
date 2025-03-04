@@ -1114,6 +1114,22 @@ tr:
       no_end_date: Bitiş tarihi yok
       starts_on: Şu tarihte başlıyor
       weekly: Haftalık
+      ends_on_date: Şu tarihte bitiyor %{date}
+      ends_on_number_times: '%{number} seferden sonra bitiyor'
+      daily: Günlük
+      daily_every_number_day: Her %{number} gün(ler)de
+      daily_options: Günlük yinelenen eylemler için ayarlar
+      day_x_on_every_x_month: Her %{month} ayın %{day} günü
+      ends_on: Şu tarihte bitiyor
+      every_work_day: Her iş günü
+      monthly: Aylık
+      monthly_every_xth_day: Her %{month} ayın %{day} %{day_of_week}
+      weekly_options: Haftalık yinelenen eylemler için ayarlar
+      yearly: Yıllık
+      yearly_options: Yıllık yinelenen eylemler için ayarlar
+      weekly_every_number_week: Her %{number} haftada geri gelir
+      yearly_every_x_day: Her %{month} %{day}
+      yearly_every_xth_day: '%{month} Ayı %{day}. %{day_of_week}'
     mobile_todos_page_title: Bütün eylemler
     new_related_todo_created: Yinelenen yapılacaklara yeni bir öğe daha eklendi
     no_actions:
@@ -1135,6 +1151,10 @@ tr:
       not_done: Şu anda bitmemiş eylem bulunmuyor
       not_done_context: Şu anda bu içerik içerisinde bitmemiş eylem bulunmuyor
       completed: Şu anda tamamlanmış bir eylem bulunmuyor
+      recurring_todos: Şu anda yineleyen yapılacak bulunmuyor
+      tag_hidden: Mevcut gizli eylem bulunamadı
+      without_project: Mevcut projesiz eylem bulunmuyor
+      title: Eylem bulunamadı
     in_pending_state: Bekleme durumunda
     new_related_todo_created_short: Yeni bir yapılacak oluştur
     in_hidden_state: Gizli durumda
@@ -1157,6 +1177,30 @@ tr:
       due_today: bugün bitiyor
       due_within_a_week: bir hafta içerisinde bitiyor
     new_related_todo_not_created_short: yapılacak oluşturulmadı
+    recurrence_period: Yinelenme periyodu
+    recurring_deleted_success: Yinelenen eylem başarıyla silindi.
+    no_actions_due_this_week: Haftanın geri kalanı için eylem bulunmuyor
+    no_completed_actions: Tamamlanmış eylem bulunmuyor
+    no_actions_with: İle eylem bulunmuyor
+    no_completed_actions_with: İle tamamlanmış eylem bulunmuyor
+    overdue: Gecikmiş
+    pending: Bekleyen
+    recurring_pattern_removed: '%{count}‘dan yinelenme süresi silindi'
+    recurrence_completed: Yinelenen eylem bittikten sonra gelecek bir eylem bulunmuyor.
+      Yinelenme tamamlandı
+    recurring_action_deleted: Eylem silindi. Bu eylem yinelendiğinden dolayı, yeni
+      bir eylem eklendi
+    recurring_action_saved: Yinelenen eylem kaydedildi
+    no_deferred_actions: Ertelenmiş eylem yok
+    no_completed_recurring: Tamamlanmış yineleme yok
+    no_project: —Proje yok—
+    recurring_actions_title: TRACKS::Yinelenen Eylemler
+    recurring_todos: Yinelen yapılacaklar
+    no_deferred_actions_with: İle ertelenen eylem yok
+    no_last_completed_actions: Bitmiş eylem bulunamadı
+    no_recurring_todos: Yineleyen yapılacak yok
+    notes: Notlar
+    no_actions_found_title: Başlıkla ilgili eylem bulunamadı
   notes:
     delete_note_title: "'%{id}' notunu sil"
     delete_note_confirm: "'%{id}' notunu silmek istediğinize emin misiniz?"
