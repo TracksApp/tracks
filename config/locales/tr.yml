@@ -1051,6 +1051,112 @@ tr:
     defer_x_days:
       one: 1 gün ertele
       other: '%{count} gün ertele'
+    hidden_actions: Gizli eylemler
+    next_actions_due_date:
+      overdue_by: '%{days} gün kadar geç'
+      overdue_by_plural: '%{days} günler kadar geç'
+      due_today: Bugün bitiyor
+      due_tomorrow: Yarın bitiriyor
+      due_in_x_days: Bitiş tarihi %{days} günde
+    recurrence:
+      monthly_options: Yinelenen eylemler için ayarlar
+      pattern:
+        day_names:
+        - pazar
+        - pazartesi
+        - salı
+        - çarşamba
+        - perşembe
+        - cuma
+        - cumartesi
+        from: buradan
+        month_names:
+        - 
+        - Ocak
+        - Şubat
+        - Eşleşme
+        - Nisan
+        - Mayıs
+        - Haziran
+        - Temmuz
+        - Ağustos
+        - Eylül
+        - Ekim
+        - Kasım
+        - Aralık
+        times: '%{number} kere'
+        every_n_days: every %{n} gün
+        the_xth_day_of_month: '%{month} ayının %{x} %{day} günü'
+        third: üçüncü
+        until: kadar
+        first: birinci
+        last: sonuncu
+        on_day_n: '%{n} gününde'
+        on_work_days: iş günlerinde
+        second: saniye
+        show: göster
+        weekly: haftalık
+        every_day: her gün
+        every_month: her ay
+        every_n: her %{n}
+        every_n_months: her %{n} ay
+        every_xth_day_of_every_n_months: her%{x} %{n_months} ayın %{day} günü
+        fourth: dördüncü
+        due: bitiş
+        every_year_on: her yıl %{date} tarihinde
+      recurrence_on:
+        show_options: Eylemi göster
+        due_date: eylem bitiş tarihini ayarla
+        show_days_before: bitiş tarihine şu kadar gün %{days} kalana değin
+        from_tickler: Eylem tarihini görünür olarak ayarla (eylem bitiş tarihi değil)
+        options: Hesaplanmış tarihi şunun için kullan
+        show_always: her zaman
+      no_end_date: Bitiş tarihi yok
+      starts_on: Şu tarihte başlıyor
+      weekly: Haftalık
+    mobile_todos_page_title: Bütün eylemler
+    new_related_todo_created: Yinelenen yapılacaklara yeni bir öğe daha eklendi
+    no_actions:
+      due_next_week: Gelecek hafta bitecek hiç eylem yok
+      completed_today: Bugün hiç eylem tamamlanmadı
+      not_done_with_tag: Şu anda '%{param}' Etiketiyle bitmemiş hiç eylem bulunmuyor
+      completed_recurring: Şu anda tamamlanmış yinelenen bir yapılacak bulunmuyor
+      completed_rest_of_month: Bu ayın kalanında yapılacak hiç eylem tamamlanmadı
+      completed_rest_of_week: Bu haftanın geri kalanında hiç eylem tamamlanmadı
+      context: Şu anda bu içerik içerisinde tamamlanmamış eylem bulunmuyor
+      deferred_pending: Şu anda ertelenmiş veya bekleyen eylem bulunmuyor
+      due_after_this_month: Bu ay bitecek hiç eylem yok
+      not_done_project: Şu anda bu projede bitmemiş hiç eylem yok
+      project: Şu anda bu projede bitmemiş hiç eylem bulunmuyor
+      due_this_week: Bu hafta bitecek hiç eylem yok
+      due_today: Bugün bitecek hiç eylem yok
+      due_this_month: Bu ayın geri kalanında bitecek hiç eylem yok
+      hidden: Şu anda gizli eylem bulunmuyor
+      not_done: Şu anda bitmemiş eylem bulunmuyor
+      not_done_context: Şu anda bu içerik içerisinde bitmemiş eylem bulunmuyor
+      completed: Şu anda tamamlanmış bir eylem bulunmuyor
+    in_pending_state: Bekleme durumunda
+    new_related_todo_created_short: Yeni bir yapılacak oluştur
+    in_hidden_state: Gizli durumda
+    next_action_description: Gelecek eylem tanımı
+    next_action_needed: En ax bir gelecek eylem göndermeniz gerekiyor
+    next_actions_description: 'Filtre:'
+    next_actions_description_additions:
+      completed: Geçen %{count} günde
+      due_date: Bitiş tarihi %{due_date} veya daha erken
+    next_actions_title: Takip et - Gelecek Eylemler
+    mark_complete: Tamamlandı olarak işaretle
+    has_x_pending:
+      one: Beklenen bir eylem var
+      other: Beklenen %{count} eylem var
+    list_incomplete_next_actions: Bitirilmemiş gelecek eylemleri listeler
+    list_incomplete_next_actions_with_limit: Bitirilmemiş son gelecek %{count} kadar
+      eylemi listeler
+    next_actions_title_additions:
+      completed: eylemler tamamlandı
+      due_today: bugün bitiyor
+      due_within_a_week: bir hafta içerisinde bitiyor
+    new_related_todo_not_created_short: yapılacak oluşturulmadı
   notes:
     delete_note_title: "'%{id}' notunu sil"
     delete_note_confirm: "'%{id}' notunu silmek istediğinize emin misiniz?"
