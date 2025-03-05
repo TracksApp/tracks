@@ -94,9 +94,8 @@ de:
     action: Aufgabe
     actions: Aufgaben
     actions_midsentence:
-      one: Aufgaben
-      other: Aufgabe
-      zero: Aufgabe
+      one: Aufgabe
+      other: Aufgaben
     add: Hinzufügen
     ajaxError: Fehler beim Empfangen vom Server
     back: Zurück
@@ -108,9 +107,8 @@ de:
     contribute: Mitwirken
     create: Erstellen
     days_midsentence:
-      one: Tag
-      other: Tagen
-      zero: Tagen
+      one: Tagen
+      other: Tag
     deferred: aufgeschobene
     description: Beschreibung
     drag_handle: Verschieben
@@ -129,9 +127,8 @@ de:
     none: Keine
     not_available_abbr: n/b
     note:
-      one: 1 Notiz
-      other: "%{count} Notizen"
-      zero: keine Notizen
+      one: keine Notizen
+      other: 1 Notiz
     notes: Notizen
     numbered_step: Schritt %{number}
     ok: Ok
@@ -202,8 +199,8 @@ de:
         some: Beim Import sind Fehler aufgetreten
         file_blank: File can't be blank
         invalid_csv: "Invalid CSV: could not read headers: %{e}"
-        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write\
-          \ to the upload directory? %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write
+          to the upload directory? %{e}"
       map_title: Map fields to be imported
       header: Importing data
       submit: Importieren
@@ -214,11 +211,11 @@ de:
       projects_count: "%{count} Projects imported"
       todos_count: "%{count} Todos imported"
       yaml_disabled: "YAML loading is disabled"
-      yaml_warning: "%{warning}: vor dem Import der YAML Datei werden alle Daten in\
-        \ Ihrer Datenbank gelöscht. Falls Sie entsprechenden Zugriff auf Ihre Datenbank\
-        \ haben, empfiehlt es sich, ein Backup anzulegen, bevor Sie fortfahren."
-      paste_field: "Fügen Sie den Inhalt der kopierten YAML Datei in das untenstehende\
-        \ Formular ein:"
+      yaml_warning: "%{warning}: vor dem Import der YAML Datei werden alle Daten in
+        Ihrer Datenbank gelöscht. Falls Sie entsprechenden Zugriff auf Ihre Datenbank
+        haben, empfiehlt es sich, ein Backup anzulegen, bevor Sie fortfahren."
+      paste_field: "Fügen Sie den Inhalt der kopierten YAML Datei in das untenstehende
+        Formular ein:"
       warning: Vorsicht
     export:
       page_title: Tracks::Export
@@ -227,11 +224,11 @@ de:
       yaml_description: "%{yaml}: Für den Daten-Import bevorzugt."
       yaml_link_description: YAML-Datei mit all Ihren Aktionen, Umgebungen, Projekten,
         Tags und Notizen
-      yaml_experimental: "Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle\
-        \ Funktionalität darstellt. Nutzen Sie diese Option also nicht. um kritische\
-        \ Daten zu sichern."
-      csv_description: "%{csv}: Am besten für den Export in eine Tabellen-Kalkulation\
-        \ oder ähnliche Auswertungs-Software geeignet"
+      yaml_experimental: "Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle
+        Funktionalität darstellt. Nutzen Sie diese Option also nicht. um kritische
+        Daten zu sichern."
+      csv_description: "%{csv}: Am besten für den Export in eine Tabellen-Kalkulation
+        oder ähnliche Auswertungs-Software geeignet"
       csv_actions_description: CSV-Datei mit all Ihren Aktionen, benannten Umgebungen
         und Projekten
       csv_notes_description: CSV-Datei mit all Ihren Notizen
@@ -318,13 +315,11 @@ de:
         other: fast %{count} Jahre
       half_a_minute: eine halbe Minute
       less_than_x_minutes:
-        one: weniger als eine Minute
-        other: weniger als %{count} Minuten
-        zero: weniger als 1 Minute
+        one: weniger als 1 Minute
+        other: weniger als eine Minute
       less_than_x_seconds:
         one: weniger als 1 Sekunde
-        other: weniger als %{count} Sekunden
-        zero: weniger als 1 Sekunde
+        other: weniger als 1 Sekunde
       over_x_years:
         one: mehr als 1 Jahr
         other: mehr als %{count} Jahre
@@ -420,11 +415,11 @@ de:
       email_rich: Rich Todo Message email format
     opensearch_description: In Tracks suchen
     title: Integration
-    intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer\
-      \ Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen,\
-      \ um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt\
-      \ auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere.\
-      \ Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
+    intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer
+      Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen,
+      um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt
+      auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere.
+      Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
     developer_documentation_link: "Entwickler Documentation der Tracks' REST API"
     contents_header: "Inhalt:"
     add_your_own: Sie haben weitere Beispiele? %{tell_us_link}, damit wir es für die
@@ -445,12 +440,12 @@ de:
         laundry @ Home" or "Call Bill > project X". The subject of the message will
         fill description, context, and project, while the body will populate the tasks''s
         note.'
-      configuration: "You may need to configure your %{site_yml} to tell the message\
-        \ gateway to look at the %{to_name} field or %{from_name} field to lookup\
-        \ Tracks' user from the email address in that field."
-      one_user_configuration: "You can also send all email to a specific Tracks user.\
-        \ Configure mail_dispatch in site.yml to %{single_user_value} and pass the\
-        \ login of the user in the pipe command: %{code}"
+      configuration: "You may need to configure your %{site_yml} to tell the message
+        gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks'
+        user from the email address in that field."
+      one_user_configuration: "You can also send all email to a specific Tracks user.
+        Configure mail_dispatch in site.yml to %{single_user_value} and pass the login
+        of the user in the pipe command: %{code}"
       instructions:
         '1': 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}"
           for todos sent in via email (which could come from an SMS message)'
@@ -474,10 +469,10 @@ de:
           (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
         '4': 'Select a default context for emails to be put in with "%{sms_context_name}"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
-        '6': "Update the mailmap in 'site.yml' to define which senders can send emails\
-          \ to which incoming addresses. For example, to send emails from your work\
-          \ and home email accounts to your tracks Mailgun route, set it up like this:\
-          \ %{code}"
+        '6': "Update the mailmap in 'site.yml' to define which senders can send emails
+          to which incoming addresses. For example, to send emails from your work
+          and home email accounts to your tracks Mailgun route, set it up like this:
+          %{code}"
     email_rich:
       description: "For both of the above methods, the follow format can be used:"
       fields_title: "The fields are:"
@@ -1333,12 +1328,10 @@ de:
       multi_page_html: Angezeigte %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> von <b>%{count}</b>
         insgesamt
       single_page:
-        one: Angezeigte 1 %{model}
-        other: Anzeige aller %{count} %{model}
-        zero: Kein %{model} gefunden
+        one: Kein %{model} gefunden
+        other: Angezeigte 1 %{model}
       single_page_html:
-        one: Angezeigte <b>1</b> %{model}
-        other: Anzeige <b>aller&nbsp;%{count}</b> %{model}
-        zero: Kein %{model} gefunden
+        one: Kein %{model} gefunden
+        other: Angezeigte <b>1</b> %{model}
     page_gap: "..."
     previous_label: "« Zurück"
