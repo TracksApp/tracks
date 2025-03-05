@@ -91,13 +91,15 @@ fr:
         body: 'Il y a des problèmes avec les champs suivants :'
         header:
           one: 1 erreur a empêché ce %{model} d'être sauvegardé
-          other: "%{count} erreurs ont empêché ce %{model} d'être sauvegardé"
+          many: "%{count} erreurs ont empêché ce %{model} d'être sauvegardé"
+          other: ''
   common:
     action: Action
     actions: Actions
     actions_midsentence:
       one: action
-      other: actions
+      many: actions
+      other: ''
     add: Ajouter
     ajaxError: Une erreur s'est produite en accédant un serveur
     back: Retour
@@ -110,7 +112,8 @@ fr:
     create: Créer
     days_midsentence:
       one: jour
-      other: jours
+      many: jours
+      other: ''
     deferred: reportées
     description: Description
     drag_handle: DRAG
@@ -129,9 +132,9 @@ fr:
     none: Aucun
     not_available_abbr: n/a
     note:
-      one: 1 note
-      other: "%{count} notes"
-      zero: non notes
+      one: non notes
+      many: 1 note
+      other: '%{count} notes'
     notes: Notes
     numbered_step: Étape %{number}
     ok: OK
@@ -260,40 +263,49 @@ fr:
     distance_in_words:
       about_x_hours:
         one: environ 1 heure
-        other: environ %{count} heures
+        many: environ %{count} heures
+        other: ''
       about_x_months:
         one: environ 1 mois
-        other: environ %{count} mois
+        many: environ %{count} mois
+        other: ''
       about_x_years:
         one: environ 1 an
-        other: environ %{count} ans
+        many: environ %{count} ans
+        other: ''
       almost_x_years:
         one: presque 1 an
-        other: presque %{count} ans
+        many: presque %{count} ans
+        other: ''
       half_a_minute: 30 secondes
       less_than_x_minutes:
-        one: moins d'une minute
+        one: moins d'1 minute
+        many: moins d'une minute
         other: moins de %{count} minutes
-        zero: moins d'1 minute
       less_than_x_seconds:
         one: moins d'1 seconde
+        many: moins d'1 seconde
         other: moins de %{count} secondes
-        zero: moins d'1 seconde
       over_x_years:
         one: plus d'1 an
-        other: plus de %{count} ans
+        many: plus de %{count} ans
+        other: ''
       x_days:
         one: 1 jour
-        other: '%{count} jours'
+        many: '%{count} jours'
+        other: ''
       x_minutes:
         one: 1 minute
-        other: '%{count} minutes'
+        many: '%{count} minutes'
+        other: ''
       x_months:
         one: 1 mois
-        other: '%{count} mois'
+        many: '%{count} mois'
+        other: ''
       x_seconds:
         one: 1 seconde
-        other: '%{count} secondes'
+        many: '%{count} secondes'
+        other: ''
     prompts:
       day: Jour
       hour: Heure
@@ -367,11 +379,14 @@ fr:
     opensearch_description: Rechercher dans Tracks
   help:
     title: Help
-    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    usage: 'You can find information on the usage in the %{manual_link} in the project
+      GitHub wiki.'
     manual_link_text: User manual
-    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    bugs: 'If you encounter a bug or have a feature request, please report it in the
+      %{issue_link}.'
     issue_link_text: issue queue
-    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link}
+      for further information. You can also come discuss with the community:'
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (also available in %{matrix_link})'
@@ -537,7 +552,8 @@ fr:
         units:
           byte:
             one: Octet
-            other: Octets
+            many: Octets
+            other: ''
           gb: GB
           kb: KB
           mb: MB
@@ -894,7 +910,8 @@ fr:
     completed_actions_with: Action complétées avec l'étiquette %{tag_name}
     completed_in_archive:
       one: Il n'y a pas d'action complétée dans l'archive.
-      other: Il y a %{count} actions complétées dans l'archive.
+      many: Il y a %{count} actions complétées dans l'archive.
+      other: ''
     completed_last_day: Complété ces dernières 24 heures
     completed_last_x_days: Complété ces %{count} jours
     completed_recurrence_completed: Il n'y pas d'action suivante après l'action récurrente
@@ -914,7 +931,8 @@ fr:
       ajuster la date d'écheance avant de reporter.
     defer_x_days:
       one: Reporter d'1 jour
-      other: Report de %{count} jours
+      many: Report de %{count} jours
+      other: ''
     deferred_actions_with: Action reportées avec l'étiquette '%{tag_name}'
     deferred_pending_actions: Actions reportées ou en attente
     deferred_tasks_title: TRACKS::Échéancier
@@ -958,7 +976,8 @@ fr:
       due: 'Échéance : %{date}'
     has_x_pending:
       one: A une action en attente
-      other: A %{count} actions en attente
+      many: A %{count} actions en attente
+      other: ''
     hidden_actions: Actions cachées
     in_hidden_state: a l'état caché
     in_pending_state: en attente
@@ -1126,8 +1145,9 @@ fr:
     tickler_items_due:
       one: Un élément de l'échéancier est arrivé à échéance ? rafraîchir la page pour
         le voir.
-      other: "%{count} éléments de l'échéancier sont arrivés à échéance ? rafraîchir\
-        \ la page pour les voir."
+      many: "%{count} éléments de l'échéancier sont arrivés à échéance ? rafraîchir
+        la page pour les voir."
+      other: ''
     to_tickler: vers l'échéancier
     unable_to_add_dependency: Impossible d'ajouter la dépendance
     unresolved_dependency: La valeur saisie dans le champ dépendance ne correspond
@@ -1200,12 +1220,12 @@ fr:
       multi_page_html: Affiche %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> à la <b>%{count}</b>
         au total
       single_page:
-        one: Voir de 1 %{model}
+        one: Aucun %{model} trouvés
+        many: Voir de 1 %{model}
         other: Afficher tous les %{count} %{model}
-        zero: Aucun %{model} trouvés
       single_page_html:
-        one: Voir de <b>1</b> %{model}
+        one: Aucun %{model} trouvés
+        many: Voir de <b>1</b> %{model}
         other: Afficher <b>tous les %{count}</b> %{model}
-        zero: Aucun %{model} trouvés
     page_gap: "&hellip;"
     previous_label: "«Précédent"
