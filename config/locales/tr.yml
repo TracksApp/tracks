@@ -1201,6 +1201,31 @@ tr:
     no_recurring_todos: Yineleyen yapılacak yok
     notes: Notlar
     no_actions_found_title: Başlıkla ilgili eylem bulunamadı
+    see_all_completed: Tamamlanan tüm eylemleri görebilirsiniz %{link}
+    tags: Etiketlet (virgülle ayrılmış)
+    set_to_pending: '%{görev} beklemede olarak ayarlandı'
+    show_from: Şuradan göster
+    show_in_days: Günleri %{gün} olarak göster
+    show_on_date: Göster %{tarih}
+    show_today: Bugün Göster
+    removed_predecessor: Değşiken olarak %{successor} %{predecessor}'dan kaldırıldı.
+    remove_dependency: Değişkeni sil (eylemi silmez)
+    star_action_with_description: Bu eylemi yıldızla '%{description}'
+    tagged_page_title: TRACKS::Şunun ile etiketlendi '%{tag_name}'
+    task_list_title: TRACKS::Görevleri listele
+    show_tomorrow: Yarın Göster
+    star_action: Bu eylemi yıldızla
+    tickler_items_due:
+      one: Bir hatırlatıcı öğesinin zamanı geldi - görebilmek için sayfayı yenileyin.
+      other: '%{count} hatırlatıcı öğelerinin zamanı geldi - görebilmek için sayfayı
+        yenileyin.'
+    tagged_with: şunun ile etiketlendi '%{tag_name}'
+    unable_to_add_dependency: Değişken eklenemedi
+    was_due_on_date: '%{date} tarihinde sondu'
+    to_tickler: hatırlatıcılara
+    scheduled_overdue: Günler önce %{gün} gösterilecek şekilde programlandı
+    unresolved_dependency: Değişken alanına girdiğiniz değer mevcut bir eyleme çözümlenmedi.
+      Bu değer eylemin geri kalanıyla birlikte kaydedilmeyecektir. Devam edilsin mi?
   notes:
     delete_note_title: "'%{id}' notunu sil"
     delete_note_confirm: "'%{id}' notunu silmek istediğinize emin misiniz?"
@@ -1249,3 +1274,165 @@ tr:
     projects_matching_query: Sorguyla eşleşen projeler
     tags_matching_query: Sorgu ile eşleşen etiketler
     todos_matching_query: Sorguyla eşleyen yapılacaklar
+  users:
+    change_authentication_type: Kimlik doğrulama türünü değiştir
+    identity_url: Kimlik URL'si
+    openid_ok_pref_failed: Kimliğiniz olarak %{url} öğesini başarıyla doğruladınız
+      ancak kimlik doğrulama tercihlerinizi kaydederken bir sorun oluştu.
+    destroy_user: Kullanıcıyı kaldır
+    approve_tos: Hizmet Şartlarını onaylıyorum
+    auth_change_submit: Kimlik doğrulama türünü değiştirme
+    auth_type_updated: Kimlik doğrulama türü güncellendi.
+    change_auth_type_title: TRACKS::Kimlik doğrulama türünü değiştir
+    destroy_confirmation: "Uyarı: Bu işlem '%{login}' kullanıcısının, tüm eylemlerini,
+      içeriklerini, projesini ve notlarını silecektir. Devam etmek istediğinizden
+      emin misiniz?"
+    destroy_successful: Kullanıcı %{login} tamamen kaldırıldı
+    total_notes: Toplam notlar
+    change_password_title: TRACKS::Şifre değiştir
+    change_password_submit: Şifre değiştir
+    manage_users: Kullanıcıları yönet
+    create_error: Kullanıcı oluşturma başarısız oldu, zaten kayıtlı bir hesabınız
+      olabilir?
+    you_have_to_reset_your_password: Şifrenizi sıfırlamanız gerekiyor
+    manage_users_title: TRACKS::Kullanıcıları Yönet
+    auth_type_update_error: 'Kimlik doğrulama türünüzü güncellerken bir sorun oluştu:
+      %{error_messages}'
+    change_password_prompt: Yeni şifrenizi aşağıdaki alanlara girin ve mevcut şifrenizi
+      yenisiyle değiştirmek için 'Şifre değiştir'e tıklayın.
+    choose_password: Şifre oluştur
+    confirm_password: Şifreyi onayla
+    desired_login: İstenen giriş
+    destroy_error: Kullanıcı %{login} silinirken bir hata oluştu
+    new_user_title: TRACKS::Kaydol
+    no_signups_title: TRACKS::Kayıt yok
+    password_confirmation_label: Şifreyi onayla
+    password_updated: Şifre güncellendi.
+    select_authentication_type: Yeni kimlik doğrulama türünüzü seçin ve mevcut ayarlarınızı
+      değiştirmek için 'Kimlik doğrulama türünü değiştir'e tıklayın.
+    signup: Kaydol
+    signup_new_user: Yeni kullanıcı olarak kaydol
+    signup_successful: Kullanıcı %{username} için kayıt başarılı.
+    register_with_cas: CAS kullanıcı adınız ile
+    tos_link: Hizmet Koşullarını okuyun
+    total_actions: Toplam eylemler
+    total_contexts: Toplam içerikler
+    total_projects: Toplam projeler
+    total_users_count: Toplam %{count} kullanıcınız var
+    user_created: Kullanıcı oluşturuldu.
+    account_signup: Hesap kaydı
+    email_address: Eposta adresi
+    failed_to_delete_user: Kullanıcı %{username} silinemedi
+    first_user_heading: "TRACKS'a hoş geldiniz. Başlamak için lütfen bir yönetici
+      hesabı oluşturun:"
+    first_user_title: TRACKS::Yönetici olarak kaydolun
+    label_auth_type: Doğrulama türü
+    new_password_label: Yeni şifre
+    new_token_generated: Yeni token başarıyla oluşturuldu
+    new_user_heading: 'Yeni bir kullanıcı olarak kaydolun:'
+    openid_url_verified: Kimliğiniz olarak %{url} öğesini başarıyla doğruladınız ve
+      kimlik doğrulama türünüzü OpenID olarak ayarladınız.
+    successfully_deleted_user: Kullanıcı %{username} başarıyla silindi
+    tos_error: Kaydolmak için hizmet şartlarını kabul etmeniz gerekiyor!
+  will_paginate:
+    page_entries_info:
+      multi_page_html: '%{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>
+        toplam olarak gösteriliyor'
+      multi_page: Toplamda %{count}'un %{model} %{from} - %{to}'su görüntüleniyor
+      single_page:
+        one: "%{model} bulunamadı\n1 %{model} gösteriliyor"
+        other: "%{count} %{model}'ler gösteriliyor"
+      single_page_html:
+        one: <b>1</b> %{model} gösteriliyor
+        other: <b>all&nbsp;%{count}</b> %{model} gösteriliyor
+    previous_label: '&#8592; Önceki'
+    page_gap: '&hellip;'
+    next_label: Sonraki &#8594;
+  auth_type:
+    database: Veritabanı
+  rest_help:
+    notes:
+      title: Dokümantasyon hakkında notlar
+      description: 'Dokümantasyonda birkaç kural uygulanmıştır, bunlar şunlardır:'
+      bullet1: Bir %{url} kaynağındaki %{id}&#8217;ler, kaynağın benzersiz kimliğinin
+        buraya eklenmesi gerektiğini gösterir
+      bullet2: '%{omit}, dokümantasyondaki gürültüyü ortadan kaldırmak için yanıt
+        verilerinin önemsiz bitlerinin kaldırıldığını gösterir'
+      curl_description: Tüm örnekler %{curl} kullanır.
+    activeresource:
+      description: "%{activeresource_link}, %{ror_link} tarafından sunulan RESTful
+        hizmetlerinin etrafında ince ama güçlü bir sarmalayıcıdır. Rails 2.0'ın bir
+        parçası olacaktır ancak o zamana kadar %{gem_command} ile elde edebilirsiniz."
+      wrapper_description: '%{signals_link} &#8217;Highrise sarmalayıcısından esinlenerek,
+        bir IRB oturumunda oynamanız için ActiveResource modellerini ayarlayan API
+        için küçük bir ruby sarmalayıcı (doc/ dizininde bulabilirsiniz) oluşturduk:'
+      signals_link_text: 37 Sinyal
+      title: ActiveResource ile API kullanma
+      activeresource_link_text: ActiveResource
+      ror_link_text: Ruby on Rails
+    writing:
+      example_note_text: akçaağaç dokusu kullanın
+      description: API, içerikle birlikte %{put}, %{post} ve %{delete} HTTP yöntemlerini
+        kullanarak kaynak ekleme, güncelleme ve silme mekanizmaları sağlar.
+      example_todo_response_title: "Yanıt yine yeni todo kaynağının nerede bulunabileceğini
+        belirten %{header} başlığına sahip bir %{response_code}'dur. Yine curl kullanarak
+        todo notlarını değiştirme:"
+      example_note_response_title: "Yanıt, gövdesinde güncellenen todo'nun XML gösterimini
+        içeren bir %{response_code} şeklindedir. Güncellemeyi doğru alan değerleriyle
+        gerçekleştirmek zorunda kalmadan bir todo'yu yapıldı veya geri alındı olarak
+        değiştirmek için bir kısa yol yöntemi sunuyoruz:"
+      title: API'ye yazma
+      example_title: 'Curl kullanarak yeni bir proje oluşturma:'
+      example_project_name: Çocuklar için bir ağaç ev inşa edin
+      example_project_response_title: "Yanıt, yeni proje kaynağının nerede bulunabileceğini
+        belirten %{header} başlığına sahip bir %{response_code}'dur. Şimdi curl kullanarak
+        bu projeye bir todo ekleyebiliriz:"
+      example_todo_name: SketchUp'ta ağaç ev modeli
+      example_delete_title: "Bu todo'yu silmek istersek, benzersiz kaynak tanımlayıcısını
+        (URL) yine curl ile %{delete} HTTP yöntemiyle çağırabiliriz:"
+      example_delete_response_title: API bir %{response_code} döndürür ve todo artık
+        silinmiştir.
+    retrieve:
+      content: 'Verileri almak için yalnızca bir kaynak tanımlayıcısına HTTP GET yapmanız
+        gerekir. Örneğin, tüm bağlamları %{curl_link} ile almak istiyorsanız:'
+      single_context: 'Tek bir içerik elde etmek:'
+      projects: Yukarıda gösterilen modeli içerikler yerine projelerle de uygulayabilirsiniz.
+      paths_title: 'Tüm veriler aşağıdaki kaynak yollarına göre kullanılabilir:'
+      limit: 'Yapılacaklar kaynakları (yapılacaklar, hatırlatıcılar, yapılanlar, gizliler
+        ve takvim) için %{limit_parameter} parametresini ekleyerek ve %{set_to} olarak
+        ayarlayarak döndürülen alanı %{fields} ile sınırlayabilirsiniz. Örneğin:'
+      active_todos: 'Yalnızca etkin todoları almak istiyorsanız, %{active_code} parametresini
+        eklersiniz ve bunu aşağıdaki gibi bir değere ayarlarsınız:'
+      title: API'den veri alma
+      todos_from_context: 'Yapılacakları bir içerik içinde alma:'
+    id: ID
+    title: Geliştiriciler için REST API Dokümantasyonu
+    intro:
+      content: Tracks, komut dosyaları, web hizmetleri ve üçüncü taraf uygulamalarla
+        entegre olacak şekilde tasarlanmıştır. Bu sayfa REST API'mizin dokümantasyonu
+        olarak hizmet vermektedir.
+      content_3: API bir %{restful_link} hizmetidir. Tüm veriler, benzersiz bir tanımlayıcı
+        kullanılarak başvurulabilen bir kaynak olarak API aracılığıyla kullanılabilir.
+        Özellikle GET, PUT, POST ve UPDATE olmak üzere bir dizi HTTP yöntemine yanıt
+        verir ve API'den gelen tüm yanıtlar UTF-8 olarak kodlanmış basit bir XML biçimindedir.
+      content_2: Tracks REST API, geliştiricilerin Tracks'i uygulamalarına entegre
+        etmelerini sağlar. Uygulamaların Tracks verilerine erişmesine ve bunları değiştirmesine
+        olanak tanır ve HTTP üzerinden Vanilla XML olarak uygulanır.
+      title: Giriş
+      restful_link_text: RESTful
+    auth:
+      content: Kimlik doğrulama %{auth_link} kullanılarak gerçekleştirilir. Tracks
+        kullanıcı adınız ve parolanız API için kimlik doğrulama bilgileri olarak kullanılır.
+        Temel HTTP kimlik doğrulamasında parolanızın açık metin olarak gönderildiğini
+        unutmayın. Daha güvenli bir kimlik doğrulama çözümüne ihtiyacınız varsa, web
+        sunucunuzu Tracks'i HTTPS altında çalıştıracak şekilde yapılandırmalısınız.
+      title: Kimlik Doğrulama
+      basic_auth_link_text: Temel HTTP kimlik doğrulaması
+    response:
+      description: ­Tüm başarılı işlemler, işleme bağlı olarak %{response_200} veya
+        %{response_201} durum koduyla yanıt verir. Bazen bir liste, örneğin %{example_call}
+        herhangi bir öğeye sahip olmayacaktır, boş bir liste döndürecektir.
+      title: Yanıt ve yanıt durumu ile ilgilenme
+      xml_description: 'Boş liste yanıtları için XML, yine curl ile aşağıdaki gibi
+        görünür:'
+    curl_link_text: cURL
