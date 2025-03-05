@@ -70,7 +70,7 @@ nl:
         record_invalid: 'Validatie mislukt: %{errors}'
         restrict_dependent_destroy:
           one: Kan record niet verwijderen omdat een afhankelijk %{record} bestaat
-          many: Kan record niet verwijderen omdat afhankelijke %{record} bestaan
+          other: Kan record niet verwijderen omdat afhankelijke %{record} bestaan
         taken: is al gepakt
         too_long: is te lang (maximum is %{count} karakters)
         too_short: is te kort (minimum is %{count} karakters)
@@ -91,9 +91,8 @@ nl:
     action: Actie
     actions: Acties
     actions_midsentence:
-      one: actie
-      other: acties
-      zero: acties
+      one: acties
+      other: actie
     add: Toevoegen
     ajaxError: Er is een fout opgetreden bij het ophalen van gegevens van de server
     back: Terug
@@ -105,9 +104,8 @@ nl:
     contribute: Bijdragen
     create: Maken
     days_midsentence:
-      one: dag
-      other: dagen
-      zero: dagen
+      one: dagen
+      other: dag
     deferred: uitgestelde
     description: Beschrijving
     drag_handle: SLEEP
@@ -126,9 +124,8 @@ nl:
     none: Geen
     not_available_abbr: n/b
     note:
-      one: 1 notitie
-      other: "%{count} notities"
-      zero: geen notities
+      one: geen notities
+      other: 1 notitie
     notes: Notities
     numbered_step: Stap %{number}
     ok: Ok
@@ -269,13 +266,11 @@ nl:
         other: bijna %{count} jaren
       half_a_minute: halve minuut
       less_than_x_minutes:
-        one: minder dan een minuut
-        other: minder dan %{count} minuten
-        zero: minder dan 1 minuut
+        one: minder dan 1 minuut
+        other: minder dan een minuut
       less_than_x_seconds:
         one: minder dan 1 seconde
-        other: minder dan %{count} seconden
-        zero: minder dan 1 seconde
+        other: minder dan 1 seconde
       over_x_years:
         one: over 1 jaar
         other: over %{count} jaren
@@ -1285,12 +1280,10 @@ nl:
       multi_page_html: Toon %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> van <b>%{count}</b>
         in totaal
       single_page:
-        one: Toon 1 %{model}
-        other: Toon alle %{count} %{model}
-        zero: Geen %{model} gevonden
+        one: Geen %{model} gevonden
+        other: Toon 1 %{model}
       single_page_html:
-        one: Toon <b>1</b> %{model}
-        other: Toon <b>alle&nbsp;%{count}</b> %{model}
-        zero: Geen %{model} gevonden
+        one: Geen %{model} gevonden
+        other: Toon <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "«Vorige"
