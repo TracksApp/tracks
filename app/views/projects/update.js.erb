@@ -86,7 +86,7 @@ var <%=object_name%> = {
       return "<%= source_view_is_one_of(:project_list, :review) ? js_render('project_listing', {:suppress_drag_handle => source_view_is(:review)}, @project) : "" %>";
     },
     html_for_sidebar: function() {
-      return "<%= source_view_is(:project) ? escape_javascript(render(:file => 'sidebar/sidebar')) : "" %>";
+      return "<%= source_view_is(:project) ? escape_javascript(render(:template => 'sidebar/sidebar.html.erb')) : "" %>";
     },
     html_for_project_settings: function() {
       return "<%= source_view_is(:project) ? js_render('project_settings', {}, @project) : "" %>";

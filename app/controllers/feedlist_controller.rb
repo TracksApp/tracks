@@ -36,7 +36,7 @@ class FeedlistController < ApplicationController
 
   def get_feeds_for(object)
     respond_to do |format|
-      format.html { render :file => "feedlist/get_feeds_for_#{object.class.name.downcase}" }
+      format.html { render :template => "feedlist/get_feeds_for_#{object.class.name.downcase}" }
       format.js
     end
   end
