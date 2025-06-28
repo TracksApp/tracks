@@ -35,7 +35,7 @@ tr:
         etiketlerinizi ve notlarınızı içerir
       csv_notes_title: CSV dosyası (sadece notlar)
       xml_link_title: XML dosyası (sadece eylemler)
-      yaml_description: ':{yaml}: Dışarı aktarmak için en iyisidir.'
+      yaml_description: '%{yaml}: Dışarı aktarmak için en iyisidir.'
       download_link: İndirme bağlantısı
       yaml_link_title: YAML dosyası
       xml_description: '%{xml}: Veri aktarımı ve düzenleme için en iyisidir'
@@ -148,7 +148,7 @@ tr:
       other: Günler
     note:
       one: Not yok
-      other: 1 not var
+      other: '%{count} not var'
     actions_midsentence:
       one: eylem
       other: eylemler

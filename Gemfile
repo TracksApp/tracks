@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'actionpack-xml_parser', '~> 2.0'
 gem 'activemodel-serializers-xml', '~> 1.0.3'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.0'
 
 gem 'font-awesome-sass', '~> 6.7.2'
 gem 'jquery-rails', '~> 4.6'
@@ -30,9 +30,11 @@ gem 'pg', '~> 1.5', group: :postgresql
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'mini_racer', group: :therubyracer
 
+gem 'sprockets-rails'
+
 group :assets do
   gem 'coffee-rails', '~> 5.0.0'
-  gem 'sassc-rails', '~> 2.1.2'
+  gem 'dartsass-sprockets'
   gem 'bootstrap-sass', '3.4.1'
   gem 'uglifier', '>=1.3.0'
   gem 'listen'

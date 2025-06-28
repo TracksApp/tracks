@@ -1,5 +1,5 @@
 require_dependency "login_system"
-require_dependency "tracks/source_view"
+require_dependency "tracks/source_view_switching"
 
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.

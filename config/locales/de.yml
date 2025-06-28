@@ -472,7 +472,7 @@ de:
           )'"
         '3': 'Go to %{preferences_link} and enter your incoming Mailgun email address
           (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
-        '4': 'Select a default context for emails to be put in with "%{sms_context_name"'
+        '4': 'Select a default context for emails to be put in with "%{sms_context_name}"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
         '6': "Update the mailmap in 'site.yml' to define which senders can send emails\
           \ to which incoming addresses. For example, to send emails from your work\

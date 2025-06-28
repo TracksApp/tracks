@@ -921,7 +921,7 @@ fr:
     delete: Supprimer
     delete_action: Supprimer action
     delete_recurring_action_confirm: Êtes-vous sûr·e de vouloir supprimer l'action
-      récurrente « % {description} » ?
+      récurrente « %{description} » ?
     delete_recurring_action_title: Supprimer l'action récurrente
     deleted_success: Action supprimée avec succès.
     depends_on: Dépend de
