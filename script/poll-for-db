@@ -2,7 +2,7 @@
 
 echo "==> Polling DB…"
 
-if [ "$1" == "mysql" ]; then
+if [ -z "$1" ] || [ "$1" == "mysql" ]; then
   appdir=$(cd $(dirname "$0")/.. && pwd)
   [ -f /etc/app-env ] || exec "$appdir/script/docker-environment" $0 $@
 
