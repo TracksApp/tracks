@@ -8,27 +8,27 @@ def yesterday
   Time.zone.now.utc.beginning_of_day - 1.day
 end
 def today
-  Time.zone.now.utc.beginning_of_day.to_s(:db)
+  Time.zone.now.utc.beginning_of_day.to_formatted_s(:db)
 end
 
 def tomorrow
-  (Time.zone.now.utc.beginning_of_day + 1.day).to_s(:db)
+  (Time.zone.now.utc.beginning_of_day + 1.day).to_formatted_s(:db)
 end
 
 def next_week
-  1.week.from_now.utc.beginning_of_day.to_s(:db)
+  1.week.from_now.utc.beginning_of_day.to_formatted_s(:db)
 end
 
 def last_week
-  1.week.ago.utc.beginning_of_day.to_s(:db)
+  1.week.ago.utc.beginning_of_day.to_formatted_s(:db)
 end
 
 def two_weeks_ago
-  2.weeks.ago.utc.beginning_of_day.to_s(:db)
+  2.weeks.ago.utc.beginning_of_day.to_formatted_s(:db)
 end
 
 def two_weeks_hence
-  2.weeks.from_now.utc.beginning_of_day.to_s(:db)
+  2.weeks.from_now.utc.beginning_of_day.to_formatted_s(:db)
 end
 
 %>

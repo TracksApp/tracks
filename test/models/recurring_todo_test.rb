@@ -110,7 +110,7 @@ class RecurringTodoTest < ActiveSupport::TestCase
     # every_day should return start_day if it is in the future
     @every_day.start_from = @in_three_days
     due_date = @every_day.get_due_date(nil)
-    assert_equal @in_three_days.at_midnight.to_s(:db), due_date.to_s(:db)
+    assert_equal @in_three_days.at_midnight.to_formatted_s(:db), due_date.to_formatted_s(:db)
     due_date = @every_day.get_due_date(@tomorrow)
     assert_equal @in_three_days.at_midnight, due_date
 

@@ -1268,7 +1268,7 @@ fi:
     tickler_items_due:
       one: Yksi muistilistan merkintä on nyt ajankohtainen – päivitä sivu nähdäksesi
         sen.
-      other: '{%count} muistilistan merkintää on nyt ajankohtaisia – päivitä sivu
+      other: '%{count} muistilistan merkintää on nyt ajankohtaisia – päivitä sivu
         nähdäksesi ne.'
     to_tickler: muistilistaan
     unable_to_add_dependency: Riippuvuuden lisääminen epäonnistui

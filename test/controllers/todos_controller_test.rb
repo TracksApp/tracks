@@ -403,7 +403,7 @@ class TodosControllerTest < ActionController::TestCase
     assert_equal "bar, foo", t.tag_list
     expected = Date.new(2006,11,30)
     actual = t.due.to_date
-    assert_equal expected, actual, "Expected #{expected.to_s(:db)}, was #{actual.to_s(:db)}"
+    assert_equal expected, actual, "Expected #{expected.to_formatted_s(:db)}, was #{actual.to_formatted_s(:db)}"
   end
 
   def test_update_todos_with_blank_project_name
@@ -551,7 +551,7 @@ class TodosControllerTest < ActionController::TestCase
           assert_select 'description', /.*/
           assert_select 'link', %r{http://test.host/contexts/.+}
           assert_select 'guid', %r{http://test.host/todos/.+}
-          assert_select 'pubDate', todos(:call_bill_gates_every_day).created_at.to_s(:rfc822)
+          assert_select 'pubDate', todos(:call_bill_gates_every_day).created_at.to_formatted_s(:rfc822)
         end
       end
     end

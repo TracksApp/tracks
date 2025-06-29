@@ -11,7 +11,7 @@ xml.rss :version => "2.0" do
       xml.item do
         xml.title h(context.title)
         xml.description context_summary(context, count_undone_todos_phrase(context))
-        xml.pubDate context.created_at.to_s(:rfc822)
+        xml.pubDate context.created_at.to_formatted_s(:rfc822)
         xml.link context_url(context)
         xml.guid context_url(context)
       end

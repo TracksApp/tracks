@@ -4,15 +4,15 @@
 # rails does automatically in models or controllers! Convert to utc manually!
 <%
 def today
-  Time.zone.now.utc.to_s(:db)
+  Time.zone.now.utc.to_formatted_s(:db)
 end
 
 def next_week
-  1.week.from_now.utc.to_s(:db)
+  1.week.from_now.utc.to_formatted_s(:db)
 end
 
 def last_week
-  1.week.ago.utc.to_s(:db)
+  1.week.ago.utc.to_formatted_s(:db)
 end
 %>
 

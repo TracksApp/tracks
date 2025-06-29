@@ -5,7 +5,7 @@
 <%
 
 def today
-  Time.zone.now.utc.to_s(:db)
+  Time.zone.now.utc.to_formatted_s(:db)
 end
 
 %>

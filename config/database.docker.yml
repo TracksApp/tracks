@@ -1,26 +1,26 @@
 test:
-  adapter: <%= ENV.fetch('DATABASE_TYPE') %>
-  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
-  database: <%= ENV.fetch('DATABASE_NAME') %>
-  host: <%= ENV.fetch('DATABASE_HOST') %>
-  port: <%= ENV.fetch('DATABASE_PORT') %>
-  username: <%= ENV.fetch('DATABASE_USERNAME') %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') %>
+  adapter: <%= ENV['DATABASE_TYPE'] %>
+  encoding: <%= ENV['DATABASE_ENCODING'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
 
 development:
-  adapter: <%= ENV.fetch('DATABASE_TYPE') %>
-  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
-  database: <%= ENV.fetch('DATABASE_NAME') %>
-  host: <%= ENV.fetch('DATABASE_HOST') %>
-  port: <%= ENV.fetch('DATABASE_PORT') %>
-  username: <%= ENV.fetch('DATABASE_USERNAME') %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') %>
+  adapter: <%= ENV['DATABASE_TYPE'] %>
+  encoding: <%= ENV['DATABASE_ENCODING'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
 
 production:
-  adapter: <%= ENV.fetch('DATABASE_TYPE') %>
-  encoding: <%= ENV.fetch('DATABASE_ENCODING') %>
-  database: <%= ENV.fetch('DATABASE_NAME') %>
-  host: <%= ENV.fetch('DATABASE_HOST') %>
-  port: <%= ENV.fetch('DATABASE_PORT') %>
-  username: <%= ENV.fetch('DATABASE_USERNAME') %>
-  password: <%= ENV.fetch('DATABASE_PASSWORD') %>
+  adapter: <%= ENV['DATABASE_TYPE'] %>
+  encoding: <%= ENV['DATABASE_ENCODING'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>

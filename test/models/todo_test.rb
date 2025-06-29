@@ -10,7 +10,7 @@ class TodoTest < ActiveSupport::TestCase
   end
 
   def next_week
-    1.week.from_now.beginning_of_day.to_s(:db)
+    1.week.from_now.beginning_of_day.to_formatted_s(:db)
   end
 
   # Test loading a todo item

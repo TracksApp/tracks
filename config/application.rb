@@ -21,7 +21,7 @@ module Tracksapp
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    config.autoload_paths += %W(#{config.root}/lib)
+#    config.autoload_paths += %W(#{config.root}/lib)
     config.eager_load_paths += %W(#{config.root}/lib)
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
