@@ -34,5 +34,5 @@ else
   $docker_compose run web bin/rake db:migrate
   $docker_compose run web bin/rake db:seed
 fi
-$docker_compose run web bin/rake test
-
+echo "==> Running the tests…"
+$docker_compose run web bin/rails test
