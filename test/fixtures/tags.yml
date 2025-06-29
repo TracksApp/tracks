@@ -3,7 +3,7 @@
 
 <%
 def today
-  Time.zone.now.utc.beginning_of_day.to_s(:db)
+  Time.zone.now.utc.beginning_of_day.to_formatted_s(:db)
 end
 %>
 
