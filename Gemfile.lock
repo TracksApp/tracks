@@ -208,7 +208,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0218.1)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     mini_racer (0.12.0)
       libv8-node (~> 21.7.2.0)
     minitest (5.25.1)
@@ -373,7 +373,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.7.3)
+    sqlite3 (2.7.0)
       mini_portile2 (~> 2.8.0)
     stringio (3.1.7)
     stripe (13.3.1)
@@ -448,7 +448,7 @@ DEPENDENCIES
   solargraph
   spring (~> 4)
   sprockets-rails
-  sqlite3 (~> 1.4)
+  sqlite3 (~> 2.7)
   stripe
   tolk (~> 5.0.2)
   tracks-chartjs-ror
