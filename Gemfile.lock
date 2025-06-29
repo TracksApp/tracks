@@ -439,7 +439,7 @@ DEPENDENCIES
   pg (~> 1.5)
   puma (~> 6.6)
   rack-mini-profiler
-  rails (~> 7.0)
+  rails (~> 7.1)
   rails-controller-testing
   rails-dom-testing (~> 2.2.0)
   rails_autolink
