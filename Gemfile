@@ -31,15 +31,12 @@ gem 'pg', '~> 1.5', group: :postgresql
 gem 'mini_racer', group: :therubyracer
 
 gem 'sprockets-rails'
-
-group :assets do
-  gem 'coffee-rails', '~> 5.0.0'
-  gem 'dartsass-sprockets'
-  gem 'bootstrap-sass', '3.4.1'
-  gem 'uglifier', '>=1.3.0'
-  gem 'listen'
-  gem 'tolk', '~> 6.0.0'
-end
+gem 'coffee-rails', '~> 5.0.0'
+gem 'dartsass-sprockets'
+gem 'bootstrap-sass', '3.4.1'
+gem 'terser'
+gem 'listen'
+gem 'tolk', '~> 6.0.0'
 
 group :development, :optional => true do
   gem 'spring', '~> 4'

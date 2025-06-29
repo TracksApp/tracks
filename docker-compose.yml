@@ -1,10 +1,10 @@
 version: '3'
 services:
   db:
-    image: mysql:5.7
+    image: mariadb:lts
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
-      MYSQL_DATABASE: ${TRACKS_DB:-tracks}
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
+      MARIADB_DATABASE: ${TRACKS_DB:-tracks}
     volumes:
       - db-data:/var/lib/mysql
   web:
