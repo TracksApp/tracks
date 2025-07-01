@@ -315,10 +315,10 @@ GEM
     reverse_markdown (3.0.0)
       nokogiri
     rexml (3.4.0)
-    rspec-expectations (3.13.3)
+    rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-support (3.13.1)
+    rspec-support (3.13.4)
     rubocop (1.70.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
