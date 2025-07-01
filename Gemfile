@@ -62,7 +62,7 @@ group :test, :optional => true do
   gem 'minitest-stub-const'
   gem 'mocha'
   gem 'rails-controller-testing'
-  gem 'rails-dom-testing', '~> 2.2.0'
+  gem 'rails-dom-testing', '~> 2.3.0'
   gem 'rspec-expectations'
   gem 'simplecov'
 end

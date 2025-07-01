@@ -277,7 +277,7 @@ GEM
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
       activesupport (>= 5.0.1.rc1)
-    rails-dom-testing (2.2.0)
+    rails-dom-testing (2.3.0)
       activesupport (>= 5.0.0)
       minitest
       nokogiri (>= 1.6)
@@ -446,7 +446,7 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 7.1)
   rails-controller-testing
-  rails-dom-testing (~> 2.2.0)
+  rails-dom-testing (~> 2.3.0)
   rails_autolink
   rexml
   rspec-expectations
