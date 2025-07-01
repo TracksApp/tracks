@@ -103,7 +103,7 @@ GEM
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
     builder (3.3.0)
-    bullet (8.0.0)
+    bullet (8.0.8)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     byebug (12.0.0)
@@ -401,7 +401,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uniform_notifier (1.16.0)
+    uniform_notifier (1.17.0)
     websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
