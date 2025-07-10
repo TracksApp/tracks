@@ -146,8 +146,8 @@ tr:
     actions: Eylemler
     action: Eylem
     days_midsentence:
-      one: Gün
-      other: Günler
+      one: gün
+      other: günler
     note:
       one: Not yok
       other: '%{count} not var'
