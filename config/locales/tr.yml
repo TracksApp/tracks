@@ -636,7 +636,7 @@ tr:
         significant: doğru
         precision: '1'
         strip_insignificant_zeros: doğru
-        delimiter: Sınırlayıcı
+        delimiter: Ayırıcı
       storage_units:
         format: '%n %u'
         units:
