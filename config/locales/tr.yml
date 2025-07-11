@@ -14,10 +14,11 @@ tr:
       errors:
         invalid_destination: 'Geçersiz içe aktarma dizini: %{e}'
         some: İçe aktarım esnasında hata meydana geldi
-        save_error: Kayıt yüklenemedi CSV (%{path_and_file}). Tracks yükleme dizinine
-          yazsın mı? %{e}
+        save_error: Kayıt yüklenemedi CSV (%{path_and_file}). Tracks yükleme 
+          dizinine yazsın mı? %{e}
         invalid_csv: 'Geçersiz CSV: headerler okunamadı: %{e}'
         file_blank: Dosya boş olamaz
+        no_context: Varsayılan içerik bulunamadı
       paste_field: 'İçe aktarılan YAML dosyasının içeriğini aşağıdaki metin kutucuğuna
         yapıştır:'
       warning: Dikkat
@@ -28,23 +29,24 @@ tr:
       page_title: Tracks::Export
       title: Dışa aktarılıyor
       format_header: 'Aşağıdaki biçimleri seçebilirsiniz:'
-      csv_actions_description: CSV dosyası bütün eylemlerinizi, isimlendirilmiş içeriklerinizi
-        ve projelerinizi içerir
+      csv_actions_description: CSV dosyası bütün eylemlerinizi, isimlendirilmiş 
+        içeriklerinizi ve projelerinizi içerir
       csv_notes_description: CSV dosyası bütün notlarınızı içerir
-      yaml_link_description: YAML dosyası bütün eylemlerinizi, içeriklerinizi, projelerinizi,
-        etiketlerinizi ve notlarınızı içerir
+      yaml_link_description: YAML dosyası bütün eylemlerinizi, içeriklerinizi, 
+        projelerinizi, etiketlerinizi ve notlarınızı içerir
       csv_notes_title: CSV dosyası (sadece notlar)
       xml_link_title: XML dosyası (sadece eylemler)
       yaml_description: '%{yaml}: Dışarı aktarmak için en iyisidir.'
       download_link: İndirme bağlantısı
       yaml_link_title: YAML dosyası
       xml_description: '%{xml}: Veri aktarımı ve düzenleme için en iyisidir'
-      yaml_experimental: Lütfen YAML dosyalarının deneysel olarak desteklendiğini
-        göz önünde bulundurunuz. Önemli verileri yedeklerken dikkatli olunuz.
+      yaml_experimental: Lütfen YAML dosyalarının deneysel olarak 
+        desteklendiğini göz önünde bulundurunuz. Önemli verileri yedeklerken 
+        dikkatli olunuz.
       csv_description: '%{csv}: İş tablosuna veya veri analizi yazılımlarına aktarmak
         için en iyisidir'
-      xml_link_description: XML dosyası bütün eylemlerinizi, içeriklerinizi, projelerinizi,
-        etiketlerinizi ve notlarınızı içerir
+      xml_link_description: XML dosyası bütün eylemlerinizi, içeriklerinizi, 
+        projelerinizi, etiketlerinizi ve notlarınızı içerir
       csv_actions_title: CSV dosyası (eylemler, içerikler ve projeler)
     yaml: YAML
     csv: CSV
@@ -72,16 +74,16 @@ tr:
     hidden_contexts: Gizlenmiş içerikler
     edit_context: İçeriği düzenle
     delete_context_title: İçeriği sil
-    delete_context_confirmation: Şu içeriği silmek istediğinize emin misiniz? %{name}'
-      İçerikteki bütün (tekrarlanan) eylemler de silinecektir!
+    delete_context_confirmation: Şu içeriği silmek istediğinize emin misiniz? 
+      %{name}' İçerikteki bütün (tekrarlanan) eylemler de silinecektir!
     delete_context: İçeriği sil
     context_state: İçerik durumu
     context_name: İçerik adı
     context_hide: Font sayfasında gizle?
     context_deleted: Silinen içerik '%{name}'
     completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan eylemler
-    all_completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan bütün
-      eylemler
+    all_completed_tasks_title: TRACKS::şuradan '%{context_name}' tamamlanan 
+      bütün eylemler
     add_context: İçerik ekle
   common:
     wiki: Wiki
@@ -93,13 +95,13 @@ tr:
     third: Üçüncü
     sort:
       sort: Sırala
-      by_task_count_title_confirm: Bu projeleri görev sayısına göre sıralamak istediğinize
-        emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
+      by_task_count_title_confirm: Bu projeleri görev sayısına göre sıralamak 
+        istediğinize emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
       by_task_count_title: Görev sayısına göre sırala
       by_task_count: Görev sayısına göre
       alphabetically_title: Projeleri alfabetik olarak sırala
-      alphabetically_confirm: Bu projeleri alfabetik olarak sıralamak istediğinize
-        emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
+      alphabetically_confirm: Bu projeleri alfabetik olarak sıralamak 
+        istediğinize emin misiniz? Bu işlem mevcut sıralamayı iptal edecektir.
       alphabetically: Alfabetik sırayla
     show_all: Hepsini göster
     server_error: Sunucuda bir hata meydana geldi.
@@ -144,8 +146,8 @@ tr:
     actions: Eylemler
     action: Eylem
     days_midsentence:
-      one: Gün
-      other: Günler
+      one: gün
+      other: günler
     note:
       one: Not yok
       other: '%{count} not var'
@@ -172,9 +174,10 @@ tr:
         too_long: çok uzun (maximum is %{count} characters)
         taken: zaten alınmış
         restrict_dependent_destroy:
-          has_many: Bu kayda bağlı bir dosya bulunduğu için kayıt silinemez %{record}
-          has_one: Bu kayda bağlı farklı bir dosya bulunduğu için kayıt silinemez
+          has_many: Bu kayda bağlı bir dosya bulunduğu için kayıt silinemez 
             %{record}
+          has_one: Bu kayda bağlı farklı bir dosya bulunduğu için kayıt 
+            silinemez %{record}
         record_invalid: 'Doğrulama başarısız: %{errors}'
         odd: tek sayı olmalıdır
         not_a_number: rakam değildir
@@ -221,8 +224,8 @@ tr:
         default_context_name: Varsayılan ortam
       preference:
         week_starts: Hafta başlama tarihi
-        verbose_action_descriptors: Eylem anahtar sözcüklerini (bağlam, proje) verboz
-          biçiminde göster
+        verbose_action_descriptors: Eylem anahtar sözcüklerini (bağlam, proje) 
+          verboz biçiminde göster
         title_date_format: Başlık zaman biçimi
         time_zone: Zaman dilimi
         theme: Tema
@@ -232,8 +235,10 @@ tr:
         show_project_on_todo_done: Yapılacaklar bitiminde proje sayfasına git
         show_number_completed: Bitmiş eylemlerin sayısını göster
         show_hidden_projects_in_sidebar: Gizli projeleri kenar çubuğunda göster
-        show_hidden_contexts_in_sidebar: Bitmiş içerikleri kenar çubuğunda göster
-        show_completed_projects_in_sidebar: Bitmiş projeleri kenar çubuğunda göster
+        show_hidden_contexts_in_sidebar: Bitmiş içerikleri kenar çubuğunda 
+          göster
+        show_completed_projects_in_sidebar: Bitmiş projeleri kenar çubuğunda 
+          göster
         review_period: Proje yenilenme aralığı
         refresh: Yenilenme aralığı (dakika)
         mobile_todos_per_page: Sayfa başı eylem sayısı (Mobil Görünüm)
@@ -282,6 +287,8 @@ tr:
       short: '%d %b'
       long: '%d-%m-%Y'
       longer: '%A %d %B, %Y'
+      month_day: Ay gün
+      only_day: Sadece gün
     month_names:
     - Ocak
     - Şubat
@@ -337,6 +344,12 @@ tr:
       over_x_years:
         one: 1 yıldan fazla
         other: '%{count} yıldan fazla'
+      less_than_x_seconds:
+        one: 1 saniyeden az
+        other: '%{count} saniyeden az'
+      less_than_x_minutes:
+        one: Bir dakikadan az
+        other: '%{count} dakikadan az'
   errors:
     messages:
       blank: boş bırakılamaz
@@ -377,15 +390,16 @@ tr:
     all_actions: Tüm eylemler
     all_contexts: Bütün İçerikler
     choose_project: Almak istediğiniz projeyi seçin
-    context_centric_actions: Belirli bir içerikteki tamamlanmamış eylemler için akış
+    context_centric_actions: Belirli bir içerikteki tamamlanmamış eylemler için 
+      akış
     context_needed: Akış talep etmeden önce en az bir içerik olmalı
     ical_feed: iCal akış
     last_fixed_number: Son %{number} eylem/ler
     legend: 'Semboller:'
-    notice_incomplete_only: "Not: Akış, aksi işaretlenmedikçe sadece tamamlanmamış\
-      \ eylemleri gösterir. Bu iCal akışları todo listesine eklenebilir. Eğer bitimi\
-      \ yaklaşan todo'ları takvimde görüntülemek istiyorsanız, takvim sayfasından\
-      \ iCal akışını kullanın"
+    notice_incomplete_only: "Not: Akış, aksi işaretlenmedikçe sadece tamamlanmamış
+      eylemleri gösterir. Bu iCal akışları todo listesine eklenebilir. Eğer bitimi
+      yaklaşan todo'ları takvimde görüntülemek istiyorsanız, takvim sayfasından iCal
+      akışını kullanın"
     plain_text_feed: Düz Yazı Akışı
     project_centric: Belirli bir projedeki tamamlanmamış eylemler akışı
     project_needed: Akış talep etmeden önce en az bir proje olmalı
@@ -394,14 +408,15 @@ tr:
   integrations:
     sections:
       email_rich: Zengin Todo Mesaj e-posta formatı
-      message_gateway: Tracks aracılığıyla e-posta gönderebilmek için Tracks'ı e-posta
-        serverine bağlayın
-      automatic_email: Yaklaşan eylemler için kendinize otomatik e-posta gönderin
+      message_gateway: Tracks aracılığıyla e-posta gönderebilmek için Tracks'ı 
+        e-posta serverine bağlayın
+      automatic_email: Yaklaşan eylemler için kendinize otomatik e-posta 
+        gönderin
       mailgun: Mailgun aracılığıyla Tracks'a e-posta gönder
     opensearch_description: Tracks'ta ara
     title: Entegrasyonlar
-    add_your_own: Eklemek istediğiniz araç mı var? Tracks'ın gelecek sürümlerine ekleyebilmemiz
-      için bize gönderin %{tell_us_link}.
+    add_your_own: Eklemek istediğiniz araç mı var? Tracks'ın gelecek sürümlerine
+      ekleyebilmemiz için bize gönderin %{tell_us_link}.
     intro: 'Tracks işinize yarayabilecek diğer araçlarla entegre edilebilir! Bu sayfa
       bazılarını entegre etmeye yönelik bilgi içerir. Her platforma uygulanabilir
       olmayabilirler ve bazıları diğerlerine kıyasla daha fazla teknik bilgi gerektirebilir.
@@ -409,16 +424,85 @@ tr:
     developer_documentation_link: Tracks için geliştirici dokümantasyonu
     contents_header: 'İçerikler:'
     tell_us_link_text: Bunun hakkında bize görüş bildirin
-    cron_2: Başka bir metin kullanabilirsiniz %{feeds_link} Projede birlikte çalıştığınız
-      meslektaşlarınıza neden listeyi e-posta gönderemeyesiniz ki?
+    cron_2: Başka bir metin kullanabilirsiniz %{feeds_link} Projede birlikte 
+      çalıştığınız meslektaşlarınıza neden listeyi e-posta gönderemeyesiniz ki?
     cron_email_subject: Bitimi 7 gün içerisinde olan Tracks eylemleri
     feeds_link_text: akış Tracks tarafından sağlanmıştır
-    cron_1: Bu girdiyi crontab üzerinden girerseniz, her gün ÖÖ 5'te 7 gün içerisinde
-      bitimi yaklaşan eylemlerle ilgili bir e-posta alacaksınız.
+    cron_1: Bu girdiyi crontab üzerinden girerseniz, her gün ÖÖ 5'te 7 gün 
+      içerisinde bitimi yaklaşan eylemlerle ilgili bir e-posta alacaksınız.
     message_gateway:
-      rich_api_tip: Mesaj içeriği tanım, içerik ve proje kısmına, not ise gövde metnine
-        yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" ve benzeri
-        türden görevler oluşturmak için Rich Todo API kullanabilirsiniz.
+      rich_api_tip: Mesaj içeriği tanım, içerik ve proje kısmına, not ise gövde 
+        metnine yazarak "çamaşırları yıka @ Ev" veya "Mehmet'i Ara > x projesi" 
+        ve benzeri türden görevler oluşturmak için Rich Todo API 
+        kullanabilirsiniz.
+      configuration: '%{to_name} veya %{from_name} alanlarıyla Tracks kullanıcılarını
+        görüntüleyebilmek için %{site_yml} mesaj geçidini ayarlamanız gerekebilir.'
+      description: "Eğer tracks mail serverinizle aynı serverde çalışıyorsa, Tracks'e
+        entegre mail düzenleyicisini kullanabilirsiniz. Aşağıdaki adımları izleyebilirsiniz:"
+      instructions:
+        '3': Yeni yapılandırdığınız adresinize bir e-posta gönderin!
+        '1': preferences_link} bölümüne gidin ve e-posta yoluyla gönderilen (SMS
+          mesajından gelebilecek) yapılacaklar için “%{sms_email_name}” ve 
+          “%{sms_context_name}” ayarlarınızı yapın
+        '2': sendmail/qmail/postfix/whatever, iletileri %{command} adresine 
+          aktarmak için bir e-posta adresi takma adı oluşturun
+      one_user_configuration: 'Benzer şeklide belirli Tracks kullanııclarına eposta
+        gönderebilirsiniz. site.yml dosyasında mail_dispatch öğesini %{single_user_value}
+        olarak yapılandırın ve kullanıcının oturum açma bilgilerini pipe komutunda
+        geçirin: %{code}'
+    mailgun:
+      conditions: İşe yarayabilmesi için Tracks sunucunuzun internetten 
+        erişilebilir olması gerekir, böylece Mailgun ona veri POST edebilir.
+      instructions:
+        '4': “%{sms_context_name}” ile e-postaların yerleştirileceği varsayılan 
+          bir bağlam seçin
+        '2': "Yeni köprü eklemek için Mailgun kontrol panelinde 'Köprüler' bölümünü
+          açın:"
+        2a: "'İfade Filtrele' 'catch_all()' şeklinde ayarlanmalıdır"
+        '6': "Hangi gönderenlerin hangi gelen adreslere e-posta gönderebileceğini
+          tanımlamak için 'site.yml' içindeki mailmap'i güncelleyin. Örneğin, iş ve
+          ev e-posta hesaplarınızdaki e-postaları Tracks Mailgun rotanıza göndermek
+          için şu şekilde ayarlayın: %{code}"
+        2b: "'Eylem', 'forward(\"http://mytracksserver.example.com/mailgun/mime\"\
+          )' şeklinde olmalıdır"
+        '3': Preferences_link} bölümüne gidin ve gelen Mailgun e-posta 
+          adresinizi (örneğin tracks@user.mailgun.com) “%{sms_email_name}” 
+          kutusuna girin.
+        '5': Mailgun API anahtarınızı (Genel API anahtarını değil) 'site.yml' 
+          izlerine ekleyin
+        '1': mailgun_link} adresinden ücretsiz hesap açabilirsiniz.
+      description: Görevleri Tracks'e e-postayla göndermek istiyor ancak aynı 
+        ana bilgisayarda bir posta sunucusu çalıştıramıyorsanız, Tracks'te 
+        yerleşik olarak bulunan %{mailgun_link} desteğini kullanabilirsiniz.
+      gateway_instructions: Yukarıdaki bölümde yer alan e-posta formatına 
+        ilişkin tüm yorumlar, veriler aynı şekilde işlendiğinden Mailgun 
+        kullanımı için de geçerlidir
+    email_rich:
+      field_descriptions:
+        star: Yapılacakları yıldızlamak için Bayrak
+        project: Yapılacaklar'ın yerleştirileceği proje
+        context: Yapılacaklar'ın yerleştirileceği bağlam
+        tag: Yapılacaklar'a uygulanacak bir etiket - birden çok kez 
+          kullanılabilir
+        tickler_date: Yapılacaklar için hatırlatıcı tarihi (gün için 2 hane, 
+          ay-gün için 4 hane veya yıl-ay-gün için 6 hane olabilir)
+        due_date: Yapılacaklar için son tarih (gün için 2 basamaklı, ay-gün için
+          4 basamaklı veya yıl-ay-gün için 6 basamaklı olabilir)
+      fields_title: 'Alanlar şu şekildedir:'
+      meaning_title: Anlam
+      fields_instruction: Tüm semboller isteğe bağlıdır ve ilk sembole (veya 
+        dizenin sonuna) kadar olan metin yapılacakların açıklaması olarak 
+        kullanılır
+      description: 'Yukarıdaki yöntemlerin her ikisi için de, meta veri eklemek üzere
+        mesaj konusunda aşağıdaki format kullanılabilir:'
+      symbol_title: Sembol
+    example_names:
+      project: proje
+      tag:
+        '1': etiket1
+        '2': etiket2
+      todo: harika yapılacaklarım
+      context: bağlam
   footer:
     send_feedback: Geri bildirim
     version: 'Tracks %{version} (%{revision_with_date})'
@@ -429,3 +513,959 @@ tr:
       create: Oluştur %{model}
       submit: Kaydet %{model}
       update: Güncelle %{model}
+  help:
+    title: Yardım
+    matrix_link_text: Matrix
+    contribute_link_text: proje internet sayfası
+    irc_link_text: 'IRC kanalı #Tracks@Libera'
+    irc_bullet: circ_link} (%{matrix_link} içinde de mevcuttur)
+    manual_link_text: Kullanım klavuzu
+    usage: Kullanımla ilgili bilgileri GitHub wiki projesindeki %{manual_link} 
+      bölümünde bulabilirsiniz.
+    mailing_list_link_text: Eposta listesi
+    bugs: Bir hatayla karşılaşırsanız veya bir özellik isteğiniz varsa, lütfen 
+      bunu %{sorun_bağlantısı} bölümünde bildirin.
+    issue_link_text: sorun sırası
+    contribute: "Tracks'a yapılan tüm katkıları memnuniyetle karşılıyoruz. Daha fazla
+      bilgi için %{contribute_link} bölümünü kontrol edebilirsiniz. Benzer şekilde
+      topluluğa katılabilirsiniz:"
+  layouts:
+    mobile_navigation:
+      tickler: Hatırlatıcı
+      starred: Yıldızlı
+      calendar: Takvim
+      contexts: İçerikler
+      projects: Projeler
+      feeds: Akış
+      full: Tam Sayfa
+      home: Giriş Sayfası
+      logout: Çıkış yap
+      new_action: Yeni
+    navigation:
+      admin: Admin
+      completed_tasks_title: Tamamlandı
+      contexts_title: Bağlamlar
+      export: Dışarı aktar
+      feeds: Akış
+      import: İçeri aktar
+      import_title: Veriyi içeri aktar
+      preferences: Tercihler
+      preferences_title: Tercihlerimi görüntüle
+      projects_title: Projeler
+      recurring_todos: Tekrarlayan yapılacaklar
+      recurring_todos_title: Tekrarlanan eylemleri düzenle
+      tickler_title: Hatırlatıcılar
+      completed_tasks: Bitti
+      group_view_by_context: İçeriğe göre grupla
+      integrations_: Tracks'ı entegre et
+      starred: Yıldızlı
+      group_view_by_project: Projeye göre grupla
+      show_empty_containers_context: Boş bağlamları göster
+      help_page: Yardım
+      review_title: Gözden geçir
+      feeds_title: Uygun olan akış listesini görüntüle
+      group_view_by_title: Bu sayfadaki eylemlerin gruplamasını değiştir
+      help: '?'
+      search: Bütün nesneleri ara
+      export_title: Veriyi dışarı aktar
+      starred_title: Yıldızlı eylemlerini görüntüle
+      api_docs: REST API Dökümanları
+      calendar: Takvim
+      calendar_title: Eylemlere göre takvim
+      options: Seçenekler
+      stats: İstatistikler
+      stats_title: İstatistiklerini görüntüle
+      tickler: Hatırlatıcılar
+      view: Görüntüle
+      home: Giriş Sayfası
+      manage_users: Kullanıcıları yönet
+      mobile: Mobil site
+      notes_title: Bütün notları görüntüle
+      home_title: Giriş Sayfası
+      manage_users_title: Kullanıcı ekle veya sil
+      organize: Düzenle
+      show_empty_containers_project: Boş projeleri göster
+      show_empty_containers_title: boş bağlam ve projeleri göster veya gizle
+    next_actions_rss_feed: Gelecek eylemlerin RSS akışı
+    toggle_notes: Notları görüntüle
+    toggle_notes_title: Bütün notları görüntüle
+    toggle_contexts: Daraltılmış bağlamları aç
+    toggle_contexts_title: Daraltılmış(gizli) bağlamları görüntüle
+  login:
+    cas_create_account: Bir talebiniz olması dahilinde lütfen şu adrese gidin 
+      %{signup_link}
+    login_cas: CAS'a git
+    login_with_openid: OpenID ile giriş yap
+    user_no_expiry: Oturumunuzu açık tutun
+    mobile_use_openid: '...veya bir OpenID ile giriş yap'
+    option_separator: veya,
+    cas_logged_in_greeting: Merhaba, %{username}! Kimliğiniz doğrulandı.
+    successful: Başarıyla giriş yapıldı. Tekrar hoş geldiniz!
+    sign_in: Oturum aç
+    logged_out: Tracks'tan çıkış yaptınız.
+    login_standard: standart giriş yapma sayfasına geri git
+    account_login: Hesaba giriş yap
+    cas_login: CAS girişi
+    cas_no_user_found: Merhaba, %{username}! Bir Tracks hesabınız bulunmuyor.
+    cas_signup_link: Hesap talep et
+    cas_username_not_found: Maalesef %{username}! CAS kullanıcı adıyla bir 
+      kullanıcı bulunmamakta
+    log_in_again: tekrar giriş yap.
+    openid_identity_url_not_found: Üzgünüz, bu kimlik URL'sine sahip bir 
+      kullanıcı yok (%{identity_url})
+    please_login: Tracks'i kullanmak için lütfen giriş yapın
+    session_time_out: Oturum zaman aşımına uğradı. Lütfen %{link}
+    session_will_expire: oturumu %{hours} saat(ler) boyunca etkin olmadığında 
+      sona erecektir.
+    session_will_not_expire: oturumunun süresi dolmayacaktır.
+    signup_prompt: Bir hesap oluşturmak ister misiniz?
+    successful_with_session_info: 'Giriş başarılı:'
+    unsuccessful: Giriş başarısız.
+  number:
+    human:
+      decimal_units:
+        units:
+          billion: Milyar
+          trillion: Trilyon
+          unit: .
+          million: Milyon
+          quadrillion: Katrilyon
+          thousand: Bin
+        format: '%n %u'
+      format:
+        significant: doğru
+        precision: '1'
+        strip_insignificant_zeros: doğru
+        delimiter: Ayırıcı
+      storage_units:
+        format: '%n %u'
+        units:
+          gb: GB
+          kb: KB
+          mb: MB
+          tb: TB
+          byte:
+            one: Bayt
+            other: Bayt
+    currency:
+      format:
+        strip_insignificant_zeros: Gereksiz sıfırları kes
+        delimiter: ','
+        format: '%u%n'
+        precision: '2'
+        separator: .
+        significant: Önemli
+        unit: $
+    format:
+      delimiter: ','
+      precision: '3'
+      strip_insignificant_zeros: Gereksiz sıfırları kes
+      separator: .
+      significant: Önemli
+    percentage:
+      format:
+        format: '%n%'
+        delimiter: Sınırlayıcı
+    precision:
+      format:
+        delimiter: Sınırlayıcı
+  preferences:
+    staleness_starts_after: Durağanlık %{gün} gün sonra başlar
+    change_authentication_type: Doğrulama türünü değiştir
+    sms_context_none: Hiç
+    change_identity_url: Kimlik URL'sini değiştir
+    edit_preferences: Tercihleri düzenle
+    generate_new_token: Yeni token oluştur
+    generate_new_token_confirm: Eminmisiniz? Yeni token oluşturmak bir öncekini 
+      değiştirir ve mevcut tokenin harici kullanımlarını kaldırır.
+    is_false: yanlış
+    is_true: doğru
+    open_id_url: OpenID URL'niz
+    page_title: TRACKS::Tercihler
+    page_title_edit: TRACKS::Tercihleri Düzenle
+    password_changed: Şifreniz değiştirildi, lütfen tekrar giriş yapın.
+    pick_one: 'Veya aşağıdakilerden birini seçin:'
+    result_in: 'Şu şekilde sonuçlanacaktır: '
+    show_number_completed: Tamamlanan öğeleri %{number} göster
+    tabs:
+      authentication: Kimlik doğrulama
+      date_and_time: Tarih ve zaman
+      profile: Profil
+      remove_account: Hesabı sil
+      tracks_behavior: Tracks davranışı
+    title: Tercihleriniz
+    token_description: Token (akış ve API kullanımı için)
+    remove_introduction: Kullanıcı hesabınızı buradan kaldırabilirsiniz. Bunun 
+      geri döndürülemez olduğunu ve tüm verilerinizi sileceğini unutmayın! 
+      Kaldırma işleminden sonra oturumunuz kapatılacaktır.
+    token_header: Sizin tokeniniz
+    updated: Tercihler güncellendi
+    authentication_header: Kimlik doğrulamanız
+    change_password: Şifreni değiştir
+    current_authentication_type: Doğrulama türünüz %{auth_type} şeklindedir
+  projects:
+    letter_abbreviation: P
+    no_last_completed_recurring_todos: Tekrarlayan yapılacaklar bulunamadı
+    no_notes_attached: Mevcut olarak bu projeyle iliştirilmiş not bulunmamakta
+    with_no_default_context: varsayılan bağlam olmadan
+    with_no_default_tags: ve varsayılan etiketler olmadan
+    all_completed_tasks_title: TRACKS::Projedeki Tamamlanmış Bütün Eylemleri 
+      Listele '%{project_name}'
+    notes: Notlar
+    default_context_removed: Varsayılan bağlam silindi
+    this_project: Bu proje
+    delete_project: Proje sil
+    deferred_actions_empty: Ertelenmiş eylemler boş
+    list_completed_projects: TRACKS::Tamamlanmış Projeleri Listele
+    no_projects: Mevcut olan bir proje bulunmamakta
+    settings: Ayarlar
+    was_marked_hidden: gizlendi olarak işaretlendi
+    set_default_tags_notice: Projenin varsayılan etiketlerini %{default_tags} 
+      olarak ayarla
+    default_tags_removed_notice: Varsayılan etiketler silindi
+    deferred_actions: Ertelenmiş eylemler
+    delete_project_confirmation: "'%{name}' projesini silmek istediğinizden emin misiniz?"
+    delete_project_title: Projeyi sil
+    hidden_projects: Gizli projeler
+    hide_form: Formu gizle
+    project_destroyed_status: "'%{name}' Projesi silindi"
+    show_form_title: Yeni proje oluştur
+    state: Bu proje %{state} durumunda
+    status_project_name_changed: Projenin adı değiştirildi
+    to_new_project_page: Beni yeni proje sayfasına götür
+    view_link: 'Projeyi görüntüle: %{name}'
+    was_marked_complete: tamamlandı olarak işaretlendi
+    with_default_context: "'%{context_name}' varsayılan bağlamı ile"
+    with_default_tags: ve varsayılan etiketler olarak '%{tags}' ile
+    hide_form_title: Yeni proje formunu gizle
+    is_active: aktif
+    last_completed_in_project: (son%{number})
+    list_projects: TRACKS::Projeleri Listele
+    list_reviews: TRACKS::Gözden Geçir
+    no_default_context: Bu projede varsayılan bağlam bulunmamakta
+    no_last_completed_projects: Bitmiş proje bulunamadı
+    notes_empty: Bu proje için not bulunmamakta
+    page_title: Tracks::Proje. %{project}
+    project_saved_status: Proje kaydedildi
+    project_state: Proje %{state} durumunda.
+    show_form: Proje ekle
+    actions_in_project_title: Projedeki eylemler
+    completed_actions_empty: Tamamlanmış eylemler boş
+    completed_projects: Tamamlanmış projeler
+    completed_tasks_title: TRACKS::Projedeki Tamamlanmış Eylemleri Listele 
+      '%{project_name}'
+    default_context: Bu proje için varsayılan bağlam şu şekildedir %{context}
+    default_context_set: Projenin varsayılan bağlamını %{default_context} 
+      şeklinde ayarla
+    edit_project_settings: Proje Ayarlarını Düzenle
+    edit_project_title: Proje düzenle
+    active_projects: Aktif projeler
+    add_note_submit: Not ekle
+    add_note: Bir not ekle
+    add_project: Proje Ekle
+    completed_actions: Tamamlanmış eylemler
+  shared:
+    add_context: Bağlam ekle
+    toggle_single_title: Yeni bir sonraki eylem ekleyin
+    multiple_next_actions: Birden fazla sonraki eylem (her satırda bir tane)
+    project_for_all_actions: Tüm eylemler için proje
+    context_for_all_actions: Bütün eylemler için bağlam
+    toggle_multi_title: Tekli/çoklu yeni eylem formunu değiştir
+    add_action: Eylem ekle
+    add_actions: Birden fazla eylem ekle
+    hide_action_form_title: Yeni eylem biçimini gizle
+    hide_form: Biçimi gizle
+    make_actions_dependent: Eylemleri birbirine bağımlı hale getirin
+    separate_tags_with_commas: virgülle ayır
+    tags_for_all_actions: Tüm eylemler için etiketler (virgülle ayırarak)
+    toggle_multi: Birden fazla sonraki eylem ekleme
+    toggle_single: Bir sonraki eylem ekleyin
+  sidebar:
+    list_empty: Hiç
+    list_name_completed_projects: Tamamlanmış projeler
+    list_name_hidden_contexts: Gizli bağlamlar
+    list_name_hidden_projects: Gizli projeler
+    list_name_active_contexts: Aktif bağlamlar
+    list_name_active_projects: Aktif projeler
+  states:
+    contexts:
+      active: Aktif bağlamlar
+      ":": ':'
+      closed: Kapalı bağlamlar
+      hidden: Gizli bağlamlar
+    active: Aktif
+    active_plural: Aktif
+    completed: Tamamlandı
+    current: Güncel
+    current_plural: Güncel
+    hidden: Gizli
+    projects:
+      active: Aktif projeler
+      ":": ':'
+      blocked: Engellendi
+      closed: Kapalı projeler
+      completed: Tamamlandı
+      current: Mevcut
+      hidden: Gizli projeler
+      review: Gözden geçir
+      stalled: Durduruldu
+    blocked: Engellendi
+    blocked_plural: Engellendi
+    close: Kapalı
+    closed_plural: Kapalı
+    completed_plural: Tamamlandı
+    review: Tarihli
+    review_plural: Tarihli
+    stalled: Durduruldu
+    stalled_plural: Durduruldu
+    visible: Görünür
+    visible_plural: Görünür
+    hidden_plural: Gizli
+  stats:
+    actions_lastyear_title: Son 12 ay içerisindeki eylemler
+    legend:
+      number_of_actions: Eylem sayısı
+      day_of_week: Hafta günü
+      actions: Eylemler
+      months_ago: Aylar önce
+      number_of_days: Gün kadar önce
+      percentage: Yüzde
+      running_time: Bir eylemin yürütülme süresi (haftalar)
+    open_per_week_legend:
+      weeks: Hafta önce
+      actions: Eylemler
+    other_actions_label: (diğerleri)
+    spread_of_actions_for_all_context: Tüm bağlamlar için eylemlerin 
+      yaygınlaştırılması
+    tag_cloud_90days_title: Son 90 gün içerisinde etiket bulutu içerisinde yer 
+      alan eylemler
+    tag_cloud_description: Bu etiket bulutu tüm eylemlerin etiketlerini içerir 
+      (tamamlandı, tamamlanmadı, görünür ve/veya gizli)
+    totals_action_count: toplam %{count} eyleminiz var
+    totals_first_action: '%{date} tarihindeki ilk eyleminizden beri'
+    totals_visible_context_count: '%{count} kadarı görünür içerik'
+    index_title: TRACKS::Istatistikler
+    open_per_week: Haftalık aktif (görünür ve gizli) sonraki eylemler
+    totals_actions_completed: '%{count} kadarı tamamlanmış.'
+    contexts: içerikler
+    actions_further: ' ve dahası'
+    click_to_return_link: burada
+    running_time_all_legend:
+      percentage: Yüzde
+      running_time: Bir eylemin çalışma süresi (haftalar). Daha fazla bilgi için
+        bir çubuğa tıklayın
+      actions: Eylemler
+    tod30: Günün saati (son 30 gün)
+    tag_cloud_90days_description: Bu etiket bulutu, son 90 gün içinde 
+      oluşturulan veya tamamlanan eylemlerin etiketlerini içerir.
+    totals_completed_project_count: ve %{count} kadarı tamamlanmış projeler.
+    time_of_day_legend:
+      time_of_day: Günün saati
+      number_of_actions: Eylem sayısı
+    totals_active_project_count: '%{count} kadarı aktif proje'
+    totals_hidden_context_count: ve %{count} kadarı gizli içerik.
+    within_one: 1 içerisinde
+    action_completion_time_title: Tamamlanma zamanı (bütün tamamlanmış eylemler)
+    action_selection_title: TRACKS::Eylem seçimi
+    running_time_legend:
+      actions: Eylemler
+      percentage: Yüzde
+      weeks: Bir eylemin çalışma süresi (haftalar). Daha fazla bilgi için bir 
+        çubuğa tıklayın
+    tod30_legend:
+      time_of_day: Günün saati
+      number_of_actions: Eylem sayısı
+    top10_longrunning: En uzun süredir devam eden 10 proje
+    top10_projects: En iyi 10 proje
+    top10_projects_30days: Son 30 gün içerisindeki en iyi 10 proje
+    top5_contexts: En iyi 5 içerik
+    top5_visible_contexts_with_incomplete_actions: Tamamlanmamış eylemlere sahip
+      ilk 5 görünür içerik
+    totals: Toplamlar
+    totals_project_count: '%{count} kadar projeniz var.'
+    actions: Eylemler
+    actions_avg_completed: ve ayda ortalama %{count} eylem tamamladınız.
+    actions_avg_completed_30days: ve günde ortama %{count} eylem tamamladınız.
+    actions_avg_completion_time: Bütün tamamlanan eylemlerinizin ortalama 
+      tamamlanma süresi %{count} gün.
+    actions_avg_created: Son 12 ay içerisinde ortalama %{count} eylem 
+      oluşturdunuz
+    actions_day_of_week_legend:
+      day_of_week: Haftanın günleri
+      number_of_actions: Eylem numaraları
+    actions_last_year: Geçen yılki eylemler
+    actions_last_year_legend:
+      months_ago: Aylar önce
+      number_of_actions: Eylem sayısı
+    actions_min_completion_time: Minimum tamamlanma süresi %{time} kadar.
+    actions_min_max_completion_days: Tamamlamak için geçen süre min/maks 
+      %{min}/%{max} şeklinde.
+    actions_selected_from_week: 'Haftadan seçilen eylemler '
+    click_to_return: İstatistik sayfasına dönmek için %{link} öğesine tıklayın.
+    click_to_show_actions_from_week: hafta %{week} içerisindeki ve sonrasındaki 
+      eylemleri göstermek için %{link} öğesine tıklayın.
+    click_to_update_actions: Aşağıdaki eylemleri güncellemek için grafikteki bir
+      çubuğa tıklayın.
+    current_running_time_of_incomplete_visible_actions: Tamamlanmamış görünür 
+      eylemlerin mevcut çalışma süresi
+    labels:
+      month_avg_completed: '%{months} Ay önce ort. tamamlandı'
+      month_avg_created: '%{months} Ay önce ort. oluşturuldu'
+      avg_completed: Ort. tamamlandı
+      avg_created: Ort. oluşturuldu
+      completed: Tamamlandı
+      created: Oluşturuldu
+    time_of_day: Günün saati (tüm eylemler)
+    spread_of_running_actions_for_visible_contexts: Tüm görünür bağlamlar için 
+      çalışan eylemlerin yaygınlaştırılması
+    tag_cloud_title: Bütün eylemler için etiket bulutu
+    tags: Etiketler
+    totals_blocked_actions: '%{count} eylemlerinin tamamlanmasına bağlı.'
+    totals_context_count: '%{count} kadar içeriğiniz var.'
+    totals_deferred_actions: '%{count} kadarı hatırlatıcıda ertelenmiş eylemler'
+    totals_hidden_project_count: '%{count} kadarı gizli'
+    totals_incomplete_actions: '%{count} kadar tamamlanmamış eyleminiz var'
+    actions_30days_title: Son 30 gündeki eylemler
+    actions_actions_avg_created_30days: Son 30 gün içerisinde ortalama %{count} 
+      kadar eylem oluşturdunuz
+    actions_day_of_week_title: Haftanın günleri (bütün eylemler)
+    actions_dow_30days_legend:
+      day_of_week: Haftanın günleri
+      number_of_actions: Eylem sayısı
+    actions_dow_30days_title: Haftanın günleri (30 gün)
+    no_tags_available: etiket mevcut değil
+    projects: Projeler
+    running_time_all: Tüm tamamlanmamış eylemlerin mevcut çalışma süresi
+    totals_tag_count: '%{count} kadar eylemlerle ilişkilendirilmiş etiket var.'
+    totals_unique_tags: Etiketlerin %{count} kadarı benzersiz.
+    more_stats_will_appear: Birkaç eylem daha eklediğinizde burada daha fazla 
+      istatistik görünecektir.
+    no_actions_selected: Seçilmiş herhangi bir eylem yok.
+  time:
+    formats:
+      default: '%a, %d %b %Y %H:%M:%S %z'
+      long: '%B %d, %Y %H:%M'
+      stats: '%a %d-%m'
+      time: Vakit
+      month_day: '%B %d'
+      short: '%d %b %H:%M'
+    pm: ös
+    am: .
+  todos:
+    actions:
+      home_without_project: Projesiz eylemler
+      project_completed: Bu projede tamamlanmış eylemler
+      project_deferred_pending: Bu projede ertelenmiş/bekleyen eylemler
+      project_project: Bu projedeki eylemler
+      home_completed: Tamamlanmış eylemler
+      completed: Tamamlanmış eylemler
+      context_completed: Bu içerikte tamamlanmış eylemler
+      context_deferred_pending: Bu içerikte ertelenmiş/bekleyen eylemler
+      context_without_project: Projesiz eylemler %{param} içinde
+      tag_hidden: "'%{param}' ile etiketlenmiş gizli eylemler"
+      tag_completed: "'%{param}' ile etiketlenmiş tamamlanmış eylemler"
+      tag_deferred_pending: "'%{param}' ile etiketlenmiş ertelenmiş/bekleyen eylemler"
+    added_new_context: Yeni içerik eklendi
+    added_new_project: Yeni proje eklendi
+    all_completed_tagged_page_title: 'TRACKS:: %{tag_name} etiketiyle bütün tamamlanmış
+      eylemler'
+    calendar:
+      get_in_ical_format: Bu takvimi iCal biçiminde al
+      due_this_week: Bitiş tarihi bu haftanın geri kalanında
+      due_today: Bitiş tarihi bugün
+      due_after_this_month: Bitiş tarihi %{next_month} ve sonrası
+      due_next_week: Bitiş tarihi gelecek hafta
+      due_this_month: Bitiş tarihi %{month} geri kalanında
+    clear_due_date: Bitiş tarihini temizle
+    clear_show_from_date: Tarihten itibaren gösterimi temizle
+    completed_last_day: Son 24 saat içerisinde tamamlandı
+    context_changed: İçerik %{name} adına değiştirildi
+    deleted_success: Eylem başarıyla silindi.
+    depends_on: Bir şeye bağlı
+    error_deleting_item: Öğeyi silerken bir hata meydana geldi %{description}
+    feeds:
+      due: 'Bitiş: %{date}'
+      completed: 'Tamamlandı: %{date}'
+    cannot_add_dependency_to_completed_todo: Bu eylem tamamlanmış bir eyleme 
+      değişken olarak eklenemez!
+    archived_tasks_title: 'TRACKS::: Arşivlenmiş tamamlanmış görevler'
+    completed_actions: Tamamlanmış eylemler
+    calendar_page_title: TRACKS::Takvim
+    added_new_next_action_singular: Yeni gelecek eylem eklendi
+    action_marked_complete_error: Eylem <strong>'%{description}'</strong> sunucu
+      hatasından dolayı şu şekilde İŞARETLENMEDİ<strong>%{tamamlandı}</strong>
+    all_completed: Bütün tamamlanmış eylemler
+    append_in_this_project: bu projede
+    completed: Tamamlandı
+    convert_to_project: Proje yap
+    completed_today: Bugün tamamlandı
+    deferred_actions_with: ‘%{tag_name}' etiketiyle ertelenmiş eylemler
+    confirm_delete: Bu eylemi silmek istediğinizden emin misiniz 
+      '%{description}'?
+    delete_recurring_action_title: Yinelenen eylemi sil
+    due: Bitiş
+    error_starring_recurring: Yinelenen yapılacakların yıldızı açılamadı 
+      '%{description}'
+    error_completing_todo: Yapılacakları tamamlarken / aktif hale getirirken bir
+      hata meydana geldi %{description}
+    action_deleted_error: Eylem silinemedi
+    add_another_dependency: Yeni bir değişken ekle
+    add_new_recurring: Yeni bir tekrarlanan eylem ekle
+    added_dependency: '%{dependency} değişken olarak eklendi.'
+    added_new_next_action: Yeni gelecek eylem eklendi
+    added_new_next_action_plural: Yeni gelecek eylemler eklendi
+    completed_actions_with: "'%{tag_name}' etiketiyle tamamlanmış eylemler"
+    completed_rest_of_month: Ayın geri kalanında tamamlanmış
+    completed_rest_of_previous_month: Önceki ayın geri kalanında tamamlanmış
+    completed_tagged_page_title: "TRACKS:: '%{tag_name}' etiketiyle tamamlanmış eylemler"
+    completed_tasks_title: TRACKS::Tamamlanmış eylemler
+    defer_date_after_due_date: Erteleme tarihi bitiş tarihinden sonra. Lütfen 
+      ertelemeden önce bitiş tarihini düzenleyiniz.
+    deferred_pending_actions: Ertelenmiş/bekleyen eylemler
+    deferred_tasks_title: TRACKS::Hatırlatıcı
+    done: Bitti?
+    edit_action: Eylemi düzenle
+    action_due_on: (eylem bitiş tarihi %{date})
+    action_marked_complete: Eylem <strong>'%{description}'</strong> şu şekilde 
+      işaretlendi<strong>%{tamamlandı}</strong>
+    action_saved: Eylem kaydedildi
+    action_saved_to_tickler: Eylem hatırlatıcıya kaydedildi
+    completed_last_x_days: Son %{count} gün içerisinde tamamlandı
+    completed_recurrence_completed: Tekrar eden eylemin silinmesinin ardından 
+      gelecek teni bir eylem bulunmuyor. Yineleme tamamlandı
+    completed_recurring: Tamamlanmış yinelenen yapılacaklar
+    completed_recurring_actions_title: 'TRACKS:: Tamamlanmış yinelenen eylemler'
+    completed_rest_of_week: Bu haftanın geri kalanında tamamlanmış
+    delete: Sil
+    delete_action: Eylemi sil
+    delete_recurring_action_confirm: Yinelenen bu eylemi silmek istediğinizden 
+      emin misiniz '%{description}'?
+    depends_on_separate_with_commas: Bir şeye bağlı (virgüllerle ayır)
+    drag_action_title: Bu eylemi, bir diğer eyleme değişken atamak için bir 
+      başka eylem sürükle.
+    edit: Düzenle
+    error:
+      invalid_due_date: Geçersiz bitiş tarihi
+      invalid_show_from_date: Geçersiz gösterim tarihi
+    error_saving_recurring: Yinelenen yapılacakları kaydederken bir hata meydana
+      geldi '%{description}'
+    error_starring: Bu yapılacakların yıldızı açılamadı '%{description}'
+    action_deferred: "'%{description}' eylemi ertelendi"
+    action_deleted_success: Gelecek eylem başarıyla silindi
+    blocked_by: '%{predecessors} tarafından engellendi'
+    error_removing_dependency: Değişkeni silerken bir hata meydana geldi
+    edit_action_with_description: Eylemi düzenle '%{description}'
+    edit_recurring_todo: Yinelenen eylemi düzenle
+    error_deleting_recurring: Yinelenen yapılacakları silerken bir hata meydana 
+      geldi '%{description}'
+    all_completed_here: Burada
+    error_toggle_complete: Bu yapılacaklar tamamlandı oldu işaretlenemedi
+    feed_title_in_context: Bağlamında '%{context}'
+    feed_title_in_project: Projede '%{project}'
+    completed_in_archive:
+      one: Arşivde tamamlanmış bir eylem var.
+      other: Arşivde %{count} kadar tamamlanmış eylem var.
+    defer_x_days:
+      one: 1 gün ertele
+      other: '%{count} gün ertele'
+    hidden_actions: Gizli eylemler
+    next_actions_due_date:
+      overdue_by: '%{days} gün kadar geç'
+      overdue_by_plural: '%{days} günler kadar geç'
+      due_today: Bugün bitiyor
+      due_tomorrow: Yarın bitiriyor
+      due_in_x_days: Bitiş tarihi %{days} günde
+    recurrence:
+      monthly_options: Yinelenen eylemler için ayarlar
+      pattern:
+        day_names:
+        - pazar
+        - pazartesi
+        - salı
+        - çarşamba
+        - perşembe
+        - cuma
+        - cumartesi
+        from: buradan
+        month_names:
+        - 
+        - Ocak
+        - Şubat
+        - Eşleşme
+        - Nisan
+        - Mayıs
+        - Haziran
+        - Temmuz
+        - Ağustos
+        - Eylül
+        - Ekim
+        - Kasım
+        - Aralık
+        times: '%{number} kere'
+        every_n_days: every %{n} gün
+        the_xth_day_of_month: '%{month} ayının %{x} %{day} günü'
+        third: üçüncü
+        until: kadar
+        first: birinci
+        last: sonuncu
+        on_day_n: '%{n} gününde'
+        on_work_days: iş günlerinde
+        second: saniye
+        show: göster
+        weekly: haftalık
+        every_day: her gün
+        every_month: her ay
+        every_n: her %{n}
+        every_n_months: her %{n} ay
+        every_xth_day_of_every_n_months: her%{x} %{n_months} ayın %{day} günü
+        fourth: dördüncü
+        due: bitiş
+        every_year_on: her yıl %{date} tarihinde
+      recurrence_on:
+        show_options: Eylemi göster
+        due_date: eylem bitiş tarihini ayarla
+        show_days_before: bitiş tarihine şu kadar gün %{days} kalana değin
+        from_tickler: Eylem tarihini görünür olarak ayarla (eylem bitiş tarihi 
+          değil)
+        options: Hesaplanmış tarihi şunun için kullan
+        show_always: her zaman
+      no_end_date: Bitiş tarihi yok
+      starts_on: Şu tarihte başlıyor
+      weekly: Haftalık
+      ends_on_date: Şu tarihte bitiyor %{date}
+      ends_on_number_times: '%{number} seferden sonra bitiyor'
+      daily: Günlük
+      daily_every_number_day: Her %{number} gün(ler)de
+      daily_options: Günlük yinelenen eylemler için ayarlar
+      day_x_on_every_x_month: Her %{month} ayın %{day} günü
+      ends_on: Şu tarihte bitiyor
+      every_work_day: Her iş günü
+      monthly: Aylık
+      monthly_every_xth_day: Her %{month} ayın %{day} %{day_of_week}
+      weekly_options: Haftalık yinelenen eylemler için ayarlar
+      yearly: Yıllık
+      yearly_options: Yıllık yinelenen eylemler için ayarlar
+      weekly_every_number_week: Her %{number} haftada geri gelir
+      yearly_every_x_day: Her %{month} %{day}
+      yearly_every_xth_day: '%{month} Ayı %{day}. %{day_of_week}'
+    mobile_todos_page_title: Bütün eylemler
+    new_related_todo_created: Yinelenen yapılacaklara yeni bir öğe daha eklendi
+    no_actions:
+      due_next_week: Gelecek hafta bitecek hiç eylem yok
+      completed_today: Bugün hiç eylem tamamlanmadı
+      not_done_with_tag: Şu anda '%{param}' Etiketiyle bitmemiş hiç eylem 
+        bulunmuyor
+      completed_recurring: Şu anda tamamlanmış yinelenen bir yapılacak 
+        bulunmuyor
+      completed_rest_of_month: Bu ayın kalanında yapılacak hiç eylem 
+        tamamlanmadı
+      completed_rest_of_week: Bu haftanın geri kalanında hiç eylem tamamlanmadı
+      context: Şu anda bu içerik içerisinde tamamlanmamış eylem bulunmuyor
+      deferred_pending: Şu anda ertelenmiş veya bekleyen eylem bulunmuyor
+      due_after_this_month: Bu ay bitecek hiç eylem yok
+      not_done_project: Şu anda bu projede bitmemiş hiç eylem yok
+      project: Şu anda bu projede bitmemiş hiç eylem bulunmuyor
+      due_this_week: Bu hafta bitecek hiç eylem yok
+      due_today: Bugün bitecek hiç eylem yok
+      due_this_month: Bu ayın geri kalanında bitecek hiç eylem yok
+      hidden: Şu anda gizli eylem bulunmuyor
+      not_done: Şu anda bitmemiş eylem bulunmuyor
+      not_done_context: Şu anda bu içerik içerisinde bitmemiş eylem bulunmuyor
+      completed: Şu anda tamamlanmış bir eylem bulunmuyor
+      recurring_todos: Şu anda yineleyen yapılacak bulunmuyor
+      tag_hidden: Mevcut gizli eylem bulunamadı
+      without_project: Mevcut projesiz eylem bulunmuyor
+      title: Eylem bulunamadı
+    in_pending_state: Bekleme durumunda
+    new_related_todo_created_short: Yeni bir yapılacak oluştur
+    in_hidden_state: Gizli durumda
+    next_action_description: Gelecek eylem tanımı
+    next_action_needed: En ax bir gelecek eylem göndermeniz gerekiyor
+    next_actions_description: 'Filtre:'
+    next_actions_description_additions:
+      completed: Geçen %{count} günde
+      due_date: Bitiş tarihi %{due_date} veya daha erken
+    next_actions_title: Takip et - Gelecek Eylemler
+    mark_complete: Tamamlandı olarak işaretle
+    has_x_pending:
+      one: Beklenen bir eylem var
+      other: Beklenen %{count} eylem var
+    list_incomplete_next_actions: Bitirilmemiş gelecek eylemleri listeler
+    list_incomplete_next_actions_with_limit: Bitirilmemiş son gelecek %{count} 
+      kadar eylemi listeler
+    next_actions_title_additions:
+      completed: eylemler tamamlandı
+      due_today: bugün bitiyor
+      due_within_a_week: bir hafta içerisinde bitiyor
+    new_related_todo_not_created_short: yapılacak oluşturulmadı
+    recurrence_period: Yinelenme periyodu
+    recurring_deleted_success: Yinelenen eylem başarıyla silindi.
+    no_actions_due_this_week: Haftanın geri kalanı için eylem bulunmuyor
+    no_completed_actions: Tamamlanmış eylem bulunmuyor
+    no_actions_with: İle eylem bulunmuyor
+    no_completed_actions_with: İle tamamlanmış eylem bulunmuyor
+    overdue: Gecikmiş
+    pending: Bekleyen
+    recurring_pattern_removed: '%{count}‘dan yinelenme süresi silindi'
+    recurrence_completed: Yinelenen eylem bittikten sonra gelecek bir eylem 
+      bulunmuyor. Yinelenme tamamlandı
+    recurring_action_deleted: Eylem silindi. Bu eylem yinelendiğinden dolayı, 
+      yeni bir eylem eklendi
+    recurring_action_saved: Yinelenen eylem kaydedildi
+    no_deferred_actions: Ertelenmiş eylem yok
+    no_completed_recurring: Tamamlanmış yineleme yok
+    no_project: —Proje yok—
+    recurring_actions_title: TRACKS::Yinelenen Eylemler
+    recurring_todos: Yinelen yapılacaklar
+    no_deferred_actions_with: İle ertelenen eylem yok
+    no_last_completed_actions: Bitmiş eylem bulunamadı
+    no_recurring_todos: Yineleyen yapılacak yok
+    notes: Notlar
+    no_actions_found_title: Başlıkla ilgili eylem bulunamadı
+    see_all_completed: Tamamlanan tüm eylemleri görebilirsiniz %{link}
+    tags: Etiketlet (virgülle ayrılmış)
+    set_to_pending: '%{görev} beklemede olarak ayarlandı'
+    show_from: Şuradan göster
+    show_in_days: Günleri %{gün} olarak göster
+    show_on_date: Göster %{tarih}
+    show_today: Bugün Göster
+    removed_predecessor: Değşiken olarak %{successor} %{predecessor}'dan 
+      kaldırıldı.
+    remove_dependency: Değişkeni sil (eylemi silmez)
+    star_action_with_description: Bu eylemi yıldızla '%{description}'
+    tagged_page_title: TRACKS::Şunun ile etiketlendi '%{tag_name}'
+    task_list_title: TRACKS::Görevleri listele
+    show_tomorrow: Yarın Göster
+    star_action: Bu eylemi yıldızla
+    tickler_items_due:
+      one: Bir hatırlatıcı öğesinin zamanı geldi - görebilmek için sayfayı 
+        yenileyin.
+      other: '%{count} hatırlatıcı öğelerinin zamanı geldi - görebilmek için sayfayı
+        yenileyin.'
+    tagged_with: şunun ile etiketlendi '%{tag_name}'
+    unable_to_add_dependency: Değişken eklenemedi
+    was_due_on_date: '%{date} tarihinde sondu'
+    to_tickler: hatırlatıcılara
+    scheduled_overdue: Günler önce %{gün} gösterilecek şekilde programlandı
+    unresolved_dependency: Değişken alanına girdiğiniz değer mevcut bir eyleme 
+      çözümlenmedi. Bu değer eylemin geri kalanıyla birlikte kaydedilmeyecektir.
+      Devam edilsin mi?
+  notes:
+    delete_note_title: "'%{id}' notunu sil"
+    delete_note_confirm: "'%{id}' notunu silmek istediğinize emin misiniz?"
+    deleted_note: "'%{id}' notu silindi"
+    delete_confirmation: "'%{id}' notunu silmek istediğinize emin misiniz?"
+    delete_item_title: Öğeyi sil
+    show_note_title: Notu göster
+    edit_item_title: Öğeyi düzenle
+    in_project: 'İçinde: '
+    no_notes_available: 'Şu anda not bulunmuyor: Proje sayfalarından not ekle.'
+    note_header: Not %{id}
+    note_link_title: Notu göster %{id}
+    note_location_link: 'İçinde:'
+    save_status_message: "%{id} Not'u kaydedildi"
+  support:
+    array:
+      words_connector: ', '
+      last_word_connector: ', ve '
+      two_words_connector: ' ve '
+    select:
+      prompt: Lütfen seçiniz
+  models:
+    preference:
+      due_in: Bitiş tarihi %{gün} gün
+      due_on: Şu tarihte bitiyor %{date}
+      due_styles:
+      - Şu kadar günde bitiyor ___
+      - Şu tarihte bitiyor _____
+      themes:
+        black: Siyah
+        light_blue: Açık mavi
+    project:
+      feed_description: '%{username} kullanıcı adına göre bütün projeleri listele'
+      feed_title: Tracks Projeleri
+    todo:
+      error_date_must_be_future: gelecekte bir tarih olmalıdır
+    user:
+      error_context_not_associated: Bağlam kimliği %{context}, %{user}.kullanıcı
+        kimliği ile uyuşmamaktadır.
+      error_project_not_associated: Proje kimliği %{project}, %{user}.kullanıcı 
+        kimliği ile uyuşmamaktadır.
+  search:
+    no_results: Aramanız sonuç vermedi.
+    notes_matching_query: Sorguyla eşleşen notlar
+    contexts_matching_query: Sorguyla eşleşen bağlamlar
+    projects_matching_query: Sorguyla eşleşen projeler
+    tags_matching_query: Sorgu ile eşleşen etiketler
+    todos_matching_query: Sorguyla eşleyen yapılacaklar
+  users:
+    change_authentication_type: Kimlik doğrulama türünü değiştir
+    identity_url: Kimlik URL'si
+    openid_ok_pref_failed: Kimliğiniz olarak %{url} öğesini başarıyla 
+      doğruladınız ancak kimlik doğrulama tercihlerinizi kaydederken bir sorun 
+      oluştu.
+    destroy_user: Kullanıcıyı kaldır
+    approve_tos: Hizmet Şartlarını onaylıyorum
+    auth_change_submit: Kimlik doğrulama türünü değiştirme
+    auth_type_updated: Kimlik doğrulama türü güncellendi.
+    change_auth_type_title: TRACKS::Kimlik doğrulama türünü değiştir
+    destroy_confirmation: "Uyarı: Bu işlem '%{login}' kullanıcısının, tüm eylemlerini,
+      içeriklerini, projesini ve notlarını silecektir. Devam etmek istediğinizden
+      emin misiniz?"
+    destroy_successful: Kullanıcı %{login} tamamen kaldırıldı
+    total_notes: Toplam notlar
+    change_password_title: TRACKS::Şifre değiştir
+    change_password_submit: Şifre değiştir
+    manage_users: Kullanıcıları yönet
+    create_error: Kullanıcı oluşturma başarısız oldu, zaten kayıtlı bir 
+      hesabınız olabilir?
+    you_have_to_reset_your_password: Şifrenizi sıfırlamanız gerekiyor
+    manage_users_title: TRACKS::Kullanıcıları Yönet
+    auth_type_update_error: 'Kimlik doğrulama türünüzü güncellerken bir sorun oluştu:
+      %{error_messages}'
+    change_password_prompt: Yeni şifrenizi aşağıdaki alanlara girin ve mevcut 
+      şifrenizi yenisiyle değiştirmek için 'Şifre değiştir'e tıklayın.
+    choose_password: Şifre oluştur
+    confirm_password: Şifreyi onayla
+    desired_login: İstenen giriş
+    destroy_error: Kullanıcı %{login} silinirken bir hata oluştu
+    new_user_title: TRACKS::Kaydol
+    no_signups_title: TRACKS::Kayıt yok
+    password_confirmation_label: Şifreyi onayla
+    password_updated: Şifre güncellendi.
+    select_authentication_type: Yeni kimlik doğrulama türünüzü seçin ve mevcut 
+      ayarlarınızı değiştirmek için 'Kimlik doğrulama türünü değiştir'e 
+      tıklayın.
+    signup: Kaydol
+    signup_new_user: Yeni kullanıcı olarak kaydol
+    signup_successful: Kullanıcı %{username} için kayıt başarılı.
+    register_with_cas: CAS kullanıcı adınız ile
+    tos_link: Hizmet Koşullarını okuyun
+    total_actions: Toplam eylemler
+    total_contexts: Toplam içerikler
+    total_projects: Toplam projeler
+    total_users_count: Toplam %{count} kullanıcınız var
+    user_created: Kullanıcı oluşturuldu.
+    account_signup: Hesap kaydı
+    email_address: Eposta adresi
+    failed_to_delete_user: Kullanıcı %{username} silinemedi
+    first_user_heading: "TRACKS'a hoş geldiniz. Başlamak için lütfen bir yönetici
+      hesabı oluşturun:"
+    first_user_title: TRACKS::Yönetici olarak kaydolun
+    label_auth_type: Doğrulama türü
+    new_password_label: Yeni şifre
+    new_token_generated: Yeni token başarıyla oluşturuldu
+    new_user_heading: 'Yeni bir kullanıcı olarak kaydolun:'
+    openid_url_verified: Kimliğiniz olarak %{url} öğesini başarıyla doğruladınız
+      ve kimlik doğrulama türünüzü OpenID olarak ayarladınız.
+    successfully_deleted_user: Kullanıcı %{username} başarıyla silindi
+    tos_error: Kaydolmak için hizmet şartlarını kabul etmeniz gerekiyor!
+  will_paginate:
+    page_entries_info:
+      multi_page_html: '%{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>
+        toplam olarak gösteriliyor'
+      multi_page: Toplamda %{count}'un %{model} %{from} - %{to}'su 
+        görüntüleniyor
+      single_page:
+        one: "%{model} bulunamadı\n1 %{model} gösteriliyor"
+        other: "%{count} %{model}'ler gösteriliyor"
+      single_page_html:
+        one: <b>1</b> %{model} gösteriliyor
+        other: <b>all&nbsp;%{count}</b> %{model} gösteriliyor
+    previous_label: '&#8592; Önceki'
+    page_gap: '&hellip;'
+    next_label: Sonraki &#8594;
+  auth_type:
+    database: Veritabanı
+  rest_help:
+    notes:
+      title: Dokümantasyon hakkında notlar
+      description: 'Dokümantasyonda birkaç kural uygulanmıştır, bunlar şunlardır:'
+      bullet1: Bir %{url} kaynağındaki %{id}&#8217;ler, kaynağın benzersiz 
+        kimliğinin buraya eklenmesi gerektiğini gösterir
+      bullet2: '%{omit}, dokümantasyondaki gürültüyü ortadan kaldırmak için yanıt
+        verilerinin önemsiz bitlerinin kaldırıldığını gösterir'
+      curl_description: Tüm örnekler %{curl} kullanır.
+    activeresource:
+      description: "%{activeresource_link}, %{ror_link} tarafından sunulan RESTful
+        hizmetlerinin etrafında ince ama güçlü bir sarmalayıcıdır. Rails 2.0'ın bir
+        parçası olacaktır ancak o zamana kadar %{gem_command} ile elde edebilirsiniz."
+      wrapper_description: '%{signals_link} &#8217;Highrise sarmalayıcısından esinlenerek,
+        bir IRB oturumunda oynamanız için ActiveResource modellerini ayarlayan API
+        için küçük bir ruby sarmalayıcı (doc/ dizininde bulabilirsiniz) oluşturduk:'
+      signals_link_text: 37 Sinyal
+      title: ActiveResource ile API kullanma
+      activeresource_link_text: ActiveResource
+      ror_link_text: Ruby on Rails
+    writing:
+      example_note_text: akçaağaç dokusu kullanın
+      description: API, içerikle birlikte %{put}, %{post} ve %{delete} HTTP 
+        yöntemlerini kullanarak kaynak ekleme, güncelleme ve silme mekanizmaları
+        sağlar.
+      example_todo_response_title: "Yanıt yine yeni todo kaynağının nerede bulunabileceğini
+        belirten %{header} başlığına sahip bir %{response_code}'dur. Yine curl kullanarak
+        todo notlarını değiştirme:"
+      example_note_response_title: "Yanıt, gövdesinde güncellenen todo'nun XML gösterimini
+        içeren bir %{response_code} şeklindedir. Güncellemeyi doğru alan değerleriyle
+        gerçekleştirmek zorunda kalmadan bir todo'yu yapıldı veya geri alındı olarak
+        değiştirmek için bir kısa yol yöntemi sunuyoruz:"
+      title: API'ye yazma
+      example_title: 'Curl kullanarak yeni bir proje oluşturma:'
+      example_project_name: Çocuklar için bir ağaç ev inşa edin
+      example_project_response_title: "Yanıt, yeni proje kaynağının nerede bulunabileceğini
+        belirten %{header} başlığına sahip bir %{response_code}'dur. Şimdi curl kullanarak
+        bu projeye bir todo ekleyebiliriz:"
+      example_todo_name: SketchUp'ta ağaç ev modeli
+      example_delete_title: "Bu todo'yu silmek istersek, benzersiz kaynak tanımlayıcısını
+        (URL) yine curl ile %{delete} HTTP yöntemiyle çağırabiliriz:"
+      example_delete_response_title: API bir %{response_code} döndürür ve todo 
+        artık silinmiştir.
+    retrieve:
+      content: 'Verileri almak için yalnızca bir kaynak tanımlayıcısına HTTP GET yapmanız
+        gerekir. Örneğin, tüm bağlamları %{curl_link} ile almak istiyorsanız:'
+      single_context: 'Tek bir içerik elde etmek:'
+      projects: Yukarıda gösterilen modeli içerikler yerine projelerle de 
+        uygulayabilirsiniz.
+      paths_title: 'Tüm veriler aşağıdaki kaynak yollarına göre kullanılabilir:'
+      limit: 'Yapılacaklar kaynakları (yapılacaklar, hatırlatıcılar, yapılanlar, gizliler
+        ve takvim) için %{limit_parameter} parametresini ekleyerek ve %{set_to} olarak
+        ayarlayarak döndürülen alanı %{fields} ile sınırlayabilirsiniz. Örneğin:'
+      active_todos: 'Yalnızca etkin todoları almak istiyorsanız, %{active_code} parametresini
+        eklersiniz ve bunu aşağıdaki gibi bir değere ayarlarsınız:'
+      title: API'den veri alma
+      todos_from_context: 'Yapılacakları bir içerik içinde alma:'
+    id: ID
+    title: Geliştiriciler için REST API Dokümantasyonu
+    intro:
+      content: Tracks, komut dosyaları, web hizmetleri ve üçüncü taraf 
+        uygulamalarla entegre olacak şekilde tasarlanmıştır. Bu sayfa REST 
+        API'mizin dokümantasyonu olarak hizmet vermektedir.
+      content_3: API bir %{restful_link} hizmetidir. Tüm veriler, benzersiz bir 
+        tanımlayıcı kullanılarak başvurulabilen bir kaynak olarak API 
+        aracılığıyla kullanılabilir. Özellikle GET, PUT, POST ve UPDATE olmak 
+        üzere bir dizi HTTP yöntemine yanıt verir ve API'den gelen tüm yanıtlar 
+        UTF-8 olarak kodlanmış basit bir XML biçimindedir.
+      content_2: Tracks REST API, geliştiricilerin Tracks'i uygulamalarına 
+        entegre etmelerini sağlar. Uygulamaların Tracks verilerine erişmesine ve
+        bunları değiştirmesine olanak tanır ve HTTP üzerinden Vanilla XML olarak
+        uygulanır.
+      title: Giriş
+      restful_link_text: RESTful
+    auth:
+      content: Kimlik doğrulama %{auth_link} kullanılarak gerçekleştirilir. 
+        Tracks kullanıcı adınız ve parolanız API için kimlik doğrulama bilgileri
+        olarak kullanılır. Temel HTTP kimlik doğrulamasında parolanızın açık 
+        metin olarak gönderildiğini unutmayın. Daha güvenli bir kimlik doğrulama
+        çözümüne ihtiyacınız varsa, web sunucunuzu Tracks'i HTTPS altında 
+        çalıştıracak şekilde yapılandırmalısınız.
+      title: Kimlik Doğrulama
+      basic_auth_link_text: Temel HTTP kimlik doğrulaması
+    response:
+      description: ­Tüm başarılı işlemler, işleme bağlı olarak %{response_200} 
+        veya %{response_201} durum koduyla yanıt verir. Bazen bir liste, örneğin
+        %{example_call} herhangi bir öğeye sahip olmayacaktır, boş bir liste 
+        döndürecektir.
+      title: Yanıt ve yanıt durumu ile ilgilenme
+      xml_description: 'Boş liste yanıtları için XML, yine curl ile aşağıdaki gibi
+        görünür:'
+    curl_link_text: cURL
