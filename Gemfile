@@ -25,7 +25,7 @@ gem 'rexml'
 # Use --without <group> argument to skip unnecessary drivers
 gem 'sqlite3', '~> 2.7', group: :sqlite
 gem 'mysql2', '~> 0.5', group: :mysql
-gem 'pg', '~> 1.5', group: :postgresql
+gem 'pg', '~> 1.6', group: :postgresql
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'mini_racer', group: :therubyracer
