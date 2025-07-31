@@ -384,7 +384,7 @@ GEM
     sqlite3 (2.7.2)
       mini_portile2 (~> 2.8.0)
     stringio (3.1.7)
-    stripe (15.3.0)
+    stripe (15.4.0)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
     terrapin (0.6.0)
