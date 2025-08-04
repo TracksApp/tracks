@@ -239,7 +239,7 @@ GEM
     parser (3.3.8.0)
       ast (~> 2.4.1)
       racc
-    pg (1.5.9)
+    pg (1.6.1)
     pp (0.6.2)
       prettyprint
     prettyprint (0.2.0)
@@ -444,7 +444,7 @@ DEPENDENCIES
   minitest-stub-const
   mocha
   mysql2 (~> 0.5)
-  pg (~> 1.5)
+  pg (~> 1.6)
   puma (~> 6.6)
   rack-mini-profiler
   rails (~> 7.1)
