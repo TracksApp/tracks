@@ -247,7 +247,7 @@ GEM
     psych (5.2.6)
       date
       stringio
-    puma (6.6.0)
+    puma (7.0.2)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.16)
@@ -445,7 +445,7 @@ DEPENDENCIES
   mocha
   mysql2 (~> 0.5)
   pg (~> 1.5)
-  puma (~> 6.6)
+  puma (~> 7.0)
   rack-mini-profiler
   rails (~> 7.1)
   rails-controller-testing
