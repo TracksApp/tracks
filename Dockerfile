@@ -4,9 +4,8 @@ FROM ruby:${RUBY_VERSION} AS base
 WORKDIR /app
 RUN touch /etc/app-env
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install -y yarn netcat-openbsd
+RUN apt-get update && apt-get install -y npm netcat-openbsd
+RUN npm install -g yarn
 RUN gem install bundler
 
 RUN mkdir /app/log
