@@ -1,0 +1,352 @@
+# Traditional Chinese (Taiwan) locale for Tracks
+# 繁體中文 (台灣) 語言包
+zh-TW:
+  activerecord:
+    attributes:
+      note:
+        created_at: 建立於
+        updated_at: 更新於
+      preference:
+        date_format: 日期格式
+        due_style: 到期樣式
+        first_name: 名字
+        last_name: 姓氏
+        email: 電子郵件
+        locale: 語言
+        mobile_todos_per_page: 每頁動作數 (行動版)
+        refresh: 重新整理間隔 (分鐘)
+        review_period: 專案檢視間隔
+        show_completed_projects_in_sidebar: 在側邊欄顯示已完成的專案
+        show_hidden_contexts_in_sidebar: 在側邊欄顯示隱藏的情境
+        show_hidden_projects_in_sidebar: 在側邊欄顯示隱藏的專案
+        show_number_completed: 顯示已完成的動作數量
+        show_project_on_todo_done: 完成待辦事項時進入專案頁面
+        sms_context: 預設電子郵件情境
+        sms_email: 寄件者電子郵件
+        staleness_starts: 過期開始時間
+        theme: 主題
+        time_zone: 時區
+        title_date_format: 標題日期格式
+        verbose_action_descriptors: 以詳細形式顯示動作的描述 (情境、專案)
+        week_starts: 每週開始於
+      project:
+        default_context_name: 預設情境
+        default_tags: 預設標籤
+        description: 描述
+        name: 名稱
+      todo:
+        context: 情境
+        description: 描述
+        due: 到期
+        notes: 備註
+        predecessors: 依賴於
+        project: 專案
+        show_from: 顯示開始時間
+        tags: 標籤
+      user:
+        auth_type: 驗證類型
+        created_at: 建立於
+        display_name: 顯示名稱
+        email: 電子郵件地址
+        first_name: 名字
+        last_login_at: 上次登入時間
+        last_name: 姓氏
+        login: 登入名稱
+        open_id_url: OpenID 網址
+        password: 密碼
+    errors:
+      full_messages:
+        format: "%{attribute} %{message}"
+      messages:
+        accepted: 必須被接受
+        blank: 不能為空
+        confirmation: 與確認不符
+        empty: 不能為空
+        equal_to: '必須等於 %{count}'
+        even: 必須為偶數
+        exclusion: 被保留使用
+        greater_than: '必須大於 %{count}'
+        greater_than_or_equal_to: '必須大於或等於 %{count}'
+        inclusion: 不在清單中
+        invalid: 無效
+        less_than: '必須小於 %{count}'
+        less_than_or_equal_to: '必須小於或等於 %{count}'
+        not_a_number: 不是數字
+        odd: 必須為奇數
+        record_invalid: '驗證失敗：%{errors}'
+        restrict_dependent_destroy:
+          has_one: '無法刪除記錄，因為存在相依的 %{record}'
+          has_many: '無法刪除記錄，因為存在相依的 %{record}'
+        taken: 已被使用
+        too_long: '太長了 (最多 %{count} 個字元)'
+        too_short: '太短了 (最少 %{count} 個字元)'
+        wrong_length: '長度錯誤 (應為 %{count} 個字元)'
+      models:
+        project:
+          attributes:
+            name:
+              blank: 專案必須有名稱
+              taken: 已存在
+              too_long: 專案名稱必須少於 256 個字元
+      template:
+        body: 下列欄位有問題：
+        header:
+          one: '1 個錯誤阻止了 %{model} 的儲存'
+          other: '%{count} 個錯誤阻止了 %{model} 的儲存'
+  common:
+    action: 動作
+    actions: 動作
+    actions_midsentence:
+      one: 動作
+      other: 動作
+      zero: 動作
+    add: 新增
+    ajaxError: 從伺服器取得資料時發生錯誤
+    back: 返回
+    bugs: 錯誤回報
+    cancel: 取消
+    collapse_expand: 摺疊/展開
+    context: 情境
+    contexts: 情境
+    contribute: 貢獻
+    create: 建立
+    days_midsentence:
+      one: 天
+      other: 天
+      zero: 天
+    deferred: 延期
+    description: 描述
+    drag_handle: 拖曳
+    email: 電子郵件
+    errors_with_fields: 下列欄位有問題：
+    first: 第一個
+    forth: 第四個
+    fourth: 第四個
+    go_back: 返回
+    last: 最後一個
+    logout: 登出
+    mailing_list: 郵寄清單
+    month: 月
+    months: 月
+    next: 下一個
+    none: 無
+    not_available_abbr: 無
+    note:
+      one: 1 個備註
+      other: "%{count} 個備註"
+      zero: 無備註
+    notes: 備註
+    numbered_step: '步驟 %{number}'
+    ok: 確定
+    optional: 選填
+    previous: 前一個
+    project: 專案
+    projects: 專案
+    recurring_todos: 重複動作
+    review: 檢視
+    search: 搜尋
+    second: 第二個
+    server_error: 伺服器發生錯誤。
+    show_all: 顯示全部
+    sort:
+      alphabetically: 依字母排序
+      alphabetically_confirm: 您確定要依字母順序排列這些專案嗎？這會取代現有的排序順序。
+      alphabetically_title: 依字母順序排列專案
+      by_task_count: 依任務數量排序
+      by_task_count_title: 依任務數量排序
+      by_task_count_title_confirm: 您確定要依任務數量排列這些專案嗎？這會取代現有的排序順序。
+      sort: 排序
+    third: 第三個
+    todo: 待辦事項
+    update: 更新
+    website: 網站
+    week: 週
+    weeks: 週
+    wiki: Wiki
+  login:
+    account_login: 帳戶登入
+    please_login: 請登入以使用 Tracks
+    sign_in: 登入
+    successful: 登入成功。歡迎回來！
+    unsuccessful: 登入失敗。
+    logout: 登出
+    logged_out: 您已從 Tracks 登出。
+  layouts:
+    navigation:
+      home: 首頁
+      contexts_title: 情境
+      projects_title: 專案
+      calendar: 日曆
+      calendar_title: 到期動作的日曆
+      completed_tasks: 已完成
+      completed_tasks_title: 已完成
+      starred: 已標星
+      starred_title: 查看您已標星的動作
+      preferences: 偏好設定
+      preferences_title: 顯示我的偏好設定
+      help: "?"
+      help_page: 說明
+  todos:
+    next_actions_title: Tracks - 下一步動作
+    action_saved: 動作已儲存
+    action_marked_complete: '動作 <strong>"%{description}"</strong> 已標記為 <strong>%{completed}</strong>'
+    confirm_delete: '您確定要刪除動作 "%{description}" 嗎？'
+    deleted_success: 動作已成功刪除。
+    edit_action: 編輯動作
+    delete_action: 刪除動作
+    mark_complete: 標記完成
+    due: 到期
+    context: 情境
+    project: 專案
+    tags: 標籤 (用逗號分隔)
+    notes: 備註
+    show_from: 顯示開始時間
+    completed: 已完成
+    no_actions:
+      not_done: 目前沒有未完成動作
+      completed: 目前沒有已完成動作
+      title: 找不到動作
+  contexts:
+    add_context: 新增情境
+    context_name: 情境名稱
+    save_status_message: 情境已儲存
+    delete_context: 刪除情境
+    delete_context_confirmation: '您確定要刪除情境 "%{name}" 嗎？請注意，這也會刪除此情境中的所有（重複）動作！'
+    context_deleted: '已刪除情境 "%{name}"'
+    edit_context: 編輯情境
+    show_form: 建立新情境
+    hide_form: 隱藏表單
+  projects:
+    add_project: 新增專案
+    project_saved_status: 專案已儲存
+    delete_project: 刪除專案
+    delete_project_confirmation: '您確定要刪除專案 "%{name}" 嗎？'
+    project_destroyed_status: '已刪除專案 "%{name}"'
+    edit_project_title: 編輯專案
+    show_form: 新增專案
+    hide_form: 隱藏表單
+    notes: 備註
+    add_note: 新增備註
+    add_note_submit: 新增備註
+    settings: 設定
+  preferences:
+    title: 您的偏好設定
+    edit_preferences: 編輯偏好設定
+    updated: 偏好設定已更新
+    tabs:
+      profile: 個人檔案
+      authentication: 驗證
+      date_and_time: 日期和時間
+      tracks_behavior: Tracks 行為
+      remove_account: 移除帳戶
+  help:
+    title: 說明
+    usage: '您可以在專案 GitHub wiki 的 %{manual_link} 中找到使用資訊。'
+    manual_link_text: 使用手冊
+    bugs: '如果您遇到錯誤或有功能請求，請在 %{issue_link} 中回報。'
+    issue_link_text: 問題佇列
+  date:
+    abbr_day_names:
+    - 日
+    - 一
+    - 二
+    - 三
+    - 四
+    - 五
+    - 六
+    day_names:
+    - 星期日
+    - 星期一
+    - 星期二
+    - 星期三
+    - 星期四
+    - 星期五
+    - 星期六
+    abbr_month_names:
+    - 
+    - 1月
+    - 2月
+    - 3月
+    - 4月
+    - 5月
+    - 6月
+    - 7月
+    - 8月
+    - 9月
+    - 10月
+    - 11月
+    - 12月
+    month_names:
+    - 
+    - 一月
+    - 二月
+    - 三月
+    - 四月
+    - 五月
+    - 六月
+    - 七月
+    - 八月
+    - 九月
+    - 十月
+    - 十一月
+    - 十二月
+    formats:
+      default: "%Y-%m-%d"
+      long: "%Y年%m月%d日"
+      short: "%m月%d日"
+    order:
+    - :year
+    - :month
+    - :day
+  time:
+    am: 上午
+    pm: 下午
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      long: "%Y年%m月%d日 %H:%M"
+      short: "%m月%d日 %H:%M"
+  number:
+    format:
+      delimiter: ","
+      separator: "."
+    currency:
+      format:
+        unit: "$"
+        delimiter: ","
+        separator: "."
+        format: "%u%n"
+  errors:
+    format: "%{attribute} %{message}"
+    messages:
+      accepted: 必須被接受
+      blank: 不能為空
+      confirmation: '與 %{attribute} 不符'
+      empty: 不能為空
+      equal_to: '必須等於 %{count}'
+      even: 必須為偶數
+      exclusion: 被保留使用
+      greater_than: '必須大於 %{count}'
+      greater_than_or_equal_to: '必須大於或等於 %{count}'
+      inclusion: 不在清單中
+      invalid: 無效
+      less_than: '必須小於 %{count}'
+      less_than_or_equal_to: '必須小於或等於 %{count}'
+      not_a_number: 不是數字
+      not_an_integer: 必須是整數
+      odd: 必須為奇數
+      other_than: '必須不同於 %{count}'
+      present: 必須為空白
+      taken: 已被使用
+      too_long: '太長了 (最多 %{count} 個字元)'
+      too_short: '太短了 (最少 %{count} 個字元)'
+      wrong_length: '長度錯誤 (應為 %{count} 個字元)'
+  users:
+    signup: 註冊
+    signup_successful: '用戶 %{username} 註冊成功。'
+    create_error: 用戶建立失敗，也許您在這裡已經有帳戶？
+    user_created: 用戶已建立。
+    choose_password: 選擇密碼
+    confirm_password: 確認密碼
+    email_address: 電子郵件地址
+    change_password: 變更您的密碼
+    password_updated: 密碼已更新。
