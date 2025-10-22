@@ -13,7 +13,7 @@ gem 'acts_as_list'
 gem 'bcrypt', '~> 3.1.20'
 gem 'htmlentities'
 gem "kt-paperclip", "~> 7.2"
-gem 'puma', '~> 7.0'
+gem 'puma', '~> 7.1'
 gem 'rails_autolink'
 gem 'RedCloth'
 gem 'sanitize', '~> 7.0'
