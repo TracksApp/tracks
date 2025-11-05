@@ -183,3 +183,68 @@ func (h *WebHandler) HandleCreateUser(c *gin.Context) {
 	// Redirect back to users page with success message
 	c.Redirect(http.StatusFound, "/admin/users?success=User created successfully")
 }
+
+// ShowTodos displays the todos page
+func (h *WebHandler) ShowTodos(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+
+	// Get user's todos
+	var todos []models.Todo
+	database.DB.
+		Preload("Context").
+		Preload("Project").
+		Where("user_id = ?", user.ID).
+		Order("created_at DESC").
+		Find(&todos)
+
+	data := gin.H{
+		"Title": "Todos",
+		"User":  user,
+		"Todos": todos,
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	h.templates.ExecuteTemplate(c.Writer, "base.html", data)
+}
+
+// ShowProjects displays the projects page
+func (h *WebHandler) ShowProjects(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+
+	// Get user's projects
+	var projects []models.Project
+	database.DB.
+		Where("user_id = ?", user.ID).
+		Order("created_at DESC").
+		Find(&projects)
+
+	data := gin.H{
+		"Title":    "Projects",
+		"User":     user,
+		"Projects": projects,
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	h.templates.ExecuteTemplate(c.Writer, "base.html", data)
+}
+
+// ShowContexts displays the contexts page
+func (h *WebHandler) ShowContexts(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+
+	// Get user's contexts
+	var contexts []models.Context
+	database.DB.
+		Where("user_id = ?", user.ID).
+		Order("position ASC").
+		Find(&contexts)
+
+	data := gin.H{
+		"Title":    "Contexts",
+		"User":     user,
+		"Contexts": contexts,
+	}
+
+	c.Header("Content-Type", "text/html; charset=utf-8")
+	h.templates.ExecuteTemplate(c.Writer, "base.html", data)
+}

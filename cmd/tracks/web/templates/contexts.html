@@ -1,0 +1,83 @@
+{{define "content"}}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .context-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+
+    .context-card {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.25rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: box-shadow 0.2s;
+    }
+
+    .context-card:hover {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .context-name {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .badge-hidden {
+        background-color: var(--warning-color);
+        color: white;
+    }
+
+    .badge-closed {
+        background-color: var(--text-secondary);
+        color: white;
+    }
+</style>
+
+<div class="page-header">
+    <h2>🏷️ Contexts</h2>
+    <button class="btn" onclick="alert('Create context - Coming soon!')">➕ New Context</button>
+</div>
+
+{{if .Contexts}}
+    <div class="context-grid">
+        {{range .Contexts}}
+        <div class="context-card">
+            <div class="context-name">{{.Name}}</div>
+            <span class="badge badge-{{.State}}">{{.State}}</span>
+        </div>
+        {{end}}
+    </div>
+{{else}}
+    <div class="card">
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🏷️</div>
+            <p>No contexts yet. Create contexts to categorize where or how you'll complete todos!</p>
+        </div>
+    </div>
+{{end}}
+{{end}}

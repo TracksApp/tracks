@@ -1,0 +1,120 @@
+{{define "content"}}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .todo-list {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .todo-item {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .todo-item:last-child {
+        border-bottom: none;
+    }
+
+    .todo-item:hover {
+        background-color: var(--bg-secondary);
+    }
+
+    .todo-content {
+        flex: 1;
+    }
+
+    .todo-description {
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+    }
+
+    .todo-meta {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .todo-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-right: 0.5rem;
+    }
+
+    .badge-active {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .badge-completed {
+        background-color: var(--success-color);
+        color: white;
+    }
+
+    .badge-deferred {
+        background-color: var(--warning-color);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
+</style>
+
+<div class="page-header">
+    <h2>📝 Todos</h2>
+    <button class="btn" onclick="alert('Create todo - Coming soon!')">➕ New Todo</button>
+</div>
+
+<div class="card">
+    {{if .Todos}}
+        <div class="todo-list">
+            {{range .Todos}}
+            <div class="todo-item">
+                <div class="todo-content">
+                    <div class="todo-description">
+                        <span class="badge badge-{{.State}}">{{.State}}</span>
+                        {{.Description}}
+                    </div>
+                    <div class="todo-meta">
+                        {{if .Context}}📁 {{.Context.Name}}{{end}}
+                        {{if .Project}} • 🗂️ {{.Project.Name}}{{end}}
+                        {{if .DueDate}} • 📅 Due: {{.DueDate.Format "2006-01-02"}}{{end}}
+                    </div>
+                </div>
+                <div class="todo-actions">
+                    {{if eq .State "active"}}
+                    <button class="btn btn-sm btn-success" onclick="alert('Complete - Coming soon!')">✓</button>
+                    {{end}}
+                    <button class="btn btn-sm" onclick="alert('Edit - Coming soon!')">Edit</button>
+                </div>
+            </div>
+            {{end}}
+        </div>
+    {{else}}
+        <div class="empty-state">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+            <p>No todos yet. Create your first one to get started!</p>
+        </div>
+    {{end}}
+</div>
+{{end}}

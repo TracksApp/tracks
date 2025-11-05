@@ -103,6 +103,9 @@ func setupRoutes(router *gin.Engine, cfg *config.Config) {
 	{
 		webProtected.GET("/", webHandler.ShowDashboard)
 		webProtected.GET("/dashboard", webHandler.ShowDashboard)
+		webProtected.GET("/todos", webHandler.ShowTodos)
+		webProtected.GET("/projects", webHandler.ShowProjects)
+		webProtected.GET("/contexts", webHandler.ShowContexts)
 
 		// Admin web routes
 		webAdmin := webProtected.Group("/admin")

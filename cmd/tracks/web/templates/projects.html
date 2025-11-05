@@ -1,0 +1,109 @@
+{{define "content"}}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .project-card {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        transition: box-shadow 0.2s;
+    }
+
+    .project-card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .project-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        margin-bottom: 1rem;
+    }
+
+    .project-name {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .project-description {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-stats {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .badge-active {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .badge-completed {
+        background-color: var(--success-color);
+        color: white;
+    }
+
+    .badge-hidden {
+        background-color: var(--warning-color);
+        color: white;
+    }
+</style>
+
+<div class="page-header">
+    <h2>📁 Projects</h2>
+    <button class="btn" onclick="alert('Create project - Coming soon!')">➕ New Project</button>
+</div>
+
+{{if .Projects}}
+    <div class="project-grid">
+        {{range .Projects}}
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-name">{{.Name}}</div>
+                <span class="badge badge-{{.State}}">{{.State}}</span>
+            </div>
+            {{if .Description}}
+            <div class="project-description">{{.Description}}</div>
+            {{end}}
+            <div class="project-stats">
+                <span>📝 Todos</span>
+                <span>Created: {{.CreatedAt.Format "2006-01-02"}}</span>
+            </div>
+        </div>
+        {{end}}
+    </div>
+{{else}}
+    <div class="card">
+        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">📁</div>
+            <p>No projects yet. Create your first one to organize your todos!</p>
+        </div>
+    </div>
+{{end}}
+{{end}}
