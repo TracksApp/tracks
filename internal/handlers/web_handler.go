@@ -73,7 +73,8 @@ func (h *WebHandler) HandleLogin(c *gin.Context) {
 		return
 	}
 
-	// Set session cookie
+	// Set session cookie with explicit SameSite=Lax for better compatibility
+	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("tracks_token", resp.Token, 60*60*24*7, "/", "", false, true)
 
 	// Redirect to dashboard
