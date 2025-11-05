@@ -1,0 +1,218 @@
+{{define "content"}}
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h2 {
+        color: var(--text-primary);
+    }
+
+    .user-table {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .user-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .admin-badge {
+        background-color: var(--warning-color);
+        color: white;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background-color: var(--bg-primary);
+        border-radius: 8px;
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-header h3 {
+        color: var(--text-primary);
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+    }
+
+    .close-btn:hover {
+        color: var(--text-primary);
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: auto;
+    }
+</style>
+
+<div class="page-header">
+    <h2>👥 User Management</h2>
+    <button class="btn" onclick="openNewUserModal()">➕ Create User</button>
+</div>
+
+<div class="card">
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Users}}
+            <tr>
+                <td>{{.ID}}</td>
+                <td><strong>{{.Login}}</strong></td>
+                <td>{{.FirstName}} {{.LastName}}</td>
+                <td>
+                    {{if .IsAdmin}}
+                    <span class="admin-badge">ADMIN</span>
+                    {{else}}
+                    User
+                    {{end}}
+                </td>
+                <td>{{.CreatedAt.Format "2006-01-02"}}</td>
+                <td>
+                    <div class="user-actions">
+                        <button class="btn btn-sm" onclick="editUser({{.ID}})">Edit</button>
+                        {{if ne .Login "admin"}}
+                        <button class="btn btn-sm btn-danger" onclick="deleteUser({{.ID}}, '{{.Login}}')">Delete</button>
+                        {{end}}
+                    </div>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+</div>
+
+<!-- Create User Modal -->
+<div id="newUserModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Create New User</h3>
+            <button class="close-btn" onclick="closeNewUserModal()">&times;</button>
+        </div>
+        <form method="POST" action="/admin/users">
+            <div class="form-group">
+                <label for="login">Username *</label>
+                <input type="text" id="login" name="login" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name">
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name">
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="is_admin" name="is_admin" value="true">
+                    <label for="is_admin" style="margin: 0;">Grant admin privileges</label>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-success">Create User</button>
+                <button type="button" class="btn" onclick="closeNewUserModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openNewUserModal() {
+        document.getElementById('newUserModal').classList.add('active');
+    }
+
+    function closeNewUserModal() {
+        document.getElementById('newUserModal').classList.remove('active');
+    }
+
+    function editUser(id) {
+        // TODO: Implement edit functionality
+        alert('Edit user ' + id + ' - Coming soon!');
+    }
+
+    function deleteUser(id, login) {
+        if (confirm('Are you sure you want to delete user "' + login + '"?')) {
+            // TODO: Implement delete functionality
+            alert('Delete user ' + id + ' - Coming soon!');
+        }
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('newUserModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeNewUserModal();
+        }
+    });
+</script>
+{{end}}

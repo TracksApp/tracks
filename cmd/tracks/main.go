@@ -1,8 +1,10 @@
 package main
 
 import (
+	"embed"
 	"flag"
 	"fmt"
+	"html/template"
 	"log"
 
 	"github.com/TracksApp/tracks/internal/config"
@@ -12,6 +14,9 @@ import (
 	"github.com/TracksApp/tracks/internal/services"
 	"github.com/gin-gonic/gin"
 )
+
+//go:embed web/templates/*.html
+var templateFS embed.FS
 
 func main() {
 	// Parse command line flags
@@ -71,6 +76,9 @@ func main() {
 }
 
 func setupRoutes(router *gin.Engine, cfg *config.Config) {
+	// Parse embedded templates
+	tmpl := template.Must(template.ParseFS(templateFS, "web/templates/*.html"))
+
 	// Initialize services
 	authService := services.NewAuthService(cfg.Auth.JWTSecret)
 	todoService := services.NewTodoService()
@@ -82,6 +90,28 @@ func setupRoutes(router *gin.Engine, cfg *config.Config) {
 	todoHandler := handlers.NewTodoHandler(todoService)
 	projectHandler := handlers.NewProjectHandler(projectService)
 	contextHandler := handlers.NewContextHandler(contextService)
+	webHandler := handlers.NewWebHandler(authService, tmpl)
+
+	// Web UI routes (public)
+	router.GET("/login", webHandler.ShowLogin)
+	router.POST("/login", webHandler.HandleLogin)
+	router.GET("/logout", webHandler.HandleLogout)
+
+	// Web UI routes (protected)
+	webProtected := router.Group("")
+	webProtected.Use(middleware.AuthMiddleware(cfg.Auth.JWTSecret))
+	{
+		webProtected.GET("/", webHandler.ShowDashboard)
+		webProtected.GET("/dashboard", webHandler.ShowDashboard)
+
+		// Admin web routes
+		webAdmin := webProtected.Group("/admin")
+		webAdmin.Use(middleware.AdminMiddleware())
+		{
+			webAdmin.GET("/users", webHandler.ShowAdminUsers)
+			webAdmin.POST("/users", webHandler.HandleCreateUser)
+		}
+	}
 
 	// Public routes
 	api := router.Group("/api")

@@ -1,0 +1,187 @@
+{{define "content"}}
+<style>
+    .welcome {
+        background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+        color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--accent-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .action-btn {
+        background-color: var(--bg-primary);
+        border: 2px solid var(--accent-color);
+        color: var(--accent-color);
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        display: block;
+    }
+
+    .action-btn:hover {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .recent-section {
+        margin-top: 2rem;
+    }
+
+    .recent-section h2 {
+        margin-bottom: 1rem;
+        color: var(--text-primary);
+    }
+
+    .todo-item {
+        background-color: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-left: 4px solid var(--accent-color);
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .todo-item.completed {
+        border-left-color: var(--success-color);
+        opacity: 0.7;
+    }
+
+    .todo-description {
+        flex: 1;
+    }
+
+    .todo-meta {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-left: 0.5rem;
+    }
+
+    .badge-active {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .badge-completed {
+        background-color: var(--success-color);
+        color: white;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-secondary);
+    }
+
+    .empty-state-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="welcome">
+    <h2>Welcome back, {{.User.FirstName}}! 👋</h2>
+    <p>Here's your productivity overview</p>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{.Stats.ActiveTodos}}</div>
+        <div class="stat-label">Active Todos</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{.Stats.ActiveProjects}}</div>
+        <div class="stat-label">Active Projects</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{.Stats.ActiveContexts}}</div>
+        <div class="stat-label">Active Contexts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{.Stats.CompletedToday}}</div>
+        <div class="stat-label">Completed Today</div>
+    </div>
+</div>
+
+<div class="quick-actions">
+    <a href="/todos/new" class="action-btn">➕ New Todo</a>
+    <a href="/projects/new" class="action-btn">📁 New Project</a>
+    <a href="/contexts/new" class="action-btn">🏷️ New Context</a>
+    {{if .User.IsAdmin}}
+    <a href="/admin/users" class="action-btn">👥 Manage Users</a>
+    {{end}}
+</div>
+
+<div class="recent-section">
+    <h2>Recent Todos</h2>
+    {{if .RecentTodos}}
+        {{range .RecentTodos}}
+        <div class="todo-item {{if eq .State "completed"}}completed{{end}}">
+            <div class="todo-description">
+                <strong>{{.Description}}</strong>
+                <div class="todo-meta">
+                    {{if .Context}}{{.Context.Name}}{{end}}
+                    {{if .Project}} • {{.Project.Name}}{{end}}
+                </div>
+            </div>
+            <span class="badge badge-{{.State}}">{{.State}}</span>
+        </div>
+        {{end}}
+    {{else}}
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <p>No todos yet. Create your first one to get started!</p>
+        </div>
+    {{end}}
+</div>
+{{end}}
