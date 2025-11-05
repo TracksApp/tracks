@@ -96,10 +96,6 @@ func (s *TodoService) GetTodos(userID uint, filter ListTodosFilter) ([]models.To
 	// Preload associations
 	query = query.Preload("Context").Preload("Project")
 
-	if filter.IncludeTags {
-		query = query.Preload("Tags")
-	}
-
 	// Filter by tag
 	if filter.TagName != nil {
 		query = query.Joins("JOIN taggings ON taggings.taggable_id = todos.id AND taggings.taggable_type = ?", "Todo").
@@ -114,6 +110,15 @@ func (s *TodoService) GetTodos(userID uint, filter ListTodosFilter) ([]models.To
 		return nil, err
 	}
 
+	// Load tags if requested
+	if filter.IncludeTags {
+		for i := range todos {
+			if err := s.loadTodoTags(&todos[i]); err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	return todos, nil
 }
 
@@ -125,7 +130,6 @@ func (s *TodoService) GetTodo(userID, todoID uint) (*models.Todo, error) {
 		Where("id = ? AND user_id = ?", todoID, userID).
 		Preload("Context").
 		Preload("Project").
-		Preload("Tags").
 		Preload("Attachments").
 		Preload("Predecessors.Predecessor").
 		Preload("Successors.Successor").
@@ -136,7 +140,29 @@ func (s *TodoService) GetTodo(userID, todoID uint) (*models.Todo, error) {
 		return nil, err
 	}
 
+	// Load tags manually through taggings
+	if err := s.loadTodoTags(&todo); err != nil {
+		return nil, err
+	}
+
 	return &todo, nil
+}
+
+// loadTodoTags loads tags for a todo through the polymorphic taggings
+func (s *TodoService) loadTodoTags(todo *models.Todo) error {
+	var tags []models.Tag
+
+	err := database.DB.
+		Joins("JOIN taggings ON taggings.tag_id = tags.id").
+		Where("taggings.taggable_id = ? AND taggings.taggable_type = ?", todo.ID, "Todo").
+		Find(&tags).Error
+
+	if err != nil {
+		return err
+	}
+
+	todo.Tags = tags
+	return nil
 }
 
 // CreateTodo creates a new todo

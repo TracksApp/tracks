@@ -72,7 +72,7 @@ type RecurringTodo struct {
 	Project  *Project  `gorm:"foreignKey:ProjectID" json:"project,omitempty"`
 	Todos    []Todo    `gorm:"foreignKey:RecurringTodoID" json:"todos,omitempty"`
 	Taggings []Tagging `gorm:"polymorphic:Taggable" json:"-"`
-	Tags     []Tag     `gorm:"many2many:taggings;foreignKey:ID;joinForeignKey:TaggableID;References:ID;joinReferences:TagID" json:"tags,omitempty"`
+	Tags     []Tag     `gorm:"-" json:"tags,omitempty"`
 }
 
 // BeforeCreate sets default values

@@ -41,7 +41,7 @@ type Todo struct {
 	Project       *Project      `gorm:"foreignKey:ProjectID" json:"project,omitempty"`
 	RecurringTodo *RecurringTodo `gorm:"foreignKey:RecurringTodoID" json:"recurring_todo,omitempty"`
 	Taggings      []Tagging     `gorm:"polymorphic:Taggable" json:"-"`
-	Tags          []Tag         `gorm:"many2many:taggings;foreignKey:ID;joinForeignKey:TaggableID;References:ID;joinReferences:TagID" json:"tags,omitempty"`
+	Tags          []Tag         `gorm:"-" json:"tags,omitempty"`
 	Attachments   []Attachment  `gorm:"foreignKey:TodoID" json:"attachments,omitempty"`
 
 	// Dependencies
