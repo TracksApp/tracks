@@ -65,6 +65,12 @@
         </div>
         {{end}}
 
+        {{if .Error}}
+        <div class="alert alert-error" style="margin-bottom: 1.5rem;">
+            {{.Error}}
+        </div>
+        {{end}}
+
         <form method="POST" action="/login">
             <div class="form-group">
                 <label for="login">Username</label>
