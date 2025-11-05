@@ -48,6 +48,11 @@ func main() {
 		log.Fatal("Failed to run migrations:", err)
 	}
 
+	// Create default admin user if no users exist
+	if err := database.CreateDefaultAdmin(); err != nil {
+		log.Fatal("Failed to create default admin:", err)
+	}
+
 	// Set Gin mode
 	gin.SetMode(cfg.Server.Mode)
 
@@ -146,6 +151,14 @@ func setupRoutes(router *gin.Engine, cfg *config.Config) {
 			contexts.POST("/:id/close", contextHandler.CloseContext)
 			contexts.GET("/:id/stats", contextHandler.GetContextStats)
 		}
+	}
+
+	// Admin routes (requires authentication + admin role)
+	admin := api.Group("/admin")
+	admin.Use(middleware.AuthMiddleware(cfg.Auth.JWTSecret))
+	admin.Use(middleware.AdminMiddleware())
+	{
+		admin.POST("/users", authHandler.CreateUser)
 	}
 
 	// CORS middleware for development

@@ -105,6 +105,43 @@ go run cmd/tracks/main.go
 
 The application will be available at `http://localhost:3000`
 
+### Default Admin User
+
+On first startup, the application automatically creates a default admin user:
+
+- **Username**: `admin`
+- **Password**: `admin`
+
+**Important**: Change the default password immediately after first login!
+
+To login, make a POST request to `/api/auth/login`:
+```bash
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"login":"admin","password":"admin"}'
+```
+
+The response will include a JWT token that you can use for authenticated requests.
+
+### Creating Additional Users
+
+As an admin, you can create new users via the admin API:
+
+```bash
+curl -X POST http://localhost:3000/api/admin/users \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ADMIN_TOKEN" \
+  -d '{
+    "login": "newuser",
+    "password": "password123",
+    "first_name": "John",
+    "last_name": "Doe",
+    "is_admin": false
+  }'
+```
+
+Set `"is_admin": true` to grant admin privileges to the new user.
+
 ### Configuration
 
 The application can be configured using environment variables. See `.env.example` for all available options.
@@ -173,6 +210,35 @@ Response:
 ```bash
 GET /api/me
 Authorization: Bearer <token>
+```
+
+### Admin Endpoints (Requires Admin Role)
+
+#### Create User
+```bash
+POST /api/admin/users
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+
+{
+  "login": "newuser",
+  "password": "password123",
+  "first_name": "John",
+  "last_name": "Doe",
+  "is_admin": false
+}
+```
+
+Response:
+```json
+{
+  "id": 2,
+  "login": "newuser",
+  "first_name": "John",
+  "last_name": "Doe",
+  "is_admin": false,
+  "created_at": "2024-01-01T00:00:00Z"
+}
 ```
 
 ### Todos

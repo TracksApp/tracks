@@ -91,3 +91,55 @@ func Close() error {
 func GetDB() *gorm.DB {
 	return DB
 }
+
+// CreateDefaultAdmin creates a default admin user if no users exist
+func CreateDefaultAdmin() error {
+	if DB == nil {
+		return fmt.Errorf("database not initialized")
+	}
+
+	// Check if any users exist
+	var count int64
+	if err := DB.Model(&models.User{}).Count(&count).Error; err != nil {
+		return fmt.Errorf("failed to count users: %w", err)
+	}
+
+	// If users exist, don't create default admin
+	if count > 0 {
+		log.Println("Users already exist, skipping default admin creation")
+		return nil
+	}
+
+	log.Println("Creating default admin user (login: admin, password: admin)")
+
+	// Create default admin user
+	admin := models.User{
+		Login:     "admin",
+		FirstName: "Admin",
+		LastName:  "User",
+		IsAdmin:   true,
+		AuthType:  models.AuthTypeDatabase,
+		Token:     "default-admin-token",
+	}
+
+	// Set password
+	if err := admin.SetPassword("admin"); err != nil {
+		return fmt.Errorf("failed to set admin password: %w", err)
+	}
+
+	// Save admin user
+	if err := DB.Create(&admin).Error; err != nil {
+		return fmt.Errorf("failed to create admin user: %w", err)
+	}
+
+	// Create default preference for admin
+	preference := models.Preference{
+		UserID: admin.ID,
+	}
+	if err := DB.Create(&preference).Error; err != nil {
+		return fmt.Errorf("failed to create admin preference: %w", err)
+	}
+
+	log.Printf("Default admin user created successfully (ID: %d)", admin.ID)
+	return nil
+}

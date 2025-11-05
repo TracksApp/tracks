@@ -37,6 +37,15 @@ type RegisterRequest struct {
 	LastName  string `json:"last_name"`
 }
 
+// CreateUserRequest represents an admin user creation request
+type CreateUserRequest struct {
+	Login     string `json:"login" binding:"required"`
+	Password  string `json:"password" binding:"required"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	IsAdmin   bool   `json:"is_admin"`
+}
+
 // AuthResponse represents an authentication response
 type AuthResponse struct {
 	Token string       `json:"token"`
@@ -145,4 +154,43 @@ func (s *AuthService) RefreshToken(userID uint) (string, error) {
 	}
 
 	return user.Token, nil
+}
+
+// CreateUser creates a new user (admin only)
+func (s *AuthService) CreateUser(req CreateUserRequest) (*models.User, error) {
+	// Check if user already exists
+	var existingUser models.User
+	if err := database.DB.Where("login = ?", req.Login).First(&existingUser).Error; err == nil {
+		return nil, errors.New("user already exists")
+	}
+
+	// Create new user
+	user := models.User{
+		Login:     req.Login,
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+		IsAdmin:   req.IsAdmin,
+		AuthType:  models.AuthTypeDatabase,
+		Token:     uuid.New().String(),
+	}
+
+	// Set password
+	if err := user.SetPassword(req.Password); err != nil {
+		return nil, err
+	}
+
+	// Save user
+	if err := database.DB.Create(&user).Error; err != nil {
+		return nil, err
+	}
+
+	// Create default preference
+	preference := models.Preference{
+		UserID: user.ID,
+	}
+	if err := database.DB.Create(&preference).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
