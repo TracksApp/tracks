@@ -182,15 +182,19 @@
 
             <div class="form-group">
                 <label for="context_id">Context *</label>
-                <select id="context_id" name="context_id" required>
-                    <option value="">Select a context...</option>
+                <select id="context_id" name="context_id" onchange="handleContextChange()">
+                    <option value="">Select existing context...</option>
                     {{range .Contexts}}
                     <option value="{{.ID}}">{{.Name}}</option>
                     {{end}}
+                    <option value="__new__">➕ Create new context...</option>
                 </select>
-                {{if not .Contexts}}
-                <small style="color: var(--text-secondary);">You need to create a context first before creating todos.</small>
-                {{end}}
+            </div>
+
+            <div class="form-group" id="new_context_group" style="display: none;">
+                <label for="new_context_name">New Context Name</label>
+                <input type="text" id="new_context_name" name="new_context_name" placeholder="e.g., @home, @work, @errands">
+                <small style="color: var(--text-secondary);">Enter a name and it will be created when you save the todo.</small>
             </div>
 
             <div class="form-group">
@@ -214,11 +218,53 @@
 <script>
     function openNewTodoModal() {
         document.getElementById('newTodoModal').classList.add('active');
+        // Reset the form
+        document.getElementById('context_id').value = '';
+        document.getElementById('new_context_group').style.display = 'none';
+        document.getElementById('new_context_name').value = '';
     }
 
     function closeNewTodoModal() {
         document.getElementById('newTodoModal').classList.remove('active');
     }
+
+    function handleContextChange() {
+        const contextSelect = document.getElementById('context_id');
+        const newContextGroup = document.getElementById('new_context_group');
+        const newContextInput = document.getElementById('new_context_name');
+
+        if (contextSelect.value === '__new__') {
+            // Show the new context input field
+            newContextGroup.style.display = 'block';
+            newContextInput.required = true;
+            newContextInput.focus();
+        } else {
+            // Hide the new context input field
+            newContextGroup.style.display = 'none';
+            newContextInput.required = false;
+            newContextInput.value = '';
+        }
+    }
+
+    // Form validation before submission
+    document.querySelector('#newTodoModal form').addEventListener('submit', function(e) {
+        const contextSelect = document.getElementById('context_id');
+        const newContextName = document.getElementById('new_context_name');
+
+        if (contextSelect.value === '__new__') {
+            if (!newContextName.value.trim()) {
+                e.preventDefault();
+                alert('Please enter a name for the new context');
+                newContextName.focus();
+                return false;
+            }
+        } else if (!contextSelect.value) {
+            e.preventDefault();
+            alert('Please select a context or create a new one');
+            contextSelect.focus();
+            return false;
+        }
+    });
 
     // Close modal when clicking outside
     document.getElementById('newTodoModal').addEventListener('click', function(e) {

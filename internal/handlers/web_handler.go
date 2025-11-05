@@ -327,25 +327,58 @@ func (h *WebHandler) HandleCreateTodo(c *gin.Context) {
 
 	notes := c.PostForm("notes")
 	contextIDStr := c.PostForm("context_id")
+	newContextName := c.PostForm("new_context_name")
 	dueDateStr := c.PostForm("due_date")
 
-	// Parse context ID (required)
-	if contextIDStr == "" {
-		c.Redirect(http.StatusFound, "/todos?error=Context is required")
-		return
-	}
-
 	var contextID uint
-	if _, err := fmt.Sscanf(contextIDStr, "%d", &contextID); err != nil {
-		c.Redirect(http.StatusFound, "/todos?error=Invalid context")
-		return
-	}
 
-	// Verify context exists and belongs to user
-	var context models.Context
-	if err := database.DB.Where("id = ? AND user_id = ?", contextID, user.ID).First(&context).Error; err != nil {
-		c.Redirect(http.StatusFound, "/todos?error=Context not found")
-		return
+	// Check if user wants to create a new context
+	if contextIDStr == "__new__" {
+		// Validate new context name
+		if newContextName == "" {
+			c.Redirect(http.StatusFound, "/todos?error=New context name is required")
+			return
+		}
+
+		// Get the highest position value for proper ordering
+		var maxPosition int
+		database.DB.Model(&models.Context{}).
+			Where("user_id = ?", user.ID).
+			Select("COALESCE(MAX(position), 0)").
+			Scan(&maxPosition)
+
+		// Create new context
+		newContext := models.Context{
+			UserID:   user.ID,
+			Name:     newContextName,
+			State:    "active",
+			Position: maxPosition + 1,
+		}
+
+		if err := database.DB.Create(&newContext).Error; err != nil {
+			c.Redirect(http.StatusFound, "/todos?error=Failed to create context: "+err.Error())
+			return
+		}
+
+		contextID = newContext.ID
+	} else {
+		// Parse existing context ID (required)
+		if contextIDStr == "" {
+			c.Redirect(http.StatusFound, "/todos?error=Context is required")
+			return
+		}
+
+		if _, err := fmt.Sscanf(contextIDStr, "%d", &contextID); err != nil {
+			c.Redirect(http.StatusFound, "/todos?error=Invalid context")
+			return
+		}
+
+		// Verify context exists and belongs to user
+		var context models.Context
+		if err := database.DB.Where("id = ? AND user_id = ?", contextID, user.ID).First(&context).Error; err != nil {
+			c.Redirect(http.StatusFound, "/todos?error=Context not found")
+			return
+		}
 	}
 
 	// Create todo
