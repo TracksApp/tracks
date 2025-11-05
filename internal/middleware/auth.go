@@ -21,6 +21,9 @@ type Claims struct {
 // AuthMiddleware validates JWT tokens and sets the current user
 func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		// Determine if this is an API request or web UI request
+		isAPIRequest := strings.HasPrefix(c.Request.URL.Path, "/api/")
+
 		// Try to get token from Authorization header
 		authHeader := c.GetHeader("Authorization")
 		var tokenString string
@@ -47,7 +50,11 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		}
 
 		if tokenString == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "No authentication token provided"})
+			if isAPIRequest {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "No authentication token provided"})
+			} else {
+				c.Redirect(http.StatusFound, "/login")
+			}
 			c.Abort()
 			return
 		}
@@ -61,14 +68,22 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			if isAPIRequest {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			} else {
+				c.Redirect(http.StatusFound, "/login")
+			}
 			c.Abort()
 			return
 		}
 
 		claims, ok := token.Claims.(*Claims)
 		if !ok {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			if isAPIRequest {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			} else {
+				c.Redirect(http.StatusFound, "/login")
+			}
 			c.Abort()
 			return
 		}
@@ -76,7 +91,11 @@ func AuthMiddleware(jwtSecret string) gin.HandlerFunc {
 		// Load user from database
 		var user models.User
 		if err := database.DB.First(&user, claims.UserID).Error; err != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			if isAPIRequest {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": "User not found"})
+			} else {
+				c.Redirect(http.StatusFound, "/login")
+			}
 			c.Abort()
 			return
 		}
