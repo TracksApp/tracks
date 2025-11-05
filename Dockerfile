@@ -1,66 +1,49 @@
-ARG RUBY_VERSION=3.3
-FROM ruby:${RUBY_VERSION} AS base
+# Build stage
+FROM golang:1.21-alpine AS builder
 
+# Install build dependencies
+RUN apk add --no-cache git gcc musl-dev sqlite-dev
+
+# Set working directory
 WORKDIR /app
-RUN touch /etc/app-env
 
-RUN apt-get update && apt-get install -y npm netcat-openbsd
-RUN npm install -g yarn
-RUN gem install bundler
+# Copy go mod files
+COPY go.mod go.sum ./
 
-RUN mkdir /app/log
+# Download dependencies
+RUN go mod download
 
-COPY COPYING /app/
-COPY config /app/config/
-COPY config/database.docker.yml /app/config/database.yml
-COPY config/site.docker.yml /app/config/site.yml
+# Copy source code
+COPY . .
 
-COPY bin /app/bin/
-COPY script /app/script/
-COPY public /app/public/
-COPY vendor /app/vendor/
+# Build the application
+RUN CGO_ENABLED=1 GOOS=linux go build -a -installsuffix cgo -o tracks ./cmd/tracks
 
-COPY .yardopts /app/
-COPY Rakefile /app/
-COPY config.ru /app/
-COPY docker-entrypoint.sh /app/
+# Runtime stage
+FROM alpine:latest
 
-COPY lib /app/lib/
-COPY app /app/app/
-COPY db /app/db/
+# Install runtime dependencies
+RUN apk --no-cache add ca-certificates sqlite-libs
 
-# Use glob to omit error if the .git directory doesn't exists (in case the
-# code is from a release archive, not a Git clone)
-COPY .gi[t] /app/.git
+# Create app user
+RUN addgroup -g 1000 tracks && \
+    adduser -D -u 1000 -G tracks tracks
 
-COPY Gemfile* /app/
+# Set working directory
+WORKDIR /app
 
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# Copy binary from builder
+COPY --from=builder /app/tracks .
+
+# Create data directory
+RUN mkdir -p /app/data /app/uploads && \
+    chown -R tracks:tracks /app
+
+# Switch to non-root user
+USER tracks
+
+# Expose port
 EXPOSE 3000
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
 
-FROM base AS precompile
-RUN bundle config set deployment true
-RUN bundle install --jobs 4
-RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
-
-# Build the environment-specific stuff
-FROM base AS production
-RUN bundle config set without assets
-RUN bundle config --global frozen 1
-RUN bundle install --jobs 4
-COPY --from=precompile /app/public/assets /app/public/assets
-
-FROM base AS test
-COPY test /app/test/
-# For testing the API client
-COPY doc /app/doc/
-RUN bundle config set without assets
-RUN bundle config set with development test
-RUN bundle config --global frozen 1
-RUN bundle install --jobs 4
-COPY --from=precompile /app/public/assets /app/public/assets
-
-FROM base AS development
-RUN bundle config set with development test
-RUN bundle install --jobs 4
+# Run the application
+CMD ["./tracks"]

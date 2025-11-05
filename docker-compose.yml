@@ -1,29 +1,45 @@
-version: '3'
+version: '3.8'
+
 services:
-  db:
-    image: mariadb:lts
-    environment:
-      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 1
-      MARIADB_DATABASE: ${TRACKS_DB:-tracks}
-    volumes:
-      - db-data:/var/lib/mysql
-  web:
+  tracks:
     build:
       context: .
-      target: production # can also be development or test
-    environment:
-      # These are set in script/ci-build, so we need to pass-thru them.
-      RAILS_ENV: $RAILS_ENV
-      DATABASE_NAME: $DATABASE_NAME
-      DATABASE_USERNAME: root
-      DATABASE_PASSWORD_EMPTY: 1
-    volumes:
-      - ${VOLUME:-.}:/app:Z
-      - ${VOLUME:-.}/config/database.docker.yml:/app/config/database.yml:Z
-      - ${VOLUME:-.}/config/site.docker.yml:/app/config/site.yml:Z
+      dockerfile: Dockerfile
+    container_name: tracks-go
     ports:
-      - 3000:3000
+      - "3000:3000"
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=3000
+      - GIN_MODE=release
+      - DB_DRIVER=postgres
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=tracks
+      - DB_USER=tracks
+      - DB_PASSWORD=tracks
+      - DB_SSLMODE=disable
+      - JWT_SECRET=change-this-in-production
+      - OPEN_SIGNUPS=true
+    volumes:
+      - ./data:/app/data
+      - ./uploads:/app/uploads
     depends_on:
-      - db
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: tracks-postgres
+    environment:
+      - POSTGRES_DB=tracks
+      - POSTGRES_USER=tracks
+      - POSTGRES_PASSWORD=tracks
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
 volumes:
-  db-data:
+  postgres_data:

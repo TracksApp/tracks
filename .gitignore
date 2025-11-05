@@ -1,29 +1,49 @@
-*.DS_Store
-*.tmproj
+# Binaries
+/tracks
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# Environment files
+.env
+.env.local
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Data directories
+/data/
+/uploads/
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
 *~
-.dotest
-.idea
-.rvmrc
-.ruby-gemset
-.ruby-version
-.sass-cache/
-.yardoc
-/.bundle
-/.emacs-project
-/.redcar
-/coverage
-/db/*.db
-/db/*.sqlite3
-/db/*.sqlite3-journal
-/db/assets/*
-/log/*.log
-/public/assets/
-/tmp
-config/deploy.rb
-config/site.yml
-config/database.yml
-db/data.yml
-nbproject
-rerun.txt
-tags
-.use-docker
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Temporary files
+tmp/
+temp/
