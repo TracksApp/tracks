@@ -17,8 +17,7 @@ func main() {
 	// Parse command line flags
 	port := flag.Int("port", 0, "Port to run the server on (overrides SERVER_PORT env var)")
 	host := flag.String("host", "", "Host to bind to (overrides SERVER_HOST env var)")
-	dbDriver := flag.String("db", "", "Database driver: sqlite, mysql, or postgres (overrides DB_DRIVER)")
-	dbName := flag.String("db-name", "", "Database name or path (overrides DB_NAME)")
+	dbName := flag.String("db-name", "", "SQLite database file path (overrides DB_NAME)")
 	flag.Parse()
 
 	// Load configuration
@@ -33,9 +32,6 @@ func main() {
 	}
 	if *host != "" {
 		cfg.Server.Host = *host
-	}
-	if *dbDriver != "" {
-		cfg.Database.Driver = *dbDriver
 	}
 	if *dbName != "" {
 		cfg.Database.Name = *dbName

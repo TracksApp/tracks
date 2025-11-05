@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 
@@ -25,13 +24,7 @@ type ServerConfig struct {
 
 // DatabaseConfig holds database-related configuration
 type DatabaseConfig struct {
-	Driver   string // sqlite, mysql, postgres
-	Host     string
-	Port     int
-	Name     string
-	User     string
-	Password string
-	SSLMode  string
+	Name string // SQLite database file path
 }
 
 // AuthConfig holds authentication-related configuration
@@ -65,13 +58,7 @@ func Load() (*Config, error) {
 			Mode: getEnv("GIN_MODE", "debug"),
 		},
 		Database: DatabaseConfig{
-			Driver:   getEnv("DB_DRIVER", "sqlite"),
-			Host:     getEnv("DB_HOST", "localhost"),
-			Port:     getEnvAsInt("DB_PORT", 5432),
-			Name:     getEnv("DB_NAME", "tracks.db"),
-			User:     getEnv("DB_USER", ""),
-			Password: getEnv("DB_PASSWORD", ""),
-			SSLMode:  getEnv("DB_SSLMODE", "disable"),
+			Name: getEnv("DB_NAME", "tracks.db"),
 		},
 		Auth: AuthConfig{
 			JWTSecret:     getEnv("JWT_SECRET", "change-me-in-production"),
@@ -91,22 +78,6 @@ func Load() (*Config, error) {
 	}
 
 	return cfg, nil
-}
-
-// GetDSN returns the database connection string
-func (c *DatabaseConfig) GetDSN() string {
-	switch c.Driver {
-	case "sqlite":
-		return c.Name
-	case "mysql":
-		return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-			c.User, c.Password, c.Host, c.Port, c.Name)
-	case "postgres":
-		return fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
-			c.Host, c.Port, c.User, c.Password, c.Name, c.SSLMode)
-	default:
-		return ""
-	}
 }
 
 // Helper functions

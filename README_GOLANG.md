@@ -18,7 +18,7 @@ This is a complete rewrite of the Tracks GTD (Getting Things Done) application i
 - **Starred Todos**: Flag high-priority items
 - **Project Tracking**: Track project status and health
 - **Statistics**: Built-in stats for todos, projects, and contexts
-- **Multi-database Support**: SQLite, MySQL, and PostgreSQL
+- **SQLite Database**: Simple, file-based database with no external dependencies
 
 ### Technical Features
 - **RESTful API**: Complete REST API for all operations
@@ -33,7 +33,7 @@ This is a complete rewrite of the Tracks GTD (Getting Things Done) application i
 - **Language**: Go 1.21+
 - **Web Framework**: Gin
 - **ORM**: GORM
-- **Database**: SQLite, MySQL, or PostgreSQL
+- **Database**: SQLite
 - **Authentication**: JWT (golang-jwt)
 - **Password Hashing**: bcrypt
 
@@ -59,7 +59,6 @@ tracks-golang/
 
 ### Prerequisites
 - Go 1.21 or higher
-- PostgreSQL, MySQL, or SQLite (default)
 - Docker and Docker Compose (optional)
 
 ### Installation
@@ -118,12 +117,7 @@ The application can be configured using environment variables. See `.env.example
 - `GIN_MODE`: Gin mode (debug, release, test)
 
 **Database Configuration:**
-- `DB_DRIVER`: Database driver (sqlite, mysql, postgres)
-- `DB_HOST`: Database host
-- `DB_PORT`: Database port
-- `DB_NAME`: Database name (or file path for SQLite)
-- `DB_USER`: Database user
-- `DB_PASSWORD`: Database password
+- `DB_NAME`: SQLite database file path (default: tracks.db)
 
 **Authentication:**
 - `JWT_SECRET`: Secret key for JWT tokens (change in production!)

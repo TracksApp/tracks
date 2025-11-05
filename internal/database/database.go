@@ -7,8 +7,6 @@ import (
 
 	"github.com/TracksApp/tracks/internal/config"
 	"github.com/TracksApp/tracks/internal/models"
-	"gorm.io/driver/mysql"
-	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -19,20 +17,7 @@ var DB *gorm.DB
 
 // Initialize sets up the database connection
 func Initialize(cfg *config.DatabaseConfig) error {
-	var dialector gorm.Dialector
-
-	switch cfg.Driver {
-	case "sqlite":
-		dialector = sqlite.Open(cfg.GetDSN())
-	case "mysql":
-		dialector = mysql.Open(cfg.GetDSN())
-	case "postgres":
-		dialector = postgres.Open(cfg.GetDSN())
-	default:
-		return fmt.Errorf("unsupported database driver: %s", cfg.Driver)
-	}
-
-	db, err := gorm.Open(dialector, &gorm.Config{
+	db, err := gorm.Open(sqlite.Open(cfg.Name), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
 		NowFunc: func() time.Time {
 			return time.Now().UTC()
