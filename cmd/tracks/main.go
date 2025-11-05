@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"log"
 
@@ -13,10 +14,31 @@ import (
 )
 
 func main() {
+	// Parse command line flags
+	port := flag.Int("port", 0, "Port to run the server on (overrides SERVER_PORT env var)")
+	host := flag.String("host", "", "Host to bind to (overrides SERVER_HOST env var)")
+	dbDriver := flag.String("db", "", "Database driver: sqlite, mysql, or postgres (overrides DB_DRIVER)")
+	dbName := flag.String("db-name", "", "Database name or path (overrides DB_NAME)")
+	flag.Parse()
+
 	// Load configuration
 	cfg, err := config.Load()
 	if err != nil {
 		log.Fatal("Failed to load configuration:", err)
+	}
+
+	// Override config with CLI flags if provided
+	if *port != 0 {
+		cfg.Server.Port = *port
+	}
+	if *host != "" {
+		cfg.Server.Host = *host
+	}
+	if *dbDriver != "" {
+		cfg.Database.Driver = *dbDriver
+	}
+	if *dbName != "" {
+		cfg.Database.Name = *dbName
 	}
 
 	// Initialize database
