@@ -71,7 +71,7 @@
         </div>
         {{end}}
 
-        <form method="POST" action="/login">
+        <form method="POST" action="/login" id="loginForm">
             <div class="form-group">
                 <label for="login">Username</label>
                 <input type="text" id="login" name="login" required autofocus>
@@ -84,6 +84,20 @@
 
             <button type="submit" class="btn" style="width: 100%;">Login</button>
         </form>
+
+        <div id="debug" style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-secondary);"></div>
     </div>
 </div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    const username = document.getElementById('login').value;
+    const password = document.getElementById('password').value;
+    const debug = document.getElementById('debug');
+
+    debug.innerHTML = 'Submitting: username="' + username + '" (length: ' + username.length + '), password length: ' + password.length;
+
+    console.log('Form submit - Username:', username, 'Password length:', password.length);
+});
+</script>
 {{end}}

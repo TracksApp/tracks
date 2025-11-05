@@ -1,0 +1,24 @@
+{
+  "name": "tracks-golang",
+  "version": "1.0.0",
+  "description": "[![Build Status](https://github.com/TracksApp/tracks/workflows/Continuous%20Integration/badge.svg)](https://github.com/TracksApp/tracks/actions) [![Code Climate](https://codeclimate.com/github/TracksApp/tracks/badges/gpa.svg)](https://codeclimate.com/github/TracksApp/tracks) [![Translation status](https://hosted.weblate.org/widgets/tracks/-/tracks/svg-badge.svg)](https://hosted.weblate.org/engage/tracks/) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/6459/badge)](https://bestpractices.coreinfrastructure.org/projects/6459)",
+  "main": "test-login.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:25516/git/kamenmackay/tracks-golang"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright": "^1.56.1"
+  }
+}
