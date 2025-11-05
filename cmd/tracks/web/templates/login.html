@@ -66,12 +66,13 @@
         {{end}}
 
         {{if .Error}}
-        <div class="alert alert-error" style="margin-bottom: 1.5rem;">
-            {{.Error}}
+        <div class="alert alert-error" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <span>{{.Error}}</span>
+            <button type="button" onclick="this.parentElement.style.display='none'" style="background: none; border: none; color: inherit; font-size: 1.2rem; cursor: pointer; padding: 0 0.5rem;">×</button>
         </div>
         {{end}}
 
-        <form method="POST" action="/login" id="loginForm">
+        <form method="POST" action="/login" id="loginForm" {{if .Error}}onsubmit="return confirm('Try logging in again?')"{{end}}>
             <div class="form-group">
                 <label for="login">Username</label>
                 <input type="text" id="login" name="login" required autofocus>
