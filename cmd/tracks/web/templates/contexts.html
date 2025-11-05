@@ -56,11 +56,56 @@
         background-color: var(--text-secondary);
         color: white;
     }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background-color: var(--bg-primary);
+        border-radius: 8px;
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-secondary);
+    }
+
+    .btn-sm {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
 </style>
 
 <div class="page-header">
     <h2>🏷️ Contexts</h2>
-    <button class="btn" onclick="alert('Create context - Coming soon!')">➕ New Context</button>
+    <button class="btn" onclick="openNewContextModal()">➕ New Context</button>
 </div>
 
 {{if .Contexts}}
@@ -68,7 +113,12 @@
         {{range .Contexts}}
         <div class="context-card">
             <div class="context-name">{{.Name}}</div>
-            <span class="badge badge-{{.State}}">{{.State}}</span>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="badge badge-{{.State}}">{{.State}}</span>
+                <form method="POST" action="/contexts/{{.ID}}/delete" style="display: inline;" onsubmit="return confirm('Delete context \'{{.Name}}\'?')">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
         {{end}}
     </div>
@@ -77,7 +127,46 @@
         <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
             <div style="font-size: 3rem; margin-bottom: 1rem;">🏷️</div>
             <p>No contexts yet. Create contexts to categorize where or how you'll complete todos!</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">Examples: @home, @work, @computer, @phone, @errands</p>
         </div>
     </div>
 {{end}}
+
+<!-- Create Context Modal -->
+<div id="newContextModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Create New Context</h3>
+            <button class="close-btn" onclick="closeNewContextModal()">&times;</button>
+        </div>
+        <form method="POST" action="/contexts">
+            <div class="form-group">
+                <label for="name">Context Name *</label>
+                <input type="text" id="name" name="name" placeholder="e.g., @home, @work, @computer" required autofocus>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button type="submit" class="btn btn-success">Create Context</button>
+                <button type="button" class="btn" onclick="closeNewContextModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openNewContextModal() {
+        document.getElementById('newContextModal').classList.add('active');
+    }
+
+    function closeNewContextModal() {
+        document.getElementById('newContextModal').classList.remove('active');
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('newContextModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeNewContextModal();
+        }
+    });
+</script>
 {{end}}

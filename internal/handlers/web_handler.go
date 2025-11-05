@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"encoding/xml"
+	"fmt"
 	"html/template"
 	"net/http"
 	"time"
@@ -197,10 +199,18 @@ func (h *WebHandler) ShowTodos(c *gin.Context) {
 		Order("created_at DESC").
 		Find(&todos)
 
+	// Get user's contexts for the dropdown
+	var contexts []models.Context
+	database.DB.
+		Where("user_id = ? AND state = ?", user.ID, "active").
+		Order("position ASC").
+		Find(&contexts)
+
 	data := gin.H{
-		"Title": "Todos",
-		"User":  user,
-		"Todos": todos,
+		"Title":    "Todos",
+		"User":     user,
+		"Todos":    todos,
+		"Contexts": contexts,
 	}
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
@@ -247,4 +257,233 @@ func (h *WebHandler) ShowContexts(c *gin.Context) {
 
 	c.Header("Content-Type", "text/html; charset=utf-8")
 	h.templates.ExecuteTemplate(c.Writer, "base.html", data)
+}
+
+// HandleCreateContext processes context creation form
+func (h *WebHandler) HandleCreateContext(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+
+	name := c.PostForm("name")
+	if name == "" {
+		c.Redirect(http.StatusFound, "/contexts?error=Context name is required")
+		return
+	}
+
+	// Get the highest position value for proper ordering
+	var maxPosition int
+	database.DB.Model(&models.Context{}).
+		Where("user_id = ?", user.ID).
+		Select("COALESCE(MAX(position), 0)").
+		Scan(&maxPosition)
+
+	// Create context
+	context := models.Context{
+		UserID:   user.ID,
+		Name:     name,
+		State:    "active",
+		Position: maxPosition + 1,
+	}
+
+	if err := database.DB.Create(&context).Error; err != nil {
+		c.Redirect(http.StatusFound, "/contexts?error="+err.Error())
+		return
+	}
+
+	// Redirect back to contexts page
+	c.Redirect(http.StatusFound, "/contexts")
+}
+
+// HandleDeleteContext processes context deletion
+func (h *WebHandler) HandleDeleteContext(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+	contextID := c.Param("id")
+
+	// Verify context belongs to user
+	var context models.Context
+	if err := database.DB.Where("id = ? AND user_id = ?", contextID, user.ID).First(&context).Error; err != nil {
+		c.Redirect(http.StatusFound, "/contexts?error=Context not found")
+		return
+	}
+
+	// Delete context
+	if err := database.DB.Delete(&context).Error; err != nil {
+		c.Redirect(http.StatusFound, "/contexts?error="+err.Error())
+		return
+	}
+
+	// Redirect back to contexts page
+	c.Redirect(http.StatusFound, "/contexts")
+}
+
+// HandleCreateTodo processes todo creation form
+func (h *WebHandler) HandleCreateTodo(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+
+	description := c.PostForm("description")
+	if description == "" {
+		c.Redirect(http.StatusFound, "/todos?error=Description is required")
+		return
+	}
+
+	notes := c.PostForm("notes")
+	contextIDStr := c.PostForm("context_id")
+	dueDateStr := c.PostForm("due_date")
+
+	// Parse context ID (required)
+	if contextIDStr == "" {
+		c.Redirect(http.StatusFound, "/todos?error=Context is required")
+		return
+	}
+
+	var contextID uint
+	if _, err := fmt.Sscanf(contextIDStr, "%d", &contextID); err != nil {
+		c.Redirect(http.StatusFound, "/todos?error=Invalid context")
+		return
+	}
+
+	// Verify context exists and belongs to user
+	var context models.Context
+	if err := database.DB.Where("id = ? AND user_id = ?", contextID, user.ID).First(&context).Error; err != nil {
+		c.Redirect(http.StatusFound, "/todos?error=Context not found")
+		return
+	}
+
+	// Create todo
+	todo := models.Todo{
+		UserID:      user.ID,
+		ContextID:   contextID,
+		Description: description,
+		Notes:       notes,
+		State:       "active",
+	}
+
+	// Parse and set due date if provided
+	if dueDateStr != "" {
+		if dueDate, err := time.Parse("2006-01-02", dueDateStr); err == nil {
+			todo.DueDate = &dueDate
+		}
+	}
+
+	if err := database.DB.Create(&todo).Error; err != nil {
+		c.Redirect(http.StatusFound, "/todos?error="+err.Error())
+		return
+	}
+
+	// Redirect back to todos page
+	c.Redirect(http.StatusFound, "/todos")
+}
+
+// HandleDeleteTodo processes todo deletion
+func (h *WebHandler) HandleDeleteTodo(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+	todoID := c.Param("id")
+
+	// Verify todo belongs to user
+	var todo models.Todo
+	if err := database.DB.Where("id = ? AND user_id = ?", todoID, user.ID).First(&todo).Error; err != nil {
+		c.Redirect(http.StatusFound, "/todos?error=Todo not found")
+		return
+	}
+
+	// Delete todo
+	if err := database.DB.Delete(&todo).Error; err != nil {
+		c.Redirect(http.StatusFound, "/todos?error="+err.Error())
+		return
+	}
+
+	// Redirect back to todos page
+	c.Redirect(http.StatusFound, "/todos")
+}
+
+// RSS feed structures
+type RSSFeed struct {
+	XMLName xml.Name `xml:"rss"`
+	Version string   `xml:"version,attr"`
+	Channel RSSChannel
+}
+
+type RSSChannel struct {
+	XMLName     xml.Name `xml:"channel"`
+	Title       string   `xml:"title"`
+	Link        string   `xml:"link"`
+	Description string   `xml:"description"`
+	Language    string   `xml:"language"`
+	PubDate     string   `xml:"pubDate"`
+	Items       []RSSItem
+}
+
+type RSSItem struct {
+	XMLName     xml.Name `xml:"item"`
+	Title       string   `xml:"title"`
+	Link        string   `xml:"link"`
+	Description string   `xml:"description"`
+	PubDate     string   `xml:"pubDate"`
+	GUID        string   `xml:"guid"`
+}
+
+// HandleContextFeed generates an RSS feed for todos in a specific context
+func (h *WebHandler) HandleContextFeed(c *gin.Context) {
+	user, _ := middleware.GetCurrentUser(c)
+	contextID := c.Param("id")
+
+	// Verify context belongs to user
+	var context models.Context
+	if err := database.DB.Where("id = ? AND user_id = ?", contextID, user.ID).First(&context).Error; err != nil {
+		c.XML(http.StatusNotFound, gin.H{"error": "Context not found"})
+		return
+	}
+
+	// Get all todos for this context
+	var todos []models.Todo
+	database.DB.
+		Preload("Project").
+		Where("user_id = ? AND context_id = ?", user.ID, contextID).
+		Order("created_at DESC").
+		Find(&todos)
+
+	// Build RSS feed
+	feed := RSSFeed{
+		Version: "2.0",
+		Channel: RSSChannel{
+			Title:       fmt.Sprintf("Tracks - %s Todos", context.Name),
+			Link:        fmt.Sprintf("%s/contexts/%s", c.Request.Host, contextID),
+			Description: fmt.Sprintf("Todos for context: %s", context.Name),
+			Language:    "en-us",
+			PubDate:     time.Now().Format(time.RFC1123Z),
+			Items:       make([]RSSItem, 0, len(todos)),
+		},
+	}
+
+	// Add todos as RSS items
+	for _, todo := range todos {
+		description := todo.Description
+		if todo.Notes != "" {
+			description += "\n\n" + todo.Notes
+		}
+		if todo.Project != nil {
+			description += fmt.Sprintf("\n\nProject: %s", todo.Project.Name)
+		}
+		if todo.DueDate != nil {
+			description += fmt.Sprintf("\n\nDue: %s", todo.DueDate.Format("2006-01-02"))
+		}
+
+		item := RSSItem{
+			Title:       todo.Description,
+			Link:        fmt.Sprintf("%s/todos/%d", c.Request.Host, todo.ID),
+			Description: description,
+			PubDate:     todo.CreatedAt.Format(time.RFC1123Z),
+			GUID:        fmt.Sprintf("todo-%d", todo.ID),
+		}
+		feed.Channel.Items = append(feed.Channel.Items, item)
+	}
+
+	// Return RSS XML
+	c.Header("Content-Type", "application/rss+xml; charset=utf-8")
+	xmlData, err := xml.MarshalIndent(feed, "", "  ")
+	if err != nil {
+		c.XML(http.StatusInternalServerError, gin.H{"error": "Failed to generate RSS feed"})
+		return
+	}
+
+	c.Data(http.StatusOK, "application/rss+xml; charset=utf-8", append([]byte(xml.Header), xmlData...))
 }
