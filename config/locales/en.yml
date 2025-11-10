@@ -96,9 +96,8 @@ en:
     action: Action
     actions: Actions
     actions_midsentence:
-      one: action
-      other: actions
-      zero: actions
+      one: actions
+      other: action
     add: Add
     ajaxError: There was an error retrieving from server
     back: Back
@@ -110,9 +109,8 @@ en:
     contribute: Contribute
     create: Create
     days_midsentence:
-      one: day
-      other: days
-      zero: days
+      one: days
+      other: day
     deferred: deferred
     description: Description
     drag_handle: DRAG
@@ -131,9 +129,8 @@ en:
     none: None
     not_available_abbr: n/a
     note:
-      one: 1 notes
-      other: "%{count} notes"
-      zero: no notes
+      one: no notes
+      other: 1 notes
     notes: Notes
     numbered_step: Step %{number}
     ok: Ok
@@ -205,8 +202,8 @@ en:
         some: Some errors occurred during import
         file_blank: File can't be blank
         invalid_csv: "Invalid CSV: could not read headers: %{e}"
-        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write\
-          \ to the upload directory? %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write
+          to the upload directory? %{e}"
         no_context: No default context could be found
       map_title: Map fields to be imported
       header: Importing data
@@ -218,11 +215,11 @@ en:
       projects_count: "%{count} Projects imported"
       todos_count: "%{count} Todos imported"
       yaml_disabled: "YAML loading is disabled"
-      yaml_warning: "%{warning}: all your current data will be destroyed before importing\
-        \ the YAML file, so if you have access to the database, we strongly recommend\
-        \ backing up the database right now in case that anything goes wrong."
-      paste_field: "Paste the contents of the YAML file you exported into the text\
-        \ box below:"
+      yaml_warning: "%{warning}: all your current data will be destroyed before importing
+        the YAML file, so if you have access to the database, we strongly recommend
+        backing up the database right now in case that anything goes wrong."
+      paste_field: "Paste the contents of the YAML file you exported into the text
+        box below:"
       warning: Beware
     export:
       page_title: Tracks::Export
@@ -231,10 +228,10 @@ en:
       yaml_description: "%{yaml}: Best for exporting data."
       yaml_link_description: YAML file containing all your actions, contexts, projects,
         tags and notes
-      yaml_experimental: "Please note that importing YAML files is currently supported\
-        \ only in experimentally. Do not rely on it for backing up critical data."
-      csv_description: "%{csv}: Best for importing into spreadsheet or data analysis\
-        \ software"
+      yaml_experimental: "Please note that importing YAML files is currently supported
+        only in experimentally. Do not rely on it for backing up critical data."
+      csv_description: "%{csv}: Best for importing into spreadsheet or data analysis
+        software"
       csv_actions_description: CSV file containing all of your actions, with named
         contexts and projects
       csv_notes_description: CSV file containing all your notes
@@ -284,8 +281,8 @@ en:
       default: "%Y-%m-%d"
       long: "%B %d, %Y"
       longer: "%A %B %d, %Y"
-      month_day: ''
-      only_day: ''
+      month_day: 'Month Day'
+      only_day: 'Only Day'
       short: "%b %d"
     month_names:
     - 
@@ -321,13 +318,11 @@ en:
         other: almost %{count} years
       half_a_minute: half a minute
       less_than_x_minutes:
-        one: less than a minute
-        other: less than %{count} minutes
-        zero: less than 1 minute
+        one: less than 1 minute
+        other: less than a minute
       less_than_x_seconds:
         one: less than 1 second
-        other: less than %{count} seconds
-        zero: less than 1 second
+        other: less than 1 second
       over_x_years:
         one: over 1 year
         other: over %{count} years
@@ -425,10 +420,10 @@ en:
       email_rich: Rich Todo Message email format
     opensearch_description: Search in Tracks
     title: Integrations
-    intro: "Tracks can be integrated with a number of other tools… whatever it takes\
-      \ to help you get things done! This page has information on setting up some\
-      \ of these. Not all of these are applicable to all platforms, and some require\
-      \ more technical knowledge than others. See also %{documentation_link}"
+    intro: "Tracks can be integrated with a number of other tools… whatever it takes
+      to help you get things done! This page has information on setting up some of
+      these. Not all of these are applicable to all platforms, and some require more
+      technical knowledge than others. See also %{documentation_link}"
     developer_documentation_link: developer documentation for Tracks
     contents_header: "Contents:"
     add_your_own: Do you have one of your own to add? %{tell_us_link} and we may include
@@ -449,12 +444,12 @@ en:
         laundry @ Home" or "Call Bill > project X". The subject of the message will
         fill description, context, and project, while the body will populate the tasks''s
         note.'
-      configuration: "You may need to configure your %{site_yml} to tell the message\
-        \ gateway to look at the %{to_name} field or %{from_name} field to lookup\
-        \ Tracks' user from the email address in that field."
-      one_user_configuration: "You can also send all email to a specific Tracks user.\
-        \ Configure mail_dispatch in site.yml to %{single_user_value} and pass the\
-        \ login of the user in the pipe command: %{code}"
+      configuration: "You may need to configure your %{site_yml} to tell the message
+        gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks'
+        user from the email address in that field."
+      one_user_configuration: "You can also send all email to a specific Tracks user.
+        Configure mail_dispatch in site.yml to %{single_user_value} and pass the login
+        of the user in the pipe command: %{code}"
       instructions:
         '1': 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}"
           for todos sent in via email (which could come from an SMS message)'
@@ -478,12 +473,13 @@ en:
           (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
         '4': 'Select a default context for emails to be put in with "%{sms_context_name}"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
-        '6': "Update the mailmap in 'site.yml' to define which senders can send emails\
-          \ to which incoming addresses. For example, to send emails from your work\
-          \ and home email accounts to your Tracks Mailgun route, set it up like this:\
-          \ %{code}"
+        '6': "Update the mailmap in 'site.yml' to define which senders can send emails
+          to which incoming addresses. For example, to send emails from your work
+          and home email accounts to your Tracks Mailgun route, set it up like this:
+          %{code}"
     email_rich:
-      description: "For both of the above methods, the following format can be used in the message subject to add metadata:"
+      description: "For both of the above methods, the following format can be used
+        in the message subject to add metadata:"
       fields_title: "The fields are:"
       symbol_title: Symbol
       meaning_title: Meaning
@@ -494,8 +490,8 @@ en:
         project: The project to place the Todo in
         due_date: The due date for the Todo (may be 2 digits for day, 4 digits for
           month-day, or 6 digits for year-month-day)
-        tickler_date: The tickler date for the Todo (may be 2 digits for day, 4 digits for
-          month-day, or 6 digits for year-month-day)
+        tickler_date: The tickler date for the Todo (may be 2 digits for day, 4 digits
+          for month-day, or 6 digits for year-month-day)
         tag: A tag to apply to the Todo – may be used multiple times
         star: Flag to star the Todo
     example_names:
@@ -670,7 +666,7 @@ en:
           trillion: Trillion
           unit: "."
       format:
-        delimiter: ''
+        delimiter: 'Delimiter'
         precision: '1'
         significant: 'true'
         strip_insignificant_zeros: 'true'
@@ -1331,13 +1327,11 @@ en:
       multi_page_html: Displaying %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> of <b>%{count}</b>
         in total
       single_page:
-        one: Displaying 1 %{model}
-        other: Displaying all %{count} %{model}
-        zero: No %{model} found
+        one: No %{model} found
+        other: Displaying 1 %{model}
       single_page_html:
-        one: Displaying <b>1</b> %{model}
-        other: Displaying <b>all&nbsp;%{count}</b> %{model}
-        zero: No %{model} found
+        one: No %{model} found
+        other: Displaying <b>1</b> %{model}
     page_gap: "&hellip;"
     previous_label: "&#8592; Previous"
   auth_type:
