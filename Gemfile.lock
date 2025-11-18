@@ -216,7 +216,7 @@ GEM
       libv8-node (~> 24.1.0.0)
     minitest (5.26.0)
     minitest-stub-const (0.6)
-    mocha (2.7.1)
+    mocha (2.8.2)
       ruby2_keywords (>= 0.0.5)
     mutex_m (0.3.0)
     mysql2 (0.5.7)
