@@ -37,6 +37,9 @@ gem 'bootstrap-sass', '3.4.1'
 gem 'terser'
 gem 'listen'
 gem 'tolk', '~> 6.0.0'
+gem 'superfish-rails'
+gem 'jquery-form-rails'
+gem 'jquery_block_ui'
 
 group :development, :optional => true do
   gem 'spring', '~> 4'
