@@ -23,7 +23,7 @@ gem 'will_paginate'
 gem 'rexml'
 
 # Use --without <group> argument to skip unnecessary drivers
-gem 'sqlite3', '~> 2.8', group: :sqlite
+gem 'sqlite3', '~> 2.9', group: :sqlite
 gem 'mysql2', '~> 0.5', group: :mysql
 gem 'pg', '~> 1.6', group: :postgresql
 
