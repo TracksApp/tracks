@@ -1388,3 +1388,25 @@ ul.todo-submenu > li > a {
 .recurring_todos .ui-dialog .ui-dialog-title {
   float: inherit;
 }
+
+.sf-menu {
+  margin-bottom: 0;
+}
+
+.sf-menu a {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.sf-menu li {
+  background: none !important;
+}
+
+.sf-menu ul.todo-submenu {
+  background: white;
+  padding: 0.25em;
+}
+
+.sf-menu ul.todo-submenu li > a {
+  padding-left: 24px;
+}

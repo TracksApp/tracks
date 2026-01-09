@@ -1,6 +1,6 @@
 class TodosController < ApplicationController
-  skip_before_action :login_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
-  prepend_before_action :login_or_feed_token_required, :only => [:index, :tag, :list_deferred, :show, :list_hidden, :done]
+  skip_before_action :login_required, :only => [:index, :create, :tag, :list_deferred, :show, :list_hidden, :done]
+  prepend_before_action :login_or_feed_token_required, :only => [:index, :create, :tag, :list_deferred, :show, :list_hidden, :done]
   append_before_action :find_and_activate_ready, :only => [:index, :list_deferred]
 
   protect_from_forgery :except => :check_deferred
