@@ -92,7 +92,7 @@ GEM
       execjs (~> 2)
     backport (1.2.0)
     base64 (0.3.0)
-    bcrypt (3.1.20)
+    bcrypt (3.1.21)
     benchmark (0.5.0)
     bigdecimal (3.3.1)
     bootstrap-sass (3.4.1)
@@ -179,9 +179,9 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (8.0.0)
       railties (>= 3.2.16)
-    json (2.18.0)
     jquery_block_ui (0.0.1)
       rails (>= 3.1)
+    json (2.18.0)
     kramdown (2.5.1)
       rexml (>= 3.3.9)
     kramdown-parser-gfm (1.1.0)
@@ -435,7 +435,7 @@ DEPENDENCIES
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.3)
   acts_as_list
-  bcrypt (~> 3.1.20)
+  bcrypt (~> 3.1.21)
   bootstrap-sass (= 3.4.1)
   bullet
   byebug
