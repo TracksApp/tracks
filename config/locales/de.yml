@@ -13,11 +13,15 @@ de:
         mobile_todos_per_page: Aufgaben pro Seite (Mobile Version)
         refresh: Aktualisierungsintervall (in Minuten)
         review_period: Projekt-Review-Intervall
-        show_completed_projects_in_sidebar: Zeige erledigte Projekte in der Sidebar
-        show_hidden_contexts_in_sidebar: Zeige Versteckte Kontexte in der Sidebar
-        show_hidden_projects_in_sidebar: Zeige Versteckte Projekte in der Sidebar
+        show_completed_projects_in_sidebar: Zeige erledigte Projekte in der 
+          Sidebar
+        show_hidden_contexts_in_sidebar: Zeige Versteckte Kontexte in der 
+          Sidebar
+        show_hidden_projects_in_sidebar: Zeige Versteckte Projekte in der 
+          Sidebar
         show_number_completed: Zeige Anzahl der erledigten Aufgaben
-        show_project_on_todo_done: Zur Projektseite wechseln wenn Aufgabe erledigt
+        show_project_on_todo_done: Zur Projektseite wechseln wenn Aufgabe 
+          erledigt
         sms_context: Standard-E-Mail-Kontext
         sms_email: Per E-Mail
         staleness_starts: Veraltet ab
@@ -94,9 +98,8 @@ de:
     action: Aufgabe
     actions: Aufgaben
     actions_midsentence:
-      one: Aufgaben
-      other: Aufgabe
-      zero: Aufgabe
+      one: Aufgabe
+      other: Aufgaben
     add: Hinzufügen
     ajaxError: Fehler beim Empfangen vom Server
     back: Zurück
@@ -108,9 +111,8 @@ de:
     contribute: Mitwirken
     create: Erstellen
     days_midsentence:
-      one: Tag
-      other: Tagen
-      zero: Tagen
+      one: Tagen
+      other: Tag
     deferred: aufgeschobene
     description: Beschreibung
     drag_handle: Verschieben
@@ -129,9 +131,8 @@ de:
     none: Keine
     not_available_abbr: n/b
     note:
-      one: 1 Notiz
-      other: "%{count} Notizen"
-      zero: keine Notizen
+      one: keine Notizen
+      other: 1 Notiz
     notes: Notizen
     numbered_step: Schritt %{number}
     ok: Ok
@@ -147,13 +148,15 @@ de:
     show_all: Alle anzeigen
     sort:
       alphabetically: Alphabetisch
-      alphabetically_confirm: Sollen diese Projekte wirklich alphabetisch sortiert
-        werden? Die bisherige Sortier-Reihenfolge wird damit überschrieben.
+      alphabetically_confirm: Sollen diese Projekte wirklich alphabetisch 
+        sortiert werden? Die bisherige Sortier-Reihenfolge wird damit 
+        überschrieben.
       alphabetically_title: Projekte alphabetisch sortieren
       by_task_count: Nach Anzahl der Aufgaben
       by_task_count_title: Nach Anzahl der Aufgaben sortieren
-      by_task_count_title_confirm: Sollen diese Projekte wirklich nach Anzahl der
-        Aufgaben sortiert werden? Die bisherige Sortier-Reihenfolge wird damit überschrieben.
+      by_task_count_title_confirm: Sollen diese Projekte wirklich nach Anzahl 
+        der Aufgaben sortiert werden? Die bisherige Sortier-Reihenfolge wird 
+        damit überschrieben.
       sort: Sortieren
     third: Dritte
     todo: Aufgabe
@@ -164,15 +167,18 @@ de:
     wiki: Wiki
   contexts:
     add_context: Kontext hinzufügen
-    all_completed_tasks_title: TRACKS::Alle erledigten Aufgaben im Kontext '%{context_name}'
-    completed_tasks_title: TRACKS::Erledigte Aufgaben im Kontext '%{context_name}'
+    all_completed_tasks_title: TRACKS::Alle erledigten Aufgaben im Kontext 
+      '%{context_name}'
+    completed_tasks_title: TRACKS::Erledigte Aufgaben im Kontext 
+      '%{context_name}'
     context_deleted: Gelöschter Kontext „%{name}“
     context_hide: Auf Startseite ausblenden?
     context_name: Kontextname
     context_state: Context state
     delete_context: Kontext löschen
-    delete_context_confirmation: Soll der Kontext '%{name}' wirklich gelöscht werden?
-      Alle (wiederkehrenden) Aufgaben dieses Kontexts werden hierdurch ebenfalls gelöscht!
+    delete_context_confirmation: Soll der Kontext '%{name}' wirklich gelöscht 
+      werden? Alle (wiederkehrenden) Aufgaben dieses Kontexts werden hierdurch 
+      ebenfalls gelöscht!
     delete_context_title: Kontext löschen
     edit_context: Kontext bearbeiten
     hidden_contexts: Versteckte Kontexte
@@ -202,8 +208,8 @@ de:
         some: Beim Import sind Fehler aufgetreten
         file_blank: File can't be blank
         invalid_csv: "Invalid CSV: could not read headers: %{e}"
-        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write\
-          \ to the upload directory? %{e}"
+        save_error: "Could not save uploaded CSV (%{path_and_file}). Can Tracks write
+          to the upload directory? %{e}"
       map_title: Map fields to be imported
       header: Importing data
       submit: Importieren
@@ -214,30 +220,30 @@ de:
       projects_count: "%{count} Projects imported"
       todos_count: "%{count} Todos imported"
       yaml_disabled: "YAML loading is disabled"
-      yaml_warning: "%{warning}: vor dem Import der YAML Datei werden alle Daten in\
-        \ Ihrer Datenbank gelöscht. Falls Sie entsprechenden Zugriff auf Ihre Datenbank\
-        \ haben, empfiehlt es sich, ein Backup anzulegen, bevor Sie fortfahren."
-      paste_field: "Fügen Sie den Inhalt der kopierten YAML Datei in das untenstehende\
-        \ Formular ein:"
+      yaml_warning: "%{warning}: vor dem Import der YAML Datei werden alle Daten in
+        Ihrer Datenbank gelöscht. Falls Sie entsprechenden Zugriff auf Ihre Datenbank
+        haben, empfiehlt es sich, ein Backup anzulegen, bevor Sie fortfahren."
+      paste_field: "Fügen Sie den Inhalt der kopierten YAML Datei in das untenstehende
+        Formular ein:"
       warning: Vorsicht
     export:
       page_title: Tracks::Export
       title: Daten exportieren
       format_header: "Sie können zwischen den folgenden Formaten wählen:"
       yaml_description: "%{yaml}: Für den Daten-Import bevorzugt."
-      yaml_link_description: YAML-Datei mit all Ihren Aktionen, Umgebungen, Projekten,
-        Tags und Notizen
-      yaml_experimental: "Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle\
-        \ Funktionalität darstellt. Nutzen Sie diese Option also nicht. um kritische\
-        \ Daten zu sichern."
-      csv_description: "%{csv}: Am besten für den Export in eine Tabellen-Kalkulation\
-        \ oder ähnliche Auswertungs-Software geeignet"
-      csv_actions_description: CSV-Datei mit all Ihren Aktionen, benannten Umgebungen
-        und Projekten
+      yaml_link_description: YAML-Datei mit all Ihren Aktionen, Umgebungen, 
+        Projekten, Tags und Notizen
+      yaml_experimental: "Bitte beachten Sie, dass der YAML-Import zur Zeit noch experimentelle
+        Funktionalität darstellt. Nutzen Sie diese Option also nicht. um kritische
+        Daten zu sichern."
+      csv_description: "%{csv}: Am besten für den Export in eine Tabellen-Kalkulation
+        oder ähnliche Auswertungs-Software geeignet"
+      csv_actions_description: CSV-Datei mit all Ihren Aktionen, benannten 
+        Umgebungen und Projekten
       csv_notes_description: CSV-Datei mit all Ihren Notizen
       xml_description: "%{xml}: Am besten für den Daten-Import oder automatische Weiterverarbeitung"
-      xml_link_description: XML-Datei mit all Ihren Aktionen, Umgebungen, Projekten,
-        Tags und Notizen
+      xml_link_description: XML-Datei mit all Ihren Aktionen, Umgebungen, 
+        Projekten, Tags und Notizen
       download_link: Download link
       yaml_link_title: YAML Datei
       csv_actions_title: CSV Dile (Aktionen, Umgebungen und Projekte)
@@ -318,13 +324,11 @@ de:
         other: fast %{count} Jahre
       half_a_minute: eine halbe Minute
       less_than_x_minutes:
-        one: weniger als eine Minute
-        other: weniger als %{count} Minuten
-        zero: weniger als 1 Minute
+        one: weniger als 1 Minute
+        other: weniger als eine Minute
       less_than_x_seconds:
         one: weniger als 1 Sekunde
-        other: weniger als %{count} Sekunden
-        zero: weniger als 1 Sekunde
+        other: weniger als 1 Sekunde
       over_x_years:
         one: mehr als 1 Jahr
         other: mehr als %{count} Jahre
@@ -385,9 +389,10 @@ de:
     all_projects: Alle Projekte
     choose_context: Kontext für den Feed wählen
     choose_project: Projekt für den Feed wählen
-    context_centric_actions: Feeds für unerledigte Aufgaben in einem bestimmten Kontext
-    context_needed: Es muss mindestens ein Kontext existieren, bevor ein Feed abonniert
-      werden kann.
+    context_centric_actions: Feeds für unerledigte Aufgaben in einem bestimmten 
+      Kontext
+    context_needed: Es muss mindestens ein Kontext existieren, bevor ein Feed 
+      abonniert werden kann.
     ical_feed: iCal-Feed
     last_fixed_number: Die letzten %{number} Aufgaben
     legend: 'Legende:'
@@ -395,8 +400,8 @@ de:
       als erledigt markiert wurden.'
     plain_text_feed: Reintext-Feed
     project_centric: Feeds für unerledigte Aufgaben in einem bestimmten Kontext
-    project_needed: Es muss mindestens ein Projekt existieren, bevor ein Feed abonniert
-      werden kann.
+    project_needed: Es muss mindestens ein Projekt existieren, bevor ein Feed 
+      abonniert werden kann.
     projects_and_actions: Aktive Projekte und deren Aufgaben
     rss_feed: RSS-Feed
     select_feed_for_context: Feed für diesen Kontext auswählen
@@ -413,29 +418,30 @@ de:
       update: Обновить %{model}
   integrations:
     sections:
-      automatic_email: Anstehende Aufgaben automatisch sich via E-Mail zusenden lassen
-      message_gateway: Tracks mit einem Mail-Server integrieren, um Aufgaben via E-Mail
-        zu erstellen
+      automatic_email: Anstehende Aufgaben automatisch sich via E-Mail zusenden 
+        lassen
+      message_gateway: Tracks mit einem Mail-Server integrieren, um Aufgaben via
+        E-Mail zu erstellen
       mailgun: Send emails to Tracks with Mailgun
       email_rich: Rich Todo Message email format
     opensearch_description: In Tracks suchen
     title: Integration
-    intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer\
-      \ Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen,\
-      \ um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt\
-      \ auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere.\
-      \ Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
+    intro: "Tracks kann mit verschiedenen Werkzeugen zusammenarbeiten... was immer
+      Sie brauchen, um Ihre Aufgaben zu erledigen! Auf dieser Seite finden Sie Informationen,
+      um einige dieser Werkzeuge einzurichten. Diese Beispiele sind nicht unbedingt
+      auf Ihre Umgebung anwendbar oder bedürfen mehr technisches Wissen als andere.
+      Weitere Informationen finden Sie in der %{documentation_link} (englisch)."
     developer_documentation_link: "Entwickler Documentation der Tracks' REST API"
     contents_header: "Inhalt:"
-    add_your_own: Sie haben weitere Beispiele? %{tell_us_link}, damit wir es für die
-      nächsten Versionen berücksichtigen können.
+    add_your_own: Sie haben weitere Beispiele? %{tell_us_link}, damit wir es für
+      die nächsten Versionen berücksichtigen können.
     tell_us_link_text: Berichten Sie uns in unserem issue queue
-    cron_1: If you enter the following entry to your crontab, you will receive email
-      every day around 5 AM with a list of the upcoming actions which are due within
-      the next 7 days.
-    cron_2: You can of course use other text %{feeds_link} – why not email a list
-      of next actions in a particular project to a group of colleagues who are working
-      on the project?
+    cron_1: If you enter the following entry to your crontab, you will receive 
+      email every day around 5 AM with a list of the upcoming actions which are 
+      due within the next 7 days.
+    cron_2: You can of course use other text %{feeds_link} – why not email a 
+      list of next actions in a particular project to a group of colleagues who 
+      are working on the project?
     cron_email_subject: Tracks actions due in the next 7 days
     feeds_link_text: feeds provided by Tracks
     message_gateway:
@@ -445,25 +451,27 @@ de:
         laundry @ Home" or "Call Bill > project X". The subject of the message will
         fill description, context, and project, while the body will populate the tasks''s
         note.'
-      configuration: "You may need to configure your %{site_yml} to tell the message\
-        \ gateway to look at the %{to_name} field or %{from_name} field to lookup\
-        \ Tracks' user from the email address in that field."
-      one_user_configuration: "You can also send all email to a specific Tracks user.\
-        \ Configure mail_dispatch in site.yml to %{single_user_value} and pass the\
-        \ login of the user in the pipe command: %{code}"
+      configuration: "You may need to configure your %{site_yml} to tell the message
+        gateway to look at the %{to_name} field or %{from_name} field to lookup Tracks'
+        user from the email address in that field."
+      one_user_configuration: "You can also send all email to a specific Tracks user.
+        Configure mail_dispatch in site.yml to %{single_user_value} and pass the login
+        of the user in the pipe command: %{code}"
       instructions:
         '1': 'Go to %{preferences_link} and set your "%{sms_email_name}" and "%{sms_context_name}"
           for todos sent in via email (which could come from an SMS message)'
-        '2': In sendmail/qmail/postfix/whatever, set up an email address alias to
-          pipe messages to %{command}
+        '2': In sendmail/qmail/postfix/whatever, set up an email address alias 
+          to pipe messages to %{command}
         '3': Send an email to your newly configured address!
     mailgun:
-      description: If you want to email tasks to Tracks, but cannot run a mailserver
-        on the same host, you could use the %{mailgun_link} support built in to Tracks.
-      conditions: For this to work your Tracks server will need to be reachable from
-        the internet, so that Mailgun can POST data to it.
-      gateway_instructions: All the comments about the email format from the section
-        above apply to the Mailgun handling, as the data is processed the same way
+      description: If you want to email tasks to Tracks, but cannot run a 
+        mailserver on the same host, you could use the %{mailgun_link} support 
+        built in to Tracks.
+      conditions: For this to work your Tracks server will need to be reachable 
+        from the internet, so that Mailgun can POST data to it.
+      gateway_instructions: All the comments about the email format from the 
+        section above apply to the Mailgun handling, as the data is processed 
+        the same way
       instructions:
         '1': Go to %{mailgun_link} and register for a free account.
         '2': "Go to 'Routes' in the Mailgun control panel, and add a new route:"
@@ -474,22 +482,22 @@ de:
           (e.g. tracks@user.mailgun.com) in the "%{sms_email_name}" box.'
         '4': 'Select a default context for emails to be put in with "%{sms_context_name}"'
         '5': "Add your Mailgun API key (not the Public API key) to the Tracks 'site.yml'"
-        '6': "Update the mailmap in 'site.yml' to define which senders can send emails\
-          \ to which incoming addresses. For example, to send emails from your work\
-          \ and home email accounts to your tracks Mailgun route, set it up like this:\
-          \ %{code}"
+        '6': "Update the mailmap in 'site.yml' to define which senders can send emails
+          to which incoming addresses. For example, to send emails from your work
+          and home email accounts to your tracks Mailgun route, set it up like this:
+          %{code}"
     email_rich:
       description: "For both of the above methods, the follow format can be used:"
       fields_title: "The fields are:"
       symbol_title: Symbol
       meaning_title: Meaning
-      fields_instruction: All symbols are optional, and text up to the first symbol
-        (or end of string) is used as the description of the todo
+      fields_instruction: All symbols are optional, and text up to the first 
+        symbol (or end of string) is used as the description of the todo
       field_descriptions:
         context: The context to place the Todo in
         project: The project to place the Todo in
-        due_date: The due date for the Todo (may be 2 digits for day, 4 digits for
-          month-day, or 6 digits for year-month-day)
+        due_date: The due date for the Todo (may be 2 digits for day, 4 digits 
+          for month-day, or 6 digits for year-month-day)
         tag: A tag to apply to the Todo – may be used multiple times
         star: Flag to star the Todo
     example_names:
@@ -584,20 +592,21 @@ de:
     cas_login: CAS-Anmeldung
     cas_no_user_found: Hallo, %{username}! Sie haben leider keinen Tracks-Konto.
     cas_signup_link: Konto beantragen
-    cas_username_not_found: Sorry, aber es existiert kein Benutzer mit dem CAS-Benutzernamen
-      (%{username})
+    cas_username_not_found: Sorry, aber es existiert kein Benutzer mit dem 
+      CAS-Benutzernamen (%{username})
     log_in_again: Erneut anmelden.
     logged_out: Sie wurden von Tracks abgemeldet.
     login_cas: zum CAS gehen
     login_standard: zurück zum Standard-Login
     login_with_openid: Mit einer OpenID anmelden
     mobile_use_openid: "…oder mit einer OpenID anmelden"
-    openid_identity_url_not_found: Sorry, aber es existiert kein Benutzer mit der
-      Identitäts-URL (%{identity_url})
+    openid_identity_url_not_found: Sorry, aber es existiert kein Benutzer mit 
+      der Identitäts-URL (%{identity_url})
     option_separator: oder,
     please_login: Bitte melde dich an, um Tracks zu nutzen
     session_time_out: Sitzung abgelaufen. Bitte %{link}
-    session_will_expire: Sitzung wird nach %{hours} Stunde(n) der Inaktivität ablaufen.
+    session_will_expire: Sitzung wird nach %{hours} Stunde(n) der Inaktivität 
+      ablaufen.
     session_will_not_expire: Sitzung wird nicht ablaufen.
     sign_in: Anmeldung
     signup_prompt: Möchten Sie ein Konto erstellen?
@@ -621,20 +630,21 @@ de:
     todo:
       error_date_must_be_future: muss ein Datum in der Zukunft sein
     user:
-      error_context_not_associated: Kontext-ID %{context} nicht mit Benutzer-ID %{user}
-        verknüpft.
-      error_project_not_associated: Projekt-ID %{project} nicht mit User-ID %{user}
-        verknüpft.
+      error_context_not_associated: Kontext-ID %{context} nicht mit Benutzer-ID 
+        %{user} verknüpft.
+      error_project_not_associated: Projekt-ID %{project} nicht mit User-ID 
+        %{user} verknüpft.
   notes:
-    delete_confirmation: Sind Sie sicher, dass Sie die Notiz '%{id}' löschen möchten?
+    delete_confirmation: Sind Sie sicher, dass Sie die Notiz '%{id}' löschen 
+      möchten?
     delete_item_title: Eintrag löschen
     delete_note_confirm: Soll die Notiz '%{id}' wirklich gelöscht werden?
     delete_note_title: Notiz '%{id}' löschen
     deleted_note: Notiz '%{id}' löschen
     edit_item_title: Eintrag bearbeiten
     in_project: 'In: '
-    no_notes_available: Derzeit gibt es keine Notizen. Füge Notizen auf der jeweiligen
-      Projektseite hinzu.
+    no_notes_available: Derzeit gibt es keine Notizen. Füge Notizen auf der 
+      jeweiligen Projektseite hinzu.
     note_header: Notiz %{id}
     note_link_title: Notiz %{id} anzeigen
     note_location_link: 'In:'
@@ -696,18 +706,19 @@ de:
     current_authentication_type: Dein Authentifizierungsart ist %{auth_type}
     edit_preferences: Einstellungen bearbeiten
     generate_new_token: Neues Token generieren
-    generate_new_token_confirm: Sind Sie sicher? Wenn Sie ein neues Token generieren,
-      wird dies das alte Token ersetzen und jegliche externe Nutzung stören, die das
-      alte Token verwendet.
+    generate_new_token_confirm: Sind Sie sicher? Wenn Sie ein neues Token 
+      generieren, wird dies das alte Token ersetzen und jegliche externe Nutzung
+      stören, die das alte Token verwendet.
     is_false: Nein
     is_true: Ja
     open_id_url: 'Deine OpenID-URL lautet'
     page_title: TRACKS::Einstellungen
     page_title_edit: TRACKS::Einstellungen ändern
-    password_changed: Ihr Passwort geändert wurde, melden Sie sich bitte wieder an.
-    remove_introduction: Hier können Sie Ihr Benutzerkonto löschen. Beachten Sie,
-      dass dies irreversibel ist und alle Ihre Daten entfernt! Nach dem Löschen werden
-      Sie abgemeldet.
+    password_changed: Ihr Passwort geändert wurde, melden Sie sich bitte wieder 
+      an.
+    remove_introduction: Hier können Sie Ihr Benutzerkonto löschen. Beachten 
+      Sie, dass dies irreversibel ist und alle Ihre Daten entfernt! Nach dem 
+      Löschen werden Sie abgemeldet.
     show_number_completed: Zeige %{number} erledigte Einträge
     sms_context_none: Keine
     staleness_starts_after: Abgestandenheit startet nach %{days} Tagen
@@ -727,19 +738,23 @@ de:
     add_note: Notiz hinzufügen
     add_note_submit: Notiz hinzufügen
     add_project: Projekt hinzufügen
-    all_completed_tasks_title: TRACKS::Alle erledigten Aufgaben im Projekt '%{project_name}'
+    all_completed_tasks_title: TRACKS::Alle erledigten Aufgaben im Projekt 
+      '%{project_name}'
     completed_actions: Completed actions
     completed_actions_empty: Completed actions empty
     completed_projects: Erledigte Projekte
-    completed_tasks_title: TRACKS::Liste erledigter Aufgaben in Project '%{project_name}'
+    completed_tasks_title: TRACKS::Liste erledigter Aufgaben in Project 
+      '%{project_name}'
     default_context: Der Standard-Kontext dieses Projektes ist %{context}
     default_context_removed: Standard-Kontext entfernt
-    default_context_set: Standard-Kontext des Projekts auf %{default_context} gesetzt
+    default_context_set: Standard-Kontext des Projekts auf %{default_context} 
+      gesetzt
     default_tags_removed_notice: Standard-Tags entfernt
     deferred_actions: Deferred actions
     deferred_actions_empty: Deferred actions empty
     delete_project: Projekt löschen
-    delete_project_confirmation: Soll das Projekt '%{name}' wirklich gelöscht werden?
+    delete_project_confirmation: Soll das Projekt '%{name}' wirklich gelöscht 
+      werden?
     delete_project_title: Projekt löschen
     edit_project_settings: Projekteinstellungen bearbeiten
     edit_project_title: Projekt bearbeiten
@@ -754,8 +769,10 @@ de:
     list_reviews: TRACKS::Rückblick
     no_default_context: Dieses Projekt hat keinen Standard-Kontext
     no_last_completed_projects: Keine erledigten Projekte gefunden
-    no_last_completed_recurring_todos: Keine erledigten wiederkehrenden Aufgaben gefunden
-    no_notes_attached: Im Augenblick sind keine Notizen mit diesem Projekt verknüpft.
+    no_last_completed_recurring_todos: Keine erledigten wiederkehrenden Aufgaben
+      gefunden
+    no_notes_attached: Im Augenblick sind keine Notizen mit diesem Projekt 
+      verknüpft.
     no_projects: Keine Projekte vorhanden
     notes: Notizen
     notes_empty: Es gibt keine Notizen für dieses Projekt
@@ -763,7 +780,8 @@ de:
     project_destroyed_status: Projekt „%{name}“ gelöscht
     project_saved_status: Projekt gespeichert
     project_state: Projekt ist %{state}.
-    set_default_tags_notice: Standard-Tags des Projekts auf %{default_tags} setzen
+    set_default_tags_notice: Standard-Tags des Projekts auf %{default_tags} 
+      setzen
     settings: Einstellungen
     show_form: Projekt erstellen
     show_form_title: Neues Projekt anlegen
@@ -798,7 +816,8 @@ de:
     separate_tags_with_commas: mit Kommas trennen
     tags_for_all_actions: Tags für alle Aufgaben (kommagetrennt)
     toggle_multi: Mehrere Aufgaben hinzufügen
-    toggle_multi_title: Zwischen Einzel- und Mehrfachformular für neue Aufgaben umschalten
+    toggle_multi_title: Zwischen Einzel- und Mehrfachformular für neue Aufgaben 
+      umschalten
     toggle_single: Weitere Aufgabe erstellen
     toggle_single_title: Eine weitere Aufgabe hinzufügen
   sidebar:
@@ -847,14 +866,15 @@ de:
     action_selection_title: TRACKS::Aufgabenauswahl
     actions: Aufgaben
     actions_30days_title: _Aufgaben der letzten 30 Tage
-    actions_actions_avg_created_30days: In den letzten 30 Tagen haben Sie durchschnittlich
-      %{count} Aufgaben erstellt.
-    actions_avg_completed: und davon durchschnittlich %{count} per Monat erledigt.
+    actions_actions_avg_created_30days: In den letzten 30 Tagen haben Sie 
+      durchschnittlich %{count} Aufgaben erstellt.
+    actions_avg_completed: und davon durchschnittlich %{count} per Monat 
+      erledigt.
     actions_avg_completed_30days: und durchschnittlich %{count} davon erledigt.
-    actions_avg_completion_time: Durchschnittlich haben Sie %{count} Tage gebraucht
-      um eine Aufgabe zu erledigen.
-    actions_avg_created: In den letzten 12 Monaten haben Sie durchschnittlich %{count}
-      Aufgaben erstellt
+    actions_avg_completion_time: Durchschnittlich haben Sie %{count} Tage 
+      gebraucht um eine Aufgabe zu erledigen.
+    actions_avg_created: In den letzten 12 Monaten haben Sie durchschnittlich 
+      %{count} Aufgaben erstellt
     actions_day_of_week_legend:
       day_of_week: Tag der Woche
       number_of_actions: Anzahl der Aufgaben
@@ -870,18 +890,18 @@ de:
       number_of_actions: Anzahl Aufgaben
     actions_lastyear_title: Aufgaben der letzten 12 Monate
     actions_min_completion_time: Die minimale Zeit beträgt %{time}.
-    actions_min_max_completion_days: Das Minimum/Maximum in Tagen zur Erledigung ist
-      %{min}/%{max}.
+    actions_min_max_completion_days: Das Minimum/Maximum in Tagen zur Erledigung
+      ist %{min}/%{max}.
     actions_selected_from_week: 'Aufgaben ausgewählt ab Woche '
     click_to_return: Klick auf %{link} um zur Statistikseite zurückzukehren.
     click_to_return_link: hier
-    click_to_show_actions_from_week: Klick auf %{link} um die Aufgaben von Woche %{week}
-      und danach anzuzeigen.
-    click_to_update_actions: Klicke auf eine Leiste in der Grafik um die Aufgaben
-      unten zu aktualisieren.
+    click_to_show_actions_from_week: Klick auf %{link} um die Aufgaben von Woche
+      %{week} und danach anzuzeigen.
+    click_to_update_actions: Klicke auf eine Leiste in der Grafik um die 
+      Aufgaben unten zu aktualisieren.
     contexts: Kontexte
-    current_running_time_of_incomplete_visible_actions: Aktuelle Laufzeit unerledigter
-      sichtbarer Aufgaben
+    current_running_time_of_incomplete_visible_actions: Aktuelle Laufzeit 
+      unerledigter sichtbarer Aufgaben
     index_title: TRACKS::Statistik
     labels:
       avg_completed: Durchschnittlich erledigt
@@ -898,8 +918,8 @@ de:
       number_of_days: Anzahl vergangene Tage
       percentage: Prozentsatz
       running_time: Laufzeit einer Aufgabe (Wochen)
-    more_stats_will_appear: Weitere Statistiken werden verfügbar, wenn einige Aufgaben
-      hinzugefügt wurden.
+    more_stats_will_appear: Weitere Statistiken werden verfügbar, wenn einige 
+      Aufgaben hinzugefügt wurden.
     no_actions_selected: Es sind keine Aufgaben ausgewählt.
     no_tags_available: keine Tags verfügbar
     open_per_week: Aktiv (sichtbar und unsichtbar) nächsten Aufgaben pro Woche
@@ -912,21 +932,21 @@ de:
     running_time_all_legend:
       actions: Aufgaben
       percentage: Prozentsatz
-      running_time: Laufzeit einer Aufgabe (Wochen). Klick auf eine Leiste für mehr
-        Informationen.
+      running_time: Laufzeit einer Aufgabe (Wochen). Klick auf eine Leiste für 
+        mehr Informationen.
     running_time_legend:
       actions: Aufgaben
       percentage: Prozentsatz
-      weeks: Vergangene Zeit einer Aufgabe (Wochen). Klicke auf eine Leiste für mehr
-        Informationen.
+      weeks: Vergangene Zeit einer Aufgabe (Wochen). Klicke auf eine Leiste für 
+        mehr Informationen.
     spread_of_actions_for_all_context: Aufgabenverteilung aller Kontexte
-    spread_of_running_actions_for_visible_contexts: Verteilung der laufenden Aufgaben
-      aller sichtbaren Kontexte
-    tag_cloud_90days_description: Diese Tag-Cloud beinhaltet Tags der Aufgaben, die
-      in den letzten 90 Tagen erstellt oder erledigt wurden.
+    spread_of_running_actions_for_visible_contexts: Verteilung der laufenden 
+      Aufgaben aller sichtbaren Kontexte
+    tag_cloud_90days_description: Diese Tag-Cloud beinhaltet Tags der Aufgaben, 
+      die in den letzten 90 Tagen erstellt oder erledigt wurden.
     tag_cloud_90days_title: Tag-Cloud-Aufgaben in den letzten 90 Tagen
-    tag_cloud_description: Diese Tag-Cloud beinhaltet Tags aller Aufgaben (erledigt,
-      unerledigt, sichtbar, unsichtbar)
+    tag_cloud_description: Diese Tag-Cloud beinhaltet Tags aller Aufgaben 
+      (erledigt, unerledigt, sichtbar, unsichtbar)
     tag_cloud_title: Tag-Cloud aller Aufgaben
     tags: Tags
     time_of_day: Tageszeit (alle Aufgaben)
@@ -941,8 +961,8 @@ de:
     top10_projects: Top 10 aller Projekte
     top10_projects_30days: Top-10-Projekt der letzten 30 Tage
     top5_contexts: Top 5 aller Kontexte
-    top5_visible_contexts_with_incomplete_actions: Top 5 der sichtbaren Kontexte mit
-      unerledigten Aufgaben
+    top5_visible_contexts_with_incomplete_actions: Top 5 der sichtbaren Kontexte
+      mit unerledigten Aufgaben
     totals: Ingesamt
     totals_action_count: hatten Sie insgesamt %{count} Aufgaben
     totals_actions_completed: "%{count} davon sind erledigt."
@@ -982,10 +1002,11 @@ de:
     action_deleted_error: Fehler beim Löschen der Aufgabe
     action_deleted_success: Die nächste Aufgabe erfolgreich gelöscht
     action_due_on: "(Aufgabe fällig am %{date})"
-    action_marked_complete: Die Aufgabe <strong>'%{description}'</strong> wurde als
-      <strong>%{completed}</strong> markiert.
-    action_marked_complete_error: Die Aufgabe <strong>'%{description}'</strong> wurde
-      aufgrund eines Fehlers NICHT als <strong>%{completed}</strong> markiert.
+    action_marked_complete: Die Aufgabe <strong>'%{description}'</strong> wurde 
+      als <strong>%{completed}</strong> markiert.
+    action_marked_complete_error: Die Aufgabe <strong>'%{description}'</strong> 
+      wurde aufgrund eines Fehlers NICHT als <strong>%{completed}</strong> 
+      markiert.
     action_saved: Aufgabe gespeichert
     action_saved_to_tickler: Aufgabe im Notizbuch gespeichert
     actions:
@@ -1011,7 +1032,8 @@ de:
     added_new_project: Neues Projekt hinzugefügt
     all_completed: Alle erledigten Aufgaben
     all_completed_here: hier
-    all_completed_tagged_page_title: TRACKS::Alle erledigten Aufgaben mit Tag %{tag_name}
+    all_completed_tagged_page_title: TRACKS::Alle erledigten Aufgaben mit Tag 
+      %{tag_name}
     append_in_this_project: in diesem Projekt
     archived_tasks_title: TRACKS::Archivierte erledigte Aufgaben
     blocked_by: Blockiert durch %{predecessors}
@@ -1023,8 +1045,8 @@ de:
       due_today: Heute fällig
       get_in_ical_format: Diesen Kalender im iCal Format herunterladen
     calendar_page_title: TRACKS::Kalender
-    cannot_add_dependency_to_completed_todo: Kann keine Abhängigkeit zu einer erledigten
-      Aufgabe hinzufügen!
+    cannot_add_dependency_to_completed_todo: Kann keine Abhängigkeit zu einer 
+      erledigten Aufgabe hinzufügen!
     clear_due_date: Fälligkeitsdatum leeren
     clear_show_from_date: Datum leeren
     completed: Erledigt
@@ -1035,8 +1057,8 @@ de:
       other: Es befinden sich %{count} erledigte Aufgaben im Archiv.
     completed_last_day: In den letzten 24 Stunden erledigt
     completed_last_x_days: In den letzten %{count} Tagen erledigt
-    completed_recurrence_completed: Es gibt keine weitere Aufgabe nach der soeben
-      gelöschten. Die Wiederholung ist abgeschlossen.
+    completed_recurrence_completed: Es gibt keine weitere Aufgabe nach der 
+      soeben gelöschten. Die Wiederholung ist abgeschlossen.
     completed_recurring: Erledigte wiederkehrende Aufgaben
     completed_recurring_actions_title: TRACKS::Erledigte wiederkehrende Aufgaben
     completed_rest_of_month: Erledigt diesen Monat
@@ -1045,12 +1067,12 @@ de:
     completed_tagged_page_title: TRACKS::Erledigte Aufgaben mit Tag %{tag_name}
     completed_tasks_title: TRACKS::Erledigte Aufgaben
     completed_today: Heute erledigt
-    confirm_delete: Sind Sie sicher, dass Sie die Aufgabe '%{description}' löschen
-      möchten?
+    confirm_delete: Sind Sie sicher, dass Sie die Aufgabe '%{description}' 
+      löschen möchten?
     context_changed: Kontext zu %{name} gewechselt
     convert_to_project: In Projekt umwandeln
-    defer_date_after_due_date: Zurückstellungsdatum nach Ablaufdatum. Bitte passe
-      das Ablaufdatum an, dass es vor dem Zurückstellungsdatum liegt.
+    defer_date_after_due_date: Zurückstellungsdatum nach Ablaufdatum. Bitte 
+      passe das Ablaufdatum an, dass es vor dem Zurückstellungsdatum liegt.
     defer_x_days:
       one: Einen Tag zurückstellen
       other: '%{count} Tage zurückstellen'
@@ -1059,14 +1081,15 @@ de:
     deferred_tasks_title: TRACKS::Notizbuch
     delete: Löschen
     delete_action: Aufgabe löschen
-    delete_recurring_action_confirm: Soll die wiederkehrende Aufgabe '%{description}'
-      wirklich gelöscht werden?
+    delete_recurring_action_confirm: Soll die wiederkehrende Aufgabe 
+      '%{description}' wirklich gelöscht werden?
     delete_recurring_action_title: Delete the recurring action
     deleted_success: Die Aufgabe wurde erfolgreich gelöscht.
     depends_on: Hängt ab von
     depends_on_separate_with_commas: Hängt ab von (kommagetrennt)
     done: Erledigt?
-    drag_action_title: Auf andere Aufgabe ziehen, um sie als Abhängigkeit zu definieren
+    drag_action_title: Auf andere Aufgabe ziehen, um sie als Abhängigkeit zu 
+      definieren
     due: Fällig
     edit: Bearbeiten
     edit_action: Aufgabe bearbeiten
@@ -1075,17 +1098,19 @@ de:
     error:
       invalid_due_date: Invalid due date
       invalid_show_from_date: Invalid show from date
-    error_completing_todo: Beim Abschließen/Aktivieren der wiederkehrenden Aufgabe
-      %{description} ist ein Fehler aufgetreten
+    error_completing_todo: Beim Abschließen/Aktivieren der wiederkehrenden 
+      Aufgabe %{description} ist ein Fehler aufgetreten
     error_deleting_item: Beim Löschen von %{description} trat ein Fehler auf
-    error_deleting_recurring: Beim Löschen der wiederkehrenden Aufgabe %{description}
-      ist ein Fehler aufgetreten
-    error_removing_dependency: Beim Entfernen der Abhängigkeit ist ein Fehler aufgetreten
-    error_saving_recurring: Es gab einen Fehler beim Speichern der wiederkehrenden
-      Aufgabe '%{description}'
-    error_starring: Konnte die Hervorhebung von '%{description}' nicht durchführen
-    error_starring_recurring: Konnte die Hervorhebung der wiederkehrenden Aufgabe
-      '%{description}' nicht durchführen
+    error_deleting_recurring: Beim Löschen der wiederkehrenden Aufgabe 
+      %{description} ist ein Fehler aufgetreten
+    error_removing_dependency: Beim Entfernen der Abhängigkeit ist ein Fehler 
+      aufgetreten
+    error_saving_recurring: Es gab einen Fehler beim Speichern der 
+      wiederkehrenden Aufgabe '%{description}'
+    error_starring: Konnte die Hervorhebung von '%{description}' nicht 
+      durchführen
+    error_starring_recurring: Konnte die Hervorhebung der wiederkehrenden 
+      Aufgabe '%{description}' nicht durchführen
     error_toggle_complete: Könnte nicht diese Marke todo komplett
     feed_title_in_context: im Kontext '%{context}'
     feed_title_in_project: im Projekt '%{project}'
@@ -1099,12 +1124,12 @@ de:
     in_hidden_state: als versteckt markiert
     in_pending_state: und als ausstehend markiert
     list_incomplete_next_actions: Unerledigte Folge-Aufgaben anzeigen
-    list_incomplete_next_actions_with_limit: Zeige die letzten %{count} unerledigten
-      Folge-Aufgaben
+    list_incomplete_next_actions_with_limit: Zeige die letzten %{count} 
+      unerledigten Folge-Aufgaben
     mark_complete: Mark complete
     mobile_todos_page_title: Alle Aufgaben
-    new_related_todo_created: Eine neue Aufgabe wurde hinzugefügt, die zu dieser wiederkehrenden
-      Aufgabe gehört
+    new_related_todo_created: Eine neue Aufgabe wurde hinzugefügt, die zu dieser
+      wiederkehrenden Aufgabe gehört
     new_related_todo_created_short: hat eine neue Aufgabe
     new_related_todo_not_created_short: konnte nicht erstellt werden
     next_action_description: Beschreibung der nächsten Aufgabe
@@ -1127,7 +1152,8 @@ de:
     no_actions:
       completed: Currently there are no completed actions
       completed_recurring: Currently there are no completed recurring todos
-      completed_rest_of_month: No actions were completed in the rest of this month
+      completed_rest_of_month: No actions were completed in the rest of this 
+        month
       completed_rest_of_week: No actions were completed in the rest of this week
       completed_today: No actions were completed today
       context: Currently there are no incomplete actions in this context
@@ -1139,9 +1165,12 @@ de:
       due_today: No actions due today
       hidden: Currently there are no hidden actions found
       not_done: Currently there are no incomplete actions
-      not_done_context: Currently there are no incomplete actions in this context
-      not_done_project: Currently there are no incomplete actions in this project
-      not_done_with_tag: Currently there are no incomplete actions with the tag '%{param}'
+      not_done_context: Currently there are no incomplete actions in this 
+        context
+      not_done_project: Currently there are no incomplete actions in this 
+        project
+      not_done_with_tag: Currently there are no incomplete actions with the tag 
+        '%{param}'
       project: Currently there are no incomplete actions in this project
       recurring_todos: Currently there are no recurring todos
       tag_hidden: Currently there are no hidden actions found
@@ -1171,7 +1200,8 @@ de:
       ends_on_number_times: Endet nach %{number} mal
       every_work_day: Jeden Arbeitstag
       monthly: Monatlich
-      monthly_every_xth_day: Der %{day} %{day_of_week} eines jeden %{month}. Monats
+      monthly_every_xth_day: Der %{day} %{day_of_week} eines jeden %{month}. 
+        Monats
       monthly_options: Einstellungen für monatliche Aufgaben
       no_end_date: Kein Enddatum
       pattern:
@@ -1220,7 +1250,8 @@ de:
         weekly: wöchentlich
       recurrence_on:
         due_date: set the actions due date
-        from_tickler: set the date the action should be shown (do not set a due date)
+        from_tickler: set the date the action should be shown (do not set a due 
+          date)
         options: Use the calculated date to
         show_always: always
         show_days_before: not until %{days} days before the due date
@@ -1233,14 +1264,15 @@ de:
       yearly_every_x_day: Jeden %{day}. %{month}
       yearly_every_xth_day: Den %{day} %{day_of_week} des %{month}
       yearly_options: Einstellungen jährliche Aufgaben
-    recurrence_completed: Nach dieser erledigten wiederkehrenden Aufgabe folgt keine
-      mehr. Die Wiederholung endet hiermit.
+    recurrence_completed: Nach dieser erledigten wiederkehrenden Aufgabe folgt 
+      keine mehr. Die Wiederholung endet hiermit.
     recurrence_period: Wiederholungszeitraum
-    recurring_action_deleted: Die Aufgabe wurde gelöscht. Da dies eine wiederkehrende
-      Aufgabe ist, wurde eine neue erstellt.
+    recurring_action_deleted: Die Aufgabe wurde gelöscht. Da dies eine 
+      wiederkehrende Aufgabe ist, wurde eine neue erstellt.
     recurring_action_saved: Wiederkehrende Aufgabe gespeichert
     recurring_actions_title: TRACKS::Wiederkehrende Aufgaben
-    recurring_deleted_success: Die wiederkehrende Aufgabe wurde erfolgreich gelöscht.
+    recurring_deleted_success: Die wiederkehrende Aufgabe wurde erfolgreich 
+      gelöscht.
     recurring_pattern_removed: Das Wiederholungsmuster wurde entfernt %{count}
     recurring_todos: Wiederkehrende Aufgaben
     remove_dependency: Abhängigkeit löschen (löscht nicht die Aufgabe)
@@ -1260,14 +1292,15 @@ de:
     tags: Tags (kommagetrennt)
     task_list_title: TRACKS::Aufgaben anzeigen
     tickler_items_due:
-      one: Ein Notizbuch-Eintrag ist nun fällig - lade die Seite neu, um sie zu sehen.
+      one: Ein Notizbuch-Eintrag ist nun fällig - lade die Seite neu, um sie zu 
+        sehen.
       other: '%{count} Notizbuch-Einträge sind nun fällig - lade die Seite neu, um
         sie zu sehen.'
     to_tickler: ", im Notizbuch hinterlegt"
     unable_to_add_dependency: Abhängigkeit nicht hinzufügbar
-    unresolved_dependency: Zu dem Wert, den Sie im Feld ''Hängt ab von'' eingegeben
-      haben, konnte keine Aufgabe gefunden werden. Dieser Wert wird nicht mit der
-      neuen Aufgabe gespeichert. Trotzdem fortfahren?
+    unresolved_dependency: Zu dem Wert, den Sie im Feld ''Hängt ab von'' 
+      eingegeben haben, konnte keine Aufgabe gefunden werden. Dieser Wert wird 
+      nicht mit der neuen Aufgabe gespeichert. Trotzdem fortfahren?
     was_due_on_date: war am %{date} fällig
   users:
     account_signup: Kontoerstellung
@@ -1278,9 +1311,9 @@ de:
     auth_type_updated: Authentifizierungs-Art erfolgreich geändert.
     change_auth_type_title: TRACKS::Authentifizierungstyp ändern
     change_authentication_type: Authentifizierungsart ändern
-    change_password_prompt: Gib dein neues Passwort in die unten stehenden Felder
-      ein und klicke auf 'Passwort ändern' um dein altes Passwort durch das neue zu
-      ersetzen.
+    change_password_prompt: Gib dein neues Passwort in die unten stehenden 
+      Felder ein und klicke auf 'Passwort ändern' um dein altes Passwort durch 
+      das neue zu ersetzen.
     change_password_submit: Passwort ändern
     change_password_title: TRACKS::Passwort ändern
     choose_password: Passwort wählen
@@ -1289,7 +1322,8 @@ de:
     destroy_confirmation: 'Achtung: der Benutzer ''%{login}'' wird mit all seinen
       Aufgaben, Kontexten, Projekten und Notizen gelöscht. Sind Sie sicher, dass Sie
       fortfahren möchten?'
-    destroy_error: Beim Löschen des Benutzers %{login} ist ein Fehler aufgetreten.
+    destroy_error: Beim Löschen des Benutzers %{login} ist ein Fehler 
+      aufgetreten.
     destroy_successful: Benutzer %{login} wurde erfolgreich gelöscht
     destroy_user: Benutzer löschen
     email_address: E-Mail-Adresse
@@ -1305,15 +1339,16 @@ de:
     new_user_heading: 'Einen neuen Benutzer anlegen:'
     new_user_title: TRACKS::Als Administrator anmelden
     no_signups_title: TRACKS::Anmeldung nicht erlaubt
-    openid_ok_pref_failed: Die URL %{url} wurde erfolgreich als Identität verifiziert,
-      beim Speichern der Einstellungen trat jedoch ein Fehler auf.
-    openid_url_verified: Die URL %{url} wurde erfolgreich als Identität verifiziert
-      und Deine Authentifizierung auf OpenID umgestellt.
+    openid_ok_pref_failed: Die URL %{url} wurde erfolgreich als Identität 
+      verifiziert, beim Speichern der Einstellungen trat jedoch ein Fehler auf.
+    openid_url_verified: Die URL %{url} wurde erfolgreich als Identität 
+      verifiziert und Deine Authentifizierung auf OpenID umgestellt.
     password_confirmation_label: Passwort bestätigen
     password_updated: Passwort aktualisiert.
     register_with_cas: Mit deinem CAS-Benutzernamen
-    select_authentication_type: Wähle deine neue Authentifizierungsart und klicke
-      'Authentifizierungsart ändern' an, um deine aktuellen Einstellungen zu überschreiben.
+    select_authentication_type: Wähle deine neue Authentifizierungsart und 
+      klicke 'Authentifizierungsart ändern' an, um deine aktuellen Einstellungen
+      zu überschreiben.
     signup: Registrieren
     signup_new_user: Neuen Benutzer anlegen
     signup_successful: Benutzer %{username} erfolgreich angelegt.
@@ -1330,15 +1365,13 @@ de:
     next_label: Nächste »
     page_entries_info:
       multi_page: Angezeigte %{model} %{from} - %{to} von %{count} insgesamt
-      multi_page_html: Angezeigte %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> von <b>%{count}</b>
-        insgesamt
+      multi_page_html: Angezeigte %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> von 
+        <b>%{count}</b> insgesamt
       single_page:
-        one: Angezeigte 1 %{model}
-        other: Anzeige aller %{count} %{model}
-        zero: Kein %{model} gefunden
+        one: Kein %{model} gefunden
+        other: Angezeigte 1 %{model}
       single_page_html:
-        one: Angezeigte <b>1</b> %{model}
-        other: Anzeige <b>aller&nbsp;%{count}</b> %{model}
-        zero: Kein %{model} gefunden
+        one: Kein %{model} gefunden
+        other: Angezeigte <b>1</b> %{model}
     page_gap: "..."
     previous_label: "« Zurück"
