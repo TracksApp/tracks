@@ -395,7 +395,7 @@ GEM
     sqlite3 (2.9.0)
       mini_portile2 (~> 2.8.0)
     stringio (3.1.7)
-    stripe (18.2.0)
+    stripe (18.3.0)
     superfish-rails (1.6.0.1)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
