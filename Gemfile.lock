@@ -94,7 +94,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.21)
     benchmark (0.5.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -105,7 +105,7 @@ GEM
     byebug (13.0.0)
       reline (>= 0.6.0)
     cgi (0.5.0)
-    climate_control (0.2.0)
+    climate_control (1.2.0)
     codeclimate-test-reporter (1.0.9)
       simplecov (<= 0.13)
     coffee-rails (5.0.0)
@@ -115,8 +115,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    concurrent-ruby (1.3.5)
-    connection_pool (2.5.4)
+    concurrent-ruby (1.3.6)
+    connection_pool (3.0.2)
     crass (1.0.6)
     dartsass-sprockets (3.2.1)
       railties (>= 4.0.0)
@@ -153,7 +153,7 @@ GEM
     highline (3.1.2)
       reline
     htmlentities (4.4.2)
-    i18n (1.14.7)
+    i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     i18n-tasks (1.0.15)
       activesupport (>= 4.0.2)
@@ -187,12 +187,12 @@ GEM
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    kt-paperclip (7.2.0)
+    kt-paperclip (7.3.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       marcel (~> 1.0.1)
       mime-types
-      terrapin (~> 0.6.0)
+      terrapin (>= 0.6.0, < 2.0)
     language_server-protocol (3.17.0.5)
     libv8-node (24.12.0.1)
     lint_roller (1.1.0)
@@ -211,14 +211,17 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
-    mime-types (3.4.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2023.0218.1)
+    mime-types (3.7.0)
+      logger
+      mime-types-data (~> 3.2025, >= 3.2025.0507)
+    mime-types-data (3.2026.0224)
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     mini_racer (0.19.2)
       libv8-node (~> 24.12.0.1)
-    minitest (5.26.0)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
     minitest-stub-const (0.6)
     mocha (3.0.2)
       ruby2_keywords (>= 0.0.5)
@@ -399,8 +402,8 @@ GEM
     superfish-rails (1.6.0.1)
     terminal-table (4.0.0)
       unicode-display_width (>= 1.1.1, < 4)
-    terrapin (0.6.0)
-      climate_control (>= 0.0.3, < 1.0)
+    terrapin (1.1.1)
+      climate_control
     terser (1.2.6)
       execjs (>= 0.3.0, < 3)
     thor (1.5.0)
@@ -456,7 +459,7 @@ DEPENDENCIES
   jquery-rails (~> 4.6)
   jquery-ui-rails (~> 8.0.0)
   jquery_block_ui
-  kt-paperclip (~> 7.2)
+  kt-paperclip (~> 7.3)
   listen
   mini_racer
   minitest-stub-const
