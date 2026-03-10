@@ -96,7 +96,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.21)
     benchmark (0.5.0)
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
@@ -173,7 +173,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    jaro_winkler (1.6.1)
+    jaro_winkler (1.7.0)
     jquery-form-rails (1.0.1)
       jquery-rails
     jquery-rails (4.6.1)
@@ -184,8 +184,8 @@ GEM
       railties (>= 3.2.16)
     jquery_block_ui (0.0.1)
       rails (>= 3.1)
-    json (2.18.1)
-    json-schema (6.1.0)
+    json (2.19.1)
+    json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
     kramdown (2.5.2)
@@ -320,8 +320,9 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rbs (3.10.2)
+    rbs (3.10.3)
       logger
+      tsort
     rdoc (6.15.1)
       erb
       psych (>= 4.0.0)
@@ -329,7 +330,7 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.2)
       io-console (~> 0.5)
-    reverse_markdown (3.0.1)
+    reverse_markdown (3.0.2)
       nokogiri
     rexml (3.4.4)
     rspec-expectations (3.13.5)
@@ -369,7 +370,7 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    solargraph (0.58.2)
+    solargraph (0.58.3)
       ast (~> 2.4.3)
       backport (~> 1.2)
       benchmark (~> 0.4)
