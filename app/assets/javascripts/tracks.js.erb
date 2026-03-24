@@ -96,6 +96,26 @@ var TracksForm = {
             }
             return false;
         });
+
+        /* add another date fieldset for multi-date todo creation */
+        $(document).on("click", "#add_date_fieldset", function(e) {
+            e.preventDefault();
+            var $container = $("#date_fieldsets_container");
+            var $original  = $container.find(".date_fieldset").first();
+            var $clone     = $original.clone(false);
+            $clone.find("input").val("").removeClass("hasDatepicker").removeAttr("id");
+            // Replace the + button with a − remove button on the clone
+            $clone.find(".date_fieldset_btn").remove();
+            $clone.append('<a href="#" class="date_fieldset_btn remove_date_fieldset" title="' + i18n['todos.remove_date'] + '" aria-label="' + i18n['todos.remove_date'] + '"><i class="fas fa-minus-circle"></i></a>');
+            $container.find(".date_fieldset").last().after($clone);
+            TracksPages.setup_datepicker();
+        });
+
+        /* remove a cloned date fieldset */
+        $(document).on("click", ".remove_date_fieldset", function(e) {
+            e.preventDefault();
+            $(this).closest(".date_fieldset").remove();
+        });
     },
     enable_dependency_delete: function() {
         $(document).on("click", 'a[class=icon_delete_dep]', function() {

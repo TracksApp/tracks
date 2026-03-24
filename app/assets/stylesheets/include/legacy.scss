@@ -854,9 +854,44 @@ input#go_to_project, input#context_hide {
     .show_from_input, .due_input {
         width: 45%;
     }
+
+    .date_fieldset {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        margin-bottom: 4px;
+
+        .due_input, .show_from_input {
+            flex: 1;
+            float: none;
+        }
+
+        .date_fieldset_btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 30px;
+            flex-shrink: 0;
+            color: #5cb85c;
+            font-size: 16px;
+            text-decoration: none;
+            opacity: 0.75;
+            transition: opacity 0.15s;
+            margin-bottom: 1px;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        .remove_date_fieldset {
+            color: #d9534f;
+        }
+    }
 }
 
-#todo_new_action_container .show_from_input {
+#todo_new_action_container > .show_from_input {
     float: right;
 }
 

@@ -91,8 +91,13 @@ class TodosController < ApplicationController
     @tag_name = params['_tag_name']
 
     is_multiple = params[:todo] && params[:todo][:multiple_todos] && !params[:todo][:multiple_todos].nil?
+    is_multiple_dates = params[:todo] &&
+                        ((params[:todo][:due].is_a?(Array) && params[:todo][:due].count(&:present?) > 1) ||
+                         (params[:todo][:show_from].is_a?(Array) && params[:todo][:show_from].count(&:present?) > 1))
     if is_multiple
       create_multiple
+    elsif is_multiple_dates
+      create_multiple_dates
     else
       p = Todos::TodoCreateParamsHelper.new(params, current_user)
       p.parse_dates unless mobile?
@@ -236,6 +241,72 @@ class TodosController < ApplicationController
         else
           render :xml => @todos[0].errors.to_xml, :status => 422
         end
+      end
+    end
+  end
+
+  def create_multiple_dates
+    p = Todos::TodoCreateParamsHelper.new(params, current_user)
+    # parse_dates is skipped because due/show_from are arrays (guarded in helper)
+    tag_list = p.tag_list
+
+    due_dates       = Array(params[:todo][:due]).map       { |d| current_user.prefs.parse_date(d) }
+    show_from_dates = Array(params[:todo][:show_from]).map { |d| current_user.prefs.parse_date(d) }
+
+    @todos       = []
+    @build_todos = []
+    validates    = true
+
+    due_dates.each_with_index do |due, i|
+      next if due.blank? && show_from_dates[i].blank?
+
+      todo_attrs = p.attributes.merge('due' => due, 'show_from' => show_from_dates[i])
+      todo = current_user.todos.build
+      todo.assign_attributes(todo_attrs)
+      validates &&= todo.valid?
+      @build_todos << todo
+    end
+
+    if validates && @build_todos.any?
+      @build_todos.each do |todo|
+        @saved = todo.save
+        if @saved
+          todo.tag_with(tag_list) if tag_list.present?
+          todo.add_predecessor_list(p.predecessor_list) if p.predecessor_list.present?
+          todo.block! if todo.uncompleted_predecessors?
+          @todos << todo
+        end
+      end
+      @saved = @todos.size == @build_todos.size
+    else
+      @todos = @build_todos
+      @saved = false
+    end
+
+    @todo = @todos.last if @todos.present?
+    @not_done_todos = @todos if p.new_project_created || p.new_context_created
+
+    respond_to do |format|
+      format.html { redirect_to action: 'index' }
+      format.js do
+        determine_down_count if @saved
+        @contexts = current_user.contexts if p.new_context_created
+        @projects = current_user.projects if p.new_project_created
+        @new_project_created   = p.new_project_created
+        @new_context_created   = p.new_context_created
+        @initial_context_name  = params['default_context_name']
+        @initial_project_name  = params['default_project_name']
+        @initial_tags          = params['initial_tag_list']
+        if @saved && @todos.size > 0
+          @default_tags = @todos[0].project.default_tags unless @todos[0].project.nil?
+        else
+          @multiple_error = @todos.size > 0 ? '' : t('todos.next_action_needed')
+          @saved = false
+        end
+        @status_message = @todos.size > 1 ? t('todos.added_new_next_action_plural') : t('todos.added_new_next_action_singular')
+        @status_message = t('todos.added_new_project') + ' / ' + @status_message if p.new_project_created
+        @status_message = t('todos.added_new_context') + ' / ' + @status_message if p.new_context_created
+        render action: 'create_multiple_dates'
       end
     end
   end
