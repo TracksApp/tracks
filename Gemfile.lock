@@ -94,7 +94,7 @@ GEM
       execjs (~> 2)
     backport (1.2.0)
     base64 (0.3.0)
-    bcrypt (3.1.21)
+    bcrypt (3.1.22)
     benchmark (0.5.0)
     bigdecimal (4.0.1)
     bootstrap-sass (3.4.1)
@@ -450,7 +450,7 @@ DEPENDENCIES
   actionpack-xml_parser (~> 2.0)
   activemodel-serializers-xml (~> 1.0.3)
   acts_as_list
-  bcrypt (~> 3.1.21)
+  bcrypt (~> 3.1.22)
   bootstrap-sass (= 3.4.1)
   bullet
   byebug
