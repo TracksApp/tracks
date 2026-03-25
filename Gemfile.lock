@@ -87,8 +87,6 @@ GEM
     acts_as_list (1.2.6)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    addressable (2.8.9)
-      public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     autoprefixer-rails (10.4.21.0)
       execjs (~> 2)
@@ -185,9 +183,6 @@ GEM
     jquery_block_ui (0.0.1)
       rails (>= 3.1)
     json (2.19.2)
-    json-schema (6.2.0)
-      addressable (~> 2.8)
-      bigdecimal (>= 3.1, < 5)
     kramdown (2.5.2)
       rexml (>= 3.4.4)
     kramdown-parser-gfm (1.1.0)
@@ -216,8 +211,6 @@ GEM
       net-pop
       net-smtp
     marcel (1.0.4)
-    mcp (0.9.1)
-      json-schema (>= 4.1)
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0218.1)
@@ -259,7 +252,6 @@ GEM
     psych (5.2.6)
       date
       stringio
-    public_suffix (7.0.5)
     puma (7.2.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -337,11 +329,10 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.4)
-    rubocop (1.85.1)
+    rubocop (1.86.0)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
-      mcp (~> 0.6)
       parallel (~> 1.10)
       parser (>= 3.3.0.2)
       rainbow (>= 2.2.2, < 4.0)
@@ -481,7 +472,7 @@ DEPENDENCIES
   rails_autolink
   rexml
   rspec-expectations
-  rubocop (~> 1.85)
+  rubocop (~> 1.86)
   sanitize (~> 7.0)
   simplecov
   solargraph
