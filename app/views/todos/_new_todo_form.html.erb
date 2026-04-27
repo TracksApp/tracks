@@ -37,15 +37,19 @@
       <%= content_tag("div", "", :id => "tag_list_auto_complete", :class => "auto_complete") %>
     </div>
 
-    <div class="form-group">
-      <div class="due_input">
-        <label for="todo_due"><%= Todo.human_attribute_name('due') %></label>
-        <%= t.text_field("due", "size" => 12, "class" => "Date form-control input-sm", "autocomplete" => "off") %>
-      </div>
+    <div class="form-group" id="date_fieldsets_container">
+      <div class="date_fieldset">
+        <div class="due_input">
+          <label><%= Todo.human_attribute_name('due') %></label>
+          <%= t.text_field("due", name: "todo[due][]", "size" => 12, "class" => "Date form-control input-sm", "autocomplete" => "off", "aria-label" => Todo.human_attribute_name('due')) %>
+        </div>
 
-      <div class="show_from_input">
-        <label for="todo_show_from"><%= Todo.human_attribute_name('show_from') %></label>
-        <%= t.text_field("show_from", "size" => 12, "class" => "Date form-control input-sm", "autocomplete" => "off") %>
+        <div class="show_from_input">
+          <label><%= Todo.human_attribute_name('show_from') %></label>
+          <%= t.text_field("show_from", name: "todo[show_from][]", "size" => 12, "class" => "Date form-control input-sm", "autocomplete" => "off", "aria-label" => Todo.human_attribute_name('show_from')) %>
+        </div>
+
+        <a href="#" id="add_date_fieldset" class="date_fieldset_btn" title="<%= t('todos.add_another_date') %>" aria-label="<%= t('todos.add_another_date') %>"><i class="fas fa-plus-circle"></i></a>
       </div>
     </div>
 

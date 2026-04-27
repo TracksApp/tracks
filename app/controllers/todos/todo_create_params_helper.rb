@@ -79,6 +79,11 @@ module Todos
     end
 
     def parse_dates
+      return if (@attributes['due'].is_a?(Array) && @attributes['due'].count(&:present?) > 1) ||
+                 (@attributes['show_from'].is_a?(Array) && @attributes['show_from'].count(&:present?) > 1)   # multi-date: parsed per-element in controller
+      # unwrap single-element arrays coming from the multi-date form fields
+      @attributes['due'] = @attributes['due'].first if @attributes['due'].is_a?(Array)
+      @attributes['show_from'] = @attributes['show_from'].first if @attributes['show_from'].is_a?(Array)
       @attributes['show_from'] = @user.prefs.parse_date(show_from)
       @attributes['due'] = @user.prefs.parse_date(due)
       @attributes['due'] ||= ''
@@ -129,7 +134,7 @@ module Todos
 
       filtered = params.require(:todo).permit(
         :context_id, :project_id, :description, :notes,
-        :due, :show_from, :state,
+        :due, :show_from, :state, due: [], show_from: [],
         # XML API
         :tags => [:tag => [:name]],
         :context => [:name],
