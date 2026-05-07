@@ -1,4 +1,3 @@
----
 he:
   activerecord:
     attributes:
@@ -70,8 +69,9 @@ he:
         odd: חייב להיות אי זוגי
         record_invalid: אימות נכשל %{errors}
         restrict_dependent_destroy:
-          many: Невозможно удалить запись, так как есть %{record} зависящие от нее
           one: Невозможно удалить запись, так как есть %{record} зависящая от нее
+          two: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          other: ''
         taken: כבר נמצא בשימוש
         too_long: ארוך מדי (לכל היותר %{count} תווים(
         too_short: קצר צדי (לכל הפחות %{count} תווים(
@@ -87,14 +87,15 @@ he:
         body: 'בעיות בשדות הבאים:'
         header:
           one: 1 error prohibited this %{model} from being saved
-          other: "%{count} errors prohibited this %{model} from being saved"
+          two: '%{count} errors prohibited this %{model} from being saved'
+          other: ''
   common:
     action: פעולה
     actions: פעולות
     actions_midsentence:
-      one: פעולה
+      one: פעולות
+      two: פעולה
       other: פעולות
-      zero: פעולות
     add: הוסף
     ajaxError: שגיאה בתגובה מהשרת
     back: אחורה
@@ -106,9 +107,9 @@ he:
     contribute: תרום
     create: צור
     days_midsentence:
-      one: יום
+      one: ימים
+      two: יום
       other: ימים
-      zero: ימים
     deferred: נדחה
     description: תיאור
     drag_handle: משוך
@@ -127,9 +128,9 @@ he:
     none: הערה
     not_available_abbr: ל/י
     note:
-      one: פתקה
-      other: "%{count} פתקיות"
-      zero: אין פתקיות
+      one: אין פתקיות
+      two: פתקה
+      other: '%{count} פתקיות'
     notes: פתקיות
     numbered_step: צעד %{number}
     ok: אוקי
@@ -145,11 +146,13 @@ he:
     show_all: הצג הכל
     sort:
       alphabetically: אלפבתי
-      alphabetically_confirm: לסדר את הפרוייקטים בסדר אלפבתי? הפעולה תחליף את הסדר הקיים
+      alphabetically_confirm: לסדר את הפרוייקטים בסדר אלפבתי? הפעולה תחליף את הסדר
+        הקיים
       alphabetically_title: סדר פרוייקטים אלפבטית
       by_task_count: לפי מספר משימות
       by_task_count_title: מיין לפי מספר משימות
-      by_task_count_title_confirm: לסדר את הפרוייקטים לפי מספר המשימות? הפעולה תחליף את הסדר הקיים
+      by_task_count_title_confirm: לסדר את הפרוייקטים לפי מספר המשימות? הפעולה תחליף
+        את הסדר הקיים
       sort: מיין
     third: שלישי
     todo: משימה
@@ -167,7 +170,8 @@ he:
     context_name: שם הקשר
     context_state: Context state
     delete_context: מחק הקשר
-    delete_context_confirmation: האם למחוק את ההקשר  '%{name}'? יש להזהר מפני שפעולה זו מתחוק את כל הפעולות המחזוריות בהקשר זה
+    delete_context_confirmation: האם למחוק את ההקשר  '%{name}'? יש להזהר מפני שפעולה
+      זו מתחוק את כל הפעולות המחזוריות בהקשר זה
     delete_context_title: מחיקת הקשר
     edit_context: עריכת הקשר
     hidden_contexts: הקשרים מוסתרים
@@ -197,8 +201,10 @@ he:
     invalid_import_destination: Invalid import destination
   date:
     abbr_day_names: '["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]'
-    abbr_month_names: '[nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]'
-    day_names: '["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]'
+    abbr_month_names: '[nil, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+      "Sep", "Oct", "Nov", "Dec"]'
+    day_names: '["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+      "Saturday"]'
     formats:
       default: "%Y-%m-%d"
       long: "%B %d, %Y"
@@ -206,46 +212,56 @@ he:
       month_day: Month day
       only_day: Only day
       short: "%b %d"
-    month_names: '[nil, "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]'
+    month_names: '[nil, "January", "February", "March", "April", "May", "June", "July",
+      "August", "September", "October", "November", "December"]'
     order: "[:year, :month, :day]"
   datetime:
     distance_in_words:
       about_x_hours:
         one: כשעה
-        other: כ-%{count} שעות
+        two: כ-%{count} שעות
+        other: ''
       about_x_months:
         one: כחודש
-        other: כ-%{count} חודשים
+        two: כ-%{count} חודשים
+        other: ''
       about_x_years:
         one: כשנה
-        other: כ-%{count} שנים
+        two: כ-%{count} שנים
+        other: ''
       almost_x_years:
         one: כמעט שנה
-        other: כמעט %{count} שנים
+        two: כמעט %{count} שנים
+        other: ''
       half_a_minute: חצי דקה
       less_than_x_minutes:
         one: פחות מדקה
+        two: פחות מדקה
         other: פחות מ-%{count} דקות
-        zero: פחות מדקה
       less_than_x_seconds:
         one: פחות משנייה
+        two: פחות משנייה
         other: פחות מ-%{count} שניות
-        zero: פחות משנייה
       over_x_years:
         one: מעלה לשנה
-        other: מעל %{count} שנים
+        two: מעל %{count} שנים
+        other: ''
       x_days:
         one: יום
-        other: "%{count} ימים"
+        two: '%{count} ימים'
+        other: ''
       x_minutes:
         one: דקה
-        other: "%{count} דקות"
+        two: '%{count} דקות'
+        other: ''
       x_months:
         one: חודש
-        other: "%{count} חודשים"
+        two: '%{count} חודשים'
+        other: ''
       x_seconds:
         one: שנייה
-        other: "%{count} שניות"
+        two: '%{count} שניות'
+        other: ''
     prompts:
       day: יום
       hour: שעה
@@ -295,7 +311,8 @@ he:
     ical_feed: הזנת iCal
     last_fixed_number: "%{number} פעולות אחרונות"
     legend: 'מקרא:'
-    notice_incomplete_only: 'הערה: כל ההזנות מציגות את כל הפעולות שלא סומנו כמבוצעות אלא אם כן נבחר במפורש אחרת.'
+    notice_incomplete_only: 'הערה: כל ההזנות מציגות את כל הפעולות שלא סומנו כמבוצעות
+      אלא אם כן נבחר במפורש אחרת.'
     plain_text_feed: הזנת טקסט פשוט
     project_centric: הזנות עבור פעולות שלא הסתיימו בפרוייקט מסויים
     project_needed: דרוש לפחות פרוייקט אחד לפני שניתן לבקש הזנה
@@ -317,11 +334,14 @@ he:
     opensearch_description: חיפוש במסלולים
   help:
     title: Help
-    usage: 'You can find information on the usage in the %{manual_link} in the project GitHub wiki.'
+    usage: 'You can find information on the usage in the %{manual_link} in the project
+      GitHub wiki.'
     manual_link_text: User manual
-    bugs: 'If you encounter a bug or have a feature request, please report it in the %{issue_link}.'
+    bugs: 'If you encounter a bug or have a feature request, please report it in the
+      %{issue_link}.'
     issue_link_text: issue queue
-    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link} for further information. You can also come discuss with the community:'
+    contribute: 'We gladly welcome all contributions to Tracks. Check the %{contribute_link}
+      for further information. You can also come discuss with the community:'
     contribute_link_text: project website
     mailing_list_link_text: Mailing list
     irc_bullet: '%{irc_link} (also available in %{matrix_link})'
@@ -429,8 +449,10 @@ he:
     todo:
       error_date_must_be_future: חייב להיות תאריך עתידי
     user:
-      error_context_not_associated: מזהה הקשר %{context} אינו משוייך עם מזה משתמש %{user}.
-      error_project_not_associated: מזהה פרוייקט %{project} אינו משוייך עם מזה משתמש %{user}.
+      error_context_not_associated: מזהה הקשר %{context} אינו משוייך עם מזה משתמש
+        %{user}.
+      error_project_not_associated: מזהה פרוייקט %{project} אינו משוייך עם מזה משתמש
+        %{user}.
   notes:
     delete_confirmation: האם למחוק את הפתקית  '%{id}'?
     delete_item_title: מחיקת פריט
@@ -439,7 +461,8 @@ he:
     deleted_note: הפתקית '%{id}' נמחקה
     edit_item_title: עריכת פריט
     in_project: 'ב:'
-    no_notes_available: 'אין כרגע פתקיות: ניתן להוסיף פתקיות לפְּרוֹיֶקְטים ספציפיים מעמוד הפְּרוֹיֶקְט'
+    no_notes_available: 'אין כרגע פתקיות: ניתן להוסיף פתקיות לפְּרוֹיֶקְטים ספציפיים
+      מעמוד הפְּרוֹיֶקְט'
     note_header: פתקית %{id}
     note_link_title: הצגת פתקית %{id}
     note_location_link: 'בתוך:'
@@ -481,7 +504,8 @@ he:
         units:
           byte:
             one: בייט
-            other: בתים
+            two: בתים
+            other: ''
           gb: ג'יגהבייט
           kb: קילו בייט
           mb: מגה בייט
@@ -501,14 +525,17 @@ he:
     current_authentication_type: שיטת הזיהוי שלי היא %{auth_type}
     edit_preferences: עריכת העדפות
     generate_new_token: יצירת אסימון חדש
-    generate_new_token_confirm: בטוח? יצירת אסימון חדש תחליף את האסימון הקיים ותבטל את השימוש בו.
+    generate_new_token_confirm: בטוח? יצירת אסימון חדש תחליף את האסימון הקיים ותבטל
+      את השימוש בו.
     is_false: שלילי
     is_true: חיובי
     open_id_url: כתובת זיהוי OpenID שלך היא
     page_title: מסלולים::העדפות
     page_title_edit: מסלולים::עריכת העדפות
     password_changed: הסיסמא שונתה, יש להיכנס שנית.
-    remove_introduction: You can remove your user account here. Note that this is irreversible and will remove all your data! After removal you will be logged out.
+    remove_introduction: You can remove your user account here. Note that this is
+      irreversible and will remove all your data! After removal you will be logged
+      out.
     show_number_completed: הצג %{number} פריטים שהסתיימו
     sms_context_none: ללא
     staleness_starts_after: תפלות מתחילה לאחר %{days} ימים
@@ -648,10 +675,12 @@ he:
     action_selection_title: מסלולים::בחירת פעולה
     actions: פעולות
     actions_30days_title: פעולות ב-30 הימים האחרונים
-    actions_actions_avg_created_30days: ב-30 הימים האחרונים נוצרו בממוצע %{count} פעולות
+    actions_actions_avg_created_30days: ב-30 הימים האחרונים נוצרו בממוצע %{count}
+      פעולות
     actions_avg_completed: והסתיימו בממוצע %{count} פעולות לחודש
     actions_avg_completed_30days: והסתיימו בממוצע %{count} פעולות ליום
-    actions_avg_completion_time: מכל הפעוליות שנסתיימות הזמן הממוצע לסיום הוא %{count} ימים
+    actions_avg_completion_time: מכל הפעוליות שנסתיימות הזמן הממוצע לסיום הוא %{count}
+      ימים
     actions_avg_created: ב-12 החודשים האחרונים יוצרו במוצע %{count} פעולות
     actions_day_of_week_legend:
       day_of_week: יום בשבוע
@@ -672,7 +701,8 @@ he:
     actions_selected_from_week: פעולות נבחרות משבוע
     click_to_return: הקלקה על %{link} תחזיר לעמוד הסטטיסטיקה
     click_to_return_link: כאן
-    click_to_show_actions_from_week: הקלקה על %{link} תציג את הפעולות משבוע %{week} ואילך
+    click_to_show_actions_from_week: הקלקה על %{link} תציג את הפעולות משבוע %{week}
+      ואילך
     click_to_update_actions: הקלקה על הבר בגרף מעדכנת את הפעולה למטה
     contexts: הקשרים
     current_running_time_of_incomplete_visible_actions: זמן מצטבר לכל הפעולות הגלויות
@@ -712,9 +742,11 @@ he:
       weeks: זמן מצטבר לפעולות (שבועות). הקלקה על הבר למידע נוסף
     spread_of_actions_for_all_context: פיזור פעולות לכל ההקשרים
     spread_of_running_actions_for_visible_contexts: פיזור הפעולות להקשרים גלויים
-    tag_cloud_90days_description: ענן התגיות מכיל תגיות עבור פעולות שנוצרו או הסתיימו ב-90 הימים האחרונים.
+    tag_cloud_90days_description: ענן התגיות מכיל תגיות עבור פעולות שנוצרו או הסתיימו
+      ב-90 הימים האחרונים.
     tag_cloud_90days_title: ענן תגיות לפעולות ב-90 הימים האחרונים
-    tag_cloud_description: ענן התגיות מכיל תגיות לכל הפעולות (הסתיימו, לא הסתיימו, גלויות ו/או מוסתרות(
+    tag_cloud_description: ענן התגיות מכיל תגיות לכל הפעולות (הסתיימו, לא הסתיימו,
+      גלויות ו/או מוסתרות(
     tag_cloud_title: ענן תגיות לכל הפעולות
     tags: תגיות
     time_of_day: זמן ביום (כל הפעולות)
@@ -729,7 +761,8 @@ he:
     top10_projects: עשרת הפרוייקטים המובילים
     top10_projects_30days: עשרת הפרוייקטים המובילים ב-30 הימים האחרונים
     top5_contexts: 5 הקשרים מובילים
-    top5_visible_contexts_with_incomplete_actions: 5 ההקשרים המובילים עם פעולות שלא הסתיימו
+    top5_visible_contexts_with_incomplete_actions: 5 ההקשרים המובילים עם פעולות שלא
+      הסתיימו
     totals: סיכומים
     totals_action_count: קיימות %{count} פעולות בסך הכל
     totals_actions_completed: "%{count} מהם הסתיימו"
@@ -770,7 +803,8 @@ he:
     action_deleted_success: פעולת המשך נמחקה בהצלחה
     action_due_on: "(פעולה עד  %{date})"
     action_marked_complete: הפעולה <strong>'%{description}'</strong> סומנה כ- <strong>%{completed}</strong>
-    action_marked_complete_error: הפעולה <strong>'%{description}'</strong>־לא־ סומנה כ - <strong>%{completed} עקב שגיאת שרת</strong>
+    action_marked_complete_error: הפעולה <strong>'%{description}'</strong>־לא־ סומנה
+      כ - <strong>%{completed} עקב שגיאת שרת</strong>
     action_saved: פעולה נשמרה
     action_saved_to_tickler: פעולה נשמרה למִזְכָּר
     actions:
@@ -808,7 +842,8 @@ he:
       due_today: להיום
       get_in_ical_format: קבלת לוח שנה זה בפורמט iCal
     calendar_page_title: מסלולים::לוח שנה
-    cannot_add_dependency_to_completed_todo: אין אפשרות להוסיף פעולה זו כתלות לפעולה שהסתיימה!
+    cannot_add_dependency_to_completed_todo: אין אפשרות להוסיף פעולה זו כתלות לפעולה
+      שהסתיימה!
     clear_due_date: מחיקת תאריך יעד
     clear_show_from_date: נקה הצגה מתאריך
     completed: הסתיימו
@@ -816,10 +851,12 @@ he:
     completed_actions_with: פעולות שהסתיימו עם התגית %{tag_name}
     completed_in_archive:
       one: קיימת בארכיון פעולה שהסתיימה.
-      other: קיימות %{count} פעולות שהסתיימו בארכיון.
+      two: קיימות %{count} פעולות שהסתיימו בארכיון.
+      other: ''
     completed_last_day: הסתיימו ב-24 שעות האחרונות
     completed_last_x_days: הסתיימו ב-%{count} הימים האחרונים
-    completed_recurrence_completed: אין פעולת המשך לפעולה המחזורית שנמחקה. הפעולה המחזורית נמחקה.
+    completed_recurrence_completed: אין פעולת המשך לפעולה המחזורית שנמחקה. הפעולה
+      המחזורית נמחקה.
     completed_recurring: הסתיימו משימות מחזוריות
     completed_recurring_actions_title: TRACKS::Completed recurring actions
     completed_rest_of_month: הסתיימו ביתרת החודש הנוכחי
@@ -831,10 +868,12 @@ he:
     confirm_delete: האם למחוק את הפעילות '%{description}'?
     context_changed: הקשר שונה ל-%{name}
     convert_to_project: יצירת פרוייקט
-    defer_date_after_due_date: תאריך הדחייה מאוחר מתאריך היעד. יש לערוך את תאריך היעד בהתאם לפני בקשת הדחייה.
+    defer_date_after_due_date: תאריך הדחייה מאוחר מתאריך היעד. יש לערוך את תאריך היעד
+      בהתאם לפני בקשת הדחייה.
     defer_x_days:
       one: דחיה ביום
-      other: דחיה ב-%{count} ימים
+      two: דחיה ב-%{count} ימים
+      other: ''
     deferred_actions_with: פעולות דחויות על תגית '%{tag_name}'
     deferred_pending_actions: פעולות ממתינות/דחויות
     deferred_tasks_title: מסלולים::מִזְכָּר
@@ -870,7 +909,8 @@ he:
       due: יעד %{date}
     has_x_pending:
       one: בעל פעולה דחויה אחת
-      other: מכיל %{count} פעולת ממתינות
+      two: מכיל %{count} פעולת ממתינות
+      other: ''
     hidden_actions: פעולות מוסתרות
     in_hidden_state: במצב מוסתר
     in_pending_state: במצב המתנה
@@ -949,7 +989,8 @@ he:
       monthly_options: הגדרות לפעולות בחזוריות חודשית
       no_end_date: אין תאריך סיום
       pattern:
-        day_names: '["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]'
+        day_names: '["sunday", "monday", "tuesday", "wednesday", "thursday", "friday",
+          "saturday"]'
         due: יעד
         every_day: כל יום
         every_month: כל חודש
@@ -962,7 +1003,8 @@ he:
         fourth: רביעי
         from: מ
         last: אחרון
-        month_names: '[nil, "January", "February", "Match", "April", "May", "June", "July", "August", "September", "October", "November", "December"]'
+        month_names: '[nil, "January", "February", "Match", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"]'
         on_day_n: ביום %{n}
         on_work_days: בימי עבודה
         second: שני
@@ -1013,10 +1055,12 @@ he:
     task_list_title: מסלולים::רשימת משימות
     tickler_items_due:
       one: אחד מהמִזְכָּרים הגיע לתאריך היעד - יש לרענן העמוד להצגה.
-      other: "%{count} מהמִזְכָּרים הגיעו לתאריך היעד - יש לרענן העמוד להצגה."
+      two: '%{count} מהמִזְכָּרים הגיעו לתאריך היעד - יש לרענן העמוד להצגה.'
+      other: ''
     to_tickler: למִזְכָּר
     unable_to_add_dependency: לא ניתן להוסיף תלות
-    unresolved_dependency: הערך שהוכנס בתלות לא תאם לאף פעולה קיימת. הערך לא ישמר עם יתרת הפעולה. להמשיך?
+    unresolved_dependency: הערך שהוכנס בתלות לא תאם לאף פעולה קיימת. הערך לא ישמר
+      עם יתרת הפעולה. להמשיך?
     was_due_on_date: היה מיועד עד %{date}
   users:
     account_signup: רישום לחשבון
@@ -1026,13 +1070,15 @@ he:
     auth_type_updated: שיטת אימות עודכנה
     change_auth_type_title: מסלולים::שינוי שיטת הזדהות
     change_authentication_type: שינוי שיטת הזדהות
-    change_password_prompt: יש לכתוב את הסיסמא החדשה בשדות שלמטה ולהקליק 'שנה סיסמא' כדי להחליף את הסיסמא הנוכחית בחדשה.
+    change_password_prompt: יש לכתוב את הסיסמא החדשה בשדות שלמטה ולהקליק 'שנה סיסמא'
+      כדי להחליף את הסיסמא הנוכחית בחדשה.
     change_password_submit: שינוי סיסמא
     change_password_title: מסלולים::שינוי סיסמא
     choose_password: בחירת סיסמא
     confirm_password: אישור סיסמא
     desired_login: משתמש כניסה רצוי
-    destroy_confirmation: 'אזהרה: הפעולה תמחק את המשתמש ''%{login}'', כל הפעולות, הפרוייקטים והפתקים. האם להמשיך?'
+    destroy_confirmation: 'אזהרה: הפעולה תמחק את המשתמש ''%{login}'', כל הפעולות,
+      הפרוייקטים והפתקים. האם להמשיך?'
     destroy_error: ארעה שגיאה במחיקת המשתמש %{login}
     destroy_successful: משתמש %{login} הושמד בהצלחה
     destroy_user: השמדת משתמש
@@ -1048,12 +1094,14 @@ he:
     new_user_heading: 'רישום משתמש חדש:'
     new_user_title: מסלולים::רישום משתמש כמנהל
     no_signups_title: מסלולים::אין רישומים
-    openid_ok_pref_failed: כתובת הזהות %{url} .אומתה בהצלחה אך ארעה תקלה בשמירת הגדרות ההזדהות
+    openid_ok_pref_failed: כתובת הזהות %{url} .אומתה בהצלחה אך ארעה תקלה בשמירת הגדרות
+      ההזדהות
     openid_url_verified: כתובת הזהות %{url} .אומתה בהצלחה ואופן האימות נקבע ל-OpenID.
     password_confirmation_label: אימות סיסמא
     password_updated: סיסמא עודכנה.
     register_with_cas: עם משתמש השא"מ שלך
-    select_authentication_type: יש לבחור את שיטת הזיהוי החדשה ולהלליק 'שינוי שיטת הזדהות' לבחירת השיטה הנוכחית
+    select_authentication_type: יש לבחור את שיטת הזיהוי החדשה ולהלליק 'שינוי שיטת
+      הזדהות' לבחירת השיטה הנוכחית
     signup: רישום
     signup_new_user: רשום משתמש חדש
     signup_successful: רישום מוצלח עבור משתמש %{username}.
@@ -1070,14 +1118,15 @@ he:
     next_label: הבא &raquo;
     page_entries_info:
       multi_page: מציג %{model} %{from} - %{to} מתוך %{count} בסך הכל
-      multi_page_html: מציג %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> מתוך <b>%{count}</b> בסך הכל
+      multi_page_html: מציג %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> מתוך <b>%{count}</b>
+        בסך הכל
       single_page:
-        one: מציג %{model} אחד
+        one: לא נמצא %{model}
+        two: מציג %{model} אחד
         other: מציג את כל %{count} %{model}
-        zero: לא נמצא %{model}
       single_page_html:
-        one: מציג  <b>1</b> %{model}
+        one: לא נמצא %{model}
+        two: מציג  <b>1</b> %{model}
         other: מציג  <b>כל&nbsp;%{count}</b> %{model}
-        zero: לא נמצא %{model}
     page_gap: "&hellip;"
     previous_label: "&laquo; הקודם"
