@@ -13,12 +13,15 @@ ru:
         mobile_todos_per_page: Действий на страницу (мобильная версия)
         refresh: период обновления (в минутах)
         review_period: Период обзора проектов
-        show_completed_projects_in_sidebar: Отображать выполненные проекты в боковой
+        show_completed_projects_in_sidebar: Отображать выполненные проекты в 
+          боковой панели
+        show_hidden_contexts_in_sidebar: Отображать скрытые контексты в боковой 
           панели
-        show_hidden_contexts_in_sidebar: Отображать скрытые контексты в боковой панели
-        show_hidden_projects_in_sidebar: Отображать скрытые проекты в боковой панели
+        show_hidden_projects_in_sidebar: Отображать скрытые проекты в боковой 
+          панели
         show_number_completed: Показывать количество выполненных действий
-        show_project_on_todo_done: Переходить на страницу проекта при выполнении задачи
+        show_project_on_todo_done: Переходить на страницу проекта при выполнении
+          задачи
         sms_context: Контекст email по-умолчанию
         sms_email: Отправитель email
         staleness_starts: Начало устаревания
@@ -74,11 +77,15 @@ ru:
         odd: должно быть нечетным
         record_invalid: 'Проверка не пройдена: %{errors}'
         restrict_dependent_destroy:
-          one: Невозможно удалить запись, так как есть %{record} зависящая от нее
-          few: Невозможно удалить запись, так как есть %{record} зависящие от нее
+          one: Невозможно удалить запись, так как есть %{record} зависящая от 
+            нее
+          few: Невозможно удалить запись, так как есть %{record} зависящие от 
+            нее
           many: ''
-          has_one: Не удалось удалить запись, поскольку существует связанная %{record}
-          has_many: Не удалось удалить запись, поскольку от неё зависит %{record}
+          has_one: Не удалось удалить запись, поскольку существует связанная 
+            %{record}
+          has_many: Не удалось удалить запись, поскольку от неё зависит 
+            %{record}
         taken: уже занято
         too_long: слишком длинное (максимум %{count} символов)
         too_short: слишком короткое (минимум %{count} символов)
@@ -103,7 +110,6 @@ ru:
       one: действий
       few: действие
       many: действия
-      other: действия
     add: Добавить
     ajaxError: От сервера была получена ошибка
     back: Назад
@@ -136,10 +142,9 @@ ru:
     none: Не задано
     not_available_abbr: н/д
     note:
-      few: "%{count} записи"
       one: 1 запись
-      other: '%{count} записи'
-      zero: нет записей
+      few: '%{count} записи'
+      many:
     notes: Заметки
     numbered_step: Шаг %{number}
     ok: ОК
@@ -155,13 +160,13 @@ ru:
     show_all: Показать все
     sort:
       alphabetically: По алфавиту
-      alphabetically_confirm: Вы уверены, что хотите сортировать проекты по алфавиту?
-        Это изменит текущий порядок сортировки.
+      alphabetically_confirm: Вы уверены, что хотите сортировать проекты по 
+        алфавиту? Это изменит текущий порядок сортировки.
       alphabetically_title: Сортировать проекты по алфавиту
       by_task_count: По количеству задач
       by_task_count_title: Сортировать по количеству задач
-      by_task_count_title_confirm: Вы уверены, что хотите сортировать проекты по количеству
-        задач? Это изменит текущий порядок сортировки.
+      by_task_count_title_confirm: Вы уверены, что хотите сортировать проекты по
+        количеству задач? Это изменит текущий порядок сортировки.
       sort: Сортировать
     third: Третий
     todo: Задача
@@ -172,15 +177,17 @@ ru:
     wiki: Wiki
   contexts:
     add_context: Добавить контекст
-    all_completed_tasks_title: TRACKS::Все выполненные действия в контексте '%{context_name}'
-    completed_tasks_title: TRACKS::Выполненные действия в контексте '%{context_name}'
+    all_completed_tasks_title: TRACKS::Все выполненные действия в контексте 
+      '%{context_name}'
+    completed_tasks_title: TRACKS::Выполненные действия в контексте 
+      '%{context_name}'
     context_deleted: Удален контекст '%{name}'
     context_hide: Скрыть с главной страницы?
     context_name: Имя контекста
     context_state: Состояние контекста
     delete_context: Удалить контекст
-    delete_context_confirmation: Вы уверены, что хотите удалить контекст '%{name}'?
-      Это удалит также все действия (дублирующиеся) в этом контексте!
+    delete_context_confirmation: Вы уверены, что хотите удалить контекст 
+      '%{name}'? Это удалит также все действия (дублирующиеся) в этом контексте!
     delete_context_title: Удалить контекст
     edit_context: Изменить контекст
     hidden_contexts: Скрытые контексты
@@ -217,8 +224,8 @@ ru:
       errors:
         file_blank: Файл не может быть пустым
         some: Во время импорта возникли ошибки
-        save_error: Не удаётся сохранить загруженный CSV (%{path_and_file}). У Tracks
-          нет доступа к каталогу загрузок? %{e}
+        save_error: Не удаётся сохранить загруженный CSV (%{path_and_file}). У 
+          Tracks нет доступа к каталогу загрузок? %{e}
         invalid_csv: 'Недопустимый CSV: не удаётся прочитать заголовки: %{e}'
         invalid_destination: 'Неверное место назначения импорта: %{e}'
         no_context: Контекст по умолчанию не найден
@@ -242,19 +249,19 @@ ru:
       csv_actions_title: Файл CSV (действия, контексты и проекты)
       yaml_link_title: Файл YAML
       download_link: Ссылка для загрузки
-      xml_link_description: Файл XML содержит все ваши действия, заметки, контексты,
-        проекты и метки
+      xml_link_description: Файл XML содержит все ваши действия, заметки, 
+        контексты, проекты и метки
       xml_description: '%{xml}: Лучше всего для импорта или конвертации данных'
       csv_notes_description: Файл CSV содержит все ваши заметки
-      csv_actions_description: Файл CSV содержит все ваши действия в связи с контекстами
-        и проектами
+      csv_actions_description: Файл CSV содержит все ваши действия в связи с 
+        контекстами и проектами
       csv_description: '%{csv}: Лучше всего для импорта в электронную таблицу или
         программное обеспечение для анализа данных'
-      yaml_experimental: Пожалуйста помните о том, что импорт файла YAML в данный
-        момент поддерживается только в качестве эксперимента. Не полагайтесь на него
-        для резервного копирования критических данных.
-      yaml_link_description: Файл YAML содержит все ваши действия, заметки, контексты,
-        проекты и метки
+      yaml_experimental: Пожалуйста помните о том, что импорт файла YAML в 
+        данный момент поддерживается только в качестве эксперимента. Не 
+        полагайтесь на него для резервного копирования критических данных.
+      yaml_link_description: Файл YAML содержит все ваши действия, заметки, 
+        контексты, проекты и метки
       yaml_description: '%{yaml}: Лучший вариант для экспорта.'
       format_header: 'Вы можете выбрать из следующих форматов:'
       title: Данные экспортируются
@@ -407,9 +414,10 @@ ru:
     all_projects: Все проекты
     choose_context: Выберите контекст для ленты новостей
     choose_project: Выберите проект для ленты новостей
-    context_centric_actions: Лента для незавершенных действий в определенном контексте
-    context_needed: Должен быть выбран хотя бы один контекст, чтобы можно было запросить
-      ленту новостей
+    context_centric_actions: Лента для незавершенных действий в определенном 
+      контексте
+    context_needed: Должен быть выбран хотя бы один контекст, чтобы можно было 
+      запросить ленту новостей
     ical_feed: iCal-лента
     last_fixed_number: Последние %{number} действий
     legend: 'Легенда:'
@@ -419,8 +427,8 @@ ru:
       задач в календаре, используйте iCal-ленту на странице календаря'
     plain_text_feed: Лента в текстовом формате
     project_centric: Лента для незавершенных действий в определенном проекте
-    project_needed: Должен быть выбран хотя бы один проект, чтобы можно было запросить
-      ленту новостей
+    project_needed: Должен быть выбран хотя бы один проект, чтобы можно было 
+      запросить ленту новостей
     projects_and_actions: Активные проекты и действия по ним
     rss_feed: RSS-лента
     select_feed_for_context: Выберите ленту новостей для этого контекста
@@ -439,27 +447,29 @@ ru:
     opensearch_description: Искать в Tracks
     mailgun:
       instructions:
-        '3': Перейдите на %{preferences_link} и введите свой входящий адрес электронной
-          почты для Mailgun (такой как tracks@user.mailgun.com) в поле "%{sms_email_name}".
-        '6': "Обновите mailmap в 'site.yml' чтобы определить, какие отправители соответствуют\
-          \ входящим адресам. Например, чтобы отправить письмо с вашей домашней и\
-          \ рабочей почты в вашу связку Tracks Mailgun, установите что-то типа этого:\
-          \ %{code}"
-        '5': Добавьте свой ключ Mailgun API (не Public API ключ) в файл Tracks 'site.yml'
-        '4': Выберите контекст по умолчанию для электронных писем и установите его
-          в поле "%{sms_context_name}"
+        '3': Перейдите на %{preferences_link} и введите свой входящий адрес 
+          электронной почты для Mailgun (такой как tracks@user.mailgun.com) в 
+          поле "%{sms_email_name}".
+        '6': "Обновите mailmap в 'site.yml' чтобы определить, какие отправители соответствуют
+          входящим адресам. Например, чтобы отправить письмо с вашей домашней и рабочей
+          почты в вашу связку Tracks Mailgun, установите что-то типа этого: %{code}"
+        '5': Добавьте свой ключ Mailgun API (не Public API ключ) в файл Tracks 
+          'site.yml'
+        '4': Выберите контекст по умолчанию для электронных писем и установите 
+          его в поле "%{sms_context_name}"
         2b: "'Action' должно быть 'forward(\"http://mytracksserver.example.com/mailgun/mime\"\
           )'"
         2a: "'Filter expression' должен быть установлен как 'catch_all()'"
         '2': "Перейдите на 'Routes' в панели управления Mailgun и добавьте новый маршрут:"
-        '1': Перейдите на %{mailgun_link} и зарегистрируйте бесплатную учётную запись.
-      gateway_instructions: Всё сказанное выше о формате писем применимо к работе
-        через Mailgun, т.к. данные обрабатываются тем же способом
-      conditions: Чтобы это работало, нужно чтобы ваш сервер Tracks был доступен из
-        интернета. Тогда Mailgun сможет отправлять на него данные.
-      description: Если вы хотите отправлять письма в Tracks, но не можете запустить
-        почтовый сервер на том же сервере, то можно использовать встроенную в Tracks
-        поддержку %{mailgun_link}.
+        '1': Перейдите на %{mailgun_link} и зарегистрируйте бесплатную учётную 
+          запись.
+      gateway_instructions: Всё сказанное выше о формате писем применимо к 
+        работе через Mailgun, т.к. данные обрабатываются тем же способом
+      conditions: Чтобы это работало, нужно чтобы ваш сервер Tracks был доступен
+        из интернета. Тогда Mailgun сможет отправлять на него данные.
+      description: Если вы хотите отправлять письма в Tracks, но не можете 
+        запустить почтовый сервер на том же сервере, то можно использовать 
+        встроенную в Tracks поддержку %{mailgun_link}.
     example_names:
       tag:
         '2': метка2
@@ -471,14 +481,16 @@ ru:
       field_descriptions:
         star: Флаг запуска задачи
         tag: Метки для задачи - могут использоваться повторно
-        due_date: Дата выполнения для задачи (может быть двузначной для дня, четырёхзначной
-          для месяца и дня или шестизначной для года, месяца и дня)
+        due_date: Дата выполнения для задачи (может быть двузначной для дня, 
+          четырёхзначной для месяца и дня или шестизначной для года, месяца и 
+          дня)
         project: Проект для внесения в задачу
         context: Контекст для внесения в задачу
-        tickler_date: Дата напоминания для задачи (может быть 2 цифры для дня, 4 цифры
-          для месяца-дня или 6 цифр для года-месяца-дня)
-      fields_instruction: Все специальные символы являются необязательными, а текст
-        до первого символа (или конца строки) используется в качестве описания задачи
+        tickler_date: Дата напоминания для задачи (может быть 2 цифры для дня, 4
+          цифры для месяца-дня или 6 цифр для года-месяца-дня)
+      fields_instruction: Все специальные символы являются необязательными, а 
+        текст до первого символа (или конца строки) используется в качестве 
+        описания задачи
       meaning_title: Значение
       symbol_title: Символ
       fields_title: 'Поля:'
@@ -487,49 +499,50 @@ ru:
     message_gateway:
       instructions:
         '3': На вашу свежеустановленную почту отправлено письмо!
-        '2': В sendmail/qmail/postfix/другой почтовой программе, установите псевдоним
-          почтового адреса для конвейера сообщений в %{command}
-        '1': Перейдите на %{preferences_link}, установите ваши "%{sms_email_name}"
-          и "%{sms_context_name}" для отправки задач через электронную почту (которую
-          можно отправить с помощью сообщения SMS)
+        '2': В sendmail/qmail/postfix/другой почтовой программе, установите 
+          псевдоним почтового адреса для конвейера сообщений в %{command}
+        '1': Перейдите на %{preferences_link}, установите ваши 
+          "%{sms_email_name}" и "%{sms_context_name}" для отправки задач через 
+          электронную почту (которую можно отправить с помощью сообщения SMS)
       one_user_configuration: 'Вы также можете отправлять все письма определённому
         пользователю Tracks. Установите mail_dispatch в site.yml как %{single_user_value}
         и включайте имя пользователя в конвейер команд: %{code}'
-      configuration: Возможно вам понадобится установить ваш %{site_yml} чтобы сообщить
-        шлюзу использовать поле %{to_name} или %{from_name} для определения пользователя
-        Tracks по его адресу email.
-      rich_api_tip: Также вы можете использовать расширенный формат (Rich Todo API)
-        для отправки задач, например "постирать @ Дом" или "Позвонить Ивану > проект
-        X". Темой письма будет заполнено название задачи, её контекст и проект, а
-        тело письма будет вставлено в заметку.
+      configuration: Возможно вам понадобится установить ваш %{site_yml} чтобы 
+        сообщить шлюзу использовать поле %{to_name} или %{from_name} для 
+        определения пользователя Tracks по его адресу email.
+      rich_api_tip: Также вы можете использовать расширенный формат (Rich Todo 
+        API) для отправки задач, например "постирать @ Дом" или "Позвонить Ивану
+        > проект X". Темой письма будет заполнено название задачи, её контекст и
+        проект, а тело письма будет вставлено в заметку.
       description: 'Если Tracks запущен на том же сервере, что и ваш почтовый сервер,
         вы можете использовать встроенную возможность интеграции с почтой. Следующие
         шаги для настройки:'
     feeds_link_text: ленты, предоставляемые Tracks
     cron_email_subject: Задачи Tracks на следующие 7 дней
-    cron_2: Конечно вы можете использовать другой текст %{feeds_link} – почему бы
-      например не отправлять список следующих действий в конкретном проекте группе
-      коллег, которые над ним работают?
-    cron_1: Если вы вставите следующую строку в ваш crontab, то будете получать письма
-      каждый день около 5 часов утра со списком предстоящих дел, которые нужно выполнить
-      в течении следующих 7-ми дней.
+    cron_2: Конечно вы можете использовать другой текст %{feeds_link} – почему 
+      бы например не отправлять список следующих действий в конкретном проекте 
+      группе коллег, которые над ним работают?
+    cron_1: Если вы вставите следующую строку в ваш crontab, то будете получать 
+      письма каждый день около 5 часов утра со списком предстоящих дел, которые 
+      нужно выполнить в течении следующих 7-ми дней.
     tell_us_link_text: Сообщите об этом в нашей очереди задач
-    add_your_own: Можете добавить что-то своё? %{tell_us_link} и мы сможем включить
-      это в будущии версии Tracks.
+    add_your_own: Можете добавить что-то своё? %{tell_us_link} и мы сможем 
+      включить это в будущии версии Tracks.
     contents_header: 'Содержимое:'
     developer_documentation_link: документация разаработчика Tracks
-    intro: Tracks может быть интегрирован со многими другими инструментами... всем
-      что нужно для того чтобы помочь вам привести дела в порядок! На этой странице
-      есть информация о настройке некоторых из них. Не всё из этого применимо к различным
-      платформам, а что-то требует определённых технических знаний. Читайте также
-      %{documentation_link}
+    intro: Tracks может быть интегрирован со многими другими инструментами... 
+      всем что нужно для того чтобы помочь вам привести дела в порядок! На этой 
+      странице есть информация о настройке некоторых из них. Не всё из этого 
+      применимо к различным платформам, а что-то требует определённых 
+      технических знаний. Читайте также %{documentation_link}
     title: Интеграция
     sections:
       email_rich: Расширенный формат задач в письмах
       mailgun: Отправлять почту в Tracks через Mailgun
-      message_gateway: Интеграция с почтовым сервером для возможности отправлять задачи
-        в Tracks по почте
-      automatic_email: Автоматически отправлять себе письма о предстоящих задачах
+      message_gateway: Интеграция с почтовым сервером для возможности отправлять
+        задачи в Tracks по почте
+      automatic_email: Автоматически отправлять себе письма о предстоящих 
+        задачах
   help:
     title: Help
     usage: 'Вы можете найти информацию об использовании %{manual_link} в GitHub wiki
@@ -610,24 +623,27 @@ ru:
     toggle_notes_title: Переключить видимость всех заметок
   login:
     account_login: Обычный вход
-    cas_create_account: Если вы хотите послать запрос, перейдите на %{signup_link}
+    cas_create_account: Если вы хотите послать запрос, перейдите на 
+      %{signup_link}
     cas_logged_in_greeting: Привет, %{username}! Вы авторизованы.
     cas_login: Вход CAS
     cas_no_user_found: Привет, %{username}! У Вас нет учетной записи на Tracks.
     cas_signup_link: Запросить авторизацию
-    cas_username_not_found: Извините, не существует пользователя для такого CAS (%{username})
+    cas_username_not_found: Извините, не существует пользователя для такого CAS 
+      (%{username})
     log_in_again: войти снова.
     logged_out: Вы вышли из Tracks.
     login_cas: перейти на CAS
     login_standard: вернуться к обычному входу
     login_with_openid: войти с помощью OpenID
     mobile_use_openid: "… или войдите при помощи OpenID"
-    openid_identity_url_not_found: Извините, пользователя с такой ссылкой URL не существует
-      (%{identity_url})
+    openid_identity_url_not_found: Извините, пользователя с такой ссылкой URL не
+      существует (%{identity_url})
     option_separator: или,
     please_login: Пожалуйста авторизуйтесь, чтобы использовать Tracks
     session_time_out: Сессия истекла. Пожалуйста %{link}
-    session_will_expire: сессия истекает после %{hours} часов отсутствия активности.
+    session_will_expire: сессия истекает после %{hours} часов отсутствия 
+      активности.
     session_will_not_expire: сессия не будет истекать.
     sign_in: Войти
     signup_prompt: Хотите создать учётную запись?
@@ -651,10 +667,10 @@ ru:
     todo:
       error_date_must_be_future: дата должна быть больше текущей
     user:
-      error_context_not_associated: Идентификатор контекста '%{context}' не соответствует
-        идентификатору пользователя %{user}.
-      error_project_not_associated: Идентификатор проекта '%{project}' не соответствует
-        идентификатору пользователя %{user}.
+      error_context_not_associated: Идентификатор контекста '%{context}' не 
+        соответствует идентификатору пользователя %{user}.
+      error_project_not_associated: Идентификатор проекта '%{project}' не 
+        соответствует идентификатору пользователя %{user}.
   notes:
     delete_confirmation: Уверены, что хотите удалить заметку '%{id}'?
     delete_item_title: Удалить элемент
@@ -727,17 +743,18 @@ ru:
     current_authentication_type: Ваш тип авторизации %{auth_type}
     edit_preferences: Изменить настройки
     generate_new_token: Создать новый ключ
-    generate_new_token_confirm: Вы уверены? Создание нового ключа, заменит текущий
-      и нарушит все внешние взаимодействия, которые использовали предыдущий ключ.
+    generate_new_token_confirm: Вы уверены? Создание нового ключа, заменит 
+      текущий и нарушит все внешние взаимодействия, которые использовали 
+      предыдущий ключ.
     is_false: Нет
     is_true: Да
     open_id_url: Ваш OpenID URL
     page_title: TRACKS::Настройки
     page_title_edit: TRACKS::Редактирование настроек
     password_changed: Пароль изменен, пожалуйста войдите снова.
-    remove_introduction: Здесь вы можете удалить вашу учётную запись. Обратите внимание,
-      что это необратимо и удалит все ваши данные! После удаления вы окажетесь на
-      странице входа.
+    remove_introduction: Здесь вы можете удалить вашу учётную запись. Обратите 
+      внимание, что это необратимо и удалит все ваши данные! После удаления вы 
+      окажетесь на странице входа.
     show_number_completed: Отображать %{number} выполненных элементов
     sms_context_none: Нет
     staleness_starts_after: Устаревание начинается после %{days} дней
@@ -759,14 +776,17 @@ ru:
     add_note: Добавить заметку
     add_note_submit: Добавить заметку
     add_project: Добавить проект
-    all_completed_tasks_title: TRACKS::Список выполненных действий в проекте '%{project_name}'
+    all_completed_tasks_title: TRACKS::Список выполненных действий в проекте 
+      '%{project_name}'
     completed_actions: Завершённые задачи
     completed_actions_empty: Нет завершённых задач
     completed_projects: Выполненные проекты
-    completed_tasks_title: TRACKS::Список выполненных действий проекта '%{project_name}'
+    completed_tasks_title: TRACKS::Список выполненных действий проекта 
+      '%{project_name}'
     default_context: Контекст по-умолчанию для этого проекта %{context}
     default_context_removed: Удален контекст по-умолчанию
-    default_context_set: Установить для проекта контекст %{default_context} по-умолчанию
+    default_context_set: Установить для проекта контекст %{default_context} 
+      по-умолчанию
     default_tags_removed_notice: Метки по-умолчанию удалены
     deferred_actions: Отложенные действия
     deferred_actions_empty: Нет отложенных действий
@@ -795,7 +815,8 @@ ru:
     project_destroyed_status: Удалённый проект '%{name}'
     project_saved_status: Проект сохранен
     project_state: Проект в состоянии %{state}.
-    set_default_tags_notice: Установить метки %{default_tags} по-умолчанию для проекта
+    set_default_tags_notice: Установить метки %{default_tags} по-умолчанию для 
+      проекта
     settings: Настройки
     show_form: Добавить проект
     show_form_title: Создать новый проект
@@ -879,13 +900,14 @@ ru:
     action_selection_title: TRACKS::Действие выбор
     actions: Действия
     actions_30days_title: Действия за последние 30 дней
-    actions_actions_avg_created_30days: За последние 30 дней вы создали в среднем
-      %{count} действий
+    actions_actions_avg_created_30days: За последние 30 дней вы создали в 
+      среднем %{count} действий
     actions_avg_completed: и выполняли в среднем %{count} действий в месяц.
     actions_avg_completed_30days: выполнено в среднем %{count} действий в день.
-    actions_avg_completion_time: Все ваши выполненные действия, среднее время выполнения
-      %{count} дней.
-    actions_avg_created: За последние 12 месяцев вы создали в среднем %{count} действий
+    actions_avg_completion_time: Все ваши выполненные действия, среднее время 
+      выполнения %{count} дней.
+    actions_avg_created: За последние 12 месяцев вы создали в среднем %{count} 
+      действий
     actions_day_of_week_legend:
       day_of_week: День недели
       number_of_actions: Количество действий
@@ -901,17 +923,18 @@ ru:
       number_of_actions: Количество действий
     actions_lastyear_title: Действия за последние 12 месяцев
     actions_min_completion_time: Минимальное время выполнения %{time}.
-    actions_min_max_completion_days: Минимум/максимум дней до выполнения %{min}/%{max}.
+    actions_min_max_completion_days: Минимум/максимум дней до выполнения 
+      %{min}/%{max}.
     actions_selected_from_week: 'Действия, выбранные из недели '
     click_to_return: Нажмите %{link}, чтобы вернуться к странице статистики.
     click_to_return_link: здесь
-    click_to_show_actions_from_week: Кликните %{link}, чтобы отобразить действия из
-      %{week} недели и далее.
-    click_to_update_actions: Нажмите на панель в диаграмме, чтобы обновить действия
-      ниже.
+    click_to_show_actions_from_week: Кликните %{link}, чтобы отобразить действия
+      из %{week} недели и далее.
+    click_to_update_actions: Нажмите на панель в диаграмме, чтобы обновить 
+      действия ниже.
     contexts: Контексты
-    current_running_time_of_incomplete_visible_actions: Текущее время работы над незавершенными
-      видимыми действиями
+    current_running_time_of_incomplete_visible_actions: Текущее время работы над
+      незавершенными видимыми действиями
     index_title: TRACKS::Статистика
     labels:
       avg_completed: В среднем выполнено
@@ -928,8 +951,8 @@ ru:
       number_of_days: Дней назад
       percentage: Процент
       running_time: Затрачено времени на задачу (недель)
-    more_stats_will_appear: Больше статистики появится здесь как только вы добавите
-      действия.
+    more_stats_will_appear: Больше статистики появится здесь как только вы 
+      добавите действия.
     no_actions_selected: Нет выбранных действий.
     no_tags_available: нет доступных меток
     open_per_week: Активные (видимые и скрытые) дальнейшие действия за неделю
@@ -942,22 +965,22 @@ ru:
     running_time_all_legend:
       actions: Действия
       percentage: Процент
-      running_time: Время выполнения действия (в неделях). Нажмите на панель для более
-        подробной информации
+      running_time: Время выполнения действия (в неделях). Нажмите на панель для
+        более подробной информации
     running_time_legend:
       actions: Действия
       percentage: Процент
-      weeks: Время выполнения действия (недель). Кликните на панель для дополнительной
-        информации
-    spread_of_actions_for_all_context: Распределение выполняемых действий для все
-      контекстов
-    spread_of_running_actions_for_visible_contexts: Распределение выполняемых действий
-      для видимых контекстов
-    tag_cloud_90days_description: Это облако меток действия включает те, что были
-      созданы или выполнены за последние 90 дней.
+      weeks: Время выполнения действия (недель). Кликните на панель для 
+        дополнительной информации
+    spread_of_actions_for_all_context: Распределение выполняемых действий для 
+      все контекстов
+    spread_of_running_actions_for_visible_contexts: Распределение выполняемых 
+      действий для видимых контекстов
+    tag_cloud_90days_description: Это облако меток действия включает те, что 
+      были созданы или выполнены за последние 90 дней.
     tag_cloud_90days_title: Облако меток для всех действий за последние 90 дней
-    tag_cloud_description: Это облако меток для включает метки всех действий (выполненных,
-      невыполенных, видимых или скрытых)
+    tag_cloud_description: Это облако меток для включает метки всех действий 
+      (выполненных, невыполенных, видимых или скрытых)
     tag_cloud_title: Облако меток для всех действий
     tags: Метки
     time_of_day: Время дня (все действия)
@@ -972,8 +995,8 @@ ru:
     top10_projects: Топ 10 проектов
     top10_projects_30days: Топ 10 проектов за последние 30 дней
     top5_contexts: Топ 5 контекстов
-    top5_visible_contexts_with_incomplete_actions: Топ 5 видимых контекстов с незавершенными
-      действиями
+    top5_visible_contexts_with_incomplete_actions: Топ 5 видимых контекстов с 
+      незавершенными действиями
     totals: Итого
     totals_action_count: У вас всего %{count} действий
     totals_actions_completed: "%{count} из них выполнены."
@@ -1013,10 +1036,10 @@ ru:
     action_deleted_error: Не удалось удалить действие
     action_deleted_success: Успешно удалено дальнейшее действие
     action_due_on: "(действие выполнить к %{date})"
-    action_marked_complete: Действие <strong>'%{description}'</strong> отмечено как
-      <strong>%{completed}</strong>
-    action_marked_complete_error: Действие <strong>'%{description}'</strong> НЕ помечено
-      как <strong>%{completed} из-за ошибки на сервере.</strong>
+    action_marked_complete: Действие <strong>'%{description}'</strong> отмечено 
+      как <strong>%{completed}</strong>
+    action_marked_complete_error: Действие <strong>'%{description}'</strong> НЕ 
+      помечено как <strong>%{completed} из-за ошибки на сервере.</strong>
     action_saved: Действие сохранено
     action_saved_to_tickler: Действие сохранено в Отложенные
     actions:
@@ -1042,7 +1065,8 @@ ru:
     added_new_project: Добавлен новый проект
     all_completed: Все выполненные действия
     all_completed_here: здесь
-    all_completed_tagged_page_title: TRACKS::Все выполненные задачи с меткой %{tag_name}
+    all_completed_tagged_page_title: TRACKS::Все выполненные задачи с меткой 
+      %{tag_name}
     append_in_this_project: в этом проекте
     archived_tasks_title: TRACKS::Архивные выполненные задачи
     blocked_by: Блокировано %{predecessors}
@@ -1054,8 +1078,8 @@ ru:
       due_today: Выполнить сегодня
       get_in_ical_format: Получить календарь в формате iCal
     calendar_page_title: TRACKS::Календарь
-    cannot_add_dependency_to_completed_todo: Невозможно добавить действие как зависимость
-      к выполненному действию!
+    cannot_add_dependency_to_completed_todo: Невозможно добавить действие как 
+      зависимость к выполненному действию!
     clear_due_date: Очистить дату 'Выполнить к'
     clear_show_from_date: Очистить дату 'Показывать с'
     completed: Выполнено
@@ -1067,21 +1091,23 @@ ru:
       many: '%{count} выполненных действий в архиве.'
     completed_last_day: Выполнены за последние 24 часа
     completed_last_x_days: Выполнены за последние %{count} дней
-    completed_recurrence_completed: Нет дальнейших действий, которые следуют за удаленной
-      регулярной задачей. Повторение остановлено
+    completed_recurrence_completed: Нет дальнейших действий, которые следуют за 
+      удаленной регулярной задачей. Повторение остановлено
     completed_recurring: Выполненные регулярные задачи
-    completed_recurring_actions_title: TRACKS::Завершённые повторяющиеся действия
+    completed_recurring_actions_title: TRACKS::Завершённые повторяющиеся 
+      действия
     completed_rest_of_month: Выполнено за остаток месяца
     completed_rest_of_previous_month: Выполнено в конце предыдущего месяца
     completed_rest_of_week: Выполнено за остаток недели
-    completed_tagged_page_title: TRACKS::Выполненные задачи с меткой '%{tag_name}'
+    completed_tagged_page_title: TRACKS::Выполненные задачи с меткой 
+      '%{tag_name}'
     completed_tasks_title: TRACKS::Выполненные задачи
     completed_today: Выполнено сегодня
     confirm_delete: Уверены, что хотите удалить действие '%{description}'?
     context_changed: Контекст изменен на %{name}
     convert_to_project: Сформировать проект
-    defer_date_after_due_date: Дата отсрочки превышает дату выполнения. Измените дату
-      выполнения, перед тем как отложить это действие.
+    defer_date_after_due_date: Дата отсрочки превышает дату выполнения. Измените
+      дату выполнения, перед тем как отложить это действие.
     defer_x_days:
       one: Отложить на 1 день
       few: Отложить на %{count} дня
@@ -1091,15 +1117,15 @@ ru:
     deferred_tasks_title: TRACKS::Отложенные
     delete: Удалить
     delete_action: Удалить действие
-    delete_recurring_action_confirm: Уверены, что хотите удалить регулярную задачу
-      '%{description}'?
+    delete_recurring_action_confirm: Уверены, что хотите удалить регулярную 
+      задачу '%{description}'?
     delete_recurring_action_title: Удалить регулярную задачу
     deleted_success: Действие успешно удалено.
     depends_on: Зависит от
     depends_on_separate_with_commas: Зависит от (через запятую)
     done: Готово?
-    drag_action_title: Перетащите на другое действие, чтобы сделать его зависимым
-      от него.
+    drag_action_title: Перетащите на другое действие, чтобы сделать его 
+      зависимым от него.
     due: Выполнить к
     edit: Редактировать
     edit_action: Редактирвоать действие
@@ -1108,14 +1134,17 @@ ru:
     error:
       invalid_due_date: Некорректная дата 'Выполнить к'
       invalid_show_from_date: Некорректная дата 'Показывать с'
-    error_completing_todo: Ошибка выполнения/активации регулярной задачи %{description}
+    error_completing_todo: Ошибка выполнения/активации регулярной задачи 
+      %{description}
     error_deleting_item: Произошла ошибка при удалении элемента %{description}
-    error_deleting_recurring: Возникла ошибка при удалении регулярной задачи '%{description}'
-    error_removing_dependency: Ошибка при удалении зависимости
-    error_saving_recurring: Ошибка при сохранении регулярной задачи '%{description}'
-    error_starring: невозможно переключить отметку на задаче '%{description}'
-    error_starring_recurring: Невозможно установить/снять отметку регулярной задачи
+    error_deleting_recurring: Возникла ошибка при удалении регулярной задачи 
       '%{description}'
+    error_removing_dependency: Ошибка при удалении зависимости
+    error_saving_recurring: Ошибка при сохранении регулярной задачи 
+      '%{description}'
+    error_starring: невозможно переключить отметку на задаче '%{description}'
+    error_starring_recurring: Невозможно установить/снять отметку регулярной 
+      задачи '%{description}'
     error_toggle_complete: Невозможно отметить эту задачу как выполненную
     feed_title_in_context: в контексте '%{context}'
     feed_title_in_project: в проекте '%{project}'
@@ -1129,13 +1158,14 @@ ru:
     hidden_actions: Скрытые действия
     in_hidden_state: в скрытом состоянии
     in_pending_state: в ожидании
-    list_incomplete_next_actions: Выводит список незавершенных дальнейших действий
-    list_incomplete_next_actions_with_limit: Выводит список последних %{count} незавершенных
-      дальнейших действий
+    list_incomplete_next_actions: Выводит список незавершенных дальнейших 
+      действий
+    list_incomplete_next_actions_with_limit: Выводит список последних %{count} 
+      незавершенных дальнейших действий
     mark_complete: Отметить как выполненное
     mobile_todos_page_title: Все действия
-    new_related_todo_created: Добавлена новая задача, принадлежащая этой регулярной
-      задаче
+    new_related_todo_created: Добавлена новая задача, принадлежащая этой 
+      регулярной задаче
     new_related_todo_created_short: создана новая задача
     new_related_todo_not_created_short: не создана задача
     next_action_description: Описание дальнейшего действия
@@ -1158,8 +1188,10 @@ ru:
     no_actions:
       completed: На текущий момент нет выполненных действий
       completed_recurring: На текущий момент нет выполненных регулярных задач
-      completed_rest_of_month: За остаток месяца не было завершено ни одного действия
-      completed_rest_of_week: За остаток недели не было завершено ни одного действия
+      completed_rest_of_month: За остаток месяца не было завершено ни одного 
+        действия
+      completed_rest_of_week: За остаток недели не было завершено ни одного 
+        действия
       completed_today: Сегодня не было завершено ни одного действия
       context: На текущий момент нет незавершенных действий в этом контексте
       deferred_pending: На текущий момент нет отложенных или ожидающих задач
@@ -1170,9 +1202,12 @@ ru:
       due_today: Нет действий на сегодня
       hidden: На текущий момент не найдено скрытых действий
       not_done: На текущий момент нет незавершенных действий
-      not_done_context: На текущий момент нет невыполненных действий в данном контексте
-      not_done_project: На текущий момент нет невыполненных действий в данном проекте
-      not_done_with_tag: На текущий момент нет невыполненных действий с меткой '%{param}'
+      not_done_context: На текущий момент нет невыполненных действий в данном 
+        контексте
+      not_done_project: На текущий момент нет невыполненных действий в данном 
+        проекте
+      not_done_with_tag: На текущий момент нет невыполненных действий с меткой 
+        '%{param}'
       project: На текущий момент нет незавершенных действий в этом проекте
       recurring_todos: На текущий момент нет регулярных задач
       tag_hidden: На текущий момент не найдено скрытых действий
@@ -1264,11 +1299,11 @@ ru:
       yearly_every_x_day: Каждый %{month} %{day}
       yearly_every_xth_day: "%{day} %{day_of_week} %{month}"
       yearly_options: Настройки ранних регулярных задач
-    recurrence_completed: Нет дальнейших действий, которые следуют за завершенной
-      регулярной задачей. Повторение остановлено.
+    recurrence_completed: Нет дальнейших действий, которые следуют за 
+      завершенной регулярной задачей. Повторение остановлено.
     recurrence_period: Период повторения
-    recurring_action_deleted: Задача удалена. Но создана новая, так как это регулярная
-      задача
+    recurring_action_deleted: Задача удалена. Но создана новая, так как это 
+      регулярная задача
     recurring_action_saved: Регулярная задача сохранена
     recurring_actions_title: TRACKS::Регулярные задачи
     recurring_deleted_success: Регулярная задача успешно удалена.
@@ -1291,16 +1326,17 @@ ru:
     tags: Метки (через запятую)
     task_list_title: TRACKS::Список задач
     tickler_items_due:
-      one: Отложенный элемент подошел к дате выполнения - обновите страницу, чтобы
-        увидеть изменения.
+      one: Отложенный элемент подошел к дате выполнения - обновите страницу, 
+        чтобы увидеть изменения.
       few: '%{count} отложенных элемента подошли к дате выполнения - обновите страницу,
         чтобы увидеть изменения.'
       many: '%{count} отложенных элементов подошли к дате выполнения - обновите страницу,
         чтобы увидеть изменения.'
     to_tickler: в Отложенные
     unable_to_add_dependency: Не удается добавить зависимость
-    unresolved_dependency: Введенное значение зависимости не соответствует существующим
-      действиям. Значние не будет сохранно, как и другие изменения. Продолжить?
+    unresolved_dependency: Введенное значение зависимости не соответствует 
+      существующим действиям. Значние не будет сохранно, как и другие изменения.
+      Продолжить?
     was_due_on_date: было запланировано к %{date}
   users:
     account_signup: регистрация пользователя
@@ -1310,8 +1346,8 @@ ru:
     auth_type_updated: Тип авторизации обновлен.
     change_auth_type_title: TRACKS::Изменение типа авторизации
     change_authentication_type: Сменить тип авторизации
-    change_password_prompt: Введите новый пароль в поле ниже и нажмите 'Изменить пароль',
-      чтобы заменить ваш старый пароль.
+    change_password_prompt: Введите новый пароль в поле ниже и нажмите 'Изменить
+      пароль', чтобы заменить ваш старый пароль.
     change_password_submit: Сменить пароль
     change_password_title: TRACKS::Изменение пароля
     choose_password: Выберите пароль
@@ -1335,15 +1371,15 @@ ru:
     new_user_heading: 'Создайте нового пользователя:'
     new_user_title: TRACKS::Вход
     no_signups_title: TRACKS::Нет регистрации
-    openid_ok_pref_failed: Ваша ссылка %{url} подтверждена, но возникли проблемы при
-      сохранении настроек авторизации.
-    openid_url_verified: Ваша ссылка %{url} подтверждена и установлена в качестве
-      авторизации с OpenID.
+    openid_ok_pref_failed: Ваша ссылка %{url} подтверждена, но возникли проблемы
+      при сохранении настроек авторизации.
+    openid_url_verified: Ваша ссылка %{url} подтверждена и установлена в 
+      качестве авторизации с OpenID.
     password_confirmation_label: Подтверждение пароля
     password_updated: пароль обновлен.
     register_with_cas: С вашим именем пользователя CAS
-    select_authentication_type: Выберите новый тип авторизации и нажмите 'Сменить
-      тип авторизации', чтобы заменить текущие настройки.
+    select_authentication_type: Выберите новый тип авторизации и нажмите 
+      'Сменить тип авторизации', чтобы заменить текущие настройки.
     signup: Регистрация
     signup_new_user: Создать пользователя
     signup_successful: Вход пользователя %{username} выполнен.
@@ -1361,30 +1397,32 @@ ru:
     next_label: След &#8594;
     page_entries_info:
       multi_page: Отображено %{model} %{from} - %{to} из %{count}
-      multi_page_html: Отображено %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> из <b>%{count}</b>
+      multi_page_html: Отображено %{model} <b>%{from}&nbsp;-&nbsp;%{to}</b> из 
+        <b>%{count}</b>
       single_page:
         one: Отображён 1 %{model}
-        other: Отображены все %{count} %{model}
-        zero: '%{model} не найден'
+        few:
+        many:
       single_page_html:
         one: Отображен <b>1</b> %{model}
-        other: Отображены <b>все&nbsp;%{count}</b> %{model}
-        zero: '%{model} не найден'
+        few:
+        many:
     page_gap: "&hellip;"
     previous_label: "&#8592; Пред"
   rest_help:
     intro:
-      content_2: Tracks REST API позволяет разработчикам интегрировать Tracks с другими
-        приложениями. Это позволяет приложениям получать доступ и изменять данные
-        Tracks, кроме того реализован вариант чистого (Vanilla) XML поверх HTTP.
-      content: В Tracks есть возможность интеграции со скриптами, web-сервисами и
-        другими приложениями. На этой странице представлена документация по нашему
-        REST API.
+      content_2: Tracks REST API позволяет разработчикам интегрировать Tracks с 
+        другими приложениями. Это позволяет приложениям получать доступ и 
+        изменять данные Tracks, кроме того реализован вариант чистого (Vanilla) 
+        XML поверх HTTP.
+      content: В Tracks есть возможность интеграции со скриптами, web-сервисами 
+        и другими приложениями. На этой странице представлена документация по 
+        нашему REST API.
       title: Вступление
-      content_3: API — это служба %{restful_link}. Все данные доступны через API как
-        ресурс, на который можно сослаться по уникальному идентификатору. Он отвечает
-        на ряд методов HTTP, в частности GET, PUT, POST и UPDATE, а все ответы от
-        API представлены в простом XML формате, в кодировке UTF-8.
+      content_3: API — это служба %{restful_link}. Все данные доступны через API
+        как ресурс, на который можно сослаться по уникальному идентификатору. Он
+        отвечает на ряд методов HTTP, в частности GET, PUT, POST и UPDATE, а все
+        ответы от API представлены в простом XML формате, в кодировке UTF-8.
       restful_link_text: RESTful
     curl_link_text: cURL
     id: ID
@@ -1392,11 +1430,12 @@ ru:
     auth:
       basic_auth_link_text: Базовая HTTP-аутентификация
       title: Аутентификация
-      content: Аутентификация обрабатывается с помощью %{auth_link}. Ваше имя пользователя
-        и пароль Tracks используются в качестве учетных данных аутентификации через
-        API. Обратите внимание, что при обычной HTTP-аутентификации ваш пароль отправляется
-        в виде открытого текста. Если вам нужно более безопасное решение для аутентификации,
-        вам следует настроить веб-сервер для запуска Tracks по HTTPS.
+      content: Аутентификация обрабатывается с помощью %{auth_link}. Ваше имя 
+        пользователя и пароль Tracks используются в качестве учетных данных 
+        аутентификации через API. Обратите внимание, что при обычной 
+        HTTP-аутентификации ваш пароль отправляется в виде открытого текста. 
+        Если вам нужно более безопасное решение для аутентификации, вам следует 
+        настроить веб-сервер для запуска Tracks по HTTPS.
     retrieve:
       title: Получение данных из API
       content: 'Чтобы получить данные, вам нужно всего лишь выполнить HTTP GET запрос
