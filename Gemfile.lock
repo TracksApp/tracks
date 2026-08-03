@@ -393,7 +393,7 @@ GEM
       yard (~> 0.9, >= 0.9.24)
       yard-activesupport-concern (~> 0.0)
       yard-solargraph (~> 0.1)
-    spring (4.4.2)
+    spring (4.5.0)
     sprockets (4.2.2)
       concurrent-ruby (~> 1.0)
       logger
