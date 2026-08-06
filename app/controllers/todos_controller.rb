@@ -940,7 +940,8 @@ end
       end
       from.project do
         unless @todo.project_id == nil
-          @down_count = current_user.projects.find(@todo.project_id).todos.active_or_hidden.count
+          project = current_user.projects.find(@todo.project_id)
+          @down_count = project.todos.active_or_hidden.count + project.todos.deferred.count + project.todos.pending.count
         end
       end
       from.deferred do
