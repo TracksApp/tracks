@@ -161,6 +161,7 @@ module ApplicationHelper
     common.cancel             common.ok
     common.update             common.create
     common.ajaxError          todos.unresolved_dependency
+    todos.remove_date
     }.each do |s|
       js << "i18n['#{s}'] = '#{t(s).gsub(/'/, "\\\\'")}';\n"
     end
@@ -205,6 +206,8 @@ module ApplicationHelper
           model.errors.full_messages.collect { |msg| concat(content_tag(:li, msg)) }
         end
       end
+    else
+      "".html_safe
     end
   end
 

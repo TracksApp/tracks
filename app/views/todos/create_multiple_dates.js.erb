@@ -1,0 +1,71 @@
+<% unless @saved -%>
+  TracksPages.show_errors(html_for_error_messages());
+
+  function html_for_error_messages() {
+    <%
+      @multiple_error = content_tag(:div, content_tag(:p, @multiple_error), {:class => 'errorExplanation', :id => 'errorExplanation'}) if @multiple_error.present?
+      error_messages = @multiple_error || ""
+      @todos.each do |todo|
+        error_messages += get_list_of_error_messages_for(todo)
+      end
+    -%>
+    return "<%= escape_javascript(error_messages.html_safe)%>";
+  }
+
+<% else -%>
+  TracksPages.page_inform("<%=escape_javascript @status_message%>");
+  hide_empty_message();
+  TracksPages.hide_errors();
+  TracksPages.set_page_badge(<%= @down_count %>);
+  <% if should_show_new_item -%>
+    <% if @new_context_created -%>
+      insert_new_context_with_new_todo();
+    <% else -%>
+      add_todo_to_existing_context();
+    <% end -%>
+  <% end -%>
+  clear_form();
+
+  function clear_form() {
+    $('#todo-form-new-action').clearForm();
+    $('#todo-form-new-action').clearDeps();
+    /* Remove any cloned date fieldsets, keeping only the first */
+    $('#date_fieldsets_container .date_fieldset:not(:first)').remove();
+    TracksForm.set_context_name('<%=escape_javascript @initial_context_name%>');
+    TracksForm.set_project_name_and_default_project_name('<%=escape_javascript @initial_project_name%>');
+    TracksForm.set_tag_list_and_default_tag_list('<%=escape_javascript @initial_tags%>');
+    $('#todo-form-new-action input:text:first').focus();
+  }
+
+  function insert_new_context_with_new_todo() {
+    $('#display_box').prepend(html_for_new_context());
+  }
+
+  function hide_empty_message() {
+    <% if (source_view_is :project and @todo.pending?) or (source_view_is :deferred) -%>
+      $('#deferred_pending_container-empty-d').hide();
+    <% else -%>
+      $('#no_todos_in_view').hide();
+    <% end -%>
+  }
+
+  function add_todo_to_existing_context() {
+  <%
+    @todos.each do |todo|
+      if should_show_new_item(todo)
+        html = js_render(todo, { :parent_container_type => parent_container_type, :source_view => @source_view })
+        -%>
+        $('#<%= empty_container_msg_div_id(todo) %>').hide();
+        $('#<%= item_container_id(todo) %>').append('<%= html %>');
+        $('#<%= item_container_id(todo) %>').fadeIn(500, function() {
+          $('#<%= dom_id(todo) %>').effect('highlight', {}, 2000 );
+        });
+      <% end %>
+  <% end %>
+  }
+
+  function html_for_new_context() {
+    return "<%= @new_context_created ? js_render(@todo.context, { :settings => {:collapsible => true} }) : "" %>";
+  }
+
+<% end -%>

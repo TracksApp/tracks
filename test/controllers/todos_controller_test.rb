@@ -323,6 +323,27 @@ class TodosControllerTest < ActionController::TestCase
     assert !@d.predecessors.include?(@c), "c should not be a predecessor of d"
   end
 
+  def test_create_multiple_date_todos
+    login_as(:admin_user)
+    start_count = Todo.count
+    put :create, xhr: true, params: {
+      "_source_view" => "todo",
+      "context_name" => "library",
+      "project_name" => "Build a working time machine",
+      "todo" => {
+        "description" => "Multi-date test",
+        "notes"       => "",
+        "due"         => ["30/11/2026", "01/12/2026"],
+        "show_from"   => ["", ""]
+      }
+    }
+    assert_response :success
+    assert_equal start_count + 2, Todo.count, "two todos should have been created"
+    todos = Todo.where(description: "Multi-date test").order(:due)
+    assert_equal Date.new(2026, 11, 30), todos.first.due.to_date
+    assert_equal Date.new(2026, 12,  1), todos.last.due.to_date
+  end
+
   #########
   # destroy
   #########

@@ -1003,6 +1003,8 @@ en:
       tag_deferred_pending: Deferred/pending actions tagged with '%{param}'
       tag_hidden: Hidden actions tagged with '%{param}'
     add_another_dependency: Add another dependency
+    add_another_date: Add another date
+    remove_date: Remove date
     add_new_recurring: Add a new recurring action
     added_dependency: Added %{dependency} as dependency.
     added_new_context: Added new context
